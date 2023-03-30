@@ -1,0 +1,184 @@
+{
+  "sections": [
+    {
+      "name": "Quality focus",
+      "questions": [
+        {
+          "question_1": "The person produces high quality product",
+          "isFreeForm": false
+        },
+        {
+          "question_2": "The person aims to improve the quality of the end result beyond expressed requirements",
+          "isFreeForm": false
+        },
+        {
+          "question_3": "The person is living by the company values (passion, expertise, openness and care)",
+          "isFreeForm": false
+        },
+        {
+          "question_4": "The person is aligned with company best practices",
+          "isFreeForm": false
+        },
+        {
+          "question_5": "The person delivers quality even with limited resources (time, resources, information, guidance)",
+          "isFreeForm": false
+        },
+        {
+          "question_6": "Feedback about the person's quality focus",
+          "isFreeForm": true
+        }
+      ]
+    },
+    {
+      "name": "People skills",
+      "questions": [
+        {
+          "question_1": "The person is willingly helping others",
+          "isFreeForm": false
+        },
+        {
+          "question_2": "The person takes other people's views into consideration",
+          "isFreeForm": false
+        },
+        {
+          "question_3": "The person isn't afraid to ask for help from others",
+          "isFreeForm": false
+        },
+        {
+          "question_4": "The person has a good attitude towards all the aspects of their work",
+          "isFreeForm": false
+        },
+        {
+          "question_5": "The person shares knowledge openly to others",
+          "isFreeForm": false
+        },
+        {
+          "question_6": "Other feedback about the persons people skills",
+          "isFreeForm": true
+        }
+      ]
+    },
+    {
+      "name": "Self guidance",
+      "questions": [
+        {
+          "question_1": "The person has good prioritisation skills",
+          "isFreeForm": false
+        },
+        {
+          "question_2": "The person can see our work from the client's perspective (note: the client can be internal)",
+          "isFreeForm": false
+        },
+        {
+          "question_3": "The person has a positive attitude",
+          "isFreeForm": false
+        },
+        {
+          "question_4": "The person has a proactive way to take things forward",
+          "isFreeForm": false
+        },
+        {
+          "question_5": "The person is productive working independently",
+          "isFreeForm": false
+        },
+        {
+          "question_6": "The person can take good care of personal workload by prioritizing and delegating",
+          "isFreeForm": false
+        },
+        {
+          "question_7": "Other feedback about self-guidance",
+          "isFreeForm": true
+        }
+      ]
+    },
+    {
+      "name": "Leadership",
+      "questions": [
+        {
+          "question_1": "The person takes responsibility naturally",
+          "isFreeForm": false
+        },
+        {
+          "question_2": "The person can inspire others to perform better",
+          "isFreeForm": false
+        },
+        {
+          "question_3": "The person improves the team they are a part of",
+          "isFreeForm": false
+        },
+        {
+          "question_4": "You can always rely on the person to deliver",
+          "isFreeForm": false
+        },
+        {
+          "question_5": "Other feedback about leadership",
+          "isFreeForm": true
+        }
+      ]
+    },
+    {
+      "name": "Readiness for change",
+      "questions": [
+        {
+          "question_1": "The person is capable to learn new things fast",
+          "isFreeForm": false
+        },
+        {
+          "question_2": "The person is interested in developing themselves and their skills",
+          "isFreeForm": false
+        },
+        {
+          "question_3": "The person sees change as an opportunity instead of a threat",
+          "isFreeForm": false
+        },
+        {
+          "question_4": "The person is ready to adopt new different working methods",
+          "isFreeForm": false
+        },
+        {
+          "question_5": "The person is able to handle change and uncertainty",
+          "isFreeForm": false
+        },
+        {
+          "question_6": "Other feedback about readiness for change",
+          "isFreeForm": true
+        }
+      ]
+    },
+    {
+      "name": "Creativity",
+      "questions": [
+        {
+          "question_1": "The person has good problem-solving skills",
+          "isFreeForm": false
+        },
+        {
+          "question_2": "The person can provide multiple options with pros and cons on how to solve a problem",
+          "isFreeForm": false
+        },
+        {
+          "question_3": "The person can foresee and prevent negative outcomes of solutions and decisions",
+          "isFreeForm": false
+        },
+        {
+          "question_4": "Other feedback about creativity",
+          "isFreeForm": true
+        }
+      ]
+    },
+    {
+      "name": "General evaluation",
+      "description": "Please describe strengths and improvement areas in detail",
+      "questions": [
+        {
+          "question_1": "The person's personal strengths are:",
+          "isFreeForm": true
+        },
+        {
+          "question_2": "The person should improve in:",
+          "isFreeForm": true
+        }
+      ]
+    }
+  ]
+}
