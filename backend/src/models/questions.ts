@@ -9,8 +9,8 @@ const QuestionSchema = new mongoose.Schema({
     type: String,
     enum: {
       values: [
-        "Quality Focus",
-        "People Skills",
+        "Quality focus",
+        "People skills",
         "Self guidance",
         "Leadership",
         "Readiness for change",
