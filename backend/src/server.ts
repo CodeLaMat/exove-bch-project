@@ -1,6 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 const app = express();
 import dotenv from "dotenv";
+const cors = require("cors");
 dotenv.config();
 
 // db
@@ -17,6 +18,7 @@ import errorHandlerMiddleware from "./middleware/errorHandler";
 
 const PORT = process.env.PORT || 5010;
 
+app.use(cors());
 app.use(express.json());
 
 app.get("/api/v1", (req: Request, res: Response) => {
