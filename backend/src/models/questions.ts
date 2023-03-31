@@ -27,9 +27,15 @@ const QuestionSchema = new mongoose.Schema({
   description: {
     type: String,
   },
-  isFreeForm: {
-    type: Boolean,
-    default: false,
+  questionType: {
+    type: String,
+    enum: {
+      values: [
+        "Multiple choice",
+        "Free form",
+      ],
+      message: `{VALUE} is not supported`,
+    },
   },
 });
 
