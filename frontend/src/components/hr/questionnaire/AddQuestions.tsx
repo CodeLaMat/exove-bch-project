@@ -19,7 +19,7 @@ const AddQuestion: React.FC = () => {
         event.preventDefault();
         console.log("submitted", formData);
         
-        axios.post('http://localhost:5010/addquestion', formData)
+        axios.post('http://localhost:5010/api/v1/questions', formData)
         .then(response => {
         console.log(response);
         // Add logic to handle the response if needed
@@ -61,8 +61,9 @@ const AddQuestion: React.FC = () => {
             <label>
                 questionType:
                 <select name="questionType" value={formData.questionType} onChange={handleChange}>
-                <option value="">Multiple choice</option>
-                <option value="Quality focus">Free form</option>
+                <option value="">Select a question type</option>
+                <option value="Multiple choice">Multiple choice</option>
+                <option value="Free form">Free form</option>
                 </select>
             </label>
             <button type="submit">Submit</button>
