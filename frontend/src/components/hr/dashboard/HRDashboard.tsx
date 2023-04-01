@@ -1,11 +1,11 @@
 import React from "react";
 
-import classes from "./Dashboard.module.css";
+import classes from "./HRDashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "./SurveySummaryChart";
 import ProgressBar from "./ProgressBar";
 
-const Dashboard = () => {
+const HRDashboard = () => {
   return (
     <div>
       <div>
@@ -34,4 +34,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default HRDashboard;
