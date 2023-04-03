@@ -24,3 +24,5 @@ router
   .patch(authenticateUser, updateSurvey);
 ("");
 export default router;
+
+export default router;

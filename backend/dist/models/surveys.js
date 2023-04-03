@@ -71,3 +71,4 @@ const surveySchema = new mongoose.Schema({
 }, { timestamps: true });
 const survey = mongoose.model("survey", surveySchema);
 exports.default = survey;
+exports.default = survey;
