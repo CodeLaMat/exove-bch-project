@@ -1,27 +1,27 @@
 import { Request, Response } from "express";
-import Survey from "../models/surveys";
+import * as mongoose from "mongoose";
+import survey from "../models/surveys";
 
 const addSurvey = async (req: Request, res: Response) => {
   try {
-    const survey = new Survey({
-      question: req.body.name,
+    const newSurvey = new survey({
+      name: req.body.surveyName,
       description: req.body.description,
       questions: req.body.questions,
-      // add any other necessary fields here
-   });
+    });
 
-    console.log("survey: ", survey);
-    res.status(200).json({
-      status: 200,
-      message: "question saved successfully" + survey,
-    })
+    // console.log("survey: ", survey);
+    // res.status(200).json({
+    //   status: 200,
+    //   message: "survey saved successfully" + survey,
+    // })
 
-    // if (await question.save()) { 
-    //   res.status(200).json({
-    //     status: 200,
-    //     message: "question saved successfully" + question,
-    //   })
-    // } 
+    if (await newSurvey.save()) { 
+      res.status(200).json({
+        status: 200,
+        message: "question saved successfully" + survey,
+      })
+    } 
   } catch (err: any) {
     res.status(400).json({
       status: 400,
@@ -35,7 +35,8 @@ const deleteSurvey = async (req: Request, res: Response) => {
 const getAllSurveys = async (req: Request, res: Response) => {
   try {
     // res.send("getting all surveys");
-    res.send("get All surveys");
+    const getSurveys = await survey.find();
+    res.status(200).json(getSurveys);
   } catch (err: any) {
     res.status(400).json({
       status: 400,
