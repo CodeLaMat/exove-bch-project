@@ -14,6 +14,7 @@ const connect_1 = __importDefault(require("./db/connect"));
 const user_1 = __importDefault(require("./routes/user"));
 const questions_1 = __importDefault(require("./routes/questions"));
 const responses_1 = __importDefault(require("./routes/responses"));
+const surveys_1 = __importDefault(require("./routes/surveys"));
 //middleware
 const notFound_1 = __importDefault(require("./middleware/notFound"));
 const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
@@ -24,8 +25,9 @@ app.get("/api/v1", (req, res) => {
     res.json({ msg: "API" });
 });
 app.use("/api/v1/users", user_1.default);
-app.use("/api/v1/questions", questions_1.default);
 app.use("/api/v1/responses", responses_1.default);
+app.use("/api/v1/surveys", surveys_1.default);
+app.use("/api/v1/questions", questions_1.default);
 app.use(notFound_1.default);
 app.use(errorHandler_1.default);
 const start = async () => {
