@@ -8,9 +8,9 @@ import {
 } from "../controllers/responses";
 
 router
-  .route("/user:id")
+  .route("/response/user:id")
   .post(addResponse)
   .get(getAllResponses)
   .patch(updateResponses);
-router.route("/").get(showStats);
+router.route("/response").get(showStats);
 export default router;

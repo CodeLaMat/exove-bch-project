@@ -2,177 +2,177 @@
   {
     "category": "Quality focus",
     "question": "The person produces high quality product",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Quality focus",
     "question": "The person aims to improve the quality of the end result beyond expressed requirements",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Quality focus",
     "question": "The person is living by the company values (passion, expertise, opennes and care",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Quality focus",
     "question": "The person is aligned with company best practices",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Quality focus",
     "question": "The person delivers quality even with limited resources (time, resources, information, guidance",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Quality focus",
     "question": "Feedback about the person's quality focus",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "People skills",
     "question": "The person is willingly helping others",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "People skills",
     "question": "The person takes other people's views into consideration",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "People skills",
     "question": "The person isn't afraid to ask for help from others",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "People skills",
     "question": "The person has a good attitude towards all the aspects of their work",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "People skills",
     "question": "The person shares knowledge openly to others",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "People skills",
     "question": "Other feedback about the persons people skills",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "Self guidance",
     "question": "The person has good prioritisation skills",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Self guidance",
     "question": "The person can see our work from the client's perspective (note: the client can be internal)",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Self guidance",
     "question": "The person has a positive attitude",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Self guidance",
     "question": "The person has a proactive way to take things forward",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Self guidance",
     "question": "The person is productive working independently",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Self guidance",
     "question": "The person can take good care of personal workload by prioritizing and delegating",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Self guidance",
     "question": "Other feedback about self-guidance",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "Leadership",
     "question": "The person takes responsibility naturally",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Leadership",
     "question": "The person improves the team they are a part of",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Leadership",
     "question": "You can always rely on the person to deliver",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Leadership",
     "question": "Other feedback about leadership",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "Readiness for change",
     "question": "The person is capable to learn new things fast",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Readiness for change",
     "question": "The person is interested in developing themselves and their skills",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Readiness for change",
     "question": "The person sees change as an opportunity instead of a threat",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Readiness for change",
     "question": "The person is ready to adopt new different working methods",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Readiness for change",
     "question": "The person is able to handle change and uncertainty",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Readiness for change",
     "question": "Other feedback about readiness for change",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "Creativity",
     "question": "The person has good problem-solving skills",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Creativity",
     "question": "The person can provide multiple options with pros and cons on how to solve a problem",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Creativity",
     "question": "The person can foresee and prevent negative outcomes of solutions and decisions",
-    "isFreeForm": false
+    "questionType": "Multiple choice"
   },
   {
     "category": "Creativity",
     "question": "Other feedback about creativity",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "General Evaluation",
     "description": "Please describe strengths and improvement areas in detail",
     "question": "The person's personal strengths are",
-    "isFreeForm": true
+    "questionType": "Free form"
   },
   {
     "category": "General Evaluation",
     "question": "The person should improve in:",
-    "isFreeForm": true
+    "questionType": "Free form"
   }
 ]

@@ -32,7 +32,7 @@ const UserSchema = new mongoose.Schema({
         minlength: 3,
         maxlength: 20,
     },
-    lastName: {
+    surName: {
         type: String,
         required: [true, "last name must be provided"],
         trim: true,
@@ -47,16 +47,47 @@ const UserSchema = new mongoose.Schema({
     password: {
         type: String,
         required: [true, "password must be provided"],
+        minlength: 6,
     },
-    jobProfile: {
+    personal: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
+    },
+    about: {
+        type: mongoose.Schema.Types.Mixed,
+        default: {},
+    },
+    work: {
+        reportsTo: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
+        },
+    },
+    title: {
         type: String,
     },
     department: {
         type: String,
     },
+    site: {
+        type: String,
+    },
+    startDate: {
+        type: Date,
+    },
+    role: {
+        type: String,
+        enum: {
+            values: ["employee", "hr", "manager"],
+            message: `{VALUE} is not supported`,
+        },
+    },
     image: {
         type: Buffer,
     },
+});
+UserSchema.virtual("displayName").get(function () {
+    return `${this.firstName} ${this.surName}`;
 });
 const User = mongoose.model("User", UserSchema);
 exports.default = User;
