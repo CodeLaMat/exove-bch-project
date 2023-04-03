@@ -1,7 +1,11 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserRole } from "../../enum";
-import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginReducer";
+import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
+import {
+  getEmployees,
+  initialiseEmployees,
+} from "../../redux/reducers/user/userListSlice";
 import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
@@ -11,6 +15,7 @@ interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const dispatch = useAppDispatch();
+
   const { selectedRole } = useAppSelector((state) => state.loginUser);
   const navigate = useNavigate();
 
@@ -28,6 +33,7 @@ const Login: React.FC<LoginProps> = () => {
       type: "SET_IS_AUTHENTICATED",
       payload: true,
     });
+    dispatch(initialiseEmployees());
     navigate("/home"); // redirect to the dashboard page
   };
 

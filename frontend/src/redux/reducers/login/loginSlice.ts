@@ -5,7 +5,7 @@ export interface LoginState {
   selectedRole: UserRole;
 }
 
-const initialState: LoginState = {
+export const initialState: LoginState = {
   isAuthenticated: false,
   selectedRole: UserRole.User,
 };
@@ -22,7 +22,7 @@ export interface SetSelectedRoleAction {
 
 export type LoginAction = SetIsAuthenticatedAction | SetSelectedRoleAction;
 
-export function loginReducer(
+export function loginSlice(
   state: LoginState = initialState,
   action: LoginAction
 ): LoginState {
