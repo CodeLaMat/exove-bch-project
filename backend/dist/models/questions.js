@@ -29,8 +29,8 @@ const QuestionSchema = new mongoose.Schema({
         type: String,
         enum: {
             values: [
-                "Quality Focus",
-                "People Skills",
+                "Quality focus",
+                "People skills",
                 "Self guidance",
                 "Leadership",
                 "Readiness for change",
@@ -47,9 +47,15 @@ const QuestionSchema = new mongoose.Schema({
     description: {
         type: String,
     },
-    isFreeForm: {
-        type: Boolean,
-        default: false,
+    questionType: {
+        type: String,
+        enum: {
+            values: [
+                "Multiple choice",
+                "Free form",
+            ],
+            message: `{VALUE} is not supported`,
+        },
     },
 });
 const Question = mongoose.model("Question", QuestionSchema);
