@@ -7,23 +7,22 @@ exports.updateSurvey = exports.getOneSurvey = exports.getAllSurveys = exports.de
 const surveys_1 = __importDefault(require("../models/surveys"));
 const addSurvey = async (req, res) => {
     try {
-        const survey = new surveys_1.default({
-            question: req.body.name,
+        const newSurvey = new surveys_1.default({
+            name: req.body.surveyName,
             description: req.body.description,
             questions: req.body.questions,
-            // add any other necessary fields here
         });
-        console.log("survey: ", survey);
-        res.status(200).json({
-            status: 200,
-            message: "question saved successfully" + survey,
-        });
-        // if (await question.save()) { 
-        //   res.status(200).json({
-        //     status: 200,
-        //     message: "question saved successfully" + question,
-        //   })
-        // } 
+        // console.log("survey: ", survey);
+        // res.status(200).json({
+        //   status: 200,
+        //   message: "survey saved successfully" + survey,
+        // })
+        if (await newSurvey.save()) {
+            res.status(200).json({
+                status: 200,
+                message: "question saved successfully" + surveys_1.default,
+            });
+        }
     }
     catch (err) {
         res.status(400).json({
@@ -40,7 +39,8 @@ exports.deleteSurvey = deleteSurvey;
 const getAllSurveys = async (req, res) => {
     try {
         // res.send("getting all surveys");
-        res.send("get All surveys");
+        const getSurveys = await surveys_1.default.find();
+        res.status(200).json(getSurveys);
     }
     catch (err) {
         res.status(400).json({
