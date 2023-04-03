@@ -15,3 +15,4 @@ router
     .patch(authentication_1.authenticateUser, surveys_1.updateSurvey);
 ("");
 exports.default = router;
+exports.default = router;
