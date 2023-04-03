@@ -86,7 +86,22 @@ const CreateSurvey: React.FC = () => {
       description: description,
       questions: surveyQuestions,
     }));
+
+    const endpointUrl = 'http://localhost:5010/api/v1/surveys';
+
+    // Make the POST request with Axios
+    axios.post(endpointUrl, formData)
+      .then(response => {
+        console.log('Survey data submitted successfully!');
+        console.log('Response:', response.data);
+      })
+      .catch(error => {
+        console.error('Error submitting survey data:', error);
+      });
+
   }
+
+  
 
   return (
     <div>
