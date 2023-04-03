@@ -1,5 +1,10 @@
 import { UserRole } from "../../enum";
 
+export type FormData = {
+  question: string;
+  type: string;
+};
+
 export type Question = {
   question: string;
   isFreeForm: boolean;

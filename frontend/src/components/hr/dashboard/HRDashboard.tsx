@@ -1,11 +1,22 @@
 import React from "react";
-
+import axios from "axios";
+import {
+  useAppDispatch,
+  useAppSelector,
+} from "../../../../src/redux/hooks/hooks";
+import { useNavigate } from "react-router-dom";
 import classes from "./HRDashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "./SurveySummaryChart";
 import ProgressBar from "./ProgressBar";
+import { useEffect, useState } from "react";
+import { useSelector } from "react-redux";
 
 const HRDashboard = () => {
+  const employeesList = useAppSelector((state) => state.employees.employees);
+
+  console.log(employeesList);
+
   return (
     <div>
       <div>

@@ -5,13 +5,9 @@ import {
   combineReducers,
   Reducer,
 } from "@reduxjs/toolkit";
-// import userReducer from "../redux/reducers/user/userSlice";
 import surveyReducer from "./reducers/survey/surveySlice";
-import {
-  loginReducer,
-  LoginState,
-  LoginAction,
-} from "./reducers/login/loginReducer";
+import employeeSlice from "./reducers/user/userListSlice";
+import { loginSlice, LoginAction } from "./reducers/login/loginSlice";
 
 type AppAction =
   | LoginAction
@@ -19,9 +15,9 @@ type AppAction =
   | { payload: unknown; type: string };
 
 const rootReducer: Reducer = combineReducers({
-  // user: userReducer,
   survey: surveyReducer,
-  loginUser: loginReducer,
+  loginUser: loginSlice,
+  employees: employeeSlice,
 });
 
 export const store = configureStore({

@@ -6,7 +6,7 @@ import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import HRMenus from "./HRMenus";
 import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
-import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginReducer";
+import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
 import { Button } from "react-bootstrap";
 
 interface Iprops {
