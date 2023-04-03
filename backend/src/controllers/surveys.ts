@@ -35,7 +35,7 @@ const deleteSurvey = async (req: Request, res: Response) => {
 const getAllSurveys = async (req: Request, res: Response) => {
   try {
     // res.send("getting all surveys");
-    res.send("get one Question");
+    res.send("get All surveys");
   } catch (err: any) {
     res.status(400).json({
       status: 400,
@@ -43,13 +43,13 @@ const getAllSurveys = async (req: Request, res: Response) => {
     });
   }
 
-  // res.send("gel all Questions");
+  // res.send("gel all surveys");
 };
 const getOneSurvey = async (req: Request, res: Response) => {
-  res.send("get one Question");
+  res.send("get one surveys");
 };
 const updateSurvey = async (req: Request, res: Response) => {
-  res.send("update one Question");
+  res.send("update one surveys");
 };
 
 export {
