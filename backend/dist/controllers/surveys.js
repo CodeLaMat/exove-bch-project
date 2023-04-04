@@ -8,7 +8,7 @@ const surveys_1 = __importDefault(require("../models/surveys"));
 const addSurvey = async (req, res) => {
     try {
         const newSurvey = new surveys_1.default({
-            name: req.body.surveyName,
+            surveyName: req.body.surveyName,
             description: req.body.description,
             questions: req.body.questions,
         });

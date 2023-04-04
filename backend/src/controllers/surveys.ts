@@ -5,7 +5,7 @@ import survey from "../models/surveys";
 const addSurvey = async (req: Request, res: Response) => {
   try {
     const newSurvey = new survey({
-      name: req.body.surveyName,
+      surveyName: req.body.surveyName,
       description: req.body.description,
       questions: req.body.questions,
     });

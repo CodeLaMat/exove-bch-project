@@ -39,7 +39,7 @@ const questionSchema = new mongoose.Schema({
 
 const surveySchema = new mongoose.Schema(
   {
-    name: {
+    surveyName: {
       type: String,
       required: true,
     },
