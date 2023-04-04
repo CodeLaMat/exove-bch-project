@@ -1,0 +1,249 @@
+{
+  "employees": [
+    {
+      "id": "1",
+      "firstName": "John",
+      "surname": "Doe",
+      "email": "johndoe@example.com",
+      "displayName": "John Doe",
+      "personal": { "age": 35, "gender": "Male" },
+      "about": { "bio": "Software engineer with 8 years of experience." },
+      "work": {
+        "reportsTo": {
+          "id": "2",
+          "firstName": "Jane",
+          "surname": "Smith",
+          "email": "janesmith@example.com"
+        },
+        "title": "Senior Software Engineer",
+        "department": "Engineering",
+        "site": "San Francisco",
+        "startDate": "2015-06-01"
+      }
+    },
+    {
+      "id": "2",
+      "firstName": "Jane",
+      "surname": "Smith",
+      "email": "janesmith@example.com",
+      "displayName": "Jane Smith",
+      "personal": { "age": 28, "gender": "Female" },
+      "about": {
+        "bio": "Marketing manager with experience in branding and digital marketing."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "3",
+          "firstName": "Mike",
+          "surname": "Brown",
+          "email": "mikebrown@example.com"
+        },
+        "title": "Marketing Manager",
+        "department": "Marketing",
+        "site": "New York",
+        "startDate": "2018-01-15"
+      }
+    },
+    {
+      "id": "3",
+      "firstName": "Mike",
+      "surname": "Brown",
+      "email": "mikebrown@example.com",
+      "displayName": "Mike Brown",
+      "personal": { "age": 42, "gender": "Male" },
+      "about": {
+        "bio": "Sales executive with 15 years of experience in B2B sales."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "4",
+          "firstName": "Emily",
+          "surname": "Jones",
+          "email": "emilyjones@example.com"
+        },
+        "title": "Sales Director",
+        "department": "Sales",
+        "site": "Chicago",
+        "startDate": "2010-03-01"
+      }
+    },
+    {
+      "id": "4",
+      "firstName": "Emily",
+      "surname": "Jones",
+      "email": "emilyjones@example.com",
+      "displayName": "Emily Jones",
+      "personal": { "age": 37, "gender": "Female" },
+      "about": {
+        "bio": "HR manager with experience in recruitment and talent management."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "5",
+          "firstName": "Mark",
+          "surname": "Davis",
+          "email": "markdavis@example.com"
+        },
+        "title": "HR Manager",
+        "department": "Human Resources",
+        "site": "Houston",
+        "startDate": "2013-09-01"
+      }
+    },
+    {
+      "id": "6",
+      "firstName": "Alice",
+      "surname": "Smith",
+      "email": "alice.smith@example.com",
+      "displayName": "Alice Smith",
+      "personal": { "age": 28, "gender": "Female" },
+      "about": {
+        "bio": "Marketing specialist with experience in social media and content creation."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "2",
+          "firstName": "Bob",
+          "surname": "Jones",
+          "email": "bob.jones@example.com"
+        },
+        "title": "Marketing Specialist",
+        "department": "Marketing",
+        "site": "San Francisco",
+        "startDate": "2018-01-01"
+      }
+    },
+    {
+      "id": "7",
+      "firstName": "Bob",
+      "surname": "Jones",
+      "email": "bob.jones@example.com",
+      "displayName": "Bob Jones",
+      "personal": { "age": 35, "gender": "Male" },
+      "about": {
+        "bio": "Software engineer with experience in web development and cloud computing."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "3",
+          "firstName": "Charlie",
+          "surname": "Wilson",
+          "email": "charlie.wilson@example.com"
+        },
+        "title": "Senior Software Engineer",
+        "department": "Engineering",
+        "site": "New York",
+        "startDate": "2014-06-01"
+      }
+    },
+    {
+      "id": "8",
+      "firstName": "Charlie",
+      "surname": "Wilson",
+      "email": "charlie.wilson@example.com",
+      "displayName": "Charlie Wilson",
+      "personal": { "age": 42, "gender": "Male" },
+      "about": {
+        "bio": "Sales manager with experience in enterprise software sales and business development."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "4",
+          "firstName": "David",
+          "surname": "Brown",
+          "email": "david.brown@example.com"
+        },
+        "title": "Sales Manager",
+        "department": "Sales",
+        "site": "Chicago",
+        "startDate": "2010-03-01"
+      }
+    },
+    {
+      "id": "9",
+      "firstName": "David",
+      "surname": "Brown",
+      "email": "david.brown@example.com",
+      "displayName": "David Brown",
+      "personal": { "age": 37, "gender": "Male" },
+      "about": {
+        "bio": "HR manager with experience in employee relations and talent management."
+      },
+      "work": {
+        "reportsTo": {
+          "id": "5",
+          "firstName": "Emily",
+          "surname": "Davis",
+          "email": "emily.davis@example.com"
+        },
+        "title": "HR Manager",
+        "department": "Human Resources",
+        "site": "Houston",
+        "startDate": "2013-09-01"
+      }
+    },
+    {
+      "id": "10",
+      "firstName": "Jane",
+      "surname": "Smith",
+      "email": "janesmith@example.com",
+      "displayName": "Jane Smith",
+      "personal": { "age": 30, "gender": "Female" },
+      "about": { "bio": "Marketing manager with 5 years of experience." },
+      "work": {
+        "reportsTo": {
+          "id": "3",
+          "firstName": "Bob",
+          "surname": "Johnson",
+          "email": "bobjohnson@example.com"
+        },
+        "title": "Marketing Manager",
+        "department": "Marketing",
+        "site": "New York",
+        "startDate": "2018-03-15"
+      }
+    },
+    {
+      "id": "11",
+      "firstName": "Bob",
+      "surname": "Johnson",
+      "email": "bobjohnson@example.com",
+      "displayName": "Bob Johnson",
+      "personal": { "age": 40, "gender": "Male" },
+      "about": { "bio": "Sales director with 12 years of experience." },
+      "work": {
+        "reportsTo": {
+          "id": "4",
+          "firstName": "Sarah",
+          "surname": "Lee",
+          "email": "sarahlee@example.com"
+        },
+        "title": "Sales Director",
+        "department": "Sales",
+        "site": "Chicago",
+        "startDate": "2010-01-01"
+      }
+    },
+    {
+      "id": "12",
+      "firstName": "Sarah",
+      "surname": "Lee",
+      "email": "sarahlee@example.com",
+      "displayName": "Sarah Lee",
+      "personal": { "age": 28, "gender": "Female" },
+      "about": { "bio": "Product manager with 3 years of experience." },
+      "work": {
+        "reportsTo": {
+          "id": "5",
+          "firstName": "David",
+          "surname": "Nguyen",
+          "email": "davidnguyen@example.com"
+        },
+        "title": "Product Manager",
+        "department": "Product",
+        "site": "Los Angeles",
+        "startDate": "2020-07-01"
+      }
+    }
+  ]
+}

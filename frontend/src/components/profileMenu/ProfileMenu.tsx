@@ -27,7 +27,7 @@ const ProfileMenu = (props: Iprops) => {
     <div className={classes.adminNav}>
       <div className={classes.mainNav}>
         <div className={classes.pageHeading}>
-          <h2>{pageTitle}</h2>
+          <h4>{pageTitle}</h4>
         </div>
       </div>
       <div className={classes.dropDownNav}>

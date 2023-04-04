@@ -1,6 +1,7 @@
-.adminconsole {
+.mainConsole {
   display: flex;
   flex-direction: row;
+  background-color: #f8f9ff;
 }
 
 .sidemenu {
