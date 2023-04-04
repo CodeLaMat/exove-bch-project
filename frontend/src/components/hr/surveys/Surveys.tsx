@@ -101,8 +101,6 @@ const CreateSurvey: React.FC = () => {
 
   }
 
-  
-
   return (
     <div>
       <PageHeading
