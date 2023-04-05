@@ -1,8 +1,9 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
-import { UserModel } from "../types/dataTypes";
+import { User } from "../types/dataTypes";
+import jwt from "jsonwebtoken";
 
-type UserType = UserModel & mongoose.Document;
+type UserType = User & mongoose.Document;
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -12,7 +13,7 @@ const UserSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 20,
   },
-  lastName: {
+  surName: {
     type: String,
     required: [true, "last name must be provided"],
     trim: true,
@@ -27,16 +28,48 @@ const UserSchema = new mongoose.Schema({
   password: {
     type: String,
     required: [true, "password must be provided"],
+    minlength: 6,
   },
-  jobProfile: {
+  personal: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
+  about: {
+    type: mongoose.Schema.Types.Mixed,
+    default: {},
+  },
+  work: {
+    reportsTo: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+    },
+  },
+  title: {
     type: String,
   },
   department: {
     type: String,
   },
-  image: {
-    type: Buffer,
+  site: {
+    type: String,
   },
+  startDate: {
+    type: Date,
+  },
+  role: {
+    type: String,
+    enum: {
+      values: ["employee", "hr", "manager"],
+      message: `{VALUE} is not supported`,
+    },
+  },
+  image: {
+    type: String,
+  },
+});
+
+UserSchema.virtual("displayName").get(function () {
+  return `${this.firstName} ${this.surName}`;
 });
 
 const User: Model<UserType> = mongoose.model<UserType>("User", UserSchema);

@@ -14,14 +14,30 @@ export type Response = {
   createdAt: Date;
 };
 
+export enum UserRoles {
+  employee = "employee",
+  HR = "hr",
+  manager = "manager",
+}
+
 export type User = {
+  _id: string;
   firstName: string;
-  lastName: string;
+  surName: string;
   email: string;
   password: string;
-  jobProfile: string;
-  department: string;
-  image: File;
+  displayName?: string;
+  personal?: Record<string, any>;
+  about?: Record<string, any>;
+  work?: {
+    reportsTo: User["_id"];
+  };
+  title?: string;
+  department?: string;
+  site?: string;
+  startDate?: Date;
+  role: UserRoles;
+  image?: String;
 };
 
 export interface QuestionModel {
@@ -69,14 +85,42 @@ export interface UserModel {
     type: string;
     required: [boolean, string];
   };
-  jobProfile: {
+  displayName: {
+    type: string;
+  };
+  personal?: {
+    type: Record<string, any>;
+    default: {};
+  };
+  about?: {
+    type: Record<string, any>;
+    default: {};
+  };
+  work?: {
+    reportsTo: {
+      type: User["_id"];
+      ref: string;
+    };
+  };
+
+  title: {
     type: string;
   };
   department: {
     type: string;
   };
-  image: {
-    type: File;
+  site?: {
+    type: string;
+  };
+  startDate: {
+    type: string;
+  };
+  role: {
+    type: string;
+    enum: UserRoles;
+  };
+  image?: {
+    type: string;
   };
 }
 
@@ -103,9 +147,5 @@ export interface ResponseModel {
 
   response: {
     type: number | string;
-  };
-  createdAt: {
-    type: Date;
-    default: Date;
   };
 }
