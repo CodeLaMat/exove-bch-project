@@ -1,17 +1,9 @@
 import { Router } from "express";
 const router = Router();
-import {
-  login,
-  register,
-  getAllUsers,
-  getOneUser,
-  updateUser,
-  deleteUser,
-} from "../controllers/user";
-
+import { login, getAllUsers, getOneUser } from "../controllers/user";
+import authenticateUser from "../middleware/authentication";
 router.route("/auth/login").post(login);
-router.route("/auth/register").post(register);
-router.route("/").get(getAllUsers);
-router.route("/:id").get(getOneUser).delete(deleteUser).patch(updateUser);
+router.route("/user").get(authenticateUser, getAllUsers);
+router.route("/user/:id").get(authenticateUser, getOneUser);
 
 export default router;

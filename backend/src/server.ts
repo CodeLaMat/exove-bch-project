@@ -1,7 +1,7 @@
 import express, { Request, Response, NextFunction } from "express";
 const app = express();
 import dotenv from "dotenv";
-const cors = require("cors");
+import cors from "cors";
 dotenv.config();
 
 // db
@@ -24,9 +24,9 @@ app.use(express.json());
 app.get("/api/v1", (req: Request, res: Response) => {
   res.json({ msg: "API" });
 });
-app.use("/api/v1/users", userRouter);
-app.use("/api/v1/questions", questionRouter);
-app.use("/api/v1/responses", responsesRouter);
+app.use("/api/v1", userRouter);
+app.use("/api/v1", questionRouter);
+app.use("/api/v1", responsesRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

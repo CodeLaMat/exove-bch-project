@@ -6,6 +6,9 @@ import MyProfile from "../components/userProfile/MyProfile";
 import Layout from "../pages/Layout";
 import HRInbox from "../components/hr/inbox/HRInbox";
 import HRSurveys from "../components/hr/surveys/HRSurveys";
+import CreateSurvey from "../components/hr/surveys/CreateSurvey";
+import ListSurveys from "../components/hr/surveys/ListSurveys";
+import SurveyChoice from "../components/hr/surveys/SurveyChoice";
 import HRUsers from "../components/hr/users/HRUsers";
 import HRQuestionnaire from "../components/hr/questionnaire/HRQuestionnaire";
 import HRAnalytics from "../components/hr/analytics/HRAnalytics";
@@ -36,6 +39,18 @@ export const sideMenuRoutes: RouteConfig = {
         {
           path: "surveys",
           element: <HRSurveys />,
+        },
+        {
+          path: "SurveyChoice",
+          element: <SurveyChoice />,
+        },
+        {
+          path: "createsurvey",
+          element: <CreateSurvey />,
+        },
+        {
+          path: "ListSurveys",
+          element: <ListSurveys />,
         },
         {
           path: "users",
