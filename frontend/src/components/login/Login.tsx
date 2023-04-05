@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import axios from "axios";
 import { UserRole } from "../../enum";
 import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
 import {
@@ -15,6 +16,9 @@ import Form from "react-bootstrap/Form";
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
   const dispatch = useAppDispatch();
 
   const { selectedRole } = useAppSelector((state) => state.loginUser);
@@ -36,7 +40,39 @@ const Login: React.FC<LoginProps> = () => {
     });
     dispatch(initialiseEmployees());
     dispatch(initialiseQuestions());
-    navigate("/home"); // redirect to the dashboard page
+    navigate("/home");
+  };
+
+  const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+
+    try {
+      // We make API call to authenticate user
+      const response = await axios.post("http://localhost:5010/auth/login", {
+        email,
+        password,
+      });
+      const userData = response.data;
+      console.log("Response:", response.data);
+      // We check if user with email and password exists
+      if (userData) {
+        dispatch<SetIsAuthenticatedAction>({
+          type: "SET_IS_AUTHENTICATED",
+          payload: true,
+        });
+        dispatch({
+          type: "SET_SELECTED_ROLE",
+          payload: userData.role as UserRole,
+        });
+        dispatch(initialiseEmployees());
+        dispatch(initialiseQuestions());
+      } else {
+        alert("Invalid email or password");
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Error logging in");
+    }
   };
 
   return (
@@ -67,30 +103,25 @@ const Login: React.FC<LoginProps> = () => {
           access your account. If you have forgotten your password, you can
           reset it by clicking the "Forgot Password" link below the login form.
         </div>
-        <Form>
-          <fieldset disabled>
+        <Form action="POST" onSubmit={loginHandler}>
+          <fieldset>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="disabledTextInput">
-                Disabled input
-              </Form.Label>
-              <Form.Control
-                id="disabledTextInput"
-                placeholder="Disabled input"
-              />
+              <Form.Label htmlFor="TextInput">Email</Form.Label>
+              <Form.Control id="TextInput" placeholder="email" />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="disabledSelect">
-                Disabled select menu
-              </Form.Label>
-              <Form.Select id="disabledSelect">
-                <option>Disabled select</option>
-              </Form.Select>
+              <Form.Label htmlFor="password">Password</Form.Label>
+              <Form.Control
+                id="passwordInput"
+                type="password"
+                placeholder="password"
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Check
                 type="checkbox"
                 id="disabledFieldsetCheck"
-                label="Can't check this"
+                label="Keep you loged in"
               />
             </Form.Group>
             <Button type="submit">Login</Button>

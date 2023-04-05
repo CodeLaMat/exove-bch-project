@@ -5,6 +5,7 @@ import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "./SurveySummaryChart";
 import ProgressBar from "./ProgressBar";
 import DBUsers from "./DBUsers";
+import SurveyChoice from "../surveys/SurveyChoice";
 
 const HRDashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);

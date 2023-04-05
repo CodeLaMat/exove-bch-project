@@ -20,6 +20,8 @@ import ManagerInbox from "../components/manager/inbox/ManagerInbox";
 import ManagerSurveys from "../components/manager/surveys/ManagerSurveys";
 import UserDashboard from "../components/user/dashboard/UserDashboard";
 import UserInbox from "../components/user/inbox/UserInbox";
+import CreateSurvey from "../components/hr/surveys/CreateSurvey";
+import ListSurveys from "../components/hr/surveys/ListSurveys";
 
 const MainRoutes = () => {
   const { selectedRole } = useAppSelector((state) => state.loginUser);
@@ -51,9 +53,7 @@ const MainRoutes = () => {
                   <UserDashboard />
                 ) : null
               }
-            >
-              {" "}
-            </Route>
+            ></Route>
             <Route
               path="/inbox"
               element={
@@ -75,39 +75,37 @@ const MainRoutes = () => {
                   <ManagerSurveys />
                 ) : null
               }
-            ></Route>
+            ></Route>{" "}
+            <Route
+              path="/surveyslist"
+              element={selectedRole === UserRole.HR ? <ListSurveys /> : null}
+            />
+            <Route
+              path="/createsurvey"
+              element={selectedRole === UserRole.HR ? <CreateSurvey /> : null}
+            />
             <Route
               path="/users"
               element={selectedRole === UserRole.HR ? <HRUsers /> : null}
-            >
-              {" "}
-            </Route>
+            ></Route>
             <Route
               path="/questionnaire"
               element={
                 selectedRole === UserRole.HR ? <HRQuestionnaire /> : null
               }
-            >
-              {" "}
-            </Route>
+            ></Route>
             <Route
               path="/analytics"
               element={selectedRole === UserRole.HR ? <HRAnalytics /> : null}
-            >
-              {" "}
-            </Route>
+            ></Route>
             <Route
               path="/filesfolders"
               element={selectedRole === UserRole.HR ? <HRFilesFolders /> : null}
-            >
-              {" "}
-            </Route>
-            <Route path="/myprofile" element={<MyProfile />}>
-              {" "}
-            </Route>
+            ></Route>
+            <Route path="/myprofile" element={<MyProfile />}></Route>
             <Route path="/info" element={<Info />}></Route>
             <Route path="/logout" element={<Logout />}></Route>
-          </Route>{" "}
+          </Route>
         </Route>{" "}
         <Route path="*">This page could not be found</Route>
       </Routes>
