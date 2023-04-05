@@ -17,23 +17,13 @@ function QuestionMult() {
   );
   const survey = useAppSelector((state: RootState) => state.survey.survey);
   const { selectedRole } = useAppSelector((state) => state.loginUser);
-
-  const mappedQuestions = questions.map((question: QuestionProps) => {
-    return {
-      _id: question._id,
-      question: question.question,
-      questionType: question.type,
-      createdAt: question.createdAt,
-      updatedAt: question.updatedAt,
-      __v: question.__v,
-    };
-  });
   console.log(questions);
+
   return (
     <div>
-      {mappedQuestions.map((quest: QuestionProps) => (
+      {questions.map((questtions: QuestionProps) => (
         <Card>
-          <Card.Body>{quest.question}</Card.Body>
+          <Card.Body>{questions.question}</Card.Body>
           <div key={`inline-$"radio"`} className="mb-3">
             <Form.Check
               inline

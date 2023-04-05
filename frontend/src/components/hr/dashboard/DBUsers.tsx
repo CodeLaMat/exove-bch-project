@@ -32,7 +32,13 @@ const DBUsers = () => {
           <td>@fat</td>
         </tr>
         <tr>
-          <td>2</td>
+          <td>3</td>
+          <td>Jacob</td>
+          <td>Thornton</td>
+          <td>@fat</td>
+        </tr>
+        <tr>
+          <td>4</td>
           <td>Jacob</td>
           <td>Thornton</td>
           <td>@fat</td>

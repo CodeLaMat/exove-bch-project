@@ -30,3 +30,7 @@
   grid-column: 18/26;
   grid-row: 13/25;
 }
+
+.dashboard_emplList {
+  padding: 10px;
+}
