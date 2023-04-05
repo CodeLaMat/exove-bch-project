@@ -4,6 +4,7 @@ import classes from "./HRDashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "./SurveySummaryChart";
 import ProgressBar from "./ProgressBar";
+
 const HRDashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);
 

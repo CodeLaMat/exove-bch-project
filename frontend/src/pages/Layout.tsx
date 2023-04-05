@@ -18,7 +18,7 @@ const Layout = () => {
       <div className={classes.mainConsole}>
         {isAuthenticated && (
           <aside className={classes.sidemenu}>
-            <Sidemenu name={userName} image={imageUrl} role={selectedRole} />
+            <Sidemenu image={imageUrl} name={userName} role={selectedRole} />
           </aside>
         )}
         <div className={classes.mainitems}>

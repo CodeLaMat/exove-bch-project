@@ -17,6 +17,7 @@ interface Iprops {
   name: string;
   link: string;
   pageTitle: string;
+  onClick?: () => (() => void) | undefined;
 }
 const MenuItem = (props: Iprops) => {
   const { icon, name, link } = props;

@@ -1,62 +1,129 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
+import { AppDispatch } from "../../store";
+import { Dispatch, Action } from "redux";
+import { QuestionProps, SurveyType } from "../../types/dataTypes";
+import questionsService from "../../services/questions";
+import surveysService from "../../services/surveys";
+import { useEffect } from "react";
 
-interface FormState {
-  category: string;
-  question: string;
+export interface SurveyData {
+  name: string;
   description: string;
-  formStatus: string;
-  isFreeForm: boolean;
-  questionType: string;
+  questions: QuestionProps[];
+  createdAt: number;
+  updatedAt: number;
 }
 
-const initialState: FormState = {
-  category: "",
-  question: "",
+const initialSurveyState: SurveyData = {
+  name: "",
   description: "",
-  formStatus: "completed" || "incomplete" || "inreview",
-  isFreeForm: false,
-  questionType: "",
+  questions: [],
+  createdAt: 0,
+  updatedAt: 0,
 };
 
-const formSlice = createSlice({
-  name: "formSlice",
-  initialState,
+export interface SurveysData {
+  surveys: SurveyType[];
+}
+
+const initialSurveysState: SurveysData = {
+  surveys: [],
+};
+
+export const surveySlice = createSlice({
+  name: "survey",
+  initialState: initialSurveyState,
   reducers: {
-    setCategory: (state, action: PayloadAction<string>) => {
-      state.category = action.payload;
+    setName: (state, action: PayloadAction<string>) => {
+      state.name = action.payload;
     },
-
-    setQuestion: (state, action: PayloadAction<string>) => {
-      state.question = action.payload;
-    },
-
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
+    },
+    setQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
+      state.questions = action.payload;
+    },
+    setCreatedAt: (state, action: PayloadAction<number>) => {
+      state.createdAt = action.payload;
+    },
+    setUpdatedAt: (state, action: PayloadAction<number>) => {
+      state.updatedAt = action.payload;
+    },
+    getAllQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
+      state.questions = action.payload;
     },
   },
 });
 
-export interface SetIsFreeForm {
-  type: "SET_IS_FREEFORM";
-  payload: boolean;
-}
+export const {
+  setName,
+  setDescription,
+  setQuestions,
+  setCreatedAt,
+  setUpdatedAt,
+  getAllQuestions,
+} = surveySlice.actions;
 
-export type FormAction = SetIsFreeForm;
+export const initialiseQuestions = () => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const questions = (await questionsService.getAll()) as QuestionProps[];
+      dispatch(setQuestions(questions));
+    } catch (error) {
+      console.log("Error fetching the questions", error);
+    }
+  };
+};
 
-export function formTypeReducer(
-  state: FormState = initialState,
-  action: FormAction
-): FormState {
-  switch (action.type) {
-    case "SET_IS_FREEFORM":
-      return { ...state, isFreeForm: action.payload };
-    default:
-      return state;
-  }
-}
+export const useInitialiseQuestions = (dispatch: AppDispatch) => {
+  useEffect(() => {
+    dispatch(initialiseQuestions());
+  }, [dispatch]);
+};
 
-export const { setCategory, setQuestion, setDescription } = formSlice.actions;
+export const surveysSlice = createSlice({
+  name: "surveys",
+  initialState: initialSurveysState,
+  reducers: {
+    setSurveys: (state, action: PayloadAction<SurveyType[]>) => {
+      state.surveys = action.payload;
+    },
+    addSurvey: (state, action: PayloadAction<SurveyType>) => {
+      state.surveys.push(action.payload);
+    },
+    removeSurvey: (state, action: PayloadAction<number>) => {
+      state.surveys = state.surveys.filter(
+        (survey) => survey._id !== action.payload
+      );
+    },
+    updateSurvey: (state, action: PayloadAction<SurveyType>) => {
+      const index = state.surveys.findIndex(
+        (survey) => survey._id === action.payload._id
+      );
+      if (index !== -1) {
+        state.surveys[index] = action.payload;
+      }
+    },
 
-export const selectSurvey = (state: RootState) => state.survey;
-export default formSlice.reducer;
+    getAllSurveys: (state, action: PayloadAction<SurveyType[]>) => {
+      state.surveys = action.payload;
+    },
+  },
+});
+
+export const {
+  setSurveys,
+  addSurvey,
+  removeSurvey,
+  updateSurvey,
+  getAllSurveys,
+} = surveysSlice.actions;
+
+export const initialiseSurveys = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    const surveys = await surveysService.getAll();
+    dispatch(getAllSurveys(surveys));
+  };
+};
+
+export default surveySlice.reducer;
