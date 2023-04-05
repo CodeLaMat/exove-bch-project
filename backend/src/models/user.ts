@@ -64,7 +64,7 @@ const UserSchema = new mongoose.Schema({
     },
   },
   image: {
-    type: Buffer,
+    type: String,
   },
 });
 
