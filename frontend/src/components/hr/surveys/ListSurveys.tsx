@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import PageHeading from '../../pageHeading/PageHeading';
-import classes from './ListSurvey.module.css'
+import classes from './ListSurveys.module.css'
 import axios from 'axios';
 
 const ListSureys = () => {

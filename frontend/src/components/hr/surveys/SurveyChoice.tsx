@@ -1,5 +1,5 @@
 import React from 'react';
-import classes from './Surveychoice.module.css'
+import classes from './SurveyChoice.module.css'
 import PageHeading from '../../pageHeading/PageHeading';
 import { NavLink } from 'react-router-dom';
 
@@ -11,8 +11,8 @@ const Surveychoice = () => {
         />
         <div className={classes.top}>
           <div className={classes.maincontent}>
-            <button> <NavLink to="/createSurvey">Create Survey</NavLink></button>
-            <button> <NavLink to="/listSurvey">list Surveys</NavLink></button>
+            <button> <NavLink to="/createsurvey">Create Survey</NavLink></button>
+            <button> <NavLink to="/listsurvey">list Surveys</NavLink></button>
           </div>
         </div>
       </div>
