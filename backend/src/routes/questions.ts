@@ -9,9 +9,9 @@ import {
   updateQuestion,
 } from "../controllers/questions";
 
-router.route("/").get(getAllQuestions).post(addQuestion);
+router.route("/questions").get(getAllQuestions).post(addQuestion);
 router
-  .route("/:id")
+  .route("/questions/:id")
   .get(getOneQuestion)
   .delete(deleteQuestion)
   .patch(updateQuestion);
