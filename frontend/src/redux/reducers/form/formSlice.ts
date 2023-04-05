@@ -7,19 +7,17 @@ import surveysService from "../../services/surveys";
 import { useEffect } from "react";
 
 export interface SurveyData {
-  name: string;
+  _id: string;
   description: string;
   questions: QuestionProps[];
-  createdAt: number;
-  updatedAt: number;
+  name: string;
 }
 
 const initialSurveyState: SurveyData = {
+  _id: "",
   name: "",
   description: "",
   questions: [],
-  createdAt: 0,
-  updatedAt: 0,
 };
 
 export interface SurveysData {
@@ -43,12 +41,7 @@ export const surveySlice = createSlice({
     setQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
       state.questions = action.payload;
     },
-    setCreatedAt: (state, action: PayloadAction<number>) => {
-      state.createdAt = action.payload;
-    },
-    setUpdatedAt: (state, action: PayloadAction<number>) => {
-      state.updatedAt = action.payload;
-    },
+
     getAllQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
       state.questions = action.payload;
     },
@@ -59,8 +52,7 @@ export const {
   setName,
   setDescription,
   setQuestions,
-  setCreatedAt,
-  setUpdatedAt,
+
   getAllQuestions,
 } = surveySlice.actions;
 

@@ -34,15 +34,11 @@ export interface QuestionsType {
 }
 
 export interface QuestionProps {
-  _id: number | string;
+  _id: string;
   category: Categories;
   question: string;
-  type: Question_Type;
-  answerOptions: [1, 2, 3, 4, 5];
-  response: number;
-  createdAt: number;
-  updatedAt: number;
-  __v: number;
+  questionType: Question_Type;
+  description: string;
 }
 
 export type SectionType = {

@@ -32,7 +32,6 @@ const Questionnaire = () => {
       <PageHeading pageTitle="Questionnaire" />
       <div>
         <AddQuestion />
-        <QuestionForm />
       </div>
     </div>
   );
