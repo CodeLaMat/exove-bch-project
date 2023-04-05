@@ -1,47 +1,79 @@
-const express = require('express');
-const { Request, Response, NextFunction } = require('express');
 
-import  * as dotenv from "dotenv";
-const cors = require("cors");
+import * as ldap from 'ldapjs';
+import * as dotenv from 'dotenv';
 
-const isAuthenticated = false;
 
 dotenv.config();
 
+const express = require('express');
+const { Request, Response, NextFunction } = require('express');
+const cors = require("cors");
 const app = express();
 
-const LDAPAuth = require('ldapauth-fork');
-
-const ldap = new LDAPAuth({
-  url: 'ldap://192.168.100.36:389',
-  bindDN: 'cn=admin,dc=test,dc=com',
-  bindCredentials: process.env.BIND_CREDENTIALS,
-  searchBase: 'dc=test,dc=com',
-  searchFilter: '(uid={{username}})'
-});
-
-
 app.use(cors());
+app.use(express.json());
 
-// Add LDAP authentication middleware to '/login' route
-app.post('/login', ldap.auth({
-  usernameField: 'username',
-  passwordField: 'password',
-  sessionName: 'myapp_session',
-  sessionSecret: 'myapp_secret',
-  failureRedirect: '/login'
-}), (req, res) => {
-  res.send('Login successful');
+
+const serverUrl = 'ldap://192.168.100.36:389';
+const adminDn = 'cn=admin,dc=test,dc=com';
+const adminPassword = process.env.BIND_CREDENTIALS;
+const searchBase = 'dc=test,dc=com';
+const searchFilter = '(uid=john)';
+
+const client = ldap.createClient({
+  url: serverUrl,
 });
 
-// Add protected route that requires authentication
-app.get('/dashboard', (req, res) => {
-  if (isAuthenticated) {
-    res.send('Welcome to the dashboard');
-  } else {
-    res.redirect('/login');
+console.log("adminpass: ", adminPassword );
+
+const bindClient = (client: ldap.Client, adminDn: string, adminPassword: string) => {
+  return new Promise<void>((resolve, reject) => {
+    client.bind(adminDn, adminPassword, (err) => {
+      if (err) {
+        reject(err);
+      } else {
+        resolve();
+      }
+    });
+  });
+};
+
+const search = (client: ldap.Client, searchBase: string, searchFilter: string) => {
+  return new Promise<ldap.SearchCallbackResponse>((resolve, reject) => {
+    client.search(searchBase, {
+      scope: 'sub',
+      filter: searchFilter,
+    }, (err, res) => {
+      if (err) {
+        reject(err);
+      } else {
+        res.on('searchEntry', (entry) => {
+            return new Promise((resolve) => {
+              resolve(entry);
+            });
+          });
+        res.on('error', (err) => {
+          reject(err);
+        });
+      }
+    });
+  });
+};
+
+(async () => {
+  try {
+    if (typeof adminPassword === "undefined") {
+        throw new Error("Admin password is not defined");
+      }
+    await bindClient(client, adminDn, adminPassword);
+    const result = await search(client, searchBase, searchFilter);
+    console.log(result);
+  } catch (err) {
+    console.error(err);
+  } finally {
+    client.unbind();
   }
-});
+})();
 
 const port = process.env.PORT || 3000;
 
