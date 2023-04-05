@@ -1,5 +1,5 @@
 import React from "react";
-import PageHeading from "./pageHeading/PageHeading";
+import PageHeading from "../pageHeading/PageHeading";
 
 const Info = () => {
   return (

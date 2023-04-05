@@ -1,6 +1,6 @@
 import React from "react";
 import { UserRole } from "../enum";
-import Info from "../components/Info";
+import Info from "../components/userProfile/Info";
 import Logout from "../components/login/Logout";
 import MyProfile from "../components/userProfile/MyProfile";
 import Layout from "../pages/Layout";

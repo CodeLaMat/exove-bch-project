@@ -3,7 +3,7 @@ import { Route, Routes } from "react-router-dom";
 import { UserRole } from "../enum";
 import { useAppSelector } from "../../src/redux/hooks/hooks";
 import ProtectedRoutes from "../ProtectedRoutes";
-import Info from "../components/Info";
+import Info from "../components/userProfile/Info";
 import Logout from "../components/login/Logout";
 import MyProfile from "../components/userProfile/MyProfile";
 import Main from "./templates/main/Main";

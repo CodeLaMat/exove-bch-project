@@ -6,6 +6,7 @@ import {
   getEmployees,
   initialiseEmployees,
 } from "../../redux/reducers/user/userListSlice";
+import { initialiseQuestions } from "../../redux/reducers/form/formSlice";
 import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
@@ -34,6 +35,7 @@ const Login: React.FC<LoginProps> = () => {
       payload: true,
     });
     dispatch(initialiseEmployees());
+    dispatch(initialiseQuestions());
     navigate("/home"); // redirect to the dashboard page
   };
 
