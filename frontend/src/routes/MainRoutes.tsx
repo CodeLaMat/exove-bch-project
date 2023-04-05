@@ -10,6 +10,7 @@ import Main from "./templates/main/Main";
 import HRDashboard from "../components/hr/dashboard/HRDashboard";
 import HRInbox from "../components/hr/inbox/HRInbox";
 import HRSurveys from "../components/hr/surveys/HRSurveys";
+import SurveyChoice from "../components/hr/surveys/SurveyChoice";
 import HRUsers from "../components/hr/users/HRUsers";
 import HRQuestionnaire from "../components/hr/questionnaire/HRQuestionnaire";
 import HRAnalytics from "../components/hr/analytics/HRAnalytics";
@@ -69,7 +70,7 @@ const MainRoutes = () => {
               path="/surveys"
               element={
                 selectedRole === UserRole.HR ? (
-                  <HRSurveys />
+                  <SurveyChoice />
                 ) : selectedRole === UserRole.Manager ? (
                   <ManagerSurveys />
                 ) : null
