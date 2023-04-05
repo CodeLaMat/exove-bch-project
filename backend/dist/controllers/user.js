@@ -29,7 +29,7 @@ const login = async (req, res) => {
 };
 exports.login = login;
 const getAllUsers = async (req, res) => {
-    const users = await user_1.default.find().sort("role");
+    const users = await user_1.default.find({}).sort("role");
     res.status(http_status_codes_1.StatusCodes.OK).json({ users, count: users.length });
 };
 exports.getAllUsers = getAllUsers;
@@ -39,6 +39,6 @@ const getOneUser = async (req, res) => {
     if (!user) {
         throw new errors_1.NotFoundError(`No user with id ${userId}`);
     }
-    res.send("show stats");
+    res.status(http_status_codes_1.StatusCodes.OK).json({ user });
 };
 exports.getOneUser = getOneUser;

@@ -1,9 +1,9 @@
 [
   {
-    "firstName": "Willem",
-    "surName": "Kettridge",
-    "email": "wkettridge0@cloudflare.com",
-    "password": "spgI7smjpsG8",
+    "firstName": "Alishov",
+    "surName": "Eyvaz",
+    "email": "eyvaz@example.com",
+    "password": "secret",
     "personals": {},
     "about": {},
     "work": { "reportsTo": "642b0545fc13ae2c01f4cf7c" },
@@ -15,10 +15,10 @@
     "image": "fileName.svg"
   },
   {
-    "firstName": "Lorettalorna",
-    "surName": "Ronci",
-    "email": "lronci1@google.ca",
-    "password": "A75gGJx",
+    "firstName": "Dansie",
+    "surName": "Jason",
+    "email": "jason@example.com",
+    "password": "secret",
     "personals": {},
     "about": {},
     "work": { "reportsTo": "642b0545fc13ae2c01f4cf7d" },
@@ -30,10 +30,10 @@
     "image": "fileName.svg"
   },
   {
-    "firstName": "Dorry",
-    "surName": "Pover",
-    "email": "dpover2@google.co.uk",
-    "password": "b15qD8rzjot",
+    "firstName": "Fuh",
+    "surName": "Suh",
+    "email": "fuhsuh@example.com",
+    "password": "secret",
     "personals": {},
     "about": {},
     "work": { "reportsTo": "642b0545fc13ae2c01f4cf7e" },
@@ -45,10 +45,10 @@
     "image": "fileName.svg"
   },
   {
-    "firstName": "Monte",
-    "surName": "Shutler",
-    "email": "mshutler3@simplemachines.org",
-    "password": "yM4HIwUwVm9",
+    "firstName": "Niki",
+    "surName": "Lyudikaynen",
+    "email": "niki@example.com",
+    "password": "secret",
     "personals": {},
     "about": {},
     "work": { "reportsTo": "642b0545fc13ae2c01f4cf7f" },

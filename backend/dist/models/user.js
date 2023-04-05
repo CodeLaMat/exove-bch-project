@@ -83,7 +83,7 @@ const UserSchema = new mongoose.Schema({
         },
     },
     image: {
-        type: Buffer,
+        type: String,
     },
 });
 UserSchema.virtual("displayName").get(function () {

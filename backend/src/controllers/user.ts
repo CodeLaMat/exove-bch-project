@@ -40,7 +40,7 @@ const login = async (req: Request, res: Response) => {
 };
 
 const getAllUsers = async (req: Request, res: Response) => {
-  const users = await User.find().sort("role");
+  const users = await User.find({}).sort("role");
   res.status(StatusCodes.OK).json({ users, count: users.length });
 };
 const getOneUser = async (req: Request, res: Response) => {
@@ -51,7 +51,7 @@ const getOneUser = async (req: Request, res: Response) => {
   if (!user) {
     throw new NotFoundError(`No user with id ${userId}`);
   }
-  res.send("show stats");
+  res.status(StatusCodes.OK).json({ user });
 };
 // const register = async (req: Request, res: Response) => {
 //   res.send("user register");

@@ -37,7 +37,7 @@ export type User = {
   site?: string;
   startDate?: Date;
   role: UserRoles;
-  image?: File;
+  image?: String;
 };
 
 export interface QuestionModel {
@@ -120,7 +120,7 @@ export interface UserModel {
     enum: UserRoles;
   };
   image?: {
-    type: File;
+    type: string;
   };
 }
 
@@ -147,9 +147,5 @@ export interface ResponseModel {
 
   response: {
     type: number | string;
-  };
-  createdAt: {
-    type: Date;
-    default: Date;
   };
 }
