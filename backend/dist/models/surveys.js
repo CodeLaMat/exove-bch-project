@@ -24,7 +24,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
-const QuestionSchema = new mongoose.Schema({
+const questionSchema = new mongoose.Schema({
     category: {
         type: String,
         enum: {
@@ -42,7 +42,7 @@ const QuestionSchema = new mongoose.Schema({
     },
     question: {
         type: String,
-        required: [true, "Question must be provided"],
+        required: [true, "Survey must be provided"],
     },
     description: {
         type: String,
@@ -58,5 +58,19 @@ const QuestionSchema = new mongoose.Schema({
         },
     },
 });
-const Question = mongoose.model("Question", QuestionSchema);
-exports.default = Question;
+const surveySchema = new mongoose.Schema({
+    surveyName: {
+        type: String,
+        required: true,
+    },
+    description: {
+        type: String,
+        required: true,
+    },
+    questions: {
+        type: [questionSchema],
+        required: true,
+    },
+}, { timestamps: true });
+const survey = mongoose.model('survey', surveySchema);
+exports.default = survey;
