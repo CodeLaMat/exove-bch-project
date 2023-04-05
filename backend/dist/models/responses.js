@@ -51,6 +51,6 @@ const ResponseSchema = new mongoose.Schema({
         type: Date,
         default: Date.now(),
     },
-});
+}, { timestamps: true });
 const Responses = mongoose.model("Responses", ResponseSchema);
 exports.default = Responses;
