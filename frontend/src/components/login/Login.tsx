@@ -48,10 +48,13 @@ const Login: React.FC<LoginProps> = () => {
 
     try {
       // We make API call to authenticate user
-      const response = await axios.post("http://localhost:5010/auth/login", {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        "http://localhost:5010/api/v1/auth/login",
+        {
+          email,
+          password,
+        }
+      );
       const userData = response.data;
       console.log("Response:", response.data);
       // We check if user with email and password exists
