@@ -17,7 +17,6 @@ const CreateSurvey: React.FC = () => {
   const [surveyName, setSurveyName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
-  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
     surveyName: "",
     description: "",
