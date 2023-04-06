@@ -10,12 +10,12 @@ export interface SurveyData {
   _id: string;
   description: string;
   questions: QuestionProps[];
-  name: string;
+  surveyName: string;
 }
 
 const initialSurveyState: SurveyData = {
   _id: "",
-  name: "",
+  surveyName: "",
   description: "",
   questions: [],
 };
@@ -33,7 +33,7 @@ export const surveySlice = createSlice({
   initialState: initialSurveyState,
   reducers: {
     setName: (state, action: PayloadAction<string>) => {
-      state.name = action.payload;
+      state.surveyName = action.payload;
     },
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;

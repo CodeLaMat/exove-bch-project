@@ -28,7 +28,7 @@ const CreateSurvey: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<QuestionProps[]>("http://localhost:5000/list/questions")
+      .get<QuestionProps[]>("http://localhost:5010/api/v1/questions")
       .then((response) => {
         setQuestionList(response.data);
       })
@@ -88,7 +88,7 @@ const CreateSurvey: React.FC = () => {
       questions: surveyQuestions,
     }));
 
-    const endpointUrl = "http://localhost:5000/list/surveys";
+    const endpointUrl = "http://localhost:5010/api/v1/surveys";
 
     // Make the POST request with Axios
     axios

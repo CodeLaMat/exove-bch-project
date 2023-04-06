@@ -13,7 +13,7 @@ const SurveyChoice = () => {
 
   useEffect(() => {
     axios
-      .get<SurveyData[]>("http://localhost:5000/list/surveys")
+      .get<SurveyData[]>("http://localhost:5010/api/v1/surveys")
       .then((response) => {
         setsurveyList(response.data);
       })
@@ -50,7 +50,7 @@ const SurveyChoice = () => {
                   {surveyList.map((survey: SurveyData) => (
                     <tr key={survey._id}>
                       <td>{survey._id}</td>
-                      <td>{survey.name}</td>
+                      <td>{survey.surveyName}</td>
                       <td>{survey.description}</td>
                       <td>
                         <ul>
