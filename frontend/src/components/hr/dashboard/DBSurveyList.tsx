@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import classes from "./HRDashboard.module.css";
 import axios from "axios";
-
 import { Table } from "react-bootstrap";
 import { SurveyType } from "../../../redux/types/dataTypes";
 
