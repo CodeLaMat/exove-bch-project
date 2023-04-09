@@ -1,19 +1,12 @@
+import { useEffect } from "react";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { AppDispatch } from "../../store";
 import { Dispatch, Action } from "redux";
 import { QuestionProps, SurveyType } from "../../types/dataTypes";
 import questionsService from "../../services/questions";
 import surveysService from "../../services/surveys";
-import { useEffect } from "react";
 
-export interface SurveyData {
-  _id: string;
-  description: string;
-  questions: QuestionProps[];
-  surveyName: string;
-}
-
-const initialSurveyState: SurveyData = {
+const initialSurveyState: SurveyType = {
   _id: "",
   surveyName: "",
   description: "",
@@ -83,7 +76,7 @@ export const surveysSlice = createSlice({
     addSurvey: (state, action: PayloadAction<SurveyType>) => {
       state.surveys.push(action.payload);
     },
-    removeSurvey: (state, action: PayloadAction<number>) => {
+    removeSurvey: (state, action: PayloadAction<string>) => {
       state.surveys = state.surveys.filter(
         (survey) => survey._id !== action.payload
       );

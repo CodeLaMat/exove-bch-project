@@ -6,9 +6,10 @@ import {
   Reducer,
 } from "@reduxjs/toolkit";
 import employeeSlice from "./reducers/user/userListSlice";
-import { loginSlice, LoginAction } from "./reducers/login/loginSlice";
+import { loginSlice } from "./reducers/login/loginSlice";
 import surveySlice from "./reducers/form/formSlice";
 import surveysSlice from "./reducers/form/formSlice";
+import { LoginAction } from "./types/loginTypes";
 
 type AppAction =
   | LoginAction

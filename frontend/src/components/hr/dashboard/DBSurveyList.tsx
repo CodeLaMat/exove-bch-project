@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import classes from "./HRDashboard.module.css";
 import axios from "axios";
-import { SurveyData } from "../../../redux/reducers/form/formSlice";
-import { Table } from "react-bootstrap";
 
-const DBEmplList = () => {
-  const [surveyList, setsurveyList] = useState<SurveyData[]>([]);
+import { Table } from "react-bootstrap";
+import { SurveyType } from "../../../redux/types/dataTypes";
+
+const DBSurveyList = () => {
+  const [surveyList, setsurveyList] = useState<SurveyType[]>([]);
 
   useEffect(() => {
     axios
-      .get<SurveyData[]>("http://localhost:5010/api/v1/surveys")
+      .get<SurveyType[]>("http://localhost:5010/api/v1/surveys")
       .then((response) => {
         setsurveyList(response.data);
       })
       .catch((error) => {
         console.error(error);
-        // Add logic to handle the error if needed
       });
   }, [setsurveyList]);
 
@@ -33,7 +33,7 @@ const DBEmplList = () => {
           </tr>
         </thead>
         <tbody>
-          {surveyList.map((survey: SurveyData) => (
+          {surveyList.map((survey: SurveyType) => (
             <tr key={survey._id}>
               <td>{survey._id}</td>
               <td>{survey.surveyName}</td>
@@ -53,4 +53,4 @@ const DBEmplList = () => {
   );
 };
 
-export default DBEmplList;
+export default DBSurveyList;

@@ -4,13 +4,7 @@ import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./CreateSurvey.module.css";
 import axios from "axios";
 import { Button } from "react-bootstrap";
-import { QuestionProps } from "../../../redux/types/dataTypes";
-
-interface FormData {
-  surveyName: string;
-  description: string;
-  questions: QuestionProps[];
-}
+import { QuestionProps, FormData } from "../../../redux/types/dataTypes";
 
 const CreateSurvey: React.FC = () => {
   const [questionList, setQuestionList] = useState<QuestionProps[]>([]);
