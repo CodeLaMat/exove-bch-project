@@ -83,3 +83,77 @@
     ```
 
 ````
+
+{
+"users": [
+{
+"work": {
+"reportsTo": "642b0545fc13ae2c01f4cf80"
+},
+"_id": "642d20b9477db2115844a24b",
+"firstName": "Bibbye",
+"surName": "Gwyn",
+"email": "bgwyn4@clickbank.net",
+"password": "LspPqs8R6x",
+"title": "Automation Specialist III",
+"department": "Accounting",
+"site": "Baishuitan",
+"startDate": "2019-04-06T07:36:40.000Z",
+"role": "employee",
+"image": "fileName.svg",
+"__v": 0
+},
+{
+"work": {
+"reportsTo": "642b0545fc13ae2c01f4cf81"
+},
+"_id": "642d20b9477db2115844a24c",
+"firstName": "Winn",
+"surName": "Phelipeaux",
+"email": "wphelipeaux5@unesco.org",
+"password": "5xivJLHUXo1B",
+"title": "Administrative Officer",
+"department": "Research and Development",
+"site": "Citeureup",
+"startDate": "2019-10-02T04:53:47.000Z",
+"role": "employee",
+"image": "fileName.svg",
+"__v": 0
+},]}
+
+[
+[
+{
+"work": {
+"reportsTo": "642b0545fc13ae2c01f4cf80"
+},
+"_id": "642d20b9477db2115844a24b",
+"firstName": "Bibbye",
+"surName": "Gwyn",
+"email": "bgwyn4@clickbank.net",
+"password": "LspPqs8R6x",
+"title": "Automation Specialist III",
+"department": "Accounting",
+"site": "Baishuitan",
+"startDate": "2019-04-06T07:36:40.000Z",
+"role": "employee",
+"image": "fileName.svg",
+"__v": 0
+},
+{
+"work": {
+"reportsTo": "642b0545fc13ae2c01f4cf81"
+},
+"_id": "642d20b9477db2115844a24c",
+"firstName": "Winn",
+"surName": "Phelipeaux",
+"email": "wphelipeaux5@unesco.org",
+"password": "5xivJLHUXo1B",
+"title": "Administrative Officer",
+"department": "Research and Development",
+"site": "Citeureup",
+"startDate": "2019-10-02T04:53:47.000Z",
+"role": "employee",
+"image": "fileName.svg",
+"__v": 0
+},]]

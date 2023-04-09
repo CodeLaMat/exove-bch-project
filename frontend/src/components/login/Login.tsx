@@ -1,74 +1,71 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserRole } from "../../enum";
-import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
-import {
-  getEmployees,
-  initialiseEmployees,
-} from "../../redux/reducers/user/userListSlice";
+import { initialiseEmployees } from "../../redux/reducers/user/userListSlice";
 import { initialiseQuestions } from "../../redux/reducers/form/formSlice";
 import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
   const dispatch = useAppDispatch();
-
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
   const navigate = useNavigate();
-
-  const handleRoleChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    dispatch({
-      type: "SET_SELECTED_ROLE",
-      payload: event.target.value as UserRole,
-    });
-  };
-
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // prevent default form submission behavior
-    // do any necessary login authentication/validation
-    dispatch<SetIsAuthenticatedAction>({
-      type: "SET_IS_AUTHENTICATED",
-      payload: true,
-    });
-    dispatch(initialiseEmployees());
-    dispatch(initialiseQuestions());
-    navigate("/home");
-  };
 
   const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
     try {
-      // We make API call to authenticate user
       const response = await axios.post(
-        "http://localhost:5010/api/v1/auth/login",
+        "http://localhost:5010/api/v1/users/auth/login",
         {
           email,
           password,
         }
       );
       const userData = response.data;
-      console.log("Response:", response.data);
-      // We check if user with email and password exists
-      if (userData) {
-        dispatch<SetIsAuthenticatedAction>({
-          type: "SET_IS_AUTHENTICATED",
-          payload: true,
-        });
-        dispatch({
-          type: "SET_SELECTED_ROLE",
-          payload: userData.role as UserRole,
-        });
-        dispatch(initialiseEmployees());
-        dispatch(initialiseQuestions());
+      // console.log("Response:", response.data);
+
+      if (userData && userData.token) {
+        const token = userData.token;
+
+        // Decoding token to get user role
+        try {
+          const decodedToken: { [key: string]: any } = jwt_decode(token);
+          const userRole = decodedToken.role;
+          if (!userRole) {
+            console.error("The token is invalid: could not extract user role.");
+            alert("Error logging in: could not extract user role.");
+            return;
+          }
+          console.log(userRole);
+
+          localStorage.setItem("token", token);
+          axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
+          localStorage.setItem("userRole", userRole);
+          dispatch<SetIsAuthenticatedAction>({
+            type: "SET_IS_AUTHENTICATED",
+            payload: true,
+          });
+
+          dispatch({
+            type: "SET_SELECTED_ROLE",
+            payload: userRole as UserRole,
+          });
+          dispatch(initialiseEmployees());
+          dispatch(initialiseQuestions());
+          navigate("/home");
+        } catch (error) {
+          console.error(error);
+          alert("Error decoding token");
+        }
       } else {
         alert("Invalid email or password");
       }
@@ -82,25 +79,6 @@ const Login: React.FC<LoginProps> = () => {
     <div className={classes.login_container}>
       <div className={classes.login_box}>
         <h3>Login</h3>
-        <div>
-          <form onSubmit={handleLogin}>
-            <div className={classes.login_input}>
-              <label htmlFor="role-select">Select your role:</label>
-              <select
-                id="role-select"
-                value={selectedRole}
-                onChange={handleRoleChange}
-              >
-                <option value={UserRole.User}>User</option>
-                <option value={UserRole.Manager}>Manager</option>
-                <option value={UserRole.HR}>HR</option>
-              </select>
-            </div>
-            <Button variant="primary" type="submit">
-              Login
-            </Button>
-          </form>
-        </div>
         <div className={classes.login_text}>
           Welcome back! Please enter your email and password to log in and
           access your account. If you have forgotten your password, you can
@@ -109,8 +87,13 @@ const Login: React.FC<LoginProps> = () => {
         <Form action="POST" onSubmit={loginHandler}>
           <fieldset>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="TextInput">Email</Form.Label>
-              <Form.Control id="TextInput" placeholder="email" />
+              <Form.Label htmlFor="email">Email</Form.Label>
+              <Form.Control
+                id="email"
+                placeholder="email"
+                value={email}
+                onChange={(event) => setEmail(event.target.value)}
+              />
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label htmlFor="password">Password</Form.Label>
@@ -118,6 +101,8 @@ const Login: React.FC<LoginProps> = () => {
                 id="passwordInput"
                 type="password"
                 placeholder="password"
+                value={password}
+                onChange={(event) => setPassword(event.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3">

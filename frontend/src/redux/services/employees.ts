@@ -1,10 +1,8 @@
 import axios from "axios";
 import { URL } from "../../enum";
 
-const baseURL = "http://localhost:3000/employees";
-
 const getAll = async () => {
-  const response = await axios.get(baseURL);
+  const response = await axios.get(URL.EMPLOYEES_URL);
   return response.data;
 };
 

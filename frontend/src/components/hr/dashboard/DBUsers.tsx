@@ -1,48 +1,45 @@
-import React from "react";
-import { useAppSelector } from "../../../../src/redux/hooks/hooks";
-
+import React, { useEffect } from "react";
+import { initialiseEmployees } from "../../../redux/reducers/user/userListSlice";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
 import Table from "react-bootstrap/Table";
+import { Employee } from "../../../redux/types/userTypes";
+import { RootState } from "../../../redux/store";
 
 const DBUsers = () => {
-  const employeesList = useAppSelector((state) => state.employees.employees);
+  const dispatch = useAppDispatch();
+  const employees: Employee[][] = useAppSelector(
+    (state: RootState) => state.employees.employees
+  );
 
-  console.log(employeesList);
+  const entries = Object.values(employees);
+
+  console.log(entries);
+  useEffect(() => {
+    dispatch(initialiseEmployees());
+  }, [dispatch]);
 
   return (
     <Table striped bordered hover>
       <thead>
         <tr>
           <th>#</th>
-          <th>First Name</th>
-          <th>Last Name</th>
-          <th>Username</th>
+          <th>Full Name</th>
+          <th>Title</th>
+          <th>Department</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>1</td>
-          <td>Mark</td>
-          <td>Otto</td>
-          <td>@mdo</td>
-        </tr>
-        <tr>
-          <td>2</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>3</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
-        <tr>
-          <td>4</td>
-          <td>Jacob</td>
-          <td>Thornton</td>
-          <td>@fat</td>
-        </tr>
+        {entries[0] &&
+          entries[0].map((employee: Employee, index: number) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>
+                {employee.firstName} {employee.surName}
+              </td>
+              <td>{employee.title}</td>
+              <td>{employee.department}</td>
+            </tr>
+          ))}
       </tbody>
     </Table>
   );
