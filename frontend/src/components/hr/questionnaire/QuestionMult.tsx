@@ -7,7 +7,7 @@ import {
   useAppSelector,
   useAppDispatch,
 } from "../../../../src/redux/hooks/hooks";
-import { initialiseQuestions } from "../../../redux/reducers/form/formSlice";
+import { initialiseQuestions } from "../../../redux/reducers/survey/surveySlice";
 import { QuestionProps } from "../../../redux/types/dataTypes";
 
 function QuestionMult() {

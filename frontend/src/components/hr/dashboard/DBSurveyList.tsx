@@ -3,9 +3,23 @@ import classes from "./HRDashboard.module.css";
 import axios from "axios";
 import { Table } from "react-bootstrap";
 import { SurveyType } from "../../../redux/types/dataTypes";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { RootState } from "../../../redux/store";
+import { initialiseSurveys } from "../../../redux/reducers/survey/surveysSlice";
 
 const DBSurveyList = () => {
+  const dispatch = useAppDispatch();
   const [surveyList, setsurveyList] = useState<SurveyType[]>([]);
+  const surveys: SurveyType[] = useAppSelector(
+    (state: RootState) => state.surveys
+  );
+  const entries = Object.values(surveys);
+
+  console.log(entries);
+
+  useEffect(() => {
+    dispatch(initialiseSurveys());
+  }, [dispatch]);
 
   useEffect(() => {
     axios

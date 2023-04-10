@@ -3,8 +3,8 @@ import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./HRSurveys.module.css";
 import axios from "axios";
-
-import { Button, Table } from "react-bootstrap";
+import { Table } from "react-bootstrap";
+import Button from "../../shared/button/Button";
 import { SurveyType } from "../../../redux/types/dataTypes";
 
 const HRSurveys = () => {

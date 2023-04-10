@@ -17,9 +17,9 @@ const Questionnaire = () => {
     (state: RootState) => state.survey.questions
   );
 
-  const handleInitialiseQuestions = () => {
-    dispatch(setQuestions(["Question 1"]));
-  };
+  // const handleInitialiseQuestions = () => {
+  //   dispatch(setQuestions(["Question 1"]));
+  // };
 
   useEffect(() => {
     dispatch(setQuestions([]));

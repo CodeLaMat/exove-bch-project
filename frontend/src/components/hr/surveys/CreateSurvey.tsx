@@ -3,8 +3,13 @@ import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./CreateSurvey.module.css";
 import axios from "axios";
-import { Button } from "react-bootstrap";
-import { QuestionProps, FormData } from "../../../redux/types/dataTypes";
+import Button from "../../shared/button/Button";
+import Form from "react-bootstrap/Form";
+import {
+  QuestionProps,
+  FormData,
+  QuestionsByCategory,
+} from "../../../redux/types/dataTypes";
 
 const CreateSurvey: React.FC = () => {
   const [questionList, setQuestionList] = useState<QuestionProps[]>([]);
@@ -95,6 +100,18 @@ const CreateSurvey: React.FC = () => {
       });
   };
 
+  const questionsByCategory: QuestionsByCategory = questionList.reduce(
+    (acc, question) => {
+      const category = question.category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(question);
+      return acc;
+    },
+    {} as QuestionsByCategory
+  );
+
   return (
     <div>
       {" "}
@@ -125,21 +142,64 @@ const CreateSurvey: React.FC = () => {
                   onChange={onchangeHandler}
                 />
               </label>
-              <div>
-                {questionList.map((question, i) => (
-                  <div key={question._id}>
-                    <label htmlFor={question._id}>{question.question}</label>
-                    <input
-                      type="checkbox"
-                      name={question._id}
-                      value={question._id}
-                      onChange={checkboxHandler}
-                    />
-                  </div>
-                ))}
+              <div className={classes.questions_table}>
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Category</th>
+                      <th>Question</th>
+                      <th>Answer</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {Object.entries(questionsByCategory).map(
+                      ([category, questions], index) => (
+                        <React.Fragment key={category}>
+                          <tr
+                            className={
+                              index % 2 === 0
+                                ? classes.even_row
+                                : classes.odd_row
+                            }
+                          >
+                            <td rowSpan={questions.length}>{category}</td>
+                            <td>{questions[0].question}</td>
+                            <td>
+                              <Form.Check
+                                aria-label="option 1"
+                                type="checkbox"
+                                name={questions[0]._id}
+                                value={questions[0]._id}
+                                onChange={checkboxHandler}
+                              />
+                            </td>
+                          </tr>
+                          {questions.slice(1).map((question, i) => (
+                            <tr
+                              key={question._id}
+                              className={
+                                i % 2 === 0 ? classes.even_row : classes.odd_row
+                              }
+                            >
+                              <td>{question.question}</td>
+                              <td>
+                                <Form.Check
+                                  aria-label="option 1"
+                                  name={question._id}
+                                  value={question._id}
+                                  onChange={checkboxHandler}
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </React.Fragment>
+                      )
+                    )}
+                  </tbody>
+                </table>
               </div>
 
-              <Button type="submit" variant="success">
+              <Button type="submit" variant="standard">
                 Submit
               </Button>
             </form>

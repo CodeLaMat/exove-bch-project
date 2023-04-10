@@ -1,57 +1,46 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { RootState } from "../../store";
+import { QuestionProps, SurveyType } from "../../types/dataTypes";
+import { AppDispatch } from "../../store";
+import questionsService from "../../services/questions";
 
-interface SurveyState {
-  surveyName: string;
-  surveySubject: string;
-  questions: string[];
-  answers: { [key: string]: string };
-  surveyStatus: "notStarted" | "inProgress" | "completed";
-}
-
-const initialState: SurveyState = {
+const initialSurveyState: SurveyType = {
+  _id: "",
   surveyName: "",
-  surveySubject: "",
+  description: "",
   questions: [],
-  answers: {},
-  surveyStatus: "notStarted",
 };
 
-const surveySlice = createSlice({
+export const surveySlice = createSlice({
   name: "survey",
-  initialState,
+  initialState: initialSurveyState,
   reducers: {
-    setSurveyName: (state, action: PayloadAction<string>) => {
+    setName: (state, action: PayloadAction<string>) => {
       state.surveyName = action.payload;
     },
-    setSurveySubject: (state, action: PayloadAction<string>) => {
-      state.surveySubject = action.payload;
+    setDescription: (state, action: PayloadAction<string>) => {
+      state.description = action.payload;
     },
-    setQuestions: (state, action: PayloadAction<string[]>) => {
+    setQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
       state.questions = action.payload;
     },
-    setAnswer: (
-      state,
-      action: PayloadAction<{ question: string; answer: string }>
-    ) => {
-      state.answers[action.payload.question] = action.payload.answer;
-    },
-    setSurveyStatus: (
-      state,
-      action: PayloadAction<"notStarted" | "inProgress" | "completed">
-    ) => {
-      state.surveyStatus = action.payload;
+    getAllQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
+      state.questions = action.payload;
     },
   },
 });
 
-export const {
-  setSurveyName,
-  setSurveySubject,
-  setQuestions,
-  setAnswer,
-  setSurveyStatus,
-} = surveySlice.actions;
+export const { setName, setDescription, setQuestions, getAllQuestions } =
+  surveySlice.actions;
 
-export const selectSurvey = (state: RootState) => state.survey;
+export const initialiseQuestions = () => {
+  return async (dispatch: AppDispatch) => {
+    try {
+      const questions = (await questionsService.getAll()) as QuestionProps[];
+      dispatch(setQuestions(questions));
+    } catch (error) {
+      console.log("Error fetching the questions", error);
+    }
+  };
+};
+
 export default surveySlice.reducer;

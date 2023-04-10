@@ -9,7 +9,7 @@ import HRMenus from "./HRMenus";
 import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
 import { Button } from "react-bootstrap";
-import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
+import { setIsAuthenticated } from "../../redux/reducers/login/loginSlice";
 
 interface Iprops {
   image: string;
@@ -26,10 +26,7 @@ const Sidemenu = (props: Iprops) => {
 
   const handleLogout = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
-    dispatch<SetIsAuthenticatedAction>({
-      type: "SET_IS_AUTHENTICATED",
-      payload: false,
-    });
+    dispatch(setIsAuthenticated(false));
     localStorage.removeItem("token");
     localStorage.removeItem("userRole");
     axios.defaults.headers.common["Authorization"] = "";

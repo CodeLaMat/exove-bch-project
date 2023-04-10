@@ -1,5 +1,5 @@
 .surveyCreate_container {
-  width: 80%;
+  width: 70%;
   height: 100%;
   margin: auto;
   padding: 2rem;
@@ -10,13 +10,6 @@
 .surveyForm_container {
   display: flex;
   height: 100%;
-  width: 60%;
-}
-
-.top {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 2rem;
 }
 
 form label {
@@ -35,18 +28,44 @@ form input[type="text"] {
 
 form input[type="checkbox"] {
   margin-right: 0.5rem;
-  width: 15px;
+  width: 18px;
 }
 
-form div {
-  margin-bottom: 1rem;
+.questions_table {
+  margin-top: 1rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
+  border-collapse: collapse;
 }
 
-.back_button {
-  display: flex;
-  height: 40px;
+.questions_table th {
+  background-color: #e2e8f0;
+  font-weight: bold;
+  padding: 0.5rem;
+  text-align: left;
 }
 
-.surveyForm_container form button[type="submit"] {
-  align-self: flex-end;
+.questions_table td {
+  padding: 0.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.questions_table .even_row {
+  background-color: #f7fafc;
+}
+
+.questions_table .odd_row:hover {
+  background-color: #edf2f7;
+}
+
+.questions_table .even_row:hover {
+  background-color: #edf2f7;
+}
+
+.questions_table .odd_row {
+  background-color: #fff;
+}
+
+.questions_table input[type="checkbox"] {
+  margin-left: 0.5rem;
 }
