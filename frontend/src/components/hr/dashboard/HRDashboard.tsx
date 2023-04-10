@@ -4,6 +4,9 @@ import classes from "./HRDashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "./SurveySummaryChart";
 import ProgressBar from "./ProgressBar";
+import DBUsers from "./DBUsers";
+import DBSurveyList from "./DBSurveyList";
+
 const HRDashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);
 
@@ -26,10 +29,12 @@ const HRDashboard = () => {
             <ProgressBar />
           </div>
           <div className={classes.dashboard_surList}>
-            <h2>List of Surveys</h2>
+            <h2>List of Surveys</h2> <DBSurveyList />
           </div>{" "}
           <div className={classes.dashboard_emplList}>
             <h2>Employees</h2>
+
+            <DBUsers />
           </div>
         </div>
       </div>

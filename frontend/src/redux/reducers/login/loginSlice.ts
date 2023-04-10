@@ -1,26 +1,13 @@
 import { UserRole } from "../../../enum";
-
-export interface LoginState {
-  isAuthenticated: boolean;
-  selectedRole: UserRole;
-}
+import { LoginAction, LoginState } from "../../types/loginTypes";
 
 export const initialState: LoginState = {
-  isAuthenticated: false,
-  selectedRole: UserRole.User,
+  isAuthenticated: localStorage.getItem("token") !== null,
+  selectedRole:
+    (localStorage.getItem("userRole") as UserRole.HR) ||
+    UserRole.Manager ||
+    UserRole.User,
 };
-
-export interface SetIsAuthenticatedAction {
-  type: "SET_IS_AUTHENTICATED";
-  payload: boolean;
-}
-
-export interface SetSelectedRoleAction {
-  type: "SET_SELECTED_ROLE";
-  payload: UserRole;
-}
-
-export type LoginAction = SetIsAuthenticatedAction | SetSelectedRoleAction;
 
 export function loginSlice(
   state: LoginState = initialState,
@@ -28,8 +15,10 @@ export function loginSlice(
 ): LoginState {
   switch (action.type) {
     case "SET_IS_AUTHENTICATED":
+      localStorage.setItem("token", action.payload ? "true" : "");
       return { ...state, isAuthenticated: action.payload };
     case "SET_SELECTED_ROLE":
+      localStorage.setItem("userRole", action.payload);
       return { ...state, selectedRole: action.payload };
     default:
       return state;
