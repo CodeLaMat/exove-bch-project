@@ -1,24 +1,49 @@
 import { UserRole } from "../../enum";
 
-export type FormData = {
+export enum Categories {
+  QUALITY = "Quality focus",
+  PEOPLE_SKILLS = "People skills",
+  SELF_GUIDANCE = "Self guidance",
+  LEADERSHIP = "Leadership",
+  READINESS_CHANGE = "Readiness for change",
+  CREATIVITY = "Creativity",
+  GENERAL = "General evaluation",
+}
+
+export enum surveyStatus {
+  COMPLETED = "Completed",
+  OPEN = "Open",
+}
+
+export enum Question_Type {
+  MULTIPLE = "Multiple choice",
+  FREE_FORM = "Free form",
+}
+
+export interface QuestionProps {
+  _id: string;
+  category: Categories;
   question: string;
-  type: string;
-};
+  questionType: Question_Type;
+  description: string;
+}
 
-export type Question = {
-  question: string;
-  isFreeForm: boolean;
-};
+export interface QuestionsType {
+  question: QuestionProps[];
+}
 
-export type Section = {
-  name: string;
-  description?: string;
-  questions: Question[];
-};
+export interface SurveyType {
+  _id: string;
+  surveyName: string;
+  description: string;
+  questions: QuestionProps[];
+}
 
-export type FeedBackQuestions = {
-  sections: Section[];
-};
+export interface FormData {
+  surveyName: string;
+  description: string;
+  questions: QuestionProps[];
+}
 
 export type Response = {
   question: string;
@@ -28,13 +53,6 @@ export type Response = {
 export type SectionResponse = {
   name: string;
   responses: Response[];
-};
-
-export type User = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
 };
 
 export interface LoginProps {

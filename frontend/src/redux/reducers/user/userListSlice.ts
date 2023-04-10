@@ -1,32 +1,7 @@
 import { Dispatch, Action } from "redux";
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import employeesService from "../../services/employees";
-
-export interface Employee {
-  id: string;
-  firstName: string;
-  surname: string;
-  email: string;
-  displayName: string;
-  personal: { age: number; gender: string };
-  about: { bio: string };
-  work: {
-    reportsTo: {
-      id: number;
-      firstName: string;
-      surname: string;
-      email: string;
-    };
-    title: string;
-    department: string;
-    site: string;
-    startDate: string;
-  };
-}
-
-export interface EmployeesData {
-  employees: Employee[];
-}
+import { Employee, EmployeesData } from "../../types/userTypes";
 
 const initialState: EmployeesData = {
   employees: [],

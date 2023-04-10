@@ -1,4 +1,6 @@
 import React from "react";
+import axios from "axios";
+import { UserRole } from "../../enum";
 import classes from "./Sidemenu.module.css";
 import logo from "../../assets/img/logo.jpg";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,8 +8,8 @@ import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import HRMenus from "./HRMenus";
 import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
-import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
 import { Button } from "react-bootstrap";
+import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
 
 interface Iprops {
   image: string;
@@ -28,6 +30,9 @@ const Sidemenu = (props: Iprops) => {
       type: "SET_IS_AUTHENTICATED",
       payload: false,
     });
+    localStorage.removeItem("token");
+    localStorage.removeItem("userRole");
+    axios.defaults.headers.common["Authorization"] = "";
     navigate("/");
   };
 
@@ -43,9 +48,9 @@ const Sidemenu = (props: Iprops) => {
         <>
           <div className={classes.menulist}>
             <h5 className={classes.sideMenu_headers}>Main Menu</h5>
-            {selectedRole === "hr" && <HRMenus />}
-            {selectedRole === "manager" && <ManagerMenus />}
-            {selectedRole === "user" && <UserMenus />}
+            {selectedRole === UserRole.HR && <HRMenus />}
+            {selectedRole === UserRole.Manager && <ManagerMenus />}
+            {selectedRole === UserRole.User && <UserMenus />}
           </div>{" "}
           {location.pathname !== "/login" && (
             <Button variant="secondary" onClick={handleLogout}>
