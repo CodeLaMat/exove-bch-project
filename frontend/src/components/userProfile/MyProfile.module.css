@@ -69,3 +69,16 @@ h3 {
   color: #898989;
   font-size: 18px;
 }
+
+.placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  border-radius: 50%;
+  background-color: #f0f0f0;
+  text-transform: uppercase;
+  color: #9b9b9b;
+}

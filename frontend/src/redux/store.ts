@@ -6,10 +6,11 @@ import {
   Reducer,
 } from "@reduxjs/toolkit";
 import employeeSlice from "./reducers/user/userListSlice";
-import { loginSlice } from "./reducers/login/loginSlice";
-import surveySlice from "./reducers/form/formSlice";
-import surveysSlice from "./reducers/form/formSlice";
+import loginSlice from "./reducers/login/loginSlice";
+import surveySlice from "./reducers/survey/surveySlice";
+import surveysSlice from "./reducers/survey/surveysSlice";
 import { LoginAction } from "./types/loginTypes";
+import surveyPackSlice from "./reducers/survey/createSurveySlice";
 
 type AppAction =
   | LoginAction
@@ -21,6 +22,7 @@ const rootReducer: Reducer = combineReducers({
   employees: employeeSlice,
   survey: surveySlice,
   surveys: surveysSlice,
+  surveyPack: surveyPackSlice,
 });
 
 export const store = configureStore({

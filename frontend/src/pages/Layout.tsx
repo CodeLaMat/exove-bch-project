@@ -4,14 +4,15 @@ import classes from "./Layout.module.css";
 import Sidemenu from "../components/sideMenu/Sidemenu";
 import { useAppSelector } from "../../src/redux/hooks/hooks";
 import MainRoutes from "../routes/MainRoutes";
+import { UserRole } from "../enum";
 
 const Layout = () => {
   const { isAuthenticated, selectedRole } = useAppSelector(
     (state) => state.loginUser
   );
 
-  const userName = "Essi Salomaa";
-  const imageUrl = "photoFilename";
+  const userName = "";
+  const imageUrl = "";
 
   return (
     <div>
@@ -24,6 +25,7 @@ const Layout = () => {
         <div className={classes.mainitems}>
           {isAuthenticated && (
             <ProfileMenu
+              userRole={selectedRole}
               userName={userName}
               imageUrl={imageUrl}
               pageTitle={userName}

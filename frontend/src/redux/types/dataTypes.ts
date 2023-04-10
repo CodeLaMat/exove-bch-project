@@ -10,6 +10,10 @@ export enum Categories {
   GENERAL = "General evaluation",
 }
 
+export type QuestionsByCategory = {
+  [key in Categories]: QuestionProps[];
+};
+
 export enum surveyStatus {
   COMPLETED = "Completed",
   OPEN = "Open",
@@ -50,10 +54,15 @@ export type Response = {
   response: Array<number | string>;
 };
 
-export type SectionResponse = {
-  name: string;
-  responses: Response[];
-};
+interface CreatedSurvey {
+  creationDate: Date;
+  surveySubject: string;
+  participants: string[];
+  deadline: Date;
+  status: "draft" | "open" | "closed";
+  canEdit: boolean;
+  canCreate: boolean;
+}
 
 export interface LoginProps {
   onLogin: (role: UserRole) => void;

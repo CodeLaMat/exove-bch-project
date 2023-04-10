@@ -1,9 +1,24 @@
 import React from "react";
 import PageHeading from "../pageHeading/PageHeading";
 import classes from "./MyProfile.module.css";
-import profileImage from "../../assets/img/Essi_WP.jpg";
+import { useAppSelector } from "../../../src/redux/hooks/hooks";
+import { Employee } from "../../redux/types/userTypes";
+import { RootState } from "../../redux/store";
 
 const MyProfile = () => {
+  const userEmail = useAppSelector((state) => state.loginUser.email);
+  const employees: Employee[][] = useAppSelector(
+    (state: RootState) => state.employees.employees
+  );
+  const entries = Object.values(employees);
+
+  const currentUser =
+    entries && entries[0].find((entry) => entry.email === userEmail);
+
+  if (!currentUser) {
+    return <p>User not found.</p>;
+  }
+
   return (
     <div className={classes.MyProfile}>
       <PageHeading pageTitle="Profile" />
@@ -13,25 +28,43 @@ const MyProfile = () => {
         </div>
         <div className={classes.profileContent}>
           <div className={classes.profileImage}>
-            <img
-              className={classes.roundImage}
-              src={profileImage}
-              alt={`Essi Salomaa`}
-            />
+            {currentUser.image === "" ? (
+              <img
+                className={classes.roundImage}
+                src={currentUser.image}
+                alt={`${currentUser.firstName} ${currentUser.surName}`}
+              />
+            ) : (
+              <div className={classes.placeholder}>
+                <h2>{`${currentUser.firstName[0]}${currentUser.surName[0]}`}</h2>
+              </div>
+            )}
           </div>
           <div className={classes.profileInfo}>
-            <h3>Essi Salomaa</h3>
+            <h3>
+              {currentUser.firstName} {currentUser.surName}
+            </h3>
             <p>
               {" "}
-              <strong>About:</strong>People Operations Specialist
+              <strong>Department: </strong>
+              {currentUser.department}
+            </p>
+            <p>
+              {" "}
+              <strong>Title: </strong>
+              {currentUser.title}
+            </p>
+            <p>
+              {" "}
+              <strong>About: </strong>
+              {currentUser.about}
             </p>
             <ul>
               <li>
-                <i className={classes.emailClassName}></i> :
-                essi.salomaa@exove.com
+                <i className={classes.emailClassName}></i> {currentUser.email}
               </li>
               <li>
-                <i className={"fa fa-phone"}></i> : +358 123 4567
+                <i className={classes.roleClassName}></i> {currentUser.role}
               </li>
             </ul>
           </div>

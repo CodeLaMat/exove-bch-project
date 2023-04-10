@@ -3,6 +3,9 @@ import { UserRole } from "../../enum";
 export interface LoginState {
   isAuthenticated: boolean;
   selectedRole: UserRole;
+  userName: string;
+  surName: string;
+  email: string;
 }
 
 export interface SetIsAuthenticatedAction {
@@ -10,9 +13,4 @@ export interface SetIsAuthenticatedAction {
   payload: boolean;
 }
 
-export interface SetSelectedRoleAction {
-  type: "SET_SELECTED_ROLE";
-  payload: UserRole;
-}
-
-export type LoginAction = SetIsAuthenticatedAction | SetSelectedRoleAction;
+export type LoginAction = SetIsAuthenticatedAction;

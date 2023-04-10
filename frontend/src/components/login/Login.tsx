@@ -4,12 +4,16 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { UserRole } from "../../enum";
 import { initialiseEmployees } from "../../redux/reducers/user/userListSlice";
-import { initialiseQuestions } from "../../redux/reducers/form/formSlice";
+import { initialiseQuestions } from "../../redux/reducers/survey/surveySlice";
 import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
+import {
+  setIsAuthenticated,
+  setSelectedRole,
+  setUserEmail,
+} from "../../redux/reducers/login/loginSlice";
 
 interface LoginProps {}
 
@@ -40,25 +44,23 @@ const Login: React.FC<LoginProps> = () => {
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token);
           const userRole = decodedToken.role;
+          const Email = decodedToken.email;
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
             return;
           }
+
           console.log(userRole);
+          console.log(Email);
 
           localStorage.setItem("token", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
           localStorage.setItem("userRole", userRole);
-          dispatch<SetIsAuthenticatedAction>({
-            type: "SET_IS_AUTHENTICATED",
-            payload: true,
-          });
+          dispatch(setIsAuthenticated(true));
+          dispatch(setUserEmail(Email));
 
-          dispatch({
-            type: "SET_SELECTED_ROLE",
-            payload: userRole as UserRole,
-          });
+          dispatch(setSelectedRole(userRole));
           dispatch(initialiseEmployees());
           dispatch(initialiseQuestions());
           navigate("/home");
