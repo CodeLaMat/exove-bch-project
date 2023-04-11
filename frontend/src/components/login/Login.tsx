@@ -1,19 +1,30 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { UserRole } from "../../enum";
-import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
-import {
-  getEmployees,
-  initialiseEmployees,
-} from "../../redux/reducers/user/userListSlice";
+//import { SetIsAuthenticatedAction } from "../../redux/reducers/login/loginSlice";
+// import {
+//   getEmployees,
+//   initialiseEmployees,
+// } from "../../redux/reducers/user/userListSlice";
 import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { User } from "../../redux/types/dataTypes";
+import { loginUser } from "../../redux/reducers/user/userListSlice";
 
 interface LoginProps {}
 
+const initialState: User = {
+  email: "",
+  password: "",
+  displayName: "",
+};
+
 const Login: React.FC<LoginProps> = () => {
+  const [values, setValues] = useState(initialState);
+  const { user, isLoading } = useAppSelector((store) => store.users);
+
   const dispatch = useAppDispatch();
 
   const { selectedRole } = useAppSelector((state) => state.loginUser);
@@ -25,24 +36,48 @@ const Login: React.FC<LoginProps> = () => {
       payload: event.target.value as UserRole,
     });
   };
-
-  const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault(); // prevent default form submission behavior
-    // do any necessary login authentication/validation
-    dispatch<SetIsAuthenticatedAction>({
-      type: "SET_IS_AUTHENTICATED",
-      payload: true,
-    });
-    dispatch(initialiseEmployees());
-    navigate("/home"); // redirect to the dashboard page
+  const handleChange = (e: React.FormEvent) => {
+    const name = (e.target as HTMLInputElement).name;
+    const value = (e.target as HTMLInputElement).value;
+    setValues({ ...values, [name]: value });
   };
+
+  const onSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const { email, password } = values;
+    if (!email || !password) {
+      alert("Please fill out all fields");
+    }
+    dispatch(
+      loginUser({ email: email as string, password: password as string })
+    );
+  };
+
+  // const handleLogin = (event: React.FormEvent<HTMLFormElement>) => {
+  //   event.preventDefault(); // prevent default form submission behavior
+  //   // do any necessary login authentication/validation
+  //   dispatch<SetIsAuthenticatedAction>({
+  //     type: "SET_IS_AUTHENTICATED",
+  //     payload: true,
+  //   });
+  //   dispatch(initialiseEmployees());
+  //   navigate("/home"); // redirect to the dashboard page
+  // };
+
+  useEffect(() => {
+    if (user) {
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
+    }
+  }, [user, navigate]);
 
   return (
     <div className={classes.login_container}>
       <div className={classes.login_box}>
         <h3>Login</h3>
         <div>
-          <form onSubmit={handleLogin}>
+          <form>
             <div className={classes.login_input}>
               <label htmlFor="role-select">Select your role:</label>
               <select
@@ -65,34 +100,45 @@ const Login: React.FC<LoginProps> = () => {
           access your account. If you have forgotten your password, you can
           reset it by clicking the "Forgot Password" link below the login form.
         </div>
-        <Form>
-          <fieldset disabled>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="disabledTextInput">
-                Disabled input
-              </Form.Label>
-              <Form.Control
-                id="disabledTextInput"
-                placeholder="Disabled input"
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="disabledSelect">
-                Disabled select menu
-              </Form.Label>
-              <Form.Select id="disabledSelect">
-                <option>Disabled select</option>
-              </Form.Select>
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                id="disabledFieldsetCheck"
-                label="Can't check this"
-              />
-            </Form.Group>
-            <Button type="submit">Login</Button>
-          </fieldset>
+        <Form onSubmit={onSubmit}>
+          {/* <fieldset disabled> */}
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="email">Email</Form.Label>
+            <Form.Control
+              id="email"
+              type="email"
+              placeholder="email"
+              value={values.email}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Label htmlFor="password">Password</Form.Label>
+            <Form.Control
+              id="password"
+              type="password"
+              placeholder="password"
+              value={values.password}
+              onChange={handleChange}
+            />
+          </Form.Group>
+          {/* <Form.Group className="mb-3">
+            <Form.Label htmlFor="disabledSelect">
+              Disabled select menu
+            </Form.Label>
+            <Form.Select id="disabledSelect">
+              <option>Disabled select</option>
+            </Form.Select>
+          </Form.Group>
+          <Form.Group className="mb-3">
+            <Form.Check
+              type="checkbox"
+              id="disabledFieldsetCheck"
+              label="Can't check this"
+            />
+          </Form.Group> */}
+          <Button type="submit">Login</Button>
+          {/* </fieldset> */}
         </Form>
       </div>
     </div>
