@@ -6,7 +6,7 @@ const app = express();
 
 const createNewClient = () => {
   const client = ldap.createClient({
-    url: 'ldap://192.168.100.36:389',
+    url: 'ldap://localhost:389',
   });
 
   return client;
@@ -26,13 +26,14 @@ app.get('/auth', (req, res) => {
       return;
     }
 
+    console.log("authenication passed");
     const searchOptions: SearchOptions = {
       scope: 'sub',
       filter: `(uid=${username})`,
-      attributes: ['cn', 'mail', 'telephoneNumber'],
+      attributes: ['cn'],
     };
 
-    client.search('ou=People,dc=test,dc=com', searchOptions, (err: Error | null, result: ldap.SearchCallbackResponse) => {
+    client.search(`uid=${username},ou=People,dc=test,dc=com`, searchOptions, (err: Error | null, result: ldap.SearchCallbackResponse) => {
       if (err) {
         console.error(err);
         res.status(500).send('Error retrieving user info');
@@ -45,12 +46,16 @@ app.get('/auth', (req, res) => {
         userAttributes.push(entry.object);
       });
 
+      console.log("searchEntry entered");
+      console.log("userAttributes", userAttributes[0]);
+
       result.on('end', () => {
         res.status(200).send({
           message: 'Authentication successful',
           user: userAttributes[0],
         });
       });
+      console.log("userAttributes", userAttributes[0]);
     });
   });
 });

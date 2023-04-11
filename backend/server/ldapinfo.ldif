@@ -1,0 +1,180 @@
+dn: ou=People,dc=test,dc=com
+objectClass: organizationalUnit
+ou: People
+
+dn: ou=Groups,dc=test,dc=com
+objectClass: organizationalUnit
+ou: Groups
+
+# Add groups
+dn: cn=users,ou=Groups,dc=test,dc=com
+objectClass: posixGroup
+cn: users
+gidNumber: 10000
+
+dn: cn=hr,ou=Groups,dc=test,dc=com
+objectClass: posixGroup
+cn: hr
+gidNumber: 20000
+
+dn: cn=manager,ou=Groups,dc=test,dc=com
+objectClass: posixGroup
+cn: manager
+gidNumber: 30000
+
+# Add users to groups
+dn: cn=users,ou=Groups,dc=test,dc=com
+changetype: modify
+add: memberUid
+memberUid: john
+memberUid: jason
+memberUid: suh
+memberUid: eyvaz
+memberUid: nikita
+
+dn: cn=hr,ou=Groups,dc=test,dc=com
+changetype: modify
+add: memberUid
+memberUid: essi
+
+dn: cn=manager,ou=Groups,dc=test,dc=com
+changetype: modify
+add: memberUid
+memberUid: jane
+memberUid: james
+
+
+dn: uid=john,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: john
+sn: Doe
+givenName: John
+cn: John Doe
+displayName: John Doe
+uidNumber: 10000
+gidNumber: 10000
+userPassword: johnldap
+gecos: John Doe
+loginShell: /bin/bash
+homeDirectory: /home/ldap/john
+
+
+dn: uid=jason,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: jason
+sn: Dansie
+givenName: Jason
+cn: Jason Dansie
+displayName: Jason Dansie
+uidNumber: 10001
+gidNumber: 10000
+userPassword: Passwd123
+gecos: Jason Dansie
+loginShell: /bin/bash
+homeDirectory: /home/ldap/jason
+
+
+dn: uid=suh,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: suh
+sn: Fuh
+givenName: Suh
+cn: Suh Fuh
+displayName: Suh Fuh
+uidNumber: 10002
+gidNumber: 10000
+userPassword: Passwd123
+gecos: Suh Fuh
+loginShell: /bin/bash
+homeDirectory: /home/ldap/Suh
+
+
+dn: uid=eyvaz,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: eyvaz
+sn: Alishov
+givenName: Eyvaz
+cn: Eyvaz Alishov
+displayName: Eyvaz Alishov
+uidNumber: 10003
+gidNumber: 10000
+userPassword: Passwd123
+gecos: eyvaz Alishov
+loginShell: /bin/bash
+homeDirectory: /home/ldap/eyvaz
+
+
+dn: uid=jane,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: jane
+sn: Doe
+givenName: Jane
+cn: Jane Doe
+displayName: Jane Doe
+uidNumber: 10004
+gidNumber: 30000
+userPassword: Passwd123
+gecos: Jane Doe
+loginShell: /bin/bash
+homeDirectory: /home/ldap/Jane
+
+
+dn: uid=nikita,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: nikita
+sn: Lyudikaynen
+givenName: Nikita
+cn: Nikita Lyudikaynen
+displayName: Nikita Lyudikaynen
+uidNumber: 10005
+gidNumber: 10000
+userPassword: Passwd123
+gecos: Nikita Lyudikaynen
+loginShell: /bin/bash
+homeDirectory: /home/ldap/Nikita
+
+
+dn: uid=essi,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: essi
+sn: Salomaa
+givenName: Essi
+cn: Essi Salomaa
+displayName: Essi Salomaa
+uidNumber: 10006
+gidNumber: 20000
+userPassword: Passwd123
+gecos: Essi Salomaa
+loginShell: /bin/bash
+homeDirectory: /home/ldap/essi
+
+
+dn: uid=james,ou=People,dc=test,dc=com
+objectClass: inetOrgPerson
+objectClass: posixAccount
+objectClass: shadowAccount
+uid: james
+sn: Narraway
+givenName: James
+cn: James Narraway
+displayName: James Narraway
+uidNumber: 10007
+gidNumber: 30000
+userPassword: Passwd123
+gecos: James Narraway
+loginShell: /bin/bash
+homeDirectory: /home/ldap/james
