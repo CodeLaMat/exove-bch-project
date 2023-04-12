@@ -14,3 +14,10 @@ export interface SetIsAuthenticatedAction {
 }
 
 export type LoginAction = SetIsAuthenticatedAction;
+
+export interface PoginProfileProps {
+  imageUrl: string;
+  userName: string;
+  pageTitle: string;
+  userRole: string; // new prop for the user's role
+}

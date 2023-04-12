@@ -6,8 +6,11 @@ import axios from "axios";
 import { Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { SurveyType } from "../../../redux/types/dataTypes";
+import { useAppDispatch } from "../../../redux/hooks/hooks";
+import { removeSurvey } from "../../../redux/reducers/survey/surveysSlice";
 
 const HRSurveys = () => {
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [surveyList, setsurveyList] = useState<SurveyType[]>([]);
 
@@ -23,47 +26,57 @@ const HRSurveys = () => {
       });
   }, [setsurveyList]);
 
-  console.log(surveyList);
+  const handleDelete = (surveyId: string) => {
+    dispatch(removeSurvey(surveyId));
+  };
 
   return (
     <div className={classes.surveys_container}>
-      <PageHeading pageTitle="Created Surveys" />
+      <PageHeading pageTitle="Survey forms" />
       <div className={classes.top}>
         <div className={classes.maincontent}>
-          <div>
+          <div className={classes.actions}>
             <Button variant="primary" onClick={() => navigate("/createsurvey")}>
-              Create Survey
+              Create new Form
             </Button>
           </div>
-          <div className={classes.top}>
-            <div className={classes.maincontent}>
-              <Table striped bordered hover size="sm">
-                <thead>
-                  <tr>
-                    <th>Survey ID</th>
-                    <th>Survey Name</th>
-                    <th>Description</th>
-                    <th>Questions</th>
+          <div className={classes.table_container}>
+            <Table striped bordered hover size="sm">
+              <thead>
+                <tr>
+                  <th>Survey ID</th>
+                  <th>Survey Name</th>
+                  <th>Description</th>
+                  <th>Questions</th>
+                  <th>Delete </th>
+                </tr>
+              </thead>
+              <tbody>
+                {surveyList.map((survey: SurveyType) => (
+                  <tr key={survey._id}>
+                    <td>{survey._id}</td>
+                    <td>{survey.surveyName}</td>
+                    <td>{survey.description}</td>
+                    <td>
+                      <ul>
+                        {survey.questions.map((question) => (
+                          <li key={question._id}>{question.question}</li>
+                        ))}
+                      </ul>
+                    </td>
+                    <td>
+                      <Button
+                        variant="primary"
+                        type="button"
+                        onClick={() => handleDelete(survey._id)}
+                      >
+                        Delete Form
+                      </Button>
+                    </td>
                   </tr>
-                </thead>
-                <tbody>
-                  {surveyList.map((survey: SurveyType) => (
-                    <tr key={survey._id}>
-                      <td>{survey._id}</td>
-                      <td>{survey.surveyName}</td>
-                      <td>{survey.description}</td>
-                      <td>
-                        <ul>
-                          {survey.questions.map((question) => (
-                            <li key={question._id}>{question.question}</li>
-                          ))}
-                        </ul>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </div>
+                ))}
+              </tbody>
+            </Table>
           </div>
         </div>
       </div>
