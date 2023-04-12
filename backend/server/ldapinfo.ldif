@@ -59,6 +59,9 @@ userPassword: johnldap
 gecos: John Doe
 loginShell: /bin/bash
 homeDirectory: /home/ldap/john
+mail: johndoe@test.com
+description: user
+jpegPhoto:< file:///home/ldap/john/profile.jpg
 
 
 dn: uid=jason,ou=People,dc=test,dc=com
@@ -76,6 +79,9 @@ userPassword: Passwd123
 gecos: Jason Dansie
 loginShell: /bin/bash
 homeDirectory: /home/ldap/jason
+mail: jasondansie@test.com
+description: user
+jpegPhoto:< file:///home/ldap/jason/profile.jpg
 
 
 dn: uid=suh,ou=People,dc=test,dc=com
@@ -93,6 +99,9 @@ userPassword: Passwd123
 gecos: Suh Fuh
 loginShell: /bin/bash
 homeDirectory: /home/ldap/Suh
+mail: suhfuh@test.com
+description: user
+jpegPhoto:< file:///home/ldap/suh/profile.jpg
 
 
 dn: uid=eyvaz,ou=People,dc=test,dc=com
@@ -110,6 +119,9 @@ userPassword: Passwd123
 gecos: eyvaz Alishov
 loginShell: /bin/bash
 homeDirectory: /home/ldap/eyvaz
+mail: eyvazalishov@test.com
+description: user
+jpegPhoto:< file:///home/ldap/eyvaz/profile.jpg
 
 
 dn: uid=jane,ou=People,dc=test,dc=com
@@ -127,6 +139,9 @@ userPassword: Passwd123
 gecos: Jane Doe
 loginShell: /bin/bash
 homeDirectory: /home/ldap/Jane
+mail: janedoe@test.com
+description: Manager
+jpegPhoto:< file:///home/ldap/jane/profile.jpg
 
 
 dn: uid=nikita,ou=People,dc=test,dc=com
@@ -144,6 +159,9 @@ userPassword: Passwd123
 gecos: Nikita Lyudikaynen
 loginShell: /bin/bash
 homeDirectory: /home/ldap/Nikita
+mail: nikitalyudikaynen@test.com
+description: user
+jpegPhoto:< file:///home/ldap/nikita/profile.jpg
 
 
 dn: uid=essi,ou=People,dc=test,dc=com
@@ -161,6 +179,9 @@ userPassword: Passwd123
 gecos: Essi Salomaa
 loginShell: /bin/bash
 homeDirectory: /home/ldap/essi
+mail: essisalomaa@test.com
+description: HR
+jpegPhoto:< file:///home/ldap/essi/profile.jpg
 
 
 dn: uid=james,ou=People,dc=test,dc=com
@@ -178,3 +199,6 @@ userPassword: Passwd123
 gecos: James Narraway
 loginShell: /bin/bash
 homeDirectory: /home/ldap/james
+mail: jamesnarraway@test.com
+description: Manager
+jpegPhoto:< file:///home/ldap/james/profile.jpg

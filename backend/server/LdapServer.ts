@@ -1,8 +1,17 @@
 const express = require('express');
 import * as ldap from 'ldapjs';
+import * as cors from 'cors';
 import { SearchEntryObject, SearchOptions } from 'ldapjs';
+import createToken from '../src/middleware/createToken'
+
+require('dotenv').config();
+
 
 const app = express();
+
+app.use(cors());
+app.use(express.json());
+
 
 const createNewClient = () => {
   const client = ldap.createClient({
@@ -12,9 +21,23 @@ const createNewClient = () => {
   return client;
 };
 
-app.get('/auth', (req, res) => {
-  const { username, password } = req.query as { username: string, password: string };
+const generateToken = async (userData) => {
+  console.log("userData", userData);
+  const payload = { 
+    user: { 
+      role: userData.description,
+      name: userData.cn,
+      email: userData.mail,
+    } 
+  };
+  console.log("payload: ", payload);
+  const token = await createToken({payload});
+  return token;
+}
 
+app.post('/auth', (req, res) => {
+  const { username, password } = req.body as { username: string, password: string };
+ console.log(`${username} is trying to login with ${password} as a pwd`);
   const client = createNewClient();
 
   const bindDN = `uid=${username},ou=People,dc=test,dc=com`;
@@ -26,11 +49,10 @@ app.get('/auth', (req, res) => {
       return;
     }
 
-    console.log("authenication passed");
     const searchOptions: SearchOptions = {
       scope: 'sub',
-      filter: `(uid=${username})`,
-      attributes: ['cn'],
+      filter: `(&(uid=${username})(objectClass=posixAccount))`, // add objectClass filter
+      attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', ],
     };
 
     client.search(`uid=${username},ou=People,dc=test,dc=com`, searchOptions, (err: Error | null, result: ldap.SearchCallbackResponse) => {
@@ -46,16 +68,21 @@ app.get('/auth', (req, res) => {
         userAttributes.push(entry.object);
       });
 
-      console.log("searchEntry entered");
-      console.log("userAttributes", userAttributes[0]);
-
       result.on('end', () => {
-        res.status(200).send({
-          message: 'Authentication successful',
-          user: userAttributes[0],
-        });
+        console.log("authentication successfull");
+        const userData = userAttributes[0];
+        const userToken = generateToken(userData).then(token => {
+          res.status(200).send({
+            message: 'Authentication successful',
+            user: userAttributes[0],
+            groups: userAttributes[0].memberOf, // get groups the user is a member of
+            token: token,
+          });
+        })
+        .catch(error => {
+          console.log(error);
+        });;
       });
-      console.log("userAttributes", userAttributes[0]);
     });
   });
 });

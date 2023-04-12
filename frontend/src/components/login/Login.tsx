@@ -15,6 +15,7 @@ interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
+  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -24,28 +25,30 @@ const Login: React.FC<LoginProps> = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5010/api/v1/users/auth/login",
+        "http://localhost:5000/auth",
         {
-          email,
+          username,
           password,
         }
       );
       const userData = response.data;
-      // console.log("Response:", response.data);
+      console.log("Response:", response.data);
 
       if (userData && userData.token) {
         const token = userData.token;
-
+        
         // Decoding token to get user role
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token);
-          const userRole = decodedToken.role;
+          console.log("decodedToken:", decodedToken);
+          console.log("decodedTokeninfo:", decodedToken.payload.user.role);
+          const userRole = decodedToken.payload.user.role;
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
             return;
           }
-          console.log(userRole);
+          console.log("userRole",userRole);
 
           localStorage.setItem("token", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
@@ -87,12 +90,12 @@ const Login: React.FC<LoginProps> = () => {
         <Form action="POST" onSubmit={loginHandler}>
           <fieldset>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="email">Email</Form.Label>
+              <Form.Label htmlFor="username">Username</Form.Label>
               <Form.Control
-                id="email"
-                placeholder="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                id="username"
+                placeholder="username"
+                value={username}
+                onChange={(event) => setUsername(event.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3">
