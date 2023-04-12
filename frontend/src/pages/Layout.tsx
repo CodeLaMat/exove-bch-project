@@ -4,7 +4,6 @@ import classes from "./Layout.module.css";
 import Sidemenu from "../components/sideMenu/Sidemenu";
 import { useAppSelector } from "../../src/redux/hooks/hooks";
 import MainRoutes from "../routes/MainRoutes";
-import { UserRole } from "../enum";
 
 const Layout = () => {
   const { isAuthenticated, selectedRole } = useAppSelector(

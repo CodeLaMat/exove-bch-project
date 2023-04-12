@@ -2,8 +2,8 @@ import React, { ButtonHTMLAttributes } from "react";
 import classes from "./Button.module.css";
 
 interface ButtonProps {
-  variant: "primary" | "alert" | "standard";
-  onClick?: () => void;
+  variant: "primary" | "secondary" | "alert" | "standard";
+  onClick?: (event: React.FormEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   className?: string;
   children?: React.ReactNode;

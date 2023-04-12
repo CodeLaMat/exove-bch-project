@@ -3,6 +3,7 @@ import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./CreateSurvey.module.css";
 import axios from "axios";
+import Accordion from "react-bootstrap/Accordion";
 import Button from "../../shared/button/Button";
 import Form from "react-bootstrap/Form";
 import {
@@ -113,97 +114,83 @@ const CreateSurvey: React.FC = () => {
   );
 
   return (
-    <div>
-      {" "}
+    <div className={classes.surveyCreate_container}>
+      <PageHeading pageTitle="Create Survey" />{" "}
       <div className={classes.back_button}>
         <Button variant="primary" onClick={() => navigate("/surveys")}>
           Back
         </Button>
       </div>
-      <div className={classes.surveyCreate_container}>
-        {" "}
-        <PageHeading pageTitle="Create Survey" />{" "}
-        <div className={classes.top}>
-          <div className={classes.surveyForm_container}>
-            <form action="POST" onSubmit={submitHandler}>
-              <label>
-                Survey Name:
-                <input
-                  type="text"
-                  name="surveyName"
-                  onChange={onchangeHandler}
-                />
-              </label>
-              <label>
-                Description:
-                <input
-                  type="text"
-                  name="description"
-                  onChange={onchangeHandler}
-                />
-              </label>
-              <div className={classes.questions_table}>
-                <table>
-                  <thead>
-                    <tr>
-                      <th>Category</th>
-                      <th>Question</th>
-                      <th>Answer</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    {Object.entries(questionsByCategory).map(
-                      ([category, questions], index) => (
-                        <React.Fragment key={category}>
-                          <tr
-                            className={
-                              index % 2 === 0
-                                ? classes.even_row
-                                : classes.odd_row
-                            }
-                          >
-                            <td rowSpan={questions.length}>{category}</td>
-                            <td>{questions[0].question}</td>
-                            <td>
-                              <Form.Check
-                                aria-label="option 1"
-                                type="checkbox"
-                                name={questions[0]._id}
-                                value={questions[0]._id}
-                                onChange={checkboxHandler}
-                              />
-                            </td>
+      <div className={classes.top}>
+        <div className={classes.surveyForm_container}>
+          <form action="POST" onSubmit={submitHandler}>
+            <label>
+              Survey Name:
+              <input type="text" name="surveyName" onChange={onchangeHandler} />
+            </label>
+            <label>
+              Description:
+              <input
+                type="text"
+                name="description"
+                onChange={onchangeHandler}
+              />
+            </label>
+            <Accordion
+              defaultActiveKey={["0"]}
+              alwaysOpen
+              className={classes.Accordion}
+            >
+              {Object.entries(questionsByCategory).map(
+                ([category, questions], index) => (
+                  <Accordion.Item eventKey={category} key={category}>
+                    <Accordion.Header>{category}</Accordion.Header>
+                    <Accordion.Body>
+                      <table className={classes.table}>
+                        <thead>
+                          <tr>
+                            <th>Question</th>
+                            <th>Question type</th>
+                            <th>Choose</th>
                           </tr>
-                          {questions.slice(1).map((question, i) => (
+                        </thead>
+                        <tbody>
+                          {questions.map((question) => (
                             <tr
                               key={question._id}
-                              className={
-                                i % 2 === 0 ? classes.even_row : classes.odd_row
-                              }
+                              className={index % 2 === 0 ? "" : "highlight"}
                             >
-                              <td>{question.question}</td>
-                              <td>
+                              <td className={classes.table_cell}>
+                                {question.question}
+                              </td>
+                              <td className={classes.table_cell}>
+                                {question.questionType}
+                              </td>
+                              <td className={classes.table_cell}>
                                 <Form.Check
                                   aria-label="option 1"
+                                  type="checkbox"
                                   name={question._id}
                                   value={question._id}
+                                  id={question._id}
                                   onChange={checkboxHandler}
                                 />
                               </td>
                             </tr>
                           ))}
-                        </React.Fragment>
-                      )
-                    )}
-                  </tbody>
-                </table>
-              </div>
-
-              <Button type="submit" variant="standard">
+                        </tbody>
+                      </table>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                )
+              )}
+            </Accordion>
+            <div className={classes.submit_button}>
+              <Button type="submit" variant="primary">
                 Submit
               </Button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

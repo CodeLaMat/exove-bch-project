@@ -1,5 +1,6 @@
 import axios from "axios";
 import { URL } from "../../enum";
+import { SurveyType } from "../types/dataTypes";
 
 const getAll = async () => {
   const response = await axios.get(URL.SURVEYS_URL);
@@ -7,4 +8,14 @@ const getAll = async () => {
   return response.data;
 };
 
-export default { getAll };
+const deleteSurvey = async (surveyId: string) => {
+  const response = await axios.delete(`${URL.SURVEYS_URL}/${surveyId}`);
+  return response.data;
+};
+
+const addSurvey = async (newSurvey: SurveyType) => {
+  const response = await axios.post<SurveyType>(URL.SURVEYS_URL, newSurvey);
+  return response.data;
+};
+
+export default { getAll, addSurvey, deleteSurvey };
