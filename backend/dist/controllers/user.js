@@ -17,20 +17,51 @@ const login = async (req, res) => {
     if (!user) {
         throw new errors_1.UnauthenticatedError("Invalid Credentials");
     }
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //   throw new UnauthenticatedError("Invalid Credentials");
+    // }
+    const isPasswordCorrect = await user.comparePassword(password);
+    if (!isPasswordCorrect) {
+        throw new errors_1.UnauthenticatedError("Invalid Credentials");
+    }
     const payload = {
         _id: user._id,
         email: user.email,
         role: user.role,
     };
     const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
-        expiresIn: "2d",
+        expiresIn: `${process.env.JWT_LIFETIME}`,
     });
-    res.status(http_status_codes_1.StatusCodes.OK).json({ user: { name: user.displayName }, token });
+    const oneDay = 1000 * 60 * 60 * 24;
+    res.cookie("token", token, {
+        httpOnly: true,
+        expires: new Date(Date.now() + oneDay),
+    });
+    res.status(http_status_codes_1.StatusCodes.OK).json({
+        user: { name: user.displayName, role: user.role, userId: user._id },
+        token,
+    });
 };
 exports.login = login;
 const getAllUsers = async (req, res) => {
-    const users = await user_1.default.find({}).sort("role");
-    res.status(http_status_codes_1.StatusCodes.OK).json({ users, count: users.length });
+    const queryParams = req.query;
+    const search = queryParams.search || "";
+    const query = {
+        $or: [
+            { firstName: new RegExp(search, "i") },
+            { surname: new RegExp(search, "i") },
+        ],
+    };
+    let result = user_1.default.find(query);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    result = result.skip(skip).limit(limit);
+    const users = await result;
+    const totalUsers = await user_1.default.countDocuments(query);
+    const numOfPages = Math.ceil(totalUsers / limit);
+    res.status(http_status_codes_1.StatusCodes.OK).json({ users, totalUsers, numOfPages });
 };
 exports.getAllUsers = getAllUsers;
 const getOneUser = async (req, res) => {
