@@ -2,10 +2,10 @@ import React, { useEffect, useState } from "react";
 import classes from "./HRDashboard.module.css";
 import axios from "axios";
 import { Table } from "react-bootstrap";
-import { ISurvey } from "../../../redux/types/dataTypes";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
-import { RootState } from "../../../redux/store";
-import { initialiseSurveys } from "../../../redux/reducers/survey/surveysSlice";
+import { ISurvey } from "../../../types/dataTypes";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../app/store";
+import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const DBSurveyList = () => {
   const dispatch = useAppDispatch();

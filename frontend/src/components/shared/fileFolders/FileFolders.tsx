@@ -1,5 +1,5 @@
 import React from "react";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { UserRole } from "../../../enum";
 
 const FileFolders = () => {

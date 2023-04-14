@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { URL } from "../../../enum";
-import { RootState } from "../../store";
+import { URL } from "../../enum";
+import { RootState } from "../../app/store";
 
 interface QuestionnarieState {
   section: string;

@@ -1,7 +1,7 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import questionsService from "../../api/questions";
+import { AppDispatch } from "../../app/store";
 import { IQuestion, ISurvey } from "../../types/dataTypes";
-import { AppDispatch } from "../../store";
-import questionsService from "../../services/questions";
 
 const initialSurveyState: ISurvey = {
   _id: "",

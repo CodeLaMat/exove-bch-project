@@ -4,7 +4,7 @@ import "./App.css";
 import { UserRole } from "./enum";
 import Layout from "./pages/Layout";
 import Login from "./components/login/Login";
-import { useAppSelector } from "../src/redux/hooks/hooks";
+import { useAppSelector } from "./hooks/hooks";
 import { sideMenuRoutes } from "./routes/Routes";
 
 const App = () => {

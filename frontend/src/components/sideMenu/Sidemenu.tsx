@@ -2,7 +2,7 @@ import React from "react";
 import { UserRole } from "../../enum";
 import classes from "./Sidemenu.module.css";
 import logo from "../../assets/img/logo.jpg";
-import { useAppSelector } from "../../../src/redux/hooks/hooks";
+import { useAppSelector } from "../../hooks/hooks";
 import HRMenus from "./HRMenus";
 import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";

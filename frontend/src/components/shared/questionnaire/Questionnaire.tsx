@@ -1,16 +1,13 @@
 import React, { useEffect } from "react";
 import { UserRole } from "../../../enum";
-import classes from "./HRQuestionnaire.module.css";
+import classes from "./Questionnaire.module.css";
 import AddQuestion from "../../hr/questionnaire/AddQuestions";
 import PageHeading from "../../pageHeading/PageHeading";
-import {
-  useAppSelector,
-  useAppDispatch,
-} from "../../../../src/redux/hooks/hooks";
-import { RootState } from "../../../redux/store";
+import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
+import { RootState } from "../../../app/store";
 import QuestionMult from "../../hr/questionnaire/QuestionMult";
-import { setQuestions } from "../../../redux/reducers/survey/surveySlice";
 import QuestionForm from "../../hr/questionnaire/QuestionForm";
+import { setQuestions } from "../../../features/survey/surveySlice";
 
 const Questionnaire = () => {
   const dispatch = useAppDispatch();

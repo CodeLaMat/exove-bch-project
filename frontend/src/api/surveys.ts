@@ -1,5 +1,5 @@
 import axios from "axios";
-import { URL } from "../../enum";
+import { URL } from "../enum";
 import { ISurvey } from "../types/dataTypes";
 
 const getAll = async () => {

@@ -4,8 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Button from "../shared/button/Button";
 import Modal from "react-bootstrap/Modal";
 import classes from "./Logout.module.css";
-import { setIsAuthenticated } from "../../redux/reducers/login/loginSlice";
-import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
+import { setIsAuthenticated } from "../../features/login/loginSlice";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 
 const LogoutPage = () => {
   const dispatch = useAppDispatch();

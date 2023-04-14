@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import PageHeading from "../../pageHeading/PageHeading";
 import axios from "axios";
 import classes from "./AddQuestions.module.css";
-import { initialiseQuestions } from "../../../redux/reducers/survey/surveySlice";
+import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import Button from "../../shared/button/Button";
 
 const AddQuestion: React.FC = () => {
