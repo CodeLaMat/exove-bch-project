@@ -11,10 +11,11 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
 
+import { loadUserData, setAuthenticated } from '../../redux/reducers/user/userSlice';
+
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
@@ -32,7 +33,6 @@ const Login: React.FC<LoginProps> = () => {
         }
       );
       const userData = response.data;
-      console.log("Response:", response.data);
 
       if (userData && userData.token) {
         const token = userData.token;
@@ -40,15 +40,16 @@ const Login: React.FC<LoginProps> = () => {
         // Decoding token to get user role
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token);
-          console.log("decodedToken:", decodedToken);
-          console.log("decodedTokeninfo:", decodedToken.payload.user.role);
+
+          dispatch(loadUserData(decodedToken.payload.user));
+          dispatch(setAuthenticated(true));
+
           const userRole = decodedToken.payload.user.role;
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
             return;
           }
-          console.log("userRole",userRole);
 
           localStorage.setItem("token", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;

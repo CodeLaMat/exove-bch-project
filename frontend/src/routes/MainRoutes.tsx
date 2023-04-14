@@ -36,24 +36,30 @@ const MainRoutes = () => {
             index
             element={
               selectedRole === UserRole.HR ? (
-                <HRDashboard />
+               // <HRDashboard />
+               <h1>hr</h1>
               ) : selectedRole === UserRole.Manager ? (
-                <ManagerDashboard />
+                //<ManagerDashboard />
+                <h1>manger</h1>
               ) : selectedRole === UserRole.User ? (
-                <UserDashboard />
-              ) : null
+               // <UserDashboard />
+                <h1>user</h1>
+              ) :  <h1>undefined</h1>
             }
           ></Route>
           <Route
             path="/home"
             element={
               selectedRole === UserRole.HR ? (
-                <HRDashboard />
+                 // <HRDashboard />
+               <h1>hr</h1>
               ) : selectedRole === UserRole.Manager ? (
-                <ManagerDashboard />
+                //<ManagerDashboard />
+                <h1>manger</h1>
               ) : selectedRole === UserRole.User ? (
-                <UserDashboard />
-              ) : null
+               //<UserDashboard />
+                <h1>manger</h1>
+              ) : <h1>undefined</h1>
             }
           ></Route>
           <Route

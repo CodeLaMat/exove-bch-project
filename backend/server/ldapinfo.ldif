@@ -140,7 +140,7 @@ gecos: Jane Doe
 loginShell: /bin/bash
 homeDirectory: /home/ldap/Jane
 mail: janedoe@test.com
-description: Manager
+description: manager
 jpegPhoto:< file:///home/ldap/jane/profile.jpg
 
 
@@ -180,7 +180,7 @@ gecos: Essi Salomaa
 loginShell: /bin/bash
 homeDirectory: /home/ldap/essi
 mail: essisalomaa@test.com
-description: HR
+description: hr
 jpegPhoto:< file:///home/ldap/essi/profile.jpg
 
 
@@ -200,5 +200,5 @@ gecos: James Narraway
 loginShell: /bin/bash
 homeDirectory: /home/ldap/james
 mail: jamesnarraway@test.com
-description: Manager
+description: manager
 jpegPhoto:< file:///home/ldap/james/profile.jpg

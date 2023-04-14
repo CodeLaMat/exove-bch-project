@@ -4,13 +4,22 @@ import classes from "./Layout.module.css";
 import Sidemenu from "../components/sideMenu/Sidemenu";
 import { useAppSelector } from "../../src/redux/hooks/hooks";
 import MainRoutes from "../routes/MainRoutes";
+import { useSelector } from "react-redux";
+
+import { selectUserInfo } from "../redux/reducers/user/userSlice";
+import { RootState } from "../redux/store";
 
 const Layout = () => {
+
+  const userData = useSelector((state: RootState) => state.user.userData); 
+
+  console.log("userData", userData);
+  // console.log("user name", userData[0].fullName);
   const { isAuthenticated, selectedRole } = useAppSelector(
     (state) => state.loginUser
   );
 
-  const userName = "Essi Salomaa";
+  const userName =  '';
   const imageUrl = "photoFilename";
 
   return (
