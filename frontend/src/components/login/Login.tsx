@@ -26,7 +26,7 @@ const Login: React.FC<LoginProps> = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5000/auth",
+        "http://localhost:5010/api/v1/auth/login",
         {
           username,
           password,
