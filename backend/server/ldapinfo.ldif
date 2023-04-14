@@ -61,6 +61,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/john
 mail: johndoe@test.com
 description: user
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/john/profile.jpg
 
 
@@ -81,6 +82,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/jason
 mail: jasondansie@test.com
 description: user
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/jason/profile.jpg
 
 
@@ -101,6 +103,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/Suh
 mail: suhfuh@test.com
 description: user
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/suh/profile.jpg
 
 
@@ -121,6 +124,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/eyvaz
 mail: eyvazalishov@test.com
 description: user
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/eyvaz/profile.jpg
 
 
@@ -141,6 +145,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/Jane
 mail: janedoe@test.com
 description: manager
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/jane/profile.jpg
 
 
@@ -161,6 +166,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/Nikita
 mail: nikitalyudikaynen@test.com
 description: user
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/nikita/profile.jpg
 
 
@@ -181,6 +187,7 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/essi
 mail: essisalomaa@test.com
 description: hr
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/essi/profile.jpg
 
 
@@ -201,4 +208,5 @@ loginShell: /bin/bash
 homeDirectory: /home/ldap/james
 mail: jamesnarraway@test.com
 description: manager
+telephoneNumber: +358 45 1234567
 jpegPhoto:< file:///home/ldap/james/profile.jpg

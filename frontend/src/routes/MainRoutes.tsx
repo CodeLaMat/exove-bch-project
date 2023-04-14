@@ -19,10 +19,16 @@ import ManagerSurveys from "../components/manager/surveys/ManagerSurveys";
 import UserDashboard from "../components/user/dashboard/UserDashboard";
 import UserInbox from "../components/user/inbox/UserInbox";
 import CreateSurvey from "../components/hr/surveys/CreateSurvey";
+import { useSelector } from "react-redux";
+import { RootState } from "../redux/store";
 
 const MainRoutes = () => {
   const { isAuthenticated } = useAppSelector((state) => state.loginUser);
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
+  // const { selectedRole } = useAppSelector((state) => state.loginUser);
+  
+  const userData = useSelector((state: RootState) => state.user.userData[0]);
+  const selectedRole  = userData.role;
+
 
   if (!isAuthenticated) {
     return <Navigate to="/" />;
@@ -35,15 +41,15 @@ const MainRoutes = () => {
           <Route
             index
             element={
-              selectedRole === UserRole.HR ? (
-               // <HRDashboard />
-               <h1>hr</h1>
+              selectedRole === "hr" ? (
+               <HRDashboard />
+               
               ) : selectedRole === UserRole.Manager ? (
-                //<ManagerDashboard />
-                <h1>manger</h1>
+                <ManagerDashboard />
+                
               ) : selectedRole === UserRole.User ? (
-               // <UserDashboard />
-                <h1>user</h1>
+               <UserDashboard />
+                
               ) :  <h1>undefined</h1>
             }
           ></Route>
@@ -51,14 +57,14 @@ const MainRoutes = () => {
             path="/home"
             element={
               selectedRole === UserRole.HR ? (
-                 // <HRDashboard />
-               <h1>hr</h1>
+                 <HRDashboard />
+               
               ) : selectedRole === UserRole.Manager ? (
-                //<ManagerDashboard />
-                <h1>manger</h1>
+                <ManagerDashboard />
+                
               ) : selectedRole === UserRole.User ? (
-               //<UserDashboard />
-                <h1>manger</h1>
+               <UserDashboard />
+                
               ) : <h1>undefined</h1>
             }
           ></Route>

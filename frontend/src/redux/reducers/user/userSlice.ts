@@ -2,8 +2,11 @@ import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 interface UserData {
   role: string;
-  fullName: string;
-  mail: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  groupId: string;
+  imagePath: string;
 }
 
 interface UserState {

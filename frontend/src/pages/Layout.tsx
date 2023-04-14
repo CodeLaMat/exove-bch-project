@@ -5,29 +5,27 @@ import Sidemenu from "../components/sideMenu/Sidemenu";
 import { useAppSelector } from "../../src/redux/hooks/hooks";
 import MainRoutes from "../routes/MainRoutes";
 import { useSelector } from "react-redux";
-
-import { selectUserInfo } from "../redux/reducers/user/userSlice";
 import { RootState } from "../redux/store";
 
 const Layout = () => {
 
-  const userData = useSelector((state: RootState) => state.user.userData); 
+  const userData = useSelector((state: RootState) => state.user.userData[0]); 
 
-  console.log("userData", userData);
-  // console.log("user name", userData[0].fullName);
   const { isAuthenticated, selectedRole } = useAppSelector(
     (state) => state.loginUser
   );
 
-  const userName =  '';
+  const userName =  userData.name;
   const imageUrl = "photoFilename";
+  const userRole = userData.role;
+
 
   return (
     <div>
       <div className={classes.mainConsole}>
         {isAuthenticated && (
           <aside className={classes.sidemenu}>
-            <Sidemenu image={imageUrl} name={userName} role={selectedRole} />
+            <Sidemenu image={imageUrl} name={userName} role={userRole} />
           </aside>
         )}
         <div className={classes.mainitems}>

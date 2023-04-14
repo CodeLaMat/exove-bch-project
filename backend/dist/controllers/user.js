@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOneUser = exports.getAllUsers = exports.ldapLogin = exports.login = void 0;
+exports.getOneUser = exports.getAllLdapUsers = exports.getAllUsers = exports.ldapLogin = exports.login = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const errors_1 = require("../errors");
 const http_status_codes_1 = require("http-status-codes");
@@ -76,7 +76,7 @@ const ldapLogin = async (req, res) => {
     const searchOptions = {
         scope: 'sub',
         filter: `(&(uid=${username})(objectClass=posixAccount))`,
-        attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail',],
+        attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', 'jpegPhoto', 'telephoneNumber'],
     };
     client.search(`uid=${username},ou=People,dc=test,dc=com`, searchOptions, (err, result) => {
         if (err) {
@@ -96,6 +96,9 @@ const ldapLogin = async (req, res) => {
                     role: userData.description,
                     name: userData.cn,
                     email: userData.mail,
+                    phoneNumber: userData.telephoneNumber,
+                    groupId: userData.gidNumber,
+                    imagePath: userData.jpegPhoto,
                 },
             };
             const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
@@ -111,6 +114,40 @@ const ldapLogin = async (req, res) => {
     });
 };
 exports.ldapLogin = ldapLogin;
+const getAllLdapUsers = async (req, res) => {
+    console.log("getting all ldap users");
+    try {
+        const client = createNewClient();
+        const opts = {
+            filter: '(objectClass=user)',
+            scope: 'sub',
+            attributes: ['cn', 'mail', 'memberOf']
+        };
+        const users = [];
+        client.search('dc=test,dc=com', opts, (err, result) => {
+            if (err) {
+                console.error(err);
+                return res.status(500).send(err);
+            }
+            res.on('searchEntry', (entry) => {
+                users.push(entry.object);
+            });
+            res.on('error', (err) => {
+                console.error(err);
+                return res.status(500).send(err);
+            });
+            res.on('end', (result) => {
+                console.log(`Found ${users.length} users`);
+                return res.json(users);
+            });
+        });
+    }
+    catch (err) {
+        console.error(err);
+        return res.status(500).send(err);
+    }
+};
+exports.getAllLdapUsers = getAllLdapUsers;
 const getAllUsers = async (req, res) => {
     const users = await user_1.default.find({}).sort("role");
     res.status(http_status_codes_1.StatusCodes.OK).json({ users, count: users.length });

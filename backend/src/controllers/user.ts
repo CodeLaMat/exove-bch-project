@@ -19,6 +19,9 @@ interface LdapUser {
   role: string;
   name: string;
   email: string;
+  phoneNumber: string;
+  groupId: string;
+  imagePath: string;
 }
 
 interface LoginRequestBody {
@@ -80,7 +83,7 @@ const ldapLogin = async (req: Request, res: Response) => {
   const searchOptions: SearchOptions = {
     scope: 'sub',
     filter: `(&(uid=${username})(objectClass=posixAccount))`, // add objectClass filter
-    attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', ],
+    attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', 'jpegPhoto', 'telephoneNumber' ],
   };
 
   client.search(`uid=${username},ou=People,dc=test,dc=com`, searchOptions, (err: Error | null, result: ldap.SearchCallbackResponse) => {
@@ -105,6 +108,9 @@ const ldapLogin = async (req: Request, res: Response) => {
           role: userData.description,
           name: userData.cn,
           email: userData.mail,
+          phoneNumber: userData.telephoneNumber,
+          groupId: userData.gidNumber,
+          imagePath: userData.jpegPhoto,
         } as LdapUser,
       };
       const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
@@ -119,6 +125,45 @@ const ldapLogin = async (req: Request, res: Response) => {
         });
     });
   });
+}
+
+const getAllLdapUsers = async (req: Request, res: Response) => {
+  console.log("getting all ldap users");
+  try {
+    const client = createNewClient();
+
+    const opts: SearchOptions = {
+      filter: '(objectClass=user)',
+      scope: 'sub',
+      attributes: ['cn', 'mail', 'memberOf']
+    };
+
+    const users: any[] = [];
+
+    client.search('dc=test,dc=com', opts, (err: Error | null, result: ldap.SearchCallbackResponse) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).send(err);
+      }
+
+      res.on('searchEntry', (entry: any) => {
+        users.push(entry.object);
+      });
+
+      res.on('error', (err: Error) => {
+        console.error(err);
+        return res.status(500).send(err);
+      });
+
+      res.on('end', (result: any) => {
+        console.log(`Found ${users.length} users`);
+        return res.json(users);
+      });
+    });
+  } catch (err) {
+    console.error(err);
+    return res.status(500).send(err);
+  }
 }
 
 const getAllUsers = async (req: Request, res: Response) => {
@@ -145,4 +190,4 @@ const getOneUser = async (req: Request, res: Response) => {
 //   res.send("show stats");
 // };
 
-export { login, ldapLogin, getAllUsers, getOneUser };
+export { login, ldapLogin, getAllUsers, getAllLdapUsers, getOneUser };

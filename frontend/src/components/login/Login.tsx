@@ -14,6 +14,17 @@ import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
 import { loadUserData, setAuthenticated } from '../../redux/reducers/user/userSlice';
 
 interface LoginProps {}
+interface UserData {
+  role: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  groupId: string;
+  imagePath: string;
+}
+
+
+
 
 const Login: React.FC<LoginProps> = () => {
   const [username, setUsername] = useState("");
@@ -26,25 +37,37 @@ const Login: React.FC<LoginProps> = () => {
 
     try {
       const response = await axios.post(
-        "http://localhost:5010/api/v1/auth/login",
+        "http://localhost:5010/api/v1/users/auth/ldadlogin",
         {
           username,
           password,
         }
       );
-      const userData = response.data;
+      const logedUser = response.data;
 
-      if (userData && userData.token) {
-        const token = userData.token;
+      const userInfo = { 
+        user: { 
+          role: logedUser.user.description,
+          name: logedUser.user.cn,
+          email: logedUser.user.mail,
+          phoneNumber: logedUser.user.telephoneNumber,
+          groupId: logedUser.user.gidNumber,
+          imagePath: logedUser.user.jpegPhoto,
+        } as UserData,
+      };
+
+      dispatch(loadUserData([userInfo.user]));
+      dispatch(setAuthenticated(true));
+
+
+      if (logedUser && logedUser.token) {
+        const token = logedUser.token;
         
         // Decoding token to get user role
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token);
 
-          dispatch(loadUserData(decodedToken.payload.user));
-          dispatch(setAuthenticated(true));
-
-          const userRole = decodedToken.payload.user.role;
+          const userRole = decodedToken.user.role;
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
