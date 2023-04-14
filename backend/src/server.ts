@@ -1,8 +1,10 @@
 import express, { Request, Response, NextFunction } from "express";
 const app = express();
 import dotenv from "dotenv";
-const cors = require("cors");
 dotenv.config();
+import cors from "cors";
+import morgan from "morgan";
+import cookieParser from "cookie-parser";
 
 // db
 import connectDB from "./db/connect";
@@ -19,8 +21,10 @@ import errorHandlerMiddleware from "./middleware/errorHandler";
 
 const PORT = process.env.PORT || 5010;
 
+app.use(morgan("tiny"));
 app.use(cors());
 app.use(express.json());
+app.use(cookieParser(`${process.env.JWT_SECRET}`));
 
 app.get("/api/v1", (req: Request, res: Response) => {
   res.json({ msg: "API" });
