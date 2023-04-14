@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import User from "../models/user";
+import { UserRoles } from "../types/dataTypes";
 import {
   BadRequestError,
   UnauthenticatedError,
@@ -7,6 +8,8 @@ import {
 } from "../errors";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
+import { attachCookiesToResponse } from "../util/jwt";
 
 interface JwtPayload {
   _id: string;
@@ -28,21 +31,83 @@ const login = async (req: Request, res: Response) => {
   if (!user) {
     throw new UnauthenticatedError("Invalid Credentials");
   }
-  const payload: JwtPayload = {
-    _id: user._id,
+  // const isMatch = await bcrypt.compare(password, user.password);
+  // if (!isMatch) {
+  //   throw new UnauthenticatedError("Invalid Credentials");
+  // }
+
+  const isPasswordCorrect = await user.comparePassword(password);
+  if (!isPasswordCorrect) {
+    throw new UnauthenticatedError("Invalid Credentials");
+  }
+
+  const tokenUser = {
+    userId: user._id,
     email: user.email,
     role: user.role,
   };
-  const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
-    expiresIn: "2d",
+  attachCookiesToResponse({ res, user: tokenUser });
+
+  // const payload: JwtPayload = {
+  //   _id: user._id,
+  //   email: user.email,
+  //   role: user.role,
+  // };
+  // const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
+  //   expiresIn: `${process.env.JWT_LIFETIME}`,
+  // });
+
+  // const oneDay = 1000 * 60 * 60 * 24;
+  // res.cookie("token", token, {
+  //   httpOnly: true,
+  //   expires: new Date(Date.now() + oneDay),
+  //   secure: process.env.NODE_ENV === "production",
+  //   signed: true,
+  // });
+
+  res.status(StatusCodes.OK).json({
+    user: tokenUser,
   });
-  res.status(StatusCodes.OK).json({ user: { name: user.displayName }, token });
 };
 
+// const getAllUsers = async (req: Request, res: Response) => {
+//   const users = await User.find({}).sort("role");
+//   res.status(StatusCodes.OK).json({ users, count: users.length });
+// };
+
+interface QueryParams {
+  search?: string;
+  role?: UserRoles;
+  sort?: "asc" | "desc";
+}
+
 const getAllUsers = async (req: Request, res: Response) => {
-  const users = await User.find({}).sort("role");
-  res.status(StatusCodes.OK).json({ users, count: users.length });
+  const queryParams: QueryParams = req.query;
+  const search = queryParams.search || "";
+
+  const query = {
+    $or: [
+      { firstName: new RegExp(search, "i") },
+      { surname: new RegExp(search, "i") },
+    ],
+  };
+
+  let result = User.find(query);
+
+  const page = Number(req.query.page) || 1;
+  const limit = Number(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  result = result.skip(skip).limit(limit);
+
+  const users = await result;
+
+  const totalUsers = await User.countDocuments(query);
+  const numOfPages = Math.ceil(totalUsers / limit);
+
+  res.status(StatusCodes.OK).json({ users, totalUsers, numOfPages });
 };
+
 const getOneUser = async (req: Request, res: Response) => {
   const {
     params: { id: userId },

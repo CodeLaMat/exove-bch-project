@@ -1,9 +1,13 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { User } from "../types/dataTypes";
-import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
-type UserType = User & mongoose.Document;
+interface UserMethods {
+  comparePassword: (candidatePassword: string) => Promise<boolean>;
+}
+
+type UserType = User & UserMethods & mongoose.Document;
 
 const UserSchema = new mongoose.Schema({
   firstName: {
@@ -71,6 +75,19 @@ const UserSchema = new mongoose.Schema({
 UserSchema.virtual("displayName").get(function () {
   return `${this.firstName} ${this.surName}`;
 });
+
+UserSchema.pre("save", async function () {
+  if (!this.isModified("password")) return;
+  const salt = await bcrypt.genSalt(10);
+  this.password = await bcrypt.hash(this.password, salt);
+});
+
+UserSchema.methods.comparePassword = async function (
+  candidatePassword: string
+) {
+  const isMatch = await bcrypt.compare(candidatePassword, this.password);
+  return isMatch;
+};
 
 const User: Model<UserType> = mongoose.model<UserType>("User", UserSchema);
 
