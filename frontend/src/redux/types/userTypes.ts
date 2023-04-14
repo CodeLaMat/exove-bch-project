@@ -1,4 +1,4 @@
-export interface Employee {
+export interface IEmployee {
   id: string;
   firstName: string;
   surName: string;
@@ -16,6 +16,6 @@ export interface Employee {
   image: string;
 }
 
-export interface EmployeesData {
-  employees: Employee[];
+export interface IEmployees {
+  employees: IEmployee[];
 }

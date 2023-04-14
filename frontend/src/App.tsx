@@ -17,9 +17,7 @@ const App = () => {
     <div className="App">
       {!isAuthenticated ? (
         <Login />
-      ) : UserRole.HR === selectedRole ||
-        UserRole.Manager === selectedRole ||
-        UserRole.User === selectedRole ? (
+      ) : UserRole ? (
         <Routes>
           <Route path="/" element={<Layout />}>
             {userRoutes[0].children.map(

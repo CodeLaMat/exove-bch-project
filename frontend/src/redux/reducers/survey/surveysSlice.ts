@@ -1,14 +1,10 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SurveyType } from "../../types/dataTypes";
+import { ISurvey, ISurveys } from "../../types/dataTypes";
 import surveysService from "../../services/surveys";
 import { AppDispatch } from "../../store";
 import deleteSurvey from "./surveySlice";
 
-export interface SurveysData {
-  surveys: SurveyType[];
-}
-
-const initialSurveysState: SurveysData = {
+const initialSurveysState: ISurveys = {
   surveys: [],
 };
 
@@ -16,7 +12,7 @@ export const surveysSlice = createSlice({
   name: "surveys",
   initialState: initialSurveysState,
   reducers: {
-    getAllSurveys: (state, action: PayloadAction<SurveyType[]>) => {
+    getAllSurveys: (state, action: PayloadAction<ISurvey[]>) => {
       state.surveys = action.payload;
     },
     deleteSurvey: (state, action: PayloadAction<string>) => {

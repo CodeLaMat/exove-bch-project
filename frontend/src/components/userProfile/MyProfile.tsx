@@ -2,12 +2,12 @@ import React from "react";
 import PageHeading from "../pageHeading/PageHeading";
 import classes from "./MyProfile.module.css";
 import { useAppSelector } from "../../../src/redux/hooks/hooks";
-import { Employee } from "../../redux/types/userTypes";
+import { IEmployee } from "../../redux/types/userTypes";
 import { RootState } from "../../redux/store";
 
 const MyProfile = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);
-  const employees: Employee[][] = useAppSelector(
+  const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const entries = Object.values(employees);

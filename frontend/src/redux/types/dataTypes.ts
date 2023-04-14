@@ -11,7 +11,7 @@ export enum Categories {
 }
 
 export type QuestionsByCategory = {
-  [key in Categories]: QuestionProps[];
+  [key in Categories]: IQuestion[];
 };
 
 export enum surveyStatus {
@@ -24,7 +24,7 @@ export enum Question_Type {
   FREE_FORM = "Free form",
 }
 
-export interface QuestionProps {
+export interface IQuestion {
   _id: string;
   category: Categories;
   question: string;
@@ -32,43 +32,25 @@ export interface QuestionProps {
   description: string;
 }
 
-export interface QuestionsType {
-  question: QuestionProps[];
+export interface IQuestions {
+  question: IQuestion[];
 }
 
-export interface SurveyType {
+export interface ISurvey {
   _id: string;
   surveyName: string;
   description: string;
-  questions: QuestionProps[];
+  questions: IQuestion[];
+}
+
+export interface ISurveys {
+  surveys: ISurvey[];
 }
 
 export interface FormData {
   surveyName: string;
   description: string;
-  questions: QuestionProps[];
-}
-
-export type Response = {
-  question: string;
-  response: Array<number | string>;
-};
-
-interface CreatedSurvey {
-  creationDate: Date;
-  surveySubject: string;
-  participants: string[];
-  deadline: Date;
-  status: "draft" | "open" | "closed";
-  canEdit: boolean;
-  canCreate: boolean;
-}
-
-export interface LoginProps {
-  onLogin: (role: UserRole) => void;
-  setIsAuthenticated: React.Dispatch<React.SetStateAction<boolean>>;
-  handleRoleChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  selectedROle: UserRole;
+  questions: IQuestion[];
 }
 
 export type RouteConfig = {
@@ -81,3 +63,23 @@ export type RouteConfig = {
     }[];
   }[];
 };
+
+export interface IParticipant {
+  id: string;
+  acceptencestatus: "declined" | "approved";
+  role: string;
+  status: "filled" | "open";
+}
+
+export interface ISurveypack {
+  _id: string;
+  creationDate: Date;
+  surveySubject: string[];
+  survey: ISurvey[];
+  participants: IParticipant[];
+  deadline: Date;
+  status: "open" | "closed" | "inprogress";
+  managerapproved: boolean;
+  hrapproved: boolean;
+  manager: string[];
+}

@@ -1,11 +1,11 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { SurveyType } from "../../types/dataTypes";
+import { ISurvey } from "../../types/dataTypes";
 
 interface SurveyPack {
   _id: string;
   creationDate: Date;
   surveySubject: string;
-  survey: SurveyType[];
+  survey: ISurvey[];
   participants: string[];
   deadline: Date;
   status: "returned" | "open" | "closed";
