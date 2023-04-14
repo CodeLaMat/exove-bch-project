@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from "react";
 import { UserRole } from "../../../enum";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
-import classes from "./HRSurveys.module.css";
+import classes from "./Surveys.module.css";
 import axios from "axios";
 import { Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
-import { ISurvey } from "../../../redux/types/dataTypes";
-import { removeSurvey } from "../../../redux/reducers/survey/surveysSlice";
+import { ISurvey } from "../../../types/dataTypes";
+import { removeSurvey } from "../../../features/survey/surveysSlice";
 
-const HRSurveys = () => {
+const Surveys = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [surveyList, setsurveyList] = useState<ISurvey[]>([]);
@@ -91,4 +91,4 @@ const HRSurveys = () => {
   } else return null;
 };
 
-export default HRSurveys;
+export default Surveys;

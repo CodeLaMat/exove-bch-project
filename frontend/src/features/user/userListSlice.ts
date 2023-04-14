@@ -1,6 +1,6 @@
 import { Dispatch, Action } from "redux";
 import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
-import employeesService from "../../services/employees";
+import employeesService from "../../api/employees";
 import { IEmployee, IEmployees } from "../../types/userTypes";
 
 const initialState: IEmployees = {

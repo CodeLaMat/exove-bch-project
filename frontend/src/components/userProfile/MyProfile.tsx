@@ -1,9 +1,9 @@
 import React from "react";
 import PageHeading from "../pageHeading/PageHeading";
 import classes from "./MyProfile.module.css";
-import { useAppSelector } from "../../../src/redux/hooks/hooks";
-import { IEmployee } from "../../redux/types/userTypes";
-import { RootState } from "../../redux/store";
+import { useAppSelector } from "../../hooks/hooks";
+import { IEmployee } from "../../types/userTypes";
+import { RootState } from "../../app/store";
 
 const MyProfile = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);

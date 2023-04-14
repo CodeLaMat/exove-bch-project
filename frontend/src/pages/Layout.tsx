@@ -2,7 +2,6 @@ import React from "react";
 import ProfileMenu from "../components/profileMenu/ProfileMenu";
 import classes from "./Layout.module.css";
 import Sidemenu from "../components/sideMenu/Sidemenu";
-
 import MainRoutes from "../routes/MainRoutes";
 
 const Layout = () => {

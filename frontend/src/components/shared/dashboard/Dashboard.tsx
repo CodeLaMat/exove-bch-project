@@ -1,6 +1,6 @@
 import React from "react";
-import { useAppSelector } from "../../../../src/redux/hooks/hooks";
-import classes from "./HRDashboard.module.css";
+import { useAppSelector } from "../../../hooks/hooks";
+import classes from "./Dashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "../../hr/dashboard/SurveySummaryChart";
 import ProgressBar from "../../hr/dashboard/ProgressBar";
@@ -8,7 +8,7 @@ import DBUsers from "../../hr/dashboard/DBUsers";
 import DBSurveyList from "../../hr/dashboard/DBSurveyList";
 import { UserRole } from "../../../enum";
 
-const HRDashboard = () => {
+const Dashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);
   const { selectedRole } = useAppSelector((state) => state.loginUser);
 
@@ -50,4 +50,4 @@ const HRDashboard = () => {
   } else return null;
 };
 
-export default HRDashboard;
+export default Dashboard;

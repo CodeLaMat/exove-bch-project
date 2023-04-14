@@ -1,12 +1,12 @@
 import React, { useEffect } from "react";
 import { UserRole } from "../../../enum";
 import PageHeading from "../../pageHeading/PageHeading";
-import { initialiseEmployees } from "../../../redux/reducers/user/userListSlice";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import Table from "react-bootstrap/Table";
-import { IEmployee } from "../../../redux/types/userTypes";
-import { RootState } from "../../../redux/store";
-import classes from "./HRUsers.module.css";
+import { IEmployee } from "../../../types/userTypes";
+import { RootState } from "../../../app/store";
+import classes from "./Users.module.css";
+import { initialiseEmployees } from "../../../features/user/userListSlice";
 
 const Users = () => {
   const dispatch = useAppDispatch();

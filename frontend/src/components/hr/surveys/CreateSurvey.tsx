@@ -10,7 +10,7 @@ import {
   IQuestion,
   FormData,
   QuestionsByCategory,
-} from "../../../redux/types/dataTypes";
+} from "../../../types/dataTypes";
 
 const CreateSurvey: React.FC = () => {
   const [questionList, setQuestionList] = useState<IQuestion[]>([]);

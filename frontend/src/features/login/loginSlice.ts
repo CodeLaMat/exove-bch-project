@@ -1,4 +1,4 @@
-import { UserRole } from "../../../enum";
+import { UserRole } from "../../enum";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../types/loginTypes";
 

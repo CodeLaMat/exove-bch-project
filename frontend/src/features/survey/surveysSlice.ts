@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ISurvey, ISurveys } from "../../types/dataTypes";
-import surveysService from "../../services/surveys";
-import { AppDispatch } from "../../store";
+import surveysService from "../../api/surveys";
 import deleteSurvey from "./surveySlice";
+import { ISurvey, ISurveys } from "../../types/dataTypes";
+import { AppDispatch } from "../../app/store";
 
 const initialSurveysState: ISurveys = {
   surveys: [],

@@ -5,12 +5,12 @@ import {
   combineReducers,
   Reducer,
 } from "@reduxjs/toolkit";
-import employeeSlice from "./reducers/user/userListSlice";
-import loginSlice from "./reducers/login/loginSlice";
-import surveySlice from "./reducers/survey/surveySlice";
-import surveysSlice from "./reducers/survey/surveysSlice";
+import employeeSlice from "../features/user/userListSlice";
+import loginSlice from "../features/login/loginSlice";
+import surveySlice from "../features/survey/surveySlice";
+import surveysSlice from "../features/survey/surveysSlice";
 // import { LoginAction } from "./types/loginTypes";
-import surveyPackSlice from "./reducers/survey/createSurveySlice";
+import surveyPackSlice from "../features/survey/createSurveySlice";
 
 type AppAction = Action<string> | { payload: unknown; type: string };
 

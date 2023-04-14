@@ -1,9 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./ProfileMenu.module.css";
-import { RootState } from "../../redux/store";
-import { IEmployee } from "../../redux/types/userTypes";
-import { useAppSelector } from "../../../src/redux/hooks/hooks";
+import { RootState } from "../../app/store";
+import { IEmployee } from "../../types/userTypes";
+import { useAppSelector } from "../../hooks/hooks";
 
 const ProfileMenu = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);
