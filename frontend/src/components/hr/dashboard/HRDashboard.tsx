@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { useAppSelector } from "../../../../src/redux/hooks/hooks";
 import classes from "./HRDashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
@@ -6,11 +6,33 @@ import SurveySummaryChart from "./SurveySummaryChart";
 import ProgressBar from "./ProgressBar";
 import DBUsers from "./DBUsers";
 import DBSurveyList from "./DBSurveyList";
+import axios from "axios";
 
 const HRDashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);
 
   console.log(employeesList);
+
+  useEffect(() => {
+    let userList: any[] = [];
+  
+    try {
+      axios
+        .get("http://localhost:5010/api/v1/users/ldapusers")
+        .then((response) => {
+          userList = response.data;
+          console.log("userList", userList);
+        })
+        .catch((error) => {
+          console.error(error);
+          alert("Error retrieving user data");
+        });
+    } catch (error) {
+      console.error(error);
+      alert("Error from api");
+    }
+  }, []);
+
 
   return (
     <div>

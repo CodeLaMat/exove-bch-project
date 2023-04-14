@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import ProfileMenu from "../components/profileMenu/ProfileMenu";
 import classes from "./Layout.module.css";
 import Sidemenu from "../components/sideMenu/Sidemenu";
@@ -6,6 +6,7 @@ import { useAppSelector } from "../../src/redux/hooks/hooks";
 import MainRoutes from "../routes/MainRoutes";
 import { useSelector } from "react-redux";
 import { RootState } from "../redux/store";
+import axios from "axios";
 
 const Layout = () => {
 
@@ -19,7 +20,7 @@ const Layout = () => {
   const imageUrl = "photoFilename";
   const userRole = userData.role;
 
-
+  
   return (
     <div>
       <div className={classes.mainConsole}>

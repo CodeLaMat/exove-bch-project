@@ -32,6 +32,7 @@ const errors_1 = require("../errors");
 const http_status_codes_1 = require("http-status-codes");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const ldap = __importStar(require("ldapjs"));
+const util_1 = require("util");
 console.log("user.ts activated");
 const createNewClient = () => {
     const client = ldap.createClient({
@@ -124,26 +125,29 @@ const getAllLdapUsers = async (req, res) => {
             attributes: ['cn', 'mail', 'memberOf']
         };
         const users = [];
-        client.search('dc=test,dc=com', opts, (err, result) => {
-            if (err) {
-                console.error(err);
-                return res.status(500).send(err);
-            }
-            res.on('searchEntry', (entry) => {
-                users.push(entry.object);
-            });
-            res.on('error', (err) => {
-                console.error(err);
-                return res.status(500).send(err);
-            });
-            res.on('end', (result) => {
-                console.log(`Found ${users.length} users`);
-                return res.json(users);
-            });
+        const searchAsync = (0, util_1.promisify)(client.search.bind(client));
+        const result = await searchAsync('ou=People,dc=test,dc=com', opts);
+        console.log("search completed");
+        result.on('searchEntry', (entry) => {
+            users.push(entry.object);
+        });
+        console.log("array built");
+        result.on('error', (err) => {
+            console.error(err);
+            console.log("error after array");
+            return res.status(500).send(err);
+        });
+        console.log("sending it all out");
+        console.log("users", users);
+        res.on('end', (result) => {
+            console.log(`Found ${users.length} users`);
+            console.log(users);
+            return res.json(users);
         });
     }
     catch (err) {
         console.error(err);
+        console.log("We hit an error");
         return res.status(500).send(err);
     }
 };

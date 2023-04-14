@@ -9,6 +9,9 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import * as ldap from 'ldapjs';
 import { SearchEntryObject, SearchOptions } from 'ldapjs';
+import { promisify } from 'util';
+
+
 console.log("user.ts activated");
 interface JwtPayload {
   _id: string;
@@ -140,28 +143,31 @@ const getAllLdapUsers = async (req: Request, res: Response) => {
 
     const users: any[] = [];
 
-    client.search('dc=test,dc=com', opts, (err: Error | null, result: ldap.SearchCallbackResponse) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).send(err);
-      }
+    const searchAsync = promisify(client.search.bind(client));
 
-      res.on('searchEntry', (entry: any) => {
+    const result = await searchAsync('ou=People,dc=test,dc=com', opts) as ldap.SearchCallbackResponse;
+
+      console.log("search completed");
+      result.on('searchEntry', (entry: any) => {
         users.push(entry.object);
       });
 
-      res.on('error', (err: Error) => {
+      console.log("array built");
+      result.on('error', (err: Error) => {
         console.error(err);
+        console.log("error after array");
         return res.status(500).send(err);
       });
-
-      res.on('end', (result: any) => {
+      console.log("sending it all out");
+      console.log("users", users);
+      res.on('end', (result) => {
         console.log(`Found ${users.length} users`);
+        console.log(users);
         return res.json(users);
       });
-    });
   } catch (err) {
     console.error(err);
+    console.log("We hit an error");
     return res.status(500).send(err);
   }
 }
