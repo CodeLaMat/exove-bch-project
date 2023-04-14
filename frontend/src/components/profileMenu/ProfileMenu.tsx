@@ -2,13 +2,12 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./ProfileMenu.module.css";
 import { RootState } from "../../redux/store";
-import { Employee } from "../../redux/types/userTypes";
+import { IEmployee } from "../../redux/types/userTypes";
 import { useAppSelector } from "../../../src/redux/hooks/hooks";
-import { PoginProfileProps } from "../../redux/types/loginTypes";
 
-const ProfileMenu = (props: PoginProfileProps) => {
+const ProfileMenu = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);
-  const employees: Employee[][] = useAppSelector(
+  const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const entries = Object.values(employees);

@@ -2,10 +2,10 @@ import React from "react";
 import { useAppSelector } from "../../../../src/redux/hooks/hooks";
 import classes from "./HRDashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
-import SurveySummaryChart from "./SurveySummaryChart";
-import ProgressBar from "./ProgressBar";
-import DBUsers from "./DBUsers";
-import DBSurveyList from "./DBSurveyList";
+import SurveySummaryChart from "../../hr/dashboard/SurveySummaryChart";
+import ProgressBar from "../../hr/dashboard/ProgressBar";
+import DBUsers from "../../hr/dashboard/DBUsers";
+import DBSurveyList from "../../hr/dashboard/DBSurveyList";
 import { UserRole } from "../../../enum";
 
 const HRDashboard = () => {

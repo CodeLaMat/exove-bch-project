@@ -1,15 +1,8 @@
 import { UserRole } from "../../../enum";
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { ILogin } from "../../types/loginTypes";
 
-export interface LoginState {
-  isAuthenticated: boolean;
-  selectedRole: UserRole;
-  userName: string;
-  surName: string;
-  email: string;
-}
-
-const initialState: LoginState = {
+const initialState: ILogin = {
   isAuthenticated: localStorage.getItem("token") !== null,
   selectedRole: (localStorage.getItem("userRole") as UserRole) || UserRole.User,
   userName: "",

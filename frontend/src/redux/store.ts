@@ -9,13 +9,10 @@ import employeeSlice from "./reducers/user/userListSlice";
 import loginSlice from "./reducers/login/loginSlice";
 import surveySlice from "./reducers/survey/surveySlice";
 import surveysSlice from "./reducers/survey/surveysSlice";
-import { LoginAction } from "./types/loginTypes";
+// import { LoginAction } from "./types/loginTypes";
 import surveyPackSlice from "./reducers/survey/createSurveySlice";
 
-type AppAction =
-  | LoginAction
-  | Action<string>
-  | { payload: unknown; type: string };
+type AppAction = Action<string> | { payload: unknown; type: string };
 
 const rootReducer: Reducer = combineReducers({
   loginUser: loginSlice,

@@ -1,9 +1,9 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { QuestionProps, SurveyType } from "../../types/dataTypes";
+import { IQuestion, ISurvey } from "../../types/dataTypes";
 import { AppDispatch } from "../../store";
 import questionsService from "../../services/questions";
 
-const initialSurveyState: SurveyType = {
+const initialSurveyState: ISurvey = {
   _id: "",
   surveyName: "",
   description: "",
@@ -20,10 +20,10 @@ export const surveySlice = createSlice({
     setDescription: (state, action: PayloadAction<string>) => {
       state.description = action.payload;
     },
-    setQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
+    setQuestions: (state, action: PayloadAction<IQuestion[]>) => {
       state.questions = action.payload;
     },
-    getAllQuestions: (state, action: PayloadAction<QuestionProps[]>) => {
+    getAllQuestions: (state, action: PayloadAction<IQuestion[]>) => {
       state.questions = action.payload;
     },
   },
@@ -35,7 +35,7 @@ export const { setName, setDescription, setQuestions, getAllQuestions } =
 export const initialiseQuestions = () => {
   return async (dispatch: AppDispatch) => {
     try {
-      const questions = (await questionsService.getAll()) as QuestionProps[];
+      const questions = (await questionsService.getAll()) as IQuestion[];
       dispatch(setQuestions(questions));
     } catch (error) {
       console.log("Error fetching the questions", error);

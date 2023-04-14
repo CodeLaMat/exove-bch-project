@@ -8,7 +8,7 @@ import {
   useAppDispatch,
 } from "../../../../src/redux/hooks/hooks";
 import { initialiseQuestions } from "../../../redux/reducers/survey/surveySlice";
-import { QuestionProps } from "../../../redux/types/dataTypes";
+import { IQuestion } from "../../../redux/types/dataTypes";
 
 function QuestionMult() {
   const dispatch = useAppDispatch();
@@ -21,7 +21,7 @@ function QuestionMult() {
 
   return (
     <div>
-      {questions.map((questtions: QuestionProps) => (
+      {questions.map((questtions: IQuestion) => (
         <Card>
           <Card.Body>{questions.question}</Card.Body>
           <div key={`inline-$"radio"`} className="mb-3">

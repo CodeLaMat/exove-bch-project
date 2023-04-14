@@ -7,13 +7,13 @@ import Accordion from "react-bootstrap/Accordion";
 import Button from "../../shared/button/Button";
 import Form from "react-bootstrap/Form";
 import {
-  QuestionProps,
+  IQuestion,
   FormData,
   QuestionsByCategory,
 } from "../../../redux/types/dataTypes";
 
 const CreateSurvey: React.FC = () => {
-  const [questionList, setQuestionList] = useState<QuestionProps[]>([]);
+  const [questionList, setQuestionList] = useState<IQuestion[]>([]);
   const [surveyName, setSurveyName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
@@ -27,7 +27,7 @@ const CreateSurvey: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<QuestionProps[]>("http://localhost:5010/api/v1/questions")
+      .get<IQuestion[]>("http://localhost:5010/api/v1/questions")
       .then((response) => {
         setQuestionList(response.data);
       })
@@ -77,7 +77,7 @@ const CreateSurvey: React.FC = () => {
           (question) => question._id === checkedQuestion
         );
       })
-      .filter((question) => question) as QuestionProps[];
+      .filter((question) => question) as IQuestion[];
 
     console.log("surveyQuestions: ", surveyQuestions);
     setFormData((prevState) => ({

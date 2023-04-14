@@ -7,12 +7,7 @@ import HRMenus from "./HRMenus";
 import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
 
-interface Iprops {
-  image: string;
-  name: string;
-  role: string;
-}
-const Sidemenu = (props: Iprops) => {
+const Sidemenu = () => {
   const { isAuthenticated, selectedRole } = useAppSelector(
     (state) => state.loginUser
   );
