@@ -5,5 +5,5 @@ export interface ILogin {
   selectedRole: UserRole;
   userName: string;
   surName: string;
-  email: string;
+  email: string | null;
 }

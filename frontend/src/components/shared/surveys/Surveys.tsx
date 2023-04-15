@@ -8,25 +8,22 @@ import axios from "axios";
 import { Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
+import { RootState } from "../../../app/store";
 import { removeSurvey } from "../../../features/survey/surveysSlice";
+import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const Surveys = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [surveyList, setsurveyList] = useState<ISurvey[]>([]);
   const { selectedRole } = useAppSelector((state) => state.loginUser);
+  const surveys: ISurvey[] = useAppSelector(
+    (state: RootState) => state.surveys.surveys
+  );
 
   useEffect(() => {
-    axios
-      .get<ISurvey[]>("http://localhost:5010/api/v1/surveys")
-      .then((response) => {
-        setsurveyList(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-        // Add logic to handle the error if needed
-      });
-  }, [setsurveyList]);
+    dispatch(initialiseSurveys());
+  }, [dispatch]);
+  console.log(surveys);
 
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
@@ -58,7 +55,7 @@ const Surveys = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {surveyList.map((survey: ISurvey) => (
+                  {surveys.map((survey: ISurvey) => (
                     <tr key={survey._id}>
                       <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>

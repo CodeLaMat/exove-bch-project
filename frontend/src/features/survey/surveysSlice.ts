@@ -1,6 +1,5 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import surveysService from "../../api/surveys";
-import deleteSurvey from "./surveySlice";
 import { ISurvey, ISurveys } from "../../types/dataTypes";
 import { AppDispatch } from "../../app/store";
 
@@ -14,6 +13,7 @@ export const surveysSlice = createSlice({
   reducers: {
     getAllSurveys: (state, action: PayloadAction<ISurvey[]>) => {
       state.surveys = action.payload;
+      sessionStorage.setItem("surveys", JSON.stringify(action.payload));
     },
     deleteSurvey: (state, action: PayloadAction<string>) => {
       state.surveys = state.surveys.filter(
@@ -27,8 +27,14 @@ export const { getAllSurveys } = surveysSlice.actions;
 
 export const initialiseSurveys = () => {
   return async (dispatch: AppDispatch) => {
-    const surveys = await surveysService.getAll();
-    dispatch(getAllSurveys(surveys));
+    const surveysFromStorage = sessionStorage.getItem("surveys");
+    if (surveysFromStorage) {
+      const surveys = JSON.parse(surveysFromStorage);
+      dispatch(getAllSurveys(surveys));
+    } else {
+      const surveys = await surveysService.getAll();
+      dispatch(getAllSurveys(surveys));
+    }
   };
 };
 
@@ -39,6 +45,14 @@ export const removeSurvey = (surveyid: string) => {
       type: "surveys/deleteSurvey",
       payload: surveyid,
     });
+
+    const surveysFromStorage = JSON.parse(
+      sessionStorage.getItem("surveys") || "[]"
+    );
+    const updatedSurveys = surveysFromStorage.filter(
+      (survey: ISurvey) => survey._id !== surveyid
+    );
+    sessionStorage.setItem("surveys", JSON.stringify(updatedSurveys));
   };
 };
 

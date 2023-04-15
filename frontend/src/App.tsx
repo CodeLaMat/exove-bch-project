@@ -13,25 +13,25 @@ const App = () => {
   );
   const userRoutes = sideMenuRoutes[selectedRole as UserRole];
 
+  if (!isAuthenticated) {
+    return <Login />;
+  }
+
+  if (!selectedRole) {
+    return null;
+  }
+
+  const routes = userRoutes[0].children.map(({ path, element }) => (
+    <Route key={path} path={path} element={element} />
+  ));
+
   return (
     <div className="App">
-      {!isAuthenticated ? (
-        <Login />
-      ) : UserRole ? (
-        <Routes>
-          <Route path="/" element={<Layout />}>
-            {userRoutes[0].children.map(
-              (route: { path: string; element: JSX.Element }) => (
-                <Route
-                  key={route.path}
-                  path={route.path}
-                  element={route.element}
-                />
-              )
-            )}
-          </Route>
-        </Routes>
-      ) : null}
+      <Routes>
+        <Route path="*" element={<Layout />}>
+          {routes}
+        </Route>
+      </Routes>
     </div>
   );
 };

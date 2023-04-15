@@ -1,13 +1,24 @@
 import { UserRole } from "../../enum";
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import { ILogin } from "../../types/loginTypes";
 
+import axios from "axios";
+import { URL } from "../../enum";
+
+interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+const isLoggedInString = sessionStorage.getItem("isAuthenticated");
+
 const initialState: ILogin = {
-  isAuthenticated: localStorage.getItem("token") !== null,
-  selectedRole: (localStorage.getItem("userRole") as UserRole) || UserRole.User,
+  isAuthenticated: Boolean(isLoggedInString) || false,
+  selectedRole:
+    (sessionStorage.getItem("userRole") as UserRole) || UserRole.User,
   userName: "",
   surName: "",
-  email: "",
+  email: sessionStorage.getItem("userEmail"),
 };
 
 export const loginSlice = createSlice({
@@ -15,11 +26,11 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
-      localStorage.setItem("token", action.payload ? "true" : "");
+      sessionStorage.setItem("token", action.payload ? "true" : "");
       state.isAuthenticated = action.payload;
     },
     setSelectedRole: (state, action: PayloadAction<UserRole>) => {
-      localStorage.setItem("userRole", action.payload);
+      sessionStorage.setItem("userRole", action.payload);
       state.selectedRole = action.payload;
     },
     setUserName: (state, action: PayloadAction<string>) => {
@@ -33,6 +44,19 @@ export const loginSlice = createSlice({
     },
   },
 });
+
+export const loginAsync = createAsyncThunk(
+  "login/loginAsync",
+  async (credentials: LoginCredentials, { dispatch }) => {
+    try {
+      const response = await axios.post(URL.LOGIN_URL, credentials);
+      const token = response.data.token;
+      sessionStorage.setItem("token", token);
+    } catch (error) {
+      throw new Error("Failed to authenticate user");
+    }
+  }
+);
 
 export const {
   setIsAuthenticated,

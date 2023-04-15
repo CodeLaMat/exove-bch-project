@@ -28,7 +28,13 @@ const MainRoutes = () => {
           <Route path="/surveys" element={<Surveys />}></Route>{" "}
           <Route
             path="/createsurvey"
-            element={selectedRole === UserRole.HR ? <CreateSurvey /> : null}
+            element={
+              selectedRole === UserRole.HR ? (
+                <CreateSurvey />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
           />
           <Route path="/users" element={<Users />}></Route>
           <Route path="/questionnaire" element={<Questionnaire />}></Route>
@@ -39,7 +45,7 @@ const MainRoutes = () => {
           <Route path="/logout" element={<Logout />}></Route>
         </Route>
 
-        <Route path="*">This page could not be found</Route>
+        <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>
   );

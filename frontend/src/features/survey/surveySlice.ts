@@ -34,11 +34,13 @@ export const { setName, setDescription, setQuestions, getAllQuestions } =
 
 export const initialiseQuestions = () => {
   return async (dispatch: AppDispatch) => {
-    try {
+    const questionsFromStorage = sessionStorage.getItem("questions");
+    if (questionsFromStorage) {
+      const questions = JSON.parse(questionsFromStorage);
+      dispatch(setQuestions(questions));
+    } else {
       const questions = (await questionsService.getAll()) as IQuestion[];
       dispatch(setQuestions(questions));
-    } catch (error) {
-      console.log("Error fetching the questions", error);
     }
   };
 };
