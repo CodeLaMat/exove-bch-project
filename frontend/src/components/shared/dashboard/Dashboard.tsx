@@ -1,5 +1,5 @@
-import React from "react";
-import { useAppSelector } from "../../../hooks/hooks";
+import React, { useEffect } from "react";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import classes from "./Dashboard.module.css";
 import PageHeading from "../../pageHeading/PageHeading";
 import SurveySummaryChart from "../../hr/dashboard/SurveySummaryChart";
@@ -7,12 +7,20 @@ import ProgressBar from "../../hr/dashboard/ProgressBar";
 import DBUsers from "../../hr/dashboard/DBUsers";
 import DBSurveyList from "../../hr/dashboard/DBSurveyList";
 import { UserRole } from "../../../enum";
+import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseQuestions } from "../../../features/survey/surveySlice";
 
 const Dashboard = () => {
+  const dispatch = useAppDispatch();
   const employeesList = useAppSelector((state) => state.employees.employees);
   const { selectedRole } = useAppSelector((state) => state.loginUser);
 
   console.log(employeesList);
+
+  useEffect(() => {
+    dispatch(initialiseEmployees());
+    dispatch(initialiseQuestions());
+  }, [dispatch]);
 
   if (selectedRole === UserRole.HR) {
     return (

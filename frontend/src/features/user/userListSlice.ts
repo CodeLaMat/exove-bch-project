@@ -13,14 +13,21 @@ const employeeSlice: Slice<IEmployees> = createSlice({
   reducers: {
     getEmployees: (state, action: PayloadAction<IEmployee[]>) => {
       state.employees = action.payload;
+      sessionStorage.setItem("employees", JSON.stringify(action.payload));
     },
   },
 });
 
 export const initialiseEmployees = () => {
   return async (dispatch: Dispatch<Action>) => {
-    const employees = await employeesService.getAll();
-    dispatch(getEmployees(employees));
+    const employeesFromStorage = sessionStorage.getItem("employees");
+    if (employeesFromStorage) {
+      const employees = JSON.parse(employeesFromStorage);
+      dispatch(getEmployees(employees));
+    } else {
+      const employees = await employeesService.getAll();
+      dispatch(getEmployees(employees));
+    }
   };
 };
 
