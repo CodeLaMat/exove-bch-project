@@ -1,0 +1,43 @@
+.surveys_container {
+  width: 90%;
+  height: 100%;
+  margin: auto;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.top {
+  display: flex;
+  justify-content: center;
+  margin-top: 2rem;
+  align-items: center;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.table_container {
+  overflow-x: auto;
+}
+
+th {
+  font-weight: bold;
+  text-align: left;
+}
+
+td {
+  vertical-align: middle;
+}
+
+ul {
+  margin: 0;
+  padding: 5;
+}
+
+li {
+  margin: 0.5rem 0;
+}
