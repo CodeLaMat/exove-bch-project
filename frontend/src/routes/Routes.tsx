@@ -4,22 +4,15 @@ import Info from "../components/userProfile/Info";
 import Logout from "../components/login/Logout";
 import MyProfile from "../components/userProfile/MyProfile";
 import Layout from "../pages/Layout";
-import HRInbox from "../components/hr/inbox/HRInbox";
-import HRSurveys from "../components/hr/surveys/HRSurveys";
 import CreateSurvey from "../components/hr/surveys/CreateSurvey";
-
-import HRUsers from "../components/hr/users/HRUsers";
-import HRQuestionnaire from "../components/hr/questionnaire/HRQuestionnaire";
-import HRAnalytics from "../components/hr/analytics/HRAnalytics";
-import HRFileFolders from "../components/hr/fileFolders/FileFolders";
-import { RouteConfig } from "../redux/types/dataTypes";
-import ManagerInbox from "../components/manager/inbox/ManagerInbox";
-import ManagerDashboard from "../components/manager/dashboard/ManagerDashboard";
-import ManagerSurveys from "../components/manager/surveys/ManagerSurveys";
-import ManagerAnalytics from "../components/manager/analytics/ManagerAnalytics";
-import UserInbox from "../components/user/inbox/UserInbox";
-import HRDashboard from "../components/hr/dashboard/HRDashboard";
-import UserDashboard from "../components/user/dashboard/UserDashboard";
+import { RouteConfig } from "../types/dataTypes";
+import Dashboard from "../components/shared/dashboard/Dashboard";
+import Inbox from "../components/shared/inbox/Inbox";
+import Surveys from "../components/shared/surveys/Surveys";
+import Users from "../components/shared/users/Users";
+import Analytics from "../components/shared/analytics/Analytics";
+import FileFolders from "../components/shared/fileFolders/FileFolders";
+import Questionnaire from "../components/shared/questionnaire/Questionnaire";
 
 export const sideMenuRoutes: RouteConfig = {
   [UserRole.HR]: [
@@ -29,15 +22,15 @@ export const sideMenuRoutes: RouteConfig = {
       children: [
         {
           path: "home",
-          element: <HRDashboard />,
+          element: <Dashboard />,
         },
         {
           path: "inbox",
-          element: <HRInbox />,
+          element: <Inbox />,
         },
         {
           path: "surveys",
-          element: <HRSurveys />,
+          element: <Surveys />,
         },
         {
           path: "createsurvey",
@@ -46,19 +39,19 @@ export const sideMenuRoutes: RouteConfig = {
 
         {
           path: "users",
-          element: <HRUsers />,
+          element: <Users />,
         },
         {
           path: "questionnaire",
-          element: <HRQuestionnaire />,
+          element: <Questionnaire />,
         },
         {
           path: "analytics",
-          element: <HRAnalytics />,
+          element: <Analytics />,
         },
         {
           path: "filesfolders",
-          element: <HRFileFolders />,
+          element: <FileFolders />,
         },
         {
           path: "myprofile",
@@ -82,20 +75,20 @@ export const sideMenuRoutes: RouteConfig = {
       children: [
         {
           path: "home",
-          element: <ManagerDashboard />,
+          element: <Dashboard />,
         },
         {
           path: "inbox",
-          element: <ManagerInbox />,
+          element: <Inbox />,
         },
 
         {
           path: "surveys",
-          element: <ManagerSurveys />,
+          element: <Surveys />,
         },
         {
           path: "analytics",
-          element: <ManagerAnalytics />,
+          element: <Analytics />,
         },
         {
           path: "myprofile",
@@ -119,11 +112,11 @@ export const sideMenuRoutes: RouteConfig = {
       children: [
         {
           path: "home",
-          element: <UserDashboard />,
+          element: <Dashboard />,
         },
         {
           path: "inbox",
-          element: <UserInbox />,
+          element: <Inbox />,
         },
         {
           path: "myprofile",

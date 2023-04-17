@@ -1,13 +1,14 @@
 import React, { useEffect } from "react";
-import { initialiseEmployees } from "../../../redux/reducers/user/userListSlice";
-import { useAppDispatch, useAppSelector } from "../../../redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import Table from "react-bootstrap/Table";
-import { Employee } from "../../../redux/types/userTypes";
-import { RootState } from "../../../redux/store";
+import { IEmployee } from "../../../types/userTypes";
+import { RootState } from "../../../app/store";
+import { initialiseEmployees } from "../../../features/user/userListSlice";
 
 const DBUsers = () => {
   const dispatch = useAppDispatch();
-  const employees: Employee[][] = useAppSelector(
+
+  const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
 
@@ -30,7 +31,7 @@ const DBUsers = () => {
       </thead>
       <tbody>
         {entries[0] &&
-          entries[0].map((employee: Employee, index: number) => (
+          entries[0].map((employee: IEmployee, index: number) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>

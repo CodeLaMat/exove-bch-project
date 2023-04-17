@@ -1,40 +1,16 @@
 import React from "react";
-import axios from "axios";
 import { UserRole } from "../../enum";
 import classes from "./Sidemenu.module.css";
 import logo from "../../assets/img/logo.jpg";
-import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
+import { useAppSelector } from "../../hooks/hooks";
 import HRMenus from "./HRMenus";
 import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
-import { Button } from "react-bootstrap";
-import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
 
-interface Iprops {
-  image: string;
-  name: string;
-  role: string;
-}
-const Sidemenu = (props: Iprops) => {
-  const location = useLocation();
-  const dispatch = useAppDispatch();
+const Sidemenu = () => {
   const { isAuthenticated, selectedRole } = useAppSelector(
     (state) => state.loginUser
   );
-  const navigate = useNavigate();
-
-  const handleLogout = (event: React.FormEvent<HTMLButtonElement>) => {
-    event.preventDefault();
-    dispatch<SetIsAuthenticatedAction>({
-      type: "SET_IS_AUTHENTICATED",
-      payload: false,
-    });
-    localStorage.removeItem("token");
-    localStorage.removeItem("userRole");
-    axios.defaults.headers.common["Authorization"] = "";
-    navigate("/");
-  };
 
   return (
     <div className={classes.sideMenu_content}>
@@ -52,11 +28,6 @@ const Sidemenu = (props: Iprops) => {
             {selectedRole === UserRole.Manager && <ManagerMenus />}
             {selectedRole === UserRole.User && <UserMenus />}
           </div>{" "}
-          {location.pathname !== "/login" && (
-            <Button variant="secondary" onClick={handleLogout}>
-              Logout
-            </Button>
-          )}
         </>
       )}
     </div>

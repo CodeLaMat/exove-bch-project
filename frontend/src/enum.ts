@@ -17,4 +17,5 @@ export enum URL {
   QUESTIONS_URL = "http://localhost:5010/api/v1/questions",
   RESPONSES_URL = "./responses.json",
   SURVEYS_URL = "http://localhost:5010/api/v1/surveys",
+  LOGIN_URL = "http://localhost:5010/api/v1/users/auth/login",
 }

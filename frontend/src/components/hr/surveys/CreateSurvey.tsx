@@ -3,11 +3,17 @@ import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./CreateSurvey.module.css";
 import axios from "axios";
-import { Button } from "react-bootstrap";
-import { QuestionProps, FormData } from "../../../redux/types/dataTypes";
+import Accordion from "react-bootstrap/Accordion";
+import Button from "../../shared/button/Button";
+import Form from "react-bootstrap/Form";
+import {
+  IQuestion,
+  FormData,
+  QuestionsByCategory,
+} from "../../../types/dataTypes";
 
 const CreateSurvey: React.FC = () => {
-  const [questionList, setQuestionList] = useState<QuestionProps[]>([]);
+  const [questionList, setQuestionList] = useState<IQuestion[]>([]);
   const [surveyName, setSurveyName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
@@ -21,7 +27,7 @@ const CreateSurvey: React.FC = () => {
 
   useEffect(() => {
     axios
-      .get<QuestionProps[]>("http://localhost:5010/api/v1/questions")
+      .get<IQuestion[]>("http://localhost:5010/api/v1/questions")
       .then((response) => {
         setQuestionList(response.data);
       })
@@ -71,7 +77,7 @@ const CreateSurvey: React.FC = () => {
           (question) => question._id === checkedQuestion
         );
       })
-      .filter((question) => question) as QuestionProps[];
+      .filter((question) => question) as IQuestion[];
 
     console.log("surveyQuestions: ", surveyQuestions);
     setFormData((prevState) => ({
@@ -95,55 +101,96 @@ const CreateSurvey: React.FC = () => {
       });
   };
 
+  const questionsByCategory: QuestionsByCategory = questionList.reduce(
+    (acc, question) => {
+      const category = question.category;
+      if (!acc[category]) {
+        acc[category] = [];
+      }
+      acc[category].push(question);
+      return acc;
+    },
+    {} as QuestionsByCategory
+  );
+
   return (
-    <div>
-      {" "}
+    <div className={classes.surveyCreate_container}>
+      <PageHeading pageTitle="Create Survey" />{" "}
       <div className={classes.back_button}>
         <Button variant="primary" onClick={() => navigate("/surveys")}>
           Back
         </Button>
       </div>
-      <div className={classes.surveyCreate_container}>
-        {" "}
-        <PageHeading pageTitle="Create Survey" />{" "}
-        <div className={classes.top}>
-          <div className={classes.surveyForm_container}>
-            <form action="POST" onSubmit={submitHandler}>
-              <label>
-                Survey Name:
-                <input
-                  type="text"
-                  name="surveyName"
-                  onChange={onchangeHandler}
-                />
-              </label>
-              <label>
-                Description:
-                <input
-                  type="text"
-                  name="description"
-                  onChange={onchangeHandler}
-                />
-              </label>
-              <div>
-                {questionList.map((question, i) => (
-                  <div key={question._id}>
-                    <label htmlFor={question._id}>{question.question}</label>
-                    <input
-                      type="checkbox"
-                      name={question._id}
-                      value={question._id}
-                      onChange={checkboxHandler}
-                    />
-                  </div>
-                ))}
-              </div>
-
-              <Button type="submit" variant="success">
+      <div className={classes.top}>
+        <div className={classes.surveyForm_container}>
+          <form action="POST" onSubmit={submitHandler}>
+            <label>
+              Survey Name:
+              <input type="text" name="surveyName" onChange={onchangeHandler} />
+            </label>
+            <label>
+              Description:
+              <input
+                type="text"
+                name="description"
+                onChange={onchangeHandler}
+              />
+            </label>
+            <Accordion
+              defaultActiveKey={["0"]}
+              alwaysOpen
+              className={classes.Accordion}
+            >
+              {Object.entries(questionsByCategory).map(
+                ([category, questions], index) => (
+                  <Accordion.Item eventKey={category} key={category}>
+                    <Accordion.Header>{category}</Accordion.Header>
+                    <Accordion.Body>
+                      <table className={classes.table}>
+                        <thead>
+                          <tr>
+                            <th>Question</th>
+                            <th>Question type</th>
+                            <th>Choose</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          {questions.map((question) => (
+                            <tr
+                              key={question._id}
+                              className={index % 2 === 0 ? "" : "highlight"}
+                            >
+                              <td className={classes.table_cell}>
+                                {question.question}
+                              </td>
+                              <td className={classes.table_cell}>
+                                {question.questionType}
+                              </td>
+                              <td className={classes.table_cell}>
+                                <Form.Check
+                                  aria-label="option 1"
+                                  type="checkbox"
+                                  name={question._id}
+                                  value={question._id}
+                                  id={question._id}
+                                  onChange={checkboxHandler}
+                                />
+                              </td>
+                            </tr>
+                          ))}
+                        </tbody>
+                      </table>
+                    </Accordion.Body>
+                  </Accordion.Item>
+                )
+              )}
+            </Accordion>
+            <div className={classes.submit_button}>
+              <Button type="submit" variant="primary">
                 Submit
               </Button>
-            </form>
-          </div>
+            </div>
+          </form>
         </div>
       </div>
     </div>

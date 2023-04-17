@@ -2,14 +2,16 @@ import React, { useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { UserRole } from "../../enum";
-import { initialiseEmployees } from "../../redux/reducers/user/userListSlice";
-import { initialiseQuestions } from "../../redux/reducers/form/formSlice";
-import { useAppDispatch, useAppSelector } from "../../../src/redux/hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { SetIsAuthenticatedAction } from "../../redux/types/loginTypes";
+import {
+  setIsAuthenticated,
+  setSelectedRole,
+  setUserEmail,
+} from "../../features/login/loginSlice";
+import { loginAsync } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
@@ -21,47 +23,28 @@ const Login: React.FC<LoginProps> = () => {
 
   const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-
     try {
-      const response = await axios.post(
-        "http://localhost:5010/api/v1/users/auth/login",
-        {
-          email,
-          password,
-        }
-      );
-      const userData = response.data;
-      // console.log("Response:", response.data);
-
-      if (userData && userData.token) {
-        const token = userData.token;
-
-        // Decoding token to get user role
+      await dispatch(loginAsync({ email: email, password: password }));
+      const token = sessionStorage.getItem("token");
+      if (token) {
         try {
-          const decodedToken: { [key: string]: any } = jwt_decode(token);
+          const decodedToken: { [key: string]: any } = jwt_decode(token!);
           const userRole = decodedToken.role;
+          const userEmail = decodedToken.email;
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
             return;
           }
-          console.log(userRole);
-
-          localStorage.setItem("token", token);
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          localStorage.setItem("userRole", userRole);
-          dispatch<SetIsAuthenticatedAction>({
-            type: "SET_IS_AUTHENTICATED",
-            payload: true,
-          });
+          sessionStorage.setItem("userRole", userRole);
+          sessionStorage.setItem("isAuthenticated", true.toString());
+          sessionStorage.setItem("userEmail", userEmail);
 
-          dispatch({
-            type: "SET_SELECTED_ROLE",
-            payload: userRole as UserRole,
-          });
-          dispatch(initialiseEmployees());
-          dispatch(initialiseQuestions());
-          navigate("/home");
+          dispatch(setIsAuthenticated(true));
+          dispatch(setUserEmail(userEmail));
+          dispatch(setSelectedRole(userRole));
+          navigate("/");
         } catch (error) {
           console.error(error);
           alert("Error decoding token");
@@ -74,6 +57,8 @@ const Login: React.FC<LoginProps> = () => {
       alert("Error logging in");
     }
   };
+
+  console.log(sessionStorage.getItem("token"));
 
   return (
     <div className={classes.login_container}>

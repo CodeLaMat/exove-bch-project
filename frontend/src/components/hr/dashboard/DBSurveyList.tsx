@@ -2,14 +2,28 @@ import React, { useEffect, useState } from "react";
 import classes from "./HRDashboard.module.css";
 import axios from "axios";
 import { Table } from "react-bootstrap";
-import { SurveyType } from "../../../redux/types/dataTypes";
+import { ISurvey } from "../../../types/dataTypes";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../app/store";
+import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const DBSurveyList = () => {
-  const [surveyList, setsurveyList] = useState<SurveyType[]>([]);
+  const dispatch = useAppDispatch();
+  const [surveyList, setsurveyList] = useState<ISurvey[]>([]);
+  const surveys: ISurvey[] = useAppSelector(
+    (state: RootState) => state.surveys
+  );
+  const entries = Object.values(surveys);
+
+  console.log(entries);
+
+  useEffect(() => {
+    dispatch(initialiseSurveys());
+  }, [dispatch]);
 
   useEffect(() => {
     axios
-      .get<SurveyType[]>("http://localhost:5010/api/v1/surveys")
+      .get<ISurvey[]>("http://localhost:5010/api/v1/surveys")
       .then((response) => {
         setsurveyList(response.data);
       })
@@ -32,7 +46,7 @@ const DBSurveyList = () => {
           </tr>
         </thead>
         <tbody>
-          {surveyList.map((survey: SurveyType) => (
+          {surveyList.map((survey: ISurvey) => (
             <tr key={survey._id}>
               <td>{survey._id}</td>
               <td>{survey.surveyName}</td>

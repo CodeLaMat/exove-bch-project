@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import PageHeading from "../../pageHeading/PageHeading";
 import axios from "axios";
-import { initialiseQuestions } from "../../../redux/reducers/form/formSlice";
+import classes from "./AddQuestions.module.css";
+import { initialiseQuestions } from "../../../features/survey/surveySlice";
+import Button from "../../shared/button/Button";
 
 const AddQuestion: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -38,12 +40,12 @@ const AddQuestion: React.FC = () => {
   };
 
   return (
-    <div>
-      <PageHeading pageTitle="Questionnaire" />
-      <form onSubmit={handleSubmit}>
-        <label>
+    <div className={classes.addQuestionForm_container}>
+      <form className={classes.addQuestionForm_form} onSubmit={handleSubmit}>
+        <label className={classes.addQuestionForm_label}>
           Category:
           <select
+            className={classes.addQuestionForm_select}
             name="category"
             value={formData.category}
             onChange={handleChange}
@@ -59,9 +61,10 @@ const AddQuestion: React.FC = () => {
           </select>
         </label>
 
-        <label>
+        <label className={classes.addQuestionForm_label}>
           Question:
           <input
+            className={classes.addQuestionForm_select}
             type="text"
             name="question"
             value={formData.question}
@@ -69,18 +72,20 @@ const AddQuestion: React.FC = () => {
           />
         </label>
 
-        <label>
+        <label className={classes.addQuestionForm_label}>
           Description:
           <textarea
+            className={classes.addQuestionForm_select}
             name="description"
             value={formData.description}
             onChange={handleChange}
           />
         </label>
 
-        <label>
+        <label className={classes.addQuestionForm_label}>
           questionType:
           <select
+            className={classes.addQuestionForm_select}
             name="questionType"
             value={formData.questionType}
             onChange={handleChange}
@@ -90,7 +95,9 @@ const AddQuestion: React.FC = () => {
             <option value="Free form">Free form</option>
           </select>
         </label>
-        <button type="submit">Submit</button>
+        <Button variant="primary" type="submit">
+          Submit
+        </Button>
       </form>
     </div>
   );
