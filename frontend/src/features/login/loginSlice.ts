@@ -11,6 +11,11 @@ interface LoginCredentials {
   password: string;
 }
 
+interface LdapLoginCredentials {
+  user: string;
+  password: string;
+}
+
 const isLoggedInString = sessionStorage.getItem("isAuthenticated");
 
 const initialState: ILogin = {
@@ -49,6 +54,19 @@ export const loginSlice = createSlice({
 export const loginAsync = createAsyncThunk(
   "login/loginAsync",
   async (credentials: LoginCredentials, { dispatch }) => {
+    try {
+      const response = await axios.post(URL.LOGIN_URL, credentials);
+      const token = response.data.user;
+      console.log("Logintoken", response.data.user);
+      sessionStorage.setItem("token", token);
+    } catch (error) {
+      throw new Error("Failed to authenticate user");
+    }
+  }
+);
+export const ldspLoginAsync = createAsyncThunk(
+  "login/loginAsync",
+  async (credentials: LdapLoginCredentials, { dispatch }) => {
     try {
       const response = await axios.post(URL.LOGIN_URL, credentials);
       const token = response.data.user;

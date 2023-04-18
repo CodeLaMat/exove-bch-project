@@ -11,12 +11,13 @@ import {
   setSelectedRole,
   setUserEmail,
 } from "../../features/login/loginSlice";
-import { loginAsync } from "../../features/login/loginSlice";
+import { loginAsync, ldspLoginAsync } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
   const [email, setEmail] = useState("");
+  const [user, setUser] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -25,6 +26,7 @@ const Login: React.FC<LoginProps> = () => {
     event.preventDefault();
     try {
       await dispatch(loginAsync({ email: email, password: password }));
+      await dispatch(ldspLoginAsync({ user: user, password: password }));
       const token = sessionStorage.getItem("token");
       if (token) {
         try {
