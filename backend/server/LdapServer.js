@@ -50,6 +50,9 @@ var createNewClient = function () {
     });
     return client;
 };
+var ldapClient = ldap.createClient({
+    url: 'ldap://localhost:389', // Replace with your LDAP server URL
+});
 var generateToken = function (userData) { return __awaiter(void 0, void 0, void 0, function () {
     var payload, token;
     return __generator(this, function (_a) {
@@ -71,6 +74,42 @@ var generateToken = function (userData) { return __awaiter(void 0, void 0, void 
         }
     });
 }); };
+// Middleware to authenticate with LDAP server
+var authenticate = function (req, res, next) {
+    ldapClient.bind('cn=admin,dc=test,dc=com', 'myadminpassword', function (err) {
+        if (err) {
+            res.status(500).send('Error authenticating with LDAP server');
+            return;
+        }
+        next();
+    });
+};
+app.get('/users', authenticate, function (req, res) {
+    var options = {
+        scope: 'sub',
+        filter: '(objectClass=inetOrgPerson)',
+        attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail',],
+    };
+    ldapClient.search('ou=People,dc=test,dc=com', options, function (err, result) {
+        if (err) {
+            res.status(500).send('Error searching LDAP server');
+            return;
+        }
+        var users = [];
+        result.on('searchEntry', function (entry) {
+            var user = {};
+            entry.attributes.forEach(function (attribute) {
+                var key = attribute.type;
+                var value = attribute.vals;
+                user[key] = value;
+            });
+            users.push(user);
+        });
+        result.on('end', function () {
+            res.send(users);
+        });
+    });
+});
 app.post('/auth', function (req, res) {
     var _a = req.body, username = _a.username, password = _a.password;
     console.log("".concat(username, " is trying to login with ").concat(password, " as a pwd"));
@@ -87,21 +126,27 @@ app.post('/auth', function (req, res) {
             filter: "(&(uid=".concat(username, ")(objectClass=posixAccount))"),
             attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail',],
         };
-        // modify the search DN to search for the specific user
-        var searchDN = "uid=jason,ou=People,dc=test,dc=com";
-        client.search(searchDN, searchOptions, function (err, result) {
+        client.search("uid=".concat(username, ",ou=People,dc=test,dc=com"), searchOptions, function (err, result) {
             if (err) {
                 console.error(err);
                 res.status(500).send('Error retrieving user info');
                 return;
             }
             var userAttributes = [];
+            // result.on('searchEntry', (entry) => {
+            //   userAttributes.push(entry.object);
+            // });
             result.on('searchEntry', function (entry) {
-                userAttributes.push(entry.object);
+                var user = {};
+                entry.attributes.forEach(function (attribute) {
+                    var key = attribute.type;
+                    var value = attribute.vals;
+                    user[key] = value;
+                });
+                userAttributes.push(user);
             });
             result.on('end', function () {
-                console.log("authentication successful");
-                console.log("userAttributes", userAttributes);
+                console.log("authentication successfull");
                 var userData = userAttributes[0];
                 var userToken = generateToken(userData).then(function (token) {
                     res.status(200).send({

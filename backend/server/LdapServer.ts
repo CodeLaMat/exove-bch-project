@@ -21,6 +21,11 @@ const createNewClient = () => {
   return client;
 };
 
+const ldapClient = ldap.createClient({
+  url: 'ldap://localhost:389', // Replace with your LDAP server URL
+});
+
+
 const generateToken = async (userData) => {
   console.log("userData", userData);
   const payload = { 
@@ -34,6 +39,48 @@ const generateToken = async (userData) => {
   const token = await createToken({payload});
   return token;
 }
+// Middleware to authenticate with LDAP server
+const authenticate = (req, res, next) => {
+  ldapClient.bind('cn=admin,dc=test,dc=com', 'myadminpassword', (err) => {
+    if (err) {
+      res.status(500).send('Error authenticating with LDAP server');
+      return;
+    }
+    next();
+  });
+};
+
+app.get('/users', authenticate, (req, res) => {
+  const options: SearchOptions = {
+    scope: 'sub',
+    filter: '(objectClass=inetOrgPerson)',
+    attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', ],
+  };
+ 
+
+
+  ldapClient.search('ou=People,dc=test,dc=com', options, (err, result) => {
+    if (err) {
+      res.status(500).send('Error searching LDAP server');
+      return;
+    }
+
+    const users: SearchEntryObject[] = [];
+
+    result.on('searchEntry', (entry) => {
+      const user = {};
+      entry.attributes.forEach((attribute) => {
+        const key = attribute.type;
+        const value = attribute.vals;
+        user[key] = value;
+      });
+      users.push(user as SearchEntryObject);
+    });
+    result.on('end', () => {
+      res.send(users);
+    });
+  });
+});
 
 app.post('/auth', (req, res) => {
   const { username, password } = req.body as { username: string, password: string };
@@ -64,8 +111,18 @@ app.post('/auth', (req, res) => {
 
       const userAttributes: SearchEntryObject[] = [];
 
+      // result.on('searchEntry', (entry) => {
+      //   userAttributes.push(entry.object);
+      // });
+
       result.on('searchEntry', (entry) => {
-        userAttributes.push(entry.object);
+        const user = {};
+        entry.attributes.forEach((attribute) => {
+          const key = attribute.type;
+          const value = attribute.vals;
+          user[key] = value;
+        });
+        userAttributes.push(user as SearchEntryObject);
       });
 
       result.on('end', () => {
