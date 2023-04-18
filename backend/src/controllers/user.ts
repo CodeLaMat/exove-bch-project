@@ -10,6 +10,23 @@ import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { attachCookiesToResponse } from "../util/jwt";
+import * as ldap from 'ldapjs';
+import { SearchEntryObject, SearchOptions } from 'ldapjs';
+import { promisify } from 'util';
+
+interface LdapUser {
+  role: string;
+  name: string;
+  email: string;
+  phoneNumber: string;
+  groupId: string;
+  imagePath: string;
+}
+
+interface LdapLoginRequestBody {
+  username: string;
+  password: string;
+}
 
 interface JwtPayload {
   userId: string;
@@ -21,6 +38,16 @@ interface LoginRequestBody {
   email: string;
   password: string;
 }
+
+const createNewClient = () => {
+  const client = ldap.createClient({
+    url: 'ldap://localhost:389',
+  });
+  console.log("client", client);
+
+  return client;
+};
+
 
 const login = async (req: Request, res: Response) => {
   const { email, password }: LoginRequestBody = req.body;
@@ -74,6 +101,113 @@ const login = async (req: Request, res: Response) => {
     user: token,
   });
 };
+
+
+const ldapLogin = async (req: Request, res: Response) => {
+  const { username, password }: LdapLoginRequestBody = req.body;
+
+  console.log(`${username} is trying to login with ${password} as a pwd`);
+  const client = createNewClient();
+
+  const bindDN = `uid=${username},ou=People,dc=test,dc=com`;
+
+  client.bind(bindDN, password, (err: Error | null) => {
+    if (err) {
+      console.error(err);
+      res.status(401).send('Authentication failed');
+      return;
+    }
+  })
+
+  const searchOptions: SearchOptions = {
+    scope: 'sub',
+    filter: `(&(uid=${username})(objectClass=posixAccount))`, // add objectClass filter
+    attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', 'jpegPhoto', 'telephoneNumber' ],
+  };
+
+  client.search(`uid=${username},ou=People,dc=test,dc=com`, searchOptions, (err: Error | null, result: ldap.SearchCallbackResponse) => {
+    if (err) {
+      console.error(err);
+      res.status(500).send('Error retrieving user info');
+      return;
+    }
+
+    const userAttributes: SearchEntryObject[] = [];
+
+    result.on('searchEntry', (entry) => {
+      userAttributes.push(entry.object);
+    });
+
+    result.on('end', () => {
+      console.log("authentication successfull");
+      const userData = userAttributes[0];
+
+      const payload = { 
+        user: { 
+          role: userData.description,
+          name: userData.cn,
+          email: userData.mail,
+          phoneNumber: userData.telephoneNumber,
+          groupId: userData.gidNumber,
+          imagePath: userData.jpegPhoto,
+        } as LdapUser,
+      };
+      const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
+        expiresIn: "2d",
+      });
+   
+        res.status(200).send({
+          message: 'Authentication successful',
+          user: userAttributes[0],
+          groups: userAttributes[0].memberOf, // get groups the user is a member of
+          token: token,
+        });
+    });
+  });
+}
+
+const getAllLdapUsers = async (req: Request, res: Response) => {
+  console.log("getting all ldap users");
+  try {
+    const client = createNewClient();
+
+    const opts: SearchOptions = {
+      filter: '(objectClass=user)',
+      scope: 'sub',
+      attributes: ['cn', 'mail', 'memberOf']
+    };
+
+    const users: any[] = [];
+
+    const searchAsync = promisify(client.search.bind(client));
+
+    const result = await searchAsync('ou=People,dc=test,dc=com', opts) as ldap.SearchCallbackResponse;
+
+      console.log("search completed");
+      result.on('searchEntry', (entry: any) => {
+        users.push(entry.object);
+      });
+
+      console.log("array built");
+      result.on('error', (err: Error) => {
+        console.error(err);
+        console.log("error after array");
+        return res.status(500).send(err);
+      });
+      console.log("sending it all out");
+      console.log("users", users);
+      res.on('end', (result) => {
+        console.log(`Found ${users.length} users`);
+        console.log(users);
+        return res.json(users);
+      });
+  } catch (err) {
+    console.error(err);
+    console.log("We hit an error");
+    return res.status(500).send(err);
+  }
+}
+
 
 // const getAllUsers = async (req: Request, res: Response) => {
 //   const users = await User.find({}).sort("role");
@@ -133,4 +267,5 @@ const getOneUser = async (req: Request, res: Response) => {
 //   res.send("show stats");
 // };
 
-export { login, getAllUsers, getOneUser };
+export { login, ldapLogin, getAllUsers, getAllLdapUsers, getOneUser };
+
