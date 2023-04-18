@@ -12,7 +12,7 @@ import bcrypt from "bcryptjs";
 import { attachCookiesToResponse } from "../util/jwt";
 
 interface JwtPayload {
-  _id: string;
+  userId: string;
   email: string;
   role: string;
 }
@@ -29,7 +29,7 @@ const login = async (req: Request, res: Response) => {
   }
   const user = await User.findOne({ email });
   if (!user) {
-    throw new UnauthenticatedError("Invalid Credentials");
+    throw new UnauthenticatedError("Invalid email");
   }
   // const isMatch = await bcrypt.compare(password, user.password);
   // if (!isMatch) {
@@ -38,35 +38,40 @@ const login = async (req: Request, res: Response) => {
 
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) {
-    throw new UnauthenticatedError("Invalid Credentials");
+    throw new UnauthenticatedError("Invalid password");
   }
+
+  console.log('user', user);
 
   const tokenUser = {
     userId: user._id,
     email: user.email,
     role: user.role,
   };
-  attachCookiesToResponse({ res, user: tokenUser });
+  console.log('tokenUser', tokenUser);
+  
 
-  // const payload: JwtPayload = {
-  //   _id: user._id,
-  //   email: user.email,
-  //   role: user.role,
-  // };
-  // const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
-  //   expiresIn: `${process.env.JWT_LIFETIME}`,
-  // });
+  const payload: JwtPayload = {
+    userId: user._id,
+    email: user.email,
+    role: user.role,
+  };
+  const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
+    expiresIn: `${process.env.JWT_LIFETIME}`,
+  });
 
-  // const oneDay = 1000 * 60 * 60 * 24;
-  // res.cookie("token", token, {
-  //   httpOnly: true,
-  //   expires: new Date(Date.now() + oneDay),
-  //   secure: process.env.NODE_ENV === "production",
-  //   signed: true,
-  // });
+  console.log('token', token);
 
+  const oneDay = 1000 * 60 * 60 * 24;
+  res.cookie("token", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === "production",
+    signed: true,
+  });
+  // attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({
-    user: tokenUser,
+    user: token,
   });
 };
 

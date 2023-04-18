@@ -15,7 +15,7 @@ const login = async (req, res) => {
     }
     const user = await user_1.default.findOne({ email });
     if (!user) {
-        throw new errors_1.UnauthenticatedError("Invalid Credentials");
+        throw new errors_1.UnauthenticatedError("Invalid email");
     }
     // const isMatch = await bcrypt.compare(password, user.password);
     // if (!isMatch) {
@@ -23,24 +23,34 @@ const login = async (req, res) => {
     // }
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) {
-        throw new errors_1.UnauthenticatedError("Invalid Credentials");
+        throw new errors_1.UnauthenticatedError("Invalid password");
     }
+    console.log('user', user);
+    const tokenUser = {
+        userId: user._id,
+        email: user.email,
+        role: user.role,
+    };
+    console.log('tokenUser', tokenUser);
     const payload = {
-        _id: user._id,
+        userId: user._id,
         email: user.email,
         role: user.role,
     };
     const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
         expiresIn: `${process.env.JWT_LIFETIME}`,
     });
+    console.log('token', token);
     const oneDay = 1000 * 60 * 60 * 24;
     res.cookie("token", token, {
         httpOnly: true,
         expires: new Date(Date.now() + oneDay),
+        secure: process.env.NODE_ENV === "production",
+        signed: true,
     });
+    // attachCookiesToResponse({ res, user: tokenUser });
     res.status(http_status_codes_1.StatusCodes.OK).json({
-        user: { name: user.displayName, role: user.role, userId: user._id },
-        token,
+        user: token,
     });
 };
 exports.login = login;

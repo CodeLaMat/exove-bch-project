@@ -7,13 +7,19 @@ import { useAppSelector } from "../../hooks/hooks";
 
 const ProfileMenu = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);
+  const surName = useAppSelector((state) => state.loginUser.surName);
+  const firstName = useAppSelector((state) => state.loginUser.firstName);
+  const role = useAppSelector((state) => state.loginUser.setSelectedRole);
+  const image = "";
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const entries = Object.values(employees);
+  console.log("entries", entries);
+  console.log(`userEmail: ${userEmail}, surName: ${surName}, firstName: ${firstName}, role: ${role} `);
 
-  const currentUser =
-    entries && entries[0]?.find((entry) => entry.email === userEmail);
+  // const currentUser =
+  //   entries && entries[0]?.find((entry) => entry.email === userEmail);
 
   const navigate = useNavigate();
 
@@ -34,20 +40,20 @@ const ProfileMenu = () => {
       <div className={classes.mainNav}>
         <div className={classes.pageHeading}>
           <h4>
-            {currentUser?.surName} {currentUser?.firstName}
+            {surName} {firstName}
           </h4>
         </div>
       </div>
       <div className={classes.dropDownNav}>
-        {currentUser?.image === "" ? (
+        {image === "" ? (
           <img
             className={classes.roundImage}
-            src={currentUser.image}
-            alt={`${currentUser.firstName} ${currentUser.surName}`}
+            src={image}
+            alt={`${firstName} ${surName}`}
           />
         ) : (
           <div className={classes.placeholder}>
-            <h2>{`${currentUser?.surName[0]}${currentUser?.firstName[0]}`}</h2>
+            <h2>{`${surName}${firstName}`}</h2>
           </div>
         )}
         <select
@@ -57,13 +63,13 @@ const ProfileMenu = () => {
             changeHandler(e)
           }
         >
-          <option value={currentUser?.firstName} hidden>
+          <option value={firstName} hidden>
             {" "}
-            {currentUser?.surName} {currentUser?.firstName}
+            {surName} {firstName}
           </option>
           <option value="myprofile">My Profile</option>
           <option value="Info">Info</option>
-          {currentUser?.role === "hr" && (
+          {role === "hr" && (
             <option value="manageUsers">Manage Users</option>
           )}
           <option value="Logout">Logout</option>

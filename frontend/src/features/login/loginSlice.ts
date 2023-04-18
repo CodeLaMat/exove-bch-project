@@ -4,6 +4,7 @@ import { ILogin } from "../../types/loginTypes";
 
 import axios from "axios";
 import { URL } from "../../enum";
+import { copyFileSync } from "fs";
 
 interface LoginCredentials {
   email: string;
@@ -50,7 +51,8 @@ export const loginAsync = createAsyncThunk(
   async (credentials: LoginCredentials, { dispatch }) => {
     try {
       const response = await axios.post(URL.LOGIN_URL, credentials);
-      const token = response.data.token;
+      const token = response.data.user;
+      console.log("Logintoken", response.data.user);
       sessionStorage.setItem("token", token);
     } catch (error) {
       throw new Error("Failed to authenticate user");
