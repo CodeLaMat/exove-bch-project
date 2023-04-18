@@ -111,7 +111,13 @@ const ldapLogin = async (req, res) => {
         }
         const userAttributes = [];
         result.on('searchEntry', (entry) => {
-            userAttributes.push(entry.object);
+            const user = {};
+            entry.attributes.forEach((attribute) => {
+                const key = attribute.type;
+                const value = attribute.vals;
+                user[key] = value;
+            });
+            userAttributes.push(user);
         });
         result.on('end', () => {
             console.log("authentication successfull");
@@ -126,9 +132,11 @@ const ldapLogin = async (req, res) => {
                     imagePath: userData.jpegPhoto,
                 },
             };
+            console.log("payload", payload);
             const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
                 expiresIn: "2d",
             });
+            console.log("userToken", token);
             res.status(200).send({
                 message: 'Authentication successful',
                 user: userAttributes[0],
