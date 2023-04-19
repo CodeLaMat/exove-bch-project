@@ -1,7 +1,7 @@
 export enum UserRole {
   HR = "hr",
   Manager = "manager",
-  User = "employee",
+  User = "user",
 }
 
 export enum METHOD {
