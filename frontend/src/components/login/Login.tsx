@@ -10,8 +10,9 @@ import {
   setIsAuthenticated,
   setSelectedRole,
   setUserEmail,
+  setUserData,
 } from "../../features/login/loginSlice";
-import { loginAsync, ldspLoginAsync } from "../../features/login/loginSlice";
+import { loginAsync, ldspLoginAsync, User } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
@@ -21,6 +22,7 @@ const Login: React.FC<LoginProps> = () => {
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
 
   const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -33,6 +35,10 @@ const Login: React.FC<LoginProps> = () => {
           console.log("decodedToken", decodedToken);
           const userRole = decodedToken.user.role;
           const userEmail = decodedToken.user.email;
+
+          const userData = Object.values(decodedToken) as User[];
+          dispatch(setUserData(userData));
+
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
@@ -46,6 +52,7 @@ const Login: React.FC<LoginProps> = () => {
           dispatch(setIsAuthenticated(true));
           dispatch(setUserEmail(userEmail));
           dispatch(setSelectedRole(userRole));
+          
           navigate("/");
         } catch (error) {
           console.error(error);

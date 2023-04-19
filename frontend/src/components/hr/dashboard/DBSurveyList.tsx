@@ -13,18 +13,16 @@ const DBSurveyList = () => {
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys
   );
-  const entries = Object.values(surveys);
+  
 
-  console.log(entries);
-
-  useEffect(() => {
-    dispatch(initialiseSurveys());
-  }, [dispatch]);
+  // useEffect(() => {
+  //   dispatch(initialiseSurveys());
+  // }, [dispatch]);
 
   useEffect(() => {
-    axios
-      .get<ISurvey[]>("http://localhost:5010/api/v1/surveys")
+    axios.get("http://localhost:5010/api/v1/surveys")
       .then((response) => {
+        console.log("surveyResponse", response.data.surveyList);
         setsurveyList(response.data);
       })
       .catch((error) => {
@@ -32,7 +30,10 @@ const DBSurveyList = () => {
       });
   }, [setsurveyList]);
 
-  console.log(surveyList);
+  console.log("surveyList", surveyList);
+  const entries = Object.values(surveys);
+
+  console.log("entries", entries);
 
   return (
     <div className={classes.surveys_container}>

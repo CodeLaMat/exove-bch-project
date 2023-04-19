@@ -1,6 +1,6 @@
 import { UserRole } from "../../enum";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { ILogin } from "../../types/loginTypes";
+import { ILogin } from '../../types/loginTypes';
 
 import axios from "axios";
 import { URL } from "../../enum";
@@ -14,6 +14,13 @@ interface LdapLoginCredentials {
   username: string;
   password: string;
 }
+export type User = {
+  id: number;
+  userName: string;
+  surName: string;
+  role: string;
+  email: string;
+};
 
 const isLoggedInString = sessionStorage.getItem("isAuthenticated");
 
@@ -24,6 +31,7 @@ const initialState: ILogin = {
   userName: "",
   surName: "",
   email: sessionStorage.getItem("userEmail"),
+  userData: [] as User[],
 };
 
 export const loginSlice = createSlice({
@@ -46,6 +54,9 @@ export const loginSlice = createSlice({
     },
     setUserEmail: (state, action: PayloadAction<string>) => {
       state.email = action.payload;
+    },
+    setUserData: (state, action: PayloadAction<User[]>) => {
+      state.userData = action.payload;
     },
   },
 });
@@ -83,6 +94,7 @@ export const {
   setUserName,
   setSurName,
   setUserEmail,
+  setUserData,
 } = loginSlice.actions;
 
 export default loginSlice.reducer;
