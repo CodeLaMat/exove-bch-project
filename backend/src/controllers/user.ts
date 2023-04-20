@@ -84,43 +84,43 @@ const logout = async (req: Request, res: Response) => {
   return res.status(StatusCodes.OK).json({ msg: "user logout" });
 };
 
-// const getAllUsers = async (req: Request, res: Response) => {
-//   const users = await User.find({}).sort("role");
-//   res.status(StatusCodes.OK).json({ users, count: users.length });
-// };
-
-interface QueryParams {
-  search?: string;
-  role?: UserRoles;
-  sort?: "asc" | "desc";
-}
-
 const getAllUsers = async (req: Request, res: Response) => {
-  const queryParams: QueryParams = req.query;
-  const search = queryParams.search || "";
-
-  const query = {
-    $or: [
-      { firstName: new RegExp(search, "i") },
-      { surname: new RegExp(search, "i") },
-    ],
-  };
-
-  let result = User.find(query);
-
-  const page = Number(req.query.page) || 1;
-  const limit = Number(req.query.limit) || 10;
-  const skip = (page - 1) * limit;
-
-  result = result.skip(skip).limit(limit);
-
-  const users = await result;
-
-  const totalUsers = await User.countDocuments(query);
-  const numOfPages = Math.ceil(totalUsers / limit);
-
-  res.status(StatusCodes.OK).json({ users, totalUsers, numOfPages });
+  const users = await User.find({}).sort("role");
+  res.status(StatusCodes.OK).json({ users, count: users.length });
 };
+
+// interface QueryParams {
+//   search?: string;
+//   role?: UserRoles;
+//   sort?: "asc" | "desc";
+// }
+
+// const getAllUsers = async (req: Request, res: Response) => {
+//   const queryParams: QueryParams = req.query;
+//   const search = queryParams.search || "";
+
+//   const query = {
+//     $or: [
+//       { firstName: new RegExp(search, "i") },
+//       { surname: new RegExp(search, "i") },
+//     ],
+//   };
+
+//   let result = User.find(query);
+
+//   const page = Number(req.query.page) || 1;
+//   const limit = Number(req.query.limit) || 10;
+//   const skip = (page - 1) * limit;
+
+//   result = result.skip(skip).limit(limit);
+
+//   const users = await result;
+
+//   const totalUsers = await User.countDocuments(query);
+//   const numOfPages = Math.ceil(totalUsers / limit);
+
+//   res.status(StatusCodes.OK).json({ users, totalUsers, numOfPages });
+// };
 
 const getOneUser = async (req: Request, res: Response) => {
   const {

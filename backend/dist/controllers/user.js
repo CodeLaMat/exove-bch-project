@@ -64,25 +64,34 @@ const logout = async (req, res) => {
 };
 exports.logout = logout;
 const getAllUsers = async (req, res) => {
-    const queryParams = req.query;
-    const search = queryParams.search || "";
-    const query = {
-        $or: [
-            { firstName: new RegExp(search, "i") },
-            { surname: new RegExp(search, "i") },
-        ],
-    };
-    let result = user_1.default.find(query);
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    result = result.skip(skip).limit(limit);
-    const users = await result;
-    const totalUsers = await user_1.default.countDocuments(query);
-    const numOfPages = Math.ceil(totalUsers / limit);
-    res.status(http_status_codes_1.StatusCodes.OK).json({ users, totalUsers, numOfPages });
+    const users = await user_1.default.find({}).sort("role");
+    res.status(http_status_codes_1.StatusCodes.OK).json({ users, count: users.length });
 };
 exports.getAllUsers = getAllUsers;
+// interface QueryParams {
+//   search?: string;
+//   role?: UserRoles;
+//   sort?: "asc" | "desc";
+// }
+// const getAllUsers = async (req: Request, res: Response) => {
+//   const queryParams: QueryParams = req.query;
+//   const search = queryParams.search || "";
+//   const query = {
+//     $or: [
+//       { firstName: new RegExp(search, "i") },
+//       { surname: new RegExp(search, "i") },
+//     ],
+//   };
+//   let result = User.find(query);
+//   const page = Number(req.query.page) || 1;
+//   const limit = Number(req.query.limit) || 10;
+//   const skip = (page - 1) * limit;
+//   result = result.skip(skip).limit(limit);
+//   const users = await result;
+//   const totalUsers = await User.countDocuments(query);
+//   const numOfPages = Math.ceil(totalUsers / limit);
+//   res.status(StatusCodes.OK).json({ users, totalUsers, numOfPages });
+// };
 const getOneUser = async (req, res) => {
     const { params: { id: userId }, } = req;
     const user = await user_1.default.findOne({ _id: userId });

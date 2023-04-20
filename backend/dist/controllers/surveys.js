@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.updateSurvey = exports.getOneSurvey = exports.getAllSurveys = exports.deleteSurvey = exports.addSurvey = void 0;
 const surveys_1 = __importDefault(require("../models/surveys"));
+const http_status_codes_1 = require("http-status-codes");
+const errors_1 = require("../errors");
 const addSurvey = async (req, res) => {
     try {
         const newSurvey = new surveys_1.default({
@@ -52,7 +54,12 @@ const getAllSurveys = async (req, res) => {
 };
 exports.getAllSurveys = getAllSurveys;
 const getOneSurvey = async (req, res) => {
-    res.send("get one surveys");
+    const { params: { id: surveyId }, } = req;
+    const surVey = await surveys_1.default.findOne({ _id: surveyId });
+    if (!surVey) {
+        throw new errors_1.NotFoundError(`No survey with id ${surveyId}`);
+    }
+    res.status(http_status_codes_1.StatusCodes.OK).json({ surVey });
 };
 exports.getOneSurvey = getOneSurvey;
 const updateSurvey = async (req, res) => {

@@ -6,12 +6,18 @@ import { NotFoundError, UnauthorizedError } from "../errors";
 import { checkPermissions } from "../util";
 
 const createSurveyPack = async (req: Request, res: Response) => {
-  const surveyPack = await SurveyPack.create(req.body);
-  checkPermissions(
-    req.user as { role: User["role"]; userId: User["_id"] },
-    surveyPack._id
-  );
+  const surveyPack = await SurveyPack.create({ ...req.body });
   res.status(StatusCodes.CREATED).json({ surveyPack });
+  // const userRole = req.user?.role;
+  // console.log(userRole);
+  // if (userRole === "hr") {
+  //   const surveyPack = await SurveyPack.create(req.body);
+  //   return res.status(StatusCodes.CREATED).json({ surveyPack });
+  // } else {
+  //   return res
+  //     .status(StatusCodes.FORBIDDEN)
+  //     .json({ msg: "Not authorized to create surveyPack" });
+  // }
 };
 
 const getSurveyPack = async (req: Request, res: Response) => {
