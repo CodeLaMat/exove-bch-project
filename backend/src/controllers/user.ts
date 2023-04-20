@@ -7,9 +7,13 @@ import {
   NotFoundError,
 } from "../errors";
 import { StatusCodes } from "http-status-codes";
-import jwt from "jsonwebtoken";
-import bcrypt from "bcryptjs";
-import { attachCookiesToResponse } from "../util/jwt";
+//import jwt from "jsonwebtoken";
+//import bcrypt from "bcryptjs";
+import {
+  attachCookiesToResponse,
+  createTokenUser,
+  checkPermissions,
+} from "../util";
 
 interface JwtPayload {
   _id: string;
@@ -41,11 +45,13 @@ const login = async (req: Request, res: Response) => {
     throw new UnauthenticatedError("Invalid Credentials");
   }
 
-  const tokenUser = {
-    userId: user._id,
-    email: user.email,
-    role: user.role,
-  };
+  // const tokenUser = {
+  //   userId: user._id,
+  //   name: user.displayName as string,
+  //   email: user.email,
+  //   role: user.role,
+  // };
+  const tokenUser = createTokenUser(user);
   attachCookiesToResponse({ res, user: tokenUser });
 
   // const payload: JwtPayload = {
@@ -68,6 +74,14 @@ const login = async (req: Request, res: Response) => {
   res.status(StatusCodes.OK).json({
     user: tokenUser,
   });
+};
+
+const logout = async (req: Request, res: Response) => {
+  res.cookie("token", "logout", {
+    httpOnly: true,
+    expires: new Date(Date.now() + 1000),
+  });
+  return res.status(StatusCodes.OK).json({ msg: "user logout" });
 };
 
 // const getAllUsers = async (req: Request, res: Response) => {
@@ -116,7 +130,12 @@ const getOneUser = async (req: Request, res: Response) => {
   if (!user) {
     throw new NotFoundError(`No user with id ${userId}`);
   }
+  checkPermissions(req.user as { role: string; userId: string }, user._id);
   res.status(StatusCodes.OK).json({ user });
+};
+
+const showCurrentUser = async (req: Request, res: Response) => {
+  res.status(StatusCodes.OK).json({ user: req.user });
 };
 // const register = async (req: Request, res: Response) => {
 //   res.send("user register");
@@ -128,4 +147,4 @@ const getOneUser = async (req: Request, res: Response) => {
 //   res.send("show stats");
 // };
 
-export { login, getAllUsers, getOneUser };
+export { login, getAllUsers, getOneUser, logout, showCurrentUser };

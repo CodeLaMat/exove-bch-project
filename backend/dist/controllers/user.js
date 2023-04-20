@@ -3,11 +3,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.getOneUser = exports.getAllUsers = exports.login = void 0;
+exports.showCurrentUser = exports.logout = exports.getOneUser = exports.getAllUsers = exports.login = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const errors_1 = require("../errors");
 const http_status_codes_1 = require("http-status-codes");
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+//import jwt from "jsonwebtoken";
+//import bcrypt from "bcryptjs";
+const util_1 = require("../util");
 const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -25,25 +27,42 @@ const login = async (req, res) => {
     if (!isPasswordCorrect) {
         throw new errors_1.UnauthenticatedError("Invalid Credentials");
     }
-    const payload = {
-        _id: user._id,
-        email: user.email,
-        role: user.role,
-    };
-    const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
-        expiresIn: `${process.env.JWT_LIFETIME}`,
-    });
-    const oneDay = 1000 * 60 * 60 * 24;
-    res.cookie("token", token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + oneDay),
-    });
+    // const tokenUser = {
+    //   userId: user._id,
+    //   name: user.displayName as string,
+    //   email: user.email,
+    //   role: user.role,
+    // };
+    const tokenUser = (0, util_1.createTokenUser)(user);
+    (0, util_1.attachCookiesToResponse)({ res, user: tokenUser });
+    // const payload: JwtPayload = {
+    //   _id: user._id,
+    //   email: user.email,
+    //   role: user.role,
+    // };
+    // const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
+    //   expiresIn: `${process.env.JWT_LIFETIME}`,
+    // });
+    // const oneDay = 1000 * 60 * 60 * 24;
+    // res.cookie("token", token, {
+    //   httpOnly: true,
+    //   expires: new Date(Date.now() + oneDay),
+    //   secure: process.env.NODE_ENV === "production",
+    //   signed: true,
+    // });
     res.status(http_status_codes_1.StatusCodes.OK).json({
-        user: { name: user.displayName, role: user.role, userId: user._id },
-        token,
+        user: tokenUser,
     });
 };
 exports.login = login;
+const logout = async (req, res) => {
+    res.cookie("token", "logout", {
+        httpOnly: true,
+        expires: new Date(Date.now() + 1000),
+    });
+    return res.status(http_status_codes_1.StatusCodes.OK).json({ msg: "user logout" });
+};
+exports.logout = logout;
 const getAllUsers = async (req, res) => {
     const queryParams = req.query;
     const search = queryParams.search || "";
@@ -70,6 +89,11 @@ const getOneUser = async (req, res) => {
     if (!user) {
         throw new errors_1.NotFoundError(`No user with id ${userId}`);
     }
+    (0, util_1.checkPermissions)(req.user, user._id);
     res.status(http_status_codes_1.StatusCodes.OK).json({ user });
 };
 exports.getOneUser = getOneUser;
+const showCurrentUser = async (req, res) => {
+    res.status(http_status_codes_1.StatusCodes.OK).json({ user: req.user });
+};
+exports.showCurrentUser = showCurrentUser;
