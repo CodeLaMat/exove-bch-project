@@ -7,11 +7,19 @@ exports.deleteSurveyors = exports.updateSurveyors = exports.getSurveyors = expor
 const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
-const util_1 = require("../util");
 const createSurveyPack = async (req, res) => {
-    const surveyPack = await surveyPack_1.default.create(req.body);
-    (0, util_1.checkPermissions)(req.user, surveyPack._id);
+    const surveyPack = await surveyPack_1.default.create({ ...req.body });
     res.status(http_status_codes_1.StatusCodes.CREATED).json({ surveyPack });
+    // const userRole = req.user?.role;
+    // console.log(userRole);
+    // if (userRole === "hr") {
+    //   const surveyPack = await SurveyPack.create(req.body);
+    //   return res.status(StatusCodes.CREATED).json({ surveyPack });
+    // } else {
+    //   return res
+    //     .status(StatusCodes.FORBIDDEN)
+    //     .json({ msg: "Not authorized to create surveyPack" });
+    // }
 };
 exports.createSurveyPack = createSurveyPack;
 const getSurveyPack = async (req, res) => {

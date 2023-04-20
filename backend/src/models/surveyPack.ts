@@ -59,6 +59,7 @@ const SurveyPackSchema = new mongoose.Schema(
     deadline: {
       type: Date,
       required: [true, "Please add deadline"],
+      default: Date.now(),
     },
     status: {
       type: String,
