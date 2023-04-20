@@ -1,9 +1,9 @@
-export type Question = {
-  category: string;
-  question: string;
-  description?: string;
-  isFreeForm: boolean;
-};
+// export type Question = {
+//   category: string;
+//   question: string;
+//   description?: string;
+//   isFreeForm: boolean;
+// };
 
 export type Response = {
   questionID: string;
@@ -22,10 +22,10 @@ export enum UserRoles {
 
 export type User = {
   _id: string;
-  firstName: string;
-  surName: string;
-  email: string;
-  password: string;
+  firstName?: string;
+  surName?: string;
+  email?: string;
+  password?: string;
   displayName?: string;
   personal?: Record<string, any>;
   about?: Record<string, any>;
@@ -55,9 +55,9 @@ export interface QuestionModel {
   description?: {
     type: string;
   };
-  isFreeForm: {
+  questionType: {
     type: boolean;
-    default: boolean;
+    enum: Question_Type;
   };
 }
 
@@ -148,4 +148,84 @@ export interface ResponseModel {
   response: {
     type: number | string;
   };
+}
+export enum Categories {
+  QUALITY = "Quality focus",
+  PEOPLE_SKILLS = "People skills",
+  SELF_GUIDANCE = "Self guidance",
+  LEADERSHIP = "Leadership",
+  READINESS_CHANGE = "Readiness for change",
+  CREATIVITY = "Creativity",
+  GENERAL = "General evaluation",
+}
+
+export type QuestionsByCategory = {
+  [key in Categories]: IQuestion[];
+};
+
+export enum surveyStatus {
+  COMPLETED = "Completed",
+  OPEN = "Open",
+}
+
+export enum Question_Type {
+  MULTIPLE = "Multiple choice",
+  FREE_FORM = "Free form",
+}
+
+export enum SurveyPackStatus {
+  OPEN = "Open",
+  INPROGRESS = "in_progress",
+  CLOSED = "Closed",
+}
+
+export enum SurveyorsAcceptance {
+  DECLINED = "Declined",
+  APPROVED = "Approved",
+  PENDING = "Pending",
+}
+
+export enum SurveyorsStatus {
+  FILLED = "filled",
+  OPEN = "Open",
+}
+export interface IQuestion {
+  _id: string;
+  category: Categories;
+  question: string;
+  questionType: Question_Type;
+  description?: string;
+}
+
+export interface IQuestions {
+  question: IQuestion[];
+}
+
+export interface ISurvey {
+  _id: string;
+  surveyName: string;
+  description: string;
+  questions: IQuestion[];
+}
+
+// export interface ISurveys {
+//   surveys: ISurvey[];
+// }
+export interface IParticipant {
+  id?: string;
+  staff: User[];
+  acceptencestatus: SurveyorsAcceptance;
+  status: SurveyorsStatus;
+}
+
+export interface ISurveypack {
+  _id: string;
+  createdAt: Date;
+  surveyed: User[];
+  survey: ISurvey[];
+  surveyors: IParticipant[];
+  deadline: Date;
+  status: SurveyPackStatus;
+  managerapproved: boolean;
+  hrapproved: boolean;
 }
