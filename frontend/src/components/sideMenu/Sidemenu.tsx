@@ -12,6 +12,11 @@ const Sidemenu = () => {
     (state) => state.loginUser
   );
 
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const user = userData[0];
+  
+  const role = user.role.join("");
+
   return (
     <div className={classes.sideMenu_content}>
       {" "}
@@ -24,9 +29,9 @@ const Sidemenu = () => {
         <>
           <div className={classes.menulist}>
             <h5 className={classes.sideMenu_headers}>Main Menu</h5>
-            {selectedRole === UserRole.HR && <HRMenus />}
-            {selectedRole === UserRole.Manager && <ManagerMenus />}
-            {selectedRole === UserRole.User && <UserMenus />}
+            {role === UserRole.HR && <HRMenus />}
+            {role === UserRole.Manager && <ManagerMenus />}
+            {role === UserRole.User && <UserMenus />}
           </div>{" "}
         </>
       )}
