@@ -7,7 +7,7 @@ import ProgressBar from "../../hr/dashboard/ProgressBar";
 import DBUsers from "../../hr/dashboard/DBUsers";
 import DBSurveyList from "../../hr/dashboard/DBSurveyList";
 import { UserRole } from "../../../enum";
-import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseEmployees, } from "../../../features/user/userListSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 
 const Dashboard = () => {
@@ -15,14 +15,23 @@ const Dashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);
   const { selectedRole } = useAppSelector((state) => state.loginUser);
 
-  console.log(employeesList);
+
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const user = userData[0];
+  const FullName = user.name.join(" ");
+  const nameArray = FullName.split(" ");
+  const firstName = nameArray[0];
+  const role = user.role.join("");
+
+  console.log("user", user);
+  console.log("role", user.role);
 
   useEffect(() => {
     dispatch(initialiseEmployees());
     dispatch(initialiseQuestions());
   }, [dispatch]);
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div>
         <div>
@@ -51,9 +60,9 @@ const Dashboard = () => {
         </div>
       </div>
     );
-  } else if (selectedRole === UserRole.User) {
+  } else if (role === UserRole.User) {
     return <div>Component for employee role</div>;
-  } else if (selectedRole === UserRole.Manager) {
+  } else if (role === UserRole.Manager) {
     return <div>Component for manager role</div>;
   } else return null;
 };
