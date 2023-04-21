@@ -80,7 +80,6 @@ export const ldspLoginAsync = createAsyncThunk(
     try {
       const response = await axios.post(URL.LOGIN_URL, credentials);
       const token = response.data.token;
-      console.log("Logintoken", response.data.token);
       sessionStorage.setItem("token", token);
     } catch (error) {
       throw new Error("Failed to authenticate user");

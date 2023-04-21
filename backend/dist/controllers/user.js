@@ -32,12 +32,18 @@ const errors_1 = require("../errors");
 const http_status_codes_1 = require("http-status-codes");
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const ldap = __importStar(require("ldapjs"));
-const util_1 = require("util");
 const createNewClient = () => {
     const client = ldap.createClient({
         url: 'ldap://localhost:389',
     });
-    console.log("client", client);
+    return client;
+};
+const createNewSearchClient = () => {
+    const client = ldap.createClient({
+        url: 'ldap://localhost:389',
+        bindDN: 'cn=admin,dc=test,dc=com',
+        bindCredentials: 'myadminpassword' // add the admin account password here
+    });
     return client;
 };
 const login = async (req, res) => {
@@ -86,6 +92,27 @@ const login = async (req, res) => {
     });
 };
 exports.login = login;
+const getAllUsers = async (req, res) => {
+    console.log("getting all users");
+    const queryParams = req.query;
+    const search = queryParams.search || "";
+    const query = {
+        $or: [
+            { firstName: new RegExp(search, "i") },
+            { surname: new RegExp(search, "i") },
+        ],
+    };
+    let result = user_1.default.find(query);
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
+    const skip = (page - 1) * limit;
+    result = result.skip(skip).limit(limit);
+    const users = await result;
+    const totalUsers = await user_1.default.countDocuments(query);
+    const numOfPages = Math.ceil(totalUsers / limit);
+    res.status(http_status_codes_1.StatusCodes.OK).json({ users, totalUsers, numOfPages });
+};
+exports.getAllUsers = getAllUsers;
 const ldapLogin = async (req, res) => {
     const { username, password } = req.body;
     console.log(`${username} is trying to login with ${password} as a pwd`);
@@ -149,61 +176,57 @@ const ldapLogin = async (req, res) => {
 exports.ldapLogin = ldapLogin;
 const getAllLdapUsers = async (req, res) => {
     console.log("getting all ldap users");
-    try {
-        const client = createNewClient();
-        const opts = {
-            filter: '(objectClass=user)',
-            scope: 'sub',
-            attributes: ['cn', 'mail', 'memberOf']
-        };
-        const users = [];
-        const searchAsync = (0, util_1.promisify)(client.search.bind(client));
-        const result = await searchAsync('ou=People,dc=test,dc=com', opts);
-        console.log("search completed");
-        result.on('searchEntry', (entry) => {
-            users.push(entry.object);
-        });
-        console.log("array built");
-        result.on('error', (err) => {
+    const client = createNewClient();
+    const bindDN = `cn=admin,dc=test,dc=com`;
+    client.bind(bindDN, "myadminpassword", (err) => {
+        if (err) {
             console.error(err);
-            console.log("error after array");
-            return res.status(500).send(err);
+            res.status(401).send('Authentication failed');
+            return;
+        }
+    });
+    const opts = {
+        filter: '(objectClass=inetOrgPerson)',
+        scope: 'sub',
+        attributes: ['*'],
+    };
+    const users = [];
+    client.search(`ou=People,dc=test,dc=com`, opts, (err, result) => {
+        if (err) {
+            console.error(err);
+            res.status(500).send('Error retrieving user info');
+            return;
+        }
+        const userAttributes = [];
+        result.on('searchEntry', (entry) => {
+            const user = {};
+            entry.attributes.forEach((attribute) => {
+                const key = attribute.type;
+                const value = attribute.vals;
+                user[key] = value;
+            });
+            userAttributes.push(user);
         });
-        console.log("sending it all out");
-        console.log("users", users);
-        res.on('end', (result) => {
-            console.log(`Found ${users.length} users`);
-            console.log(users);
-            return res.json(users);
+        result.on('end', () => {
+            console.log("authentication successfull");
+            const userData = users[0];
+            const payload = {
+                user: {
+                    role: userData.description,
+                    name: userData.cn,
+                    email: userData.mail,
+                    phoneNumber: userData.telephoneNumber,
+                    groupId: userData.gidNumber,
+                    imagePath: userData.jpegPhoto,
+                },
+            };
+            console.log("payload", payload);
         });
-    }
-    catch (err) {
-        console.error(err);
-        console.log("We hit an error");
-        return res.status(500).send(err);
-    }
+    });
+    await client.unbind();
+    console.log("client unbound");
 };
 exports.getAllLdapUsers = getAllLdapUsers;
-const getAllUsers = async (req, res) => {
-    const queryParams = req.query;
-    const search = queryParams.search || "";
-    const query = {
-        $or: [
-            { firstName: new RegExp(search, "i") },
-            { surname: new RegExp(search, "i") },
-        ],
-    };
-    let result = user_1.default.find(query);
-    const page = Number(req.query.page) || 1;
-    const limit = Number(req.query.limit) || 10;
-    const skip = (page - 1) * limit;
-    result = result.skip(skip).limit(limit);
-    const users = await result;
-    const totalUsers = await user_1.default.countDocuments(query);
-    const numOfPages = Math.ceil(totalUsers / limit);
-    res.status(http_status_codes_1.StatusCodes.OK).json({ users, totalUsers, numOfPages });
-};
-exports.getAllUsers = getAllUsers;
 const getOneUser = async (req, res) => {
     const { params: { id: userId }, } = req;
     const user = await user_1.default.findOne({ _id: userId });

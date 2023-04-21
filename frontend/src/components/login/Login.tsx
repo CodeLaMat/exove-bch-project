@@ -67,8 +67,6 @@ const Login: React.FC<LoginProps> = () => {
     }
   };
 
-  console.log(sessionStorage.getItem("token"));
-
   return (
     <div className={classes.login_container}>
       <div className={classes.login_box}>
