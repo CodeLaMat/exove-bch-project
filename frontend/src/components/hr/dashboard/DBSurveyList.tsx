@@ -22,7 +22,6 @@ const DBSurveyList = () => {
   useEffect(() => {
     axios.get("http://localhost:5010/api/v1/surveys")
       .then((response) => {
-        console.log("surveyResponse", response.data.surveyList);
         setsurveyList(response.data);
       })
       .catch((error) => {
