@@ -1,7 +1,7 @@
 export enum UserRole {
   HR = "hr",
   Manager = "manager",
-  User = "employee",
+  User = "user",
 }
 
 export enum METHOD {
@@ -17,5 +17,6 @@ export enum URL {
   QUESTIONS_URL = "http://localhost:5010/api/v1/questions",
   RESPONSES_URL = "./responses.json",
   SURVEYS_URL = "http://localhost:5010/api/v1/surveys",
-  LOGIN_URL = "http://localhost:5010/api/v1/users/auth/login",
+  LOGIN_URL = "http://localhost:5010/api/v1/users/auth/ldadlogin",
+  LOGIN2_URL = "http://localhost:5000/auth",
 }
