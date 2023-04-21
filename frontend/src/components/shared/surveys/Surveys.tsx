@@ -15,13 +15,27 @@ import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 const Surveys = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [surveyList, setsurveyList] = useState<ISurvey[]>([]);
   const { selectedRole } = useAppSelector((state) => state.loginUser);
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
 
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const user = userData[0];
+  const role = user.role.join("");
   useEffect(() => {
-    dispatch(initialiseSurveys());
+    // dispatch(initialiseSurveys());
+
+    axios.get("http://localhost:5010/api/v1/surveys")
+      .then((response) => {
+        setsurveyList(response.data);
+        console.log("survelistSruvey", response.data);
+      })
+      .catch((error) => {
+        console.error(error);
+      });
+
   }, [dispatch]);
   console.log(surveys);
 
@@ -29,7 +43,7 @@ const Surveys = () => {
     dispatch(removeSurvey(surveyId));
   };
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
         <PageHeading pageTitle="Survey forms" />
@@ -55,7 +69,7 @@ const Surveys = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {surveys.map((survey: ISurvey) => (
+                  {surveyList.map((survey: ISurvey) => (
                     <tr key={survey._id}>
                       <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>

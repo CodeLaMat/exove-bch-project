@@ -175,29 +175,18 @@ const ldapLogin = async (req, res) => {
 };
 exports.ldapLogin = ldapLogin;
 const getAllLdapUsers = async (req, res) => {
-    console.log("getting all ldap users");
-    const client = createNewClient();
-    const bindDN = `cn=admin,dc=test,dc=com`;
-    client.bind(bindDN, "myadminpassword", (err) => {
-        if (err) {
-            console.error(err);
-            res.status(401).send('Authentication failed');
-            return;
-        }
-    });
-    const opts = {
-        filter: '(objectClass=inetOrgPerson)',
+    const options = {
         scope: 'sub',
-        attributes: ['*'],
+        filter: '(objectClass=inetOrgPerson)',
+        attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail',],
     };
-    const users = [];
-    client.search(`ou=People,dc=test,dc=com`, opts, (err, result) => {
+    const client = createNewClient();
+    client.search('ou=People,dc=test,dc=com', options, (err, result) => {
         if (err) {
-            console.error(err);
-            res.status(500).send('Error retrieving user info');
+            res.status(500).send('Error searching LDAP server');
             return;
         }
-        const userAttributes = [];
+        const users = [];
         result.on('searchEntry', (entry) => {
             const user = {};
             entry.attributes.forEach((attribute) => {
@@ -205,26 +194,14 @@ const getAllLdapUsers = async (req, res) => {
                 const value = attribute.vals;
                 user[key] = value;
             });
-            userAttributes.push(user);
+            users.push(user);
         });
         result.on('end', () => {
-            console.log("authentication successfull");
-            const userData = users[0];
-            const payload = {
-                user: {
-                    role: userData.description,
-                    name: userData.cn,
-                    email: userData.mail,
-                    phoneNumber: userData.telephoneNumber,
-                    groupId: userData.gidNumber,
-                    imagePath: userData.jpegPhoto,
-                },
-            };
-            console.log("payload", payload);
+            res.send(users);
         });
     });
-    await client.unbind();
-    console.log("client unbound");
+    // await client.unbind();
+    // console.log("client unbound");
 };
 exports.getAllLdapUsers = getAllLdapUsers;
 const getOneUser = async (req, res) => {

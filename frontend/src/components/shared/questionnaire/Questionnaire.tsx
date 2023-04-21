@@ -20,13 +20,17 @@ const Questionnaire = () => {
   //   dispatch(setQuestions(["Question 1"]));
   // };
 
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const user = userData[0];
+  const role = user.role.join("");
+
   useEffect(() => {
     dispatch(setQuestions([]));
   }, [dispatch]);
 
   console.log(questions);
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.questionnaire_container}>
         <PageHeading pageTitle="Questionnaire" />

@@ -220,67 +220,38 @@ const ldapLogin = async (req: Request, res: Response) => {
 }
 
 const getAllLdapUsers = async (req: Request, res: Response) => {
-  console.log("getting all ldap users");
+  const options: SearchOptions = {
+    scope: 'sub',
+    filter: '(objectClass=inetOrgPerson)',
+    attributes: ['cn', 'memberOf', 'gidNumber', 'description', 'mail', ],
+  };
+ 
   const client = createNewClient();
 
-  const bindDN = `cn=admin,dc=test,dc=com`;
 
-  client.bind(bindDN, "myadminpassword", (err: Error | null) => {
+  client.search('ou=People,dc=test,dc=com', options, (err, result) => {
     if (err) {
-      console.error(err);
-      res.status(401).send('Authentication failed');
+      res.status(500).send('Error searching LDAP server');
       return;
     }
-  })
 
-    const opts: SearchOptions = {
-      filter: '(objectClass=inetOrgPerson)',
-      scope: 'sub',
-      attributes: ['*'],
-    };
+    const users: SearchEntryObject[] = [];
 
-    const users: any[] = [];
-
-    client.search(`ou=People,dc=test,dc=com`, opts, (err: Error | null, result: ldap.SearchCallbackResponse) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send('Error retrieving user info');
-        return;
-      }
-  
-      const userAttributes: SearchEntryObject[] = [];
-  
-      result.on('searchEntry', (entry) => {
-        const user: Record<string, any> = {};
-        entry.attributes.forEach((attribute) => {
-          const key = attribute.type;
-          const value = attribute.vals;
-          user[key] = value;
-        });
-        userAttributes.push(user as SearchEntryObject);
+    result.on('searchEntry', (entry) => {
+      const user: Record<string, any> = {};
+      entry.attributes.forEach((attribute) => {
+        const key = attribute.type;
+        const value = attribute.vals;
+        user[key] = value;
       });
-  
-      result.on('end', () => {
-        console.log("authentication successfull");
-        const userData = users[0];
-  
-        const payload = { 
-          user: { 
-            role: userData.description,
-            name: userData.cn,
-            email: userData.mail,
-            phoneNumber: userData.telephoneNumber,
-            groupId: userData.gidNumber,
-            imagePath: userData.jpegPhoto,
-          } as LdapUser,
-        };
-        console.log("payload", payload);
-      });
-      
+      users.push(user as SearchEntryObject);
     });
-
-    await client.unbind();
-    console.log("client unbound");
+    result.on('end', () => {
+      res.send(users);
+    });
+  });
+    // await client.unbind();
+    // console.log("client unbound");
 
 }
 

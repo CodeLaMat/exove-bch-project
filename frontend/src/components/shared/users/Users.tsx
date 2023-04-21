@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { UserRole } from "../../../enum";
 import PageHeading from "../../pageHeading/PageHeading";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
@@ -7,6 +7,18 @@ import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import classes from "./Users.module.css";
 import { initialiseEmployees } from "../../../features/user/userListSlice";
+// import { User } from "../../../features/login/loginSlice";
+import axios from "axios";
+
+interface User {
+  id: number;
+  firstName: string;
+  surName: string;
+  title: string;
+  email: string;
+  department: string;
+  // add more properties as needed
+}
 
 const Users = () => {
   const dispatch = useAppDispatch();
@@ -15,14 +27,23 @@ const Users = () => {
     (state: RootState) => state.employees.employees
   );
 
-  const entries = Object.values(employees);
+  const [employeeList, setEmployeeList] = useState<User[]>([]);
+  const entries = Object.values(employeeList);
 
-  console.log(entries);
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const user = userData[0];
+  const role = user.role.join("");
+
+  console.log(employeeList);
   useEffect(() => {
-    dispatch(initialiseEmployees());
+    // dispatch(initialiseEmployees());
+    axios.get('http://localhost:5010/api/v1/users/user')
+    .then((response) => {
+      setEmployeeList(response.data.users);
+    })
   }, [dispatch]);
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.users_container}>
         <PageHeading pageTitle="Employee list" />
@@ -38,24 +59,18 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {entries[0] &&
-              entries[0].map((employee: IEmployee, index: number) => (
-                <tr key={index}>
-                  <td>{index + 1}</td>
-                  <td>
-                    {employee.firstName} {employee.surName}
-                  </td>
-                  <td>{employee.title}</td>
-                  <td>{employee.department}</td>
-                  <td>
-                    <button>Edit</button>
-                  </td>
-                  <td>
-                    <button>Delete</button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
+        {employeeList &&
+          employeeList.map((users, index) => (
+            <tr key={index}>
+              <td>{index + 1}</td>
+              <td>
+                {users.firstName} {users.surName}
+              </td>
+              <td>{users.title}</td>
+              <td>{users.department}</td>
+            </tr>
+          ))}
+      </tbody>
         </Table>
       </div>
     );
