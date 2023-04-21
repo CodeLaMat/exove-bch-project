@@ -6,10 +6,21 @@ import { RootState } from "../../../app/store";
 import { initialiseEmployees } from "../../../features/user/userListSlice";
 import axios from "axios";
 
+interface User {
+  id: number;
+  firstName: string;
+  surName: string;
+  title: string;
+  email: string;
+  department: string;
+  // add more properties as needed
+}
+
+
 const DBUsers = () => {
   const dispatch = useAppDispatch();
 
-  const employeeList = useState([]);
+  const [employeeList, setEmployeeList] = useState<User[]>([]);
 
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
@@ -31,11 +42,11 @@ const DBUsers = () => {
     axios.get('http://localhost:5010/api/v1/users/user')
     .then((response) => {
       console.log("usersList", response.data);
-      employeeList.push(response.data);
+      setEmployeeList(response.data.users);
     })
   }, [dispatch]);
 
-
+console.log("employeeList", employeeList);
 
   return (
     <Table striped bordered hover>
@@ -48,15 +59,15 @@ const DBUsers = () => {
         </tr>
       </thead>
       <tbody>
-        {employeeList[0] &&
-          employeeList[0].map((employee: IEmployee, index: number) => (
+        {employeeList &&
+          employeeList.map((user, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>
-                {employee.firstName} {employee.surName}
+                {user.firstName} {user.surName}
               </td>
-              <td>{employee.title}</td>
-              <td>{employee.department}</td>
+              <td>{user.title}</td>
+              <td>{user.department}</td>
             </tr>
           ))}
       </tbody>
