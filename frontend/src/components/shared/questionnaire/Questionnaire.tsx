@@ -25,8 +25,6 @@ const Questionnaire = () => {
     dispatch(setQuestions([]));
   }, [dispatch]);
 
-  console.log(questions);
-
   if (role === UserRole.HR) {
     return (
       <div className={classes.questionnaire_container}>

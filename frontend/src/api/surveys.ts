@@ -6,7 +6,6 @@ const surveysURL = process.env.SURVEYS_URL || "";
 
 const getAll = async () => {
   const response = await axios.get("http://localhost:5010/api/v1/surveys");
-  console.log(response.data);
   return response.data;
 };
 
