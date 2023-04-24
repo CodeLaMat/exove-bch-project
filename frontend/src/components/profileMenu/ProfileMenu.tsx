@@ -9,6 +9,7 @@ const ProfileMenu = () => {
   const FullName = userData[0].name.join(" ");
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];
+  const lastName = nameArray[1];
 
   const navigate = useNavigate();
 
@@ -42,7 +43,7 @@ const ProfileMenu = () => {
           />
         ) : (
           <div className={classes.placeholder}>
-            <h2>{`${userData[0].name}`}</h2>
+            <h2>{`${firstName[0]}${lastName[0]}`}</h2>
           </div>
         )}
         <select

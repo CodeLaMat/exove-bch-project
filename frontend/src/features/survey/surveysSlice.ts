@@ -13,7 +13,7 @@ export const surveysSlice = createSlice({
   reducers: {
     getAllSurveys: (state, action: PayloadAction<ISurvey[]>) => {
       state.surveys = action.payload;
-      sessionStorage.setItem("surveys", JSON.stringify(action.payload));
+      // sessionStorage.setItem("surveys", JSON.stringify(action.payload));
     },
     deleteSurvey: (state, action: PayloadAction<string>) => {
       state.surveys = state.surveys.filter(
@@ -27,14 +27,8 @@ export const { getAllSurveys } = surveysSlice.actions;
 
 export const initialiseSurveys = () => {
   return async (dispatch: AppDispatch) => {
-    const surveysFromStorage = sessionStorage.getItem("surveys");
-    if (surveysFromStorage) {
-      const surveys = JSON.parse(surveysFromStorage);
-      dispatch(getAllSurveys(surveys));
-    } else {
       const surveys = await surveysService.getAll();
       dispatch(getAllSurveys(surveys));
-    }
   };
 };
 

@@ -17,8 +17,6 @@ const App = () => {
     return <Login />;
   }
 
-  console.log("userData", userData[0].role);
-
   const userRoutes = sideMenuRoutes[userData[0].role as UserRole];
 
   if (!userData[0].role) {
