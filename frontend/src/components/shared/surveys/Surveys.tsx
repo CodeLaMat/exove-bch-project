@@ -24,8 +24,7 @@ const Surveys = () => {
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  console.log(surveys);
-
+  
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
   };

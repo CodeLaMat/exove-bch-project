@@ -21,7 +21,6 @@ const employeeSlice: Slice<IEmployees> = createSlice({
 export const initialiseEmployees = () => {
   return async (dispatch: Dispatch<Action>) => {
     const employees = await employeesService.getAll();
-    console.log("eployeeListSlice", employees);
     dispatch(setEmployees(employees));
   };
 };

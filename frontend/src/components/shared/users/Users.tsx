@@ -20,7 +20,6 @@ const Users = () => {
 
   const entries = Object.values(employees);
 
-  console.log(entries);
   useEffect(() => {
     dispatch(initialiseEmployees());
   }, [dispatch]);

@@ -32,7 +32,6 @@ const Login: React.FC<LoginProps> = () => {
       if (token) {
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
-          console.log("decodedToken", decodedToken);
           const userRole = decodedToken.user.role;
           const userEmail = decodedToken.user.email;
 
