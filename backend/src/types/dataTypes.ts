@@ -213,19 +213,20 @@ export interface ISurvey {
 // }
 export interface IParticipant {
   id?: string;
-  staff: User[];
+  employee: User[];
   acceptencestatus: SurveyorsAcceptance;
-  status: SurveyorsStatus;
+  isSurveyComplete: SurveyorsStatus;
 }
 
 export interface ISurveypack {
   _id: string;
   createdAt: Date;
-  surveyed: User[];
+  personBeingSurveyed: User[];
   survey: ISurvey[];
-  surveyors: IParticipant[];
+  employeesTakingSurvey: IParticipant[];
   deadline: Date;
   status: SurveyPackStatus;
+  manager: User[];
   managerapproved: boolean;
   hrapproved: boolean;
 }

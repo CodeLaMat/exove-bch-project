@@ -21,21 +21,10 @@ const authenticateUser = async (req, res, next) => {
     }
 };
 exports.authenticateUser = authenticateUser;
-// const authorizePermissions = (
-//   req: Request & { user?: User },
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   console.log(req.user);
-//   if (req.user?.role !== "hr") {
-//     throw new UnauthorizedError("Unauthorized to access this route");
-//   }
-//   next();
-// };
 const authorizePermissions = (...roles) => {
     return (req, res, next) => {
-        const user = req.user;
-        if (!user || !roles.includes(user.role)) {
+        const userRole = req.user.role;
+        if (!roles.includes(userRole)) {
             throw new errors_1.UnauthorizedError("Unauthorized to access this route");
         }
         next();

@@ -40,24 +40,25 @@
 import { Request, Response, NextFunction } from "express";
 import { isTokenValid } from "../util/jwt";
 import { UnauthenticatedError, UnauthorizedError } from "../errors";
+import User from "../models/user";
 
-interface User {
-  userId: string;
-  name: string;
-  email: string;
-  role: string;
+interface UserType {
+  userId: User["_id"];
+  name: User["displayName"];
+  email: User["email"];
+  role: User["role"];
 }
 
 declare global {
   namespace Express {
     interface Request {
-      user?: User;
+      user: User | UserType;
     }
   }
 }
 
 const authenticateUser = async (
-  req: Request & { user?: User },
+  req: Request,
   res: Response,
   next: NextFunction
 ) => {
@@ -66,7 +67,7 @@ const authenticateUser = async (
     throw new UnauthenticatedError("Authentication invalid");
   }
   try {
-    const { userId, name, email, role } = isTokenValid({ token });
+    const { userId, name, email, role } = isTokenValid({ token }) as UserType;
     req.user = { userId, name, email, role };
     next();
   } catch (error) {
@@ -74,22 +75,10 @@ const authenticateUser = async (
   }
 };
 
-// const authorizePermissions = (
-//   req: Request & { user?: User },
-//   res: Response,
-//   next: NextFunction
-// ) => {
-//   console.log(req.user);
-//   if (req.user?.role !== "hr") {
-//     throw new UnauthorizedError("Unauthorized to access this route");
-//   }
-//   next();
-// };
-
 const authorizePermissions = (...roles: string[]) => {
-  return (req: Request, res: Response, next: NextFunction) => {
-    const user = req.user;
-    if (!user || !roles.includes(user.role)) {
+  return (req: Request & { user: User }, res: Response, next: NextFunction) => {
+    const userRole = req.user.role;
+    if (!roles.includes(userRole)) {
       throw new UnauthorizedError("Unauthorized to access this route");
     }
     next();

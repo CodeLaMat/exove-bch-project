@@ -32,29 +32,34 @@ const getSurveyPack = async (req, res) => {
 };
 exports.getSurveyPack = getSurveyPack;
 const updateSurveyPack = async (req, res) => {
-    var _a, _b;
-    const surveyPackId = req.params.id;
-    const userId = (_a = req.user) === null || _a === void 0 ? void 0 : _a.userId;
-    const surveyPack = await surveyPack_1.default.findById(surveyPackId);
-    if (!surveyPack) {
-        throw new errors_1.NotFoundError(`No surveyPack with id ${surveyPack}`);
-    }
-    const userRole = (_b = req.user) === null || _b === void 0 ? void 0 : _b.role;
-    if (userRole === "hr") {
-        const updatedSurveyPack = await surveyPack_1.default.findByIdAndUpdate(surveyPackId, req.body, { new: true });
-        return res.status(http_status_codes_1.StatusCodes.OK).json(updatedSurveyPack);
-    }
-    else {
-        const { surveyors } = req.body;
-        // Check if the user is a surveyor in the surveyPack
-        const userIsSurveyor = surveyPack.surveyors.some((surveyor) => surveyor.staff.toString() === userId);
-        if (!userIsSurveyor) {
-            throw new errors_1.UnauthorizedError("You are not authorized to update this survey pack");
-        }
-        surveyPack.surveyors = surveyors;
-        const updatedSurveyPack = await surveyPack.save();
-        return res.status(http_status_codes_1.StatusCodes.OK).json(updatedSurveyPack);
-    }
+    // const surveyPackId = req.params.id;
+    // const surveyPack = await SurveyPack.findById(surveyPackId);
+    // if (!surveyPack) {
+    //   throw new NotFoundError(`No surveyPack with id ${surveyPack}`);
+    // }
+    // const userRole = req.user?.role;
+    // if (userRole === "hr") {
+    //   const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
+    //     surveyPackId,
+    //     req.body,
+    //     { new: true }
+    //   );
+    //   return res.status(StatusCodes.OK).json(updatedSurveyPack);
+    // } else {
+    //   const { surveyors } = req.body;
+    //   // Check if the user is a surveyor in the surveyPack
+    //   const userIsSurveyor = surveyPack.surveyors.some(
+    //     (surveyor) => surveyor.staff.toString() === userId
+    //   );
+    //   if (!userIsSurveyor) {
+    //     throw new UnauthorizedError(
+    //       "You are not authorized to update this survey pack"
+    //     );
+    //   }
+    //   surveyPack.surveyors = surveyors;
+    //   const updatedSurveyPack = await surveyPack.save();
+    //   return res.status(StatusCodes.OK).json(updatedSurveyPack);
+    // }
 };
 exports.updateSurveyPack = updateSurveyPack;
 const deleteSurveyPack = async (req, res) => {
