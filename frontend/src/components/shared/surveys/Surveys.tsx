@@ -1,10 +1,9 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { UserRole } from "../../../enum";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./Surveys.module.css";
-import axios from "axios";
 import { Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
@@ -15,21 +14,22 @@ import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 const Surveys = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
 
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
+
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  console.log(surveys);
-
+  
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
   };
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
         <PageHeading pageTitle="Survey forms" />

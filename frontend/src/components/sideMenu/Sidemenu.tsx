@@ -8,7 +8,7 @@ import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
 
 const Sidemenu = () => {
-  const { isAuthenticated, selectedRole } = useAppSelector(
+  const { isAuthenticated } = useAppSelector(
     (state) => state.loginUser
   );
 
