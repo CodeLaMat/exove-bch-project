@@ -130,7 +130,7 @@ const getOneUser = async (req: Request, res: Response) => {
   if (!user) {
     throw new NotFoundError(`No user with id ${userId}`);
   }
-  checkPermissions(req.user as { role: string; userId: string }, user._id);
+  checkPermissions({ role: user.role, userId: user._id }, user._id);
   res.status(StatusCodes.OK).json({ user });
 };
 

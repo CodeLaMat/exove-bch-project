@@ -14,7 +14,7 @@ import {
 router.route("/auth/login").post(login);
 router
   .route("/user")
-  .get(authenticateUser, authorizePermissions("hr"), getAllUsers);
+  .get(authenticateUser, authorizePermissions(), getAllUsers);
 router.route("/user/:id").get(authenticateUser, getOneUser);
 router.route("/showMe").get(authenticateUser, showCurrentUser);
 router.route("/auth/logout").get(logout);

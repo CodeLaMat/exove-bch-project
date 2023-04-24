@@ -28,7 +28,7 @@ type SurveyPackType = ISurveypack & mongoose.Document;
 
 const SurveyPackSchema = new mongoose.Schema(
   {
-    surveyed: {
+    personBeingSurveyed: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: [true, "Please select the employee to survey"],
@@ -38,9 +38,9 @@ const SurveyPackSchema = new mongoose.Schema(
       ref: "survey",
       required: [true, "Please select the survey"],
     },
-    surveyors: [
+    employeesTakingSurvey: [
       {
-        staff: {
+        employee: {
           type: mongoose.Schema.Types.ObjectId,
           ref: "User",
         },
@@ -49,7 +49,7 @@ const SurveyPackSchema = new mongoose.Schema(
           enum: Object.values(SurveyorsAcceptance),
           default: "Pending",
         },
-        status: {
+        isSurveyComplete: {
           type: String,
           enum: Object.values(SurveyorsStatus),
           default: "Open",
@@ -66,6 +66,12 @@ const SurveyPackSchema = new mongoose.Schema(
       required: true,
       enum: Object.values(SurveyPackStatus),
       default: "Open",
+    },
+    manager: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "user",
+      required: [true, "Please add the manager"],
+      default: "",
     },
     managerapproved: {
       type: Boolean,

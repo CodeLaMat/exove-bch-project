@@ -32,41 +32,34 @@ const getSurveyPack = async (req: Request, res: Response) => {
 };
 
 const updateSurveyPack = async (req: Request, res: Response) => {
-  const surveyPackId = req.params.id;
-  const userId = req.user?.userId;
-
-  const surveyPack = await SurveyPack.findById(surveyPackId);
-  if (!surveyPack) {
-    throw new NotFoundError(`No surveyPack with id ${surveyPack}`);
-  }
-
-  const userRole = req.user?.role;
-  if (userRole === "hr") {
-    const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
-      surveyPackId,
-      req.body,
-      { new: true }
-    );
-    return res.status(StatusCodes.OK).json(updatedSurveyPack);
-  } else {
-    const { surveyors } = req.body;
-
-    // Check if the user is a surveyor in the surveyPack
-    const userIsSurveyor = surveyPack.surveyors.some(
-      (surveyor) => surveyor.staff.toString() === userId
-    );
-
-    if (!userIsSurveyor) {
-      throw new UnauthorizedError(
-        "You are not authorized to update this survey pack"
-      );
-    }
-
-    surveyPack.surveyors = surveyors;
-    const updatedSurveyPack = await surveyPack.save();
-
-    return res.status(StatusCodes.OK).json(updatedSurveyPack);
-  }
+  // const surveyPackId = req.params.id;
+  // const surveyPack = await SurveyPack.findById(surveyPackId);
+  // if (!surveyPack) {
+  //   throw new NotFoundError(`No surveyPack with id ${surveyPack}`);
+  // }
+  // const userRole = req.user?.role;
+  // if (userRole === "hr") {
+  //   const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
+  //     surveyPackId,
+  //     req.body,
+  //     { new: true }
+  //   );
+  //   return res.status(StatusCodes.OK).json(updatedSurveyPack);
+  // } else {
+  //   const { surveyors } = req.body;
+  //   // Check if the user is a surveyor in the surveyPack
+  //   const userIsSurveyor = surveyPack.surveyors.some(
+  //     (surveyor) => surveyor.staff.toString() === userId
+  //   );
+  //   if (!userIsSurveyor) {
+  //     throw new UnauthorizedError(
+  //       "You are not authorized to update this survey pack"
+  //     );
+  //   }
+  //   surveyPack.surveyors = surveyors;
+  //   const updatedSurveyPack = await surveyPack.save();
+  //   return res.status(StatusCodes.OK).json(updatedSurveyPack);
+  // }
 };
 
 const deleteSurveyPack = async (req: Request, res: Response) => {
