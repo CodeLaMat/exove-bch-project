@@ -5,13 +5,14 @@ import AddQuestion from "../../hr/questionnaire/AddQuestions";
 import PageHeading from "../../pageHeading/PageHeading";
 import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
 import { RootState } from "../../../app/store";
-import QuestionMult from "../../hr/questionnaire/QuestionMult";
-import QuestionForm from "../../hr/questionnaire/QuestionForm";
 import { setQuestions } from "../../../features/survey/surveySlice";
 
 const Questionnaire = () => {
   const dispatch = useAppDispatch();
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
+
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
+  
   const questions = useAppSelector(
     (state: RootState) => state.survey.questions
   );
@@ -26,7 +27,7 @@ const Questionnaire = () => {
 
   console.log(questions);
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.questionnaire_container}>
         <PageHeading pageTitle="Questionnaire" />

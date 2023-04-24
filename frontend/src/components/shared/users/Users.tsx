@@ -10,10 +10,13 @@ import { initialiseEmployees } from "../../../features/user/userListSlice";
 
 const Users = () => {
   const dispatch = useAppDispatch();
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
+  
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
+
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
 
   const entries = Object.values(employees);
 
@@ -22,7 +25,7 @@ const Users = () => {
     dispatch(initialiseEmployees());
   }, [dispatch]);
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.users_container}>
         <PageHeading pageTitle="Employee list" />

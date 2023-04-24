@@ -2,19 +2,17 @@ import React from "react";
 import PageHeading from "../pageHeading/PageHeading";
 import classes from "./MyProfile.module.css";
 import { useAppSelector } from "../../hooks/hooks";
-import { IEmployee } from "../../types/userTypes";
-import { RootState } from "../../app/store";
+
 
 const MyProfile = () => {
-  const userEmail = useAppSelector((state) => state.loginUser.email);
-  const employees: IEmployee[][] = useAppSelector(
-    (state: RootState) => state.employees.employees
-  );
-  const entries = Object.values(employees);
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const FullName = userData[0].name.join(" ");
+  const nameArray = FullName.split(" ");
+  const firstName = nameArray[0];
+  const lastName = nameArray[1];
 
-  const currentUser =
-    entries && entries[0].find((entry) => entry.email === userEmail);
-
+ console.log("user:", userData);
+  const currentUser = userData[0];
   if (!currentUser) {
     return <p>User not found.</p>;
   }
@@ -32,22 +30,22 @@ const MyProfile = () => {
               <img
                 className={classes.roundImage}
                 src={currentUser.image}
-                alt={`${currentUser.firstName} ${currentUser.surName}`}
+                alt={`${firstName} ${lastName}`}
               />
             ) : (
               <div className={classes.placeholder}>
-                <h2>{`${currentUser.firstName[0]}${currentUser.surName[0]}`}</h2>
+                <h2>{`${firstName[0]}${lastName[0]}`}</h2>
               </div>
             )}
           </div>
           <div className={classes.profileInfo}>
             <h3>
-              {currentUser.firstName} {currentUser.surName}
+              {firstName} {lastName}
             </h3>
             <p>
               {" "}
               <strong>Department: </strong>
-              {currentUser.department}
+              {currentUser.role}
             </p>
             <p>
               {" "}
@@ -56,8 +54,8 @@ const MyProfile = () => {
             </p>
             <p>
               {" "}
-              <strong>About: </strong>
-              {currentUser.about}
+              <strong>Phonenumber: </strong>
+              {currentUser.phoneNumber}
             </p>
             <ul>
               <li>
