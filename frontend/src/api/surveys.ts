@@ -2,11 +2,8 @@ import axios from "axios";
 import { URL } from "../enum";
 import { ISurvey } from "../types/dataTypes";
 
-const surveysURL = process.env.SURVEYS_URL || "";
-
 const getAll = async () => {
-  const response = await axios.get(surveysURL);
-  console.log(response.data);
+  const response = await axios.get(URL.SURVEYS_URL);
   return response.data;
 };
 
