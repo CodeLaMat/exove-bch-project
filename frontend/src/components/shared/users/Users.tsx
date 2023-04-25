@@ -1,28 +1,32 @@
 import React, { useEffect } from "react";
-import { UserRole } from "../../../enum";
 import PageHeading from "../../pageHeading/PageHeading";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import Table from "react-bootstrap/Table";
 import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
+import { UserRole } from "../../../enum";
 import classes from "./Users.module.css";
 import { initialiseEmployees } from "../../../features/user/userListSlice";
 
 const Users = () => {
   const dispatch = useAppDispatch();
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
 
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const user = userData[0];
+  const role = user.role.join("");
+
   const entries = Object.values(employees);
 
-  console.log(entries);
+  console.log(role);
+
   useEffect(() => {
     dispatch(initialiseEmployees());
   }, [dispatch]);
 
-  if (selectedRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.users_container}>
         <PageHeading pageTitle="Employee list" />
@@ -59,7 +63,8 @@ const Users = () => {
         </Table>
       </div>
     );
-  } else return null;
+  }
+  return null;
 };
 
 export default Users;

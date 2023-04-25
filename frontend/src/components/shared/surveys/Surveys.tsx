@@ -16,9 +16,16 @@ const Surveys = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { selectedRole } = useAppSelector((state) => state.loginUser);
+
+  const userRole = selectedRole.join("");
+  console.log(userRole);
+
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
+  const entries = Object.values(surveys);
+
+  console.log(entries);
 
   useEffect(() => {
     dispatch(initialiseSurveys());
@@ -29,7 +36,7 @@ const Surveys = () => {
     dispatch(removeSurvey(surveyId));
   };
 
-  if (selectedRole === UserRole.HR) {
+  if (userRole === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
         <PageHeading pageTitle="Survey forms" />
@@ -55,7 +62,7 @@ const Surveys = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {surveys.map((survey: ISurvey) => (
+                  {entries.map((survey: ISurvey) => (
                     <tr key={survey._id}>
                       <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>
@@ -85,7 +92,8 @@ const Surveys = () => {
         </div>
       </div>
     );
-  } else return null;
+  }
+  return null;
 };
 
 export default Surveys;

@@ -7,13 +7,23 @@ import { RootState } from "../../app/store";
 
 const MyProfile = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);
+
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const email = userData.email;
+  const FullName = userData[0].name.join(" ");
+  const nameArray = FullName.split(" ");
+  const firstName = nameArray[0];
+  const lastName = nameArray[1];
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
+
   const entries = Object.values(employees);
 
   const currentUser =
-    entries && entries[0].find((entry) => entry.email === userEmail);
+    entries[0] && entries[0].find((entry) => entry.email === email);
+  console.log("userEmail:", userEmail);
+  console.log("employees:", entries);
 
   if (!currentUser) {
     return <p>User not found.</p>;
@@ -32,18 +42,16 @@ const MyProfile = () => {
               <img
                 className={classes.roundImage}
                 src={currentUser.image}
-                alt={`${currentUser.firstName} ${currentUser.surName}`}
+                alt={`${firstName} ${lastName}`}
               />
             ) : (
               <div className={classes.placeholder}>
-                <h2>{`${currentUser.firstName[0]}${currentUser.surName[0]}`}</h2>
+                <h2>{`${firstName[0]}${lastName[0]}`}</h2>
               </div>
             )}
           </div>
           <div className={classes.profileInfo}>
-            <h3>
-              {currentUser.firstName} {currentUser.surName}
-            </h3>
+            <h3>{FullName}</h3>
             <p>
               {" "}
               <strong>Department: </strong>

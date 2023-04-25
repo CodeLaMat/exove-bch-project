@@ -13,7 +13,7 @@ import {
   setUserData,
 } from "../../features/login/loginSlice";
 import {
-  loginAsync,
+  // loginAsync,
   ldspLoginAsync,
   User,
 } from "../../features/login/loginSlice";
@@ -36,7 +36,6 @@ const Login: React.FC<LoginProps> = () => {
       if (token) {
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
-          console.log("decodedToken", decodedToken);
           const userRole = decodedToken.user.role;
           const userEmail = decodedToken.user.email;
           const userData = Object.values(decodedToken) as User[];
@@ -51,7 +50,6 @@ const Login: React.FC<LoginProps> = () => {
           sessionStorage.setItem("userRole", userRole);
           sessionStorage.setItem("isAuthenticated", true.toString());
           sessionStorage.setItem("userEmail", userEmail);
-
           dispatch(setIsAuthenticated(true));
           dispatch(setUserEmail(userEmail));
           dispatch(setSelectedRole(userRole));

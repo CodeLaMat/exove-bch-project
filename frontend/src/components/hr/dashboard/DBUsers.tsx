@@ -1,52 +1,21 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import Table from "react-bootstrap/Table";
 import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import { initialiseEmployees } from "../../../features/user/userListSlice";
-import axios from "axios";
-
-interface User {
-  id: number;
-  firstName: string;
-  surName: string;
-  title: string;
-  email: string;
-  department: string;
-  // add more properties as needed
-}
-
 
 const DBUsers = () => {
   const dispatch = useAppDispatch();
-
-  const [employeeList, setEmployeeList] = useState<User[]>([]);
-
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
 
   const entries = Object.values(employees);
 
-  const userData = useAppSelector((state) => state.loginUser.userData);
-  const user = userData[0];
-  const FullName = user.name.join(" ");
-  const nameArray = FullName.split(" ");
-  const firstName = nameArray[0];
-  const role = user.role.join("");
-
-  console.log(entries);
   useEffect(() => {
-    // dispatch(initialiseEmployees());
-    
-    axios.get('http://localhost:5010/api/v1/users/user')
-    .then((response) => {
-      console.log("usersList", response.data);
-      setEmployeeList(response.data.users);
-    })
+    dispatch(initialiseEmployees());
   }, [dispatch]);
-
-console.log("employeeList", employeeList);
 
   return (
     <Table striped bordered hover>
@@ -59,8 +28,8 @@ console.log("employeeList", employeeList);
         </tr>
       </thead>
       <tbody>
-        {employeeList &&
-          employeeList.map((user, index) => (
+        {entries[0] &&
+          entries[0].map((user, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>

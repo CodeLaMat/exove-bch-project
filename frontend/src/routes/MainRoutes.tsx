@@ -17,6 +17,7 @@ import FileFolders from "../components/shared/fileFolders/FileFolders";
 
 const MainRoutes = () => {
   const { selectedRole } = useAppSelector((state) => state.loginUser);
+  const userRole = selectedRole.join("");
 
   return (
     <div>
@@ -29,11 +30,7 @@ const MainRoutes = () => {
           <Route
             path="/createsurvey"
             element={
-              selectedRole === UserRole.HR ? (
-                <CreateSurvey />
-              ) : (
-                <Navigate to="/" />
-              )
+              userRole === UserRole.HR ? <CreateSurvey /> : <Navigate to="/" />
             }
           />
           <Route path="/users" element={<Users />}></Route>
