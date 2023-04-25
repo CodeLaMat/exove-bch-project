@@ -59,3 +59,15 @@ form input[type="checkbox"] {
 .Accordion {
   width: 70vw;
 }
+
+.formSelect{
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  margin-top: 2rem;
+}
+
+.formSelect label{
+  margin-right: 1rem;
+}
+

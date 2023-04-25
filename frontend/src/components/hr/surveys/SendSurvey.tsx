@@ -12,9 +12,7 @@ const SendSurvey = () => {
     const employeesList = useAppSelector((state) => state.employees.employees);
 
     const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-        if (e.target.value === "myprofile") {
-          navigate("");
-        } 
+       console.log(e.target.value);
       };
 
     return(
@@ -28,19 +26,22 @@ const SendSurvey = () => {
             <div className={classes.top}>
             <div className={classes.surveyForm_container}>
                 <form action="POST" >
-                    <select
-                        name="selection"
-                        id="selection"
-                        onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                            changeHandler(e)
-                        }
-                    >
-                        { employeesList.users.map((user: IEmployee) => (
-                            <option value={user.firstName}>{user.surName} {user.firstName} </option>
-                        ))}
-                    </select>
-                    <label>
-                    </label>
+                    <div className={classes.formSelect}>
+                        <label>Employee to be surveyed</label>
+                        <select
+                            name="selection"
+                            id="selection"
+                            onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
+                                changeHandler(e)
+                            }
+                        >
+                            { employeesList.users.map((user: IEmployee) => (
+                                <option value= {` ${user.surName} ${user.firstName}`} >{user.surName} {user.firstName} </option>
+                            ))}
+                        </select>
+                    </div>
+                    
+                    
                     <label>
                         Description:
                         <input
