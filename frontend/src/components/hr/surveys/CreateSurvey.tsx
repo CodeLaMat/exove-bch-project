@@ -51,7 +51,7 @@ const CreateSurvey: React.FC = () => {
   };
 
   const checkboxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked, value, id } = event.target;
+    const { name, checked, value } = event.target;
 
     if (checked) {
       setCheckedBoxes([...checkedBoxes, value]);

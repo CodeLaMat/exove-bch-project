@@ -14,9 +14,11 @@ import Users from "../components/shared/users/Users";
 import Questionnaire from "../components/shared/questionnaire/Questionnaire";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
+import SendSurvey from "../components/hr/surveys/SendSurvey";
 
 const MainRoutes = () => {
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
 
   return (
     <div>
@@ -29,8 +31,18 @@ const MainRoutes = () => {
           <Route
             path="/createsurvey"
             element={
-              selectedRole === UserRole.HR ? (
+              role === UserRole.HR ? (
                 <CreateSurvey />
+              ) : (
+                <Navigate to="/" />
+              )
+            }
+          />
+          <Route
+            path="/sendsurvey"
+            element={
+              role === UserRole.HR ? (
+                <SendSurvey />
               ) : (
                 <Navigate to="/" />
               )

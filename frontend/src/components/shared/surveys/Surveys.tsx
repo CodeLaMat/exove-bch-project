@@ -40,7 +40,13 @@ const Surveys = () => {
                 variant="primary"
                 onClick={() => navigate("/createsurvey")}
               >
-                Create new Form
+                Create new Survey
+              </Button>
+              <Button
+                variant="primary"
+                onClick={() => navigate("/sendsurvey")}
+              >
+                Send Survey
               </Button>
             </div>
             <div className={classes.table_container}>
