@@ -9,9 +9,7 @@ router
     .get(surveyPack_1.getSurveyPack)
     .patch(surveyPack_1.updateSurveyPack)
     .delete(surveyPack_1.deleteSurveyPack);
-router
-    .route("/surveyors/:id")
-    .get(surveyPack_1.getSurveyors)
-    .patch(surveyPack_1.updateSurveyors)
-    .delete(surveyPack_1.deleteSurveyors);
+//router.route("/employee/:id").patch(updateSurveyPack);
+//router.route("/manager/:id").patch(updateSurveyPack);
+router.route("/surveyors/:id").get(surveyPack_1.getSurveyors).patch(surveyPack_1.updateSurveyors);
 exports.default = router;
