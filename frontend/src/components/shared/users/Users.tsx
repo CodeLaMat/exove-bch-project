@@ -8,8 +8,12 @@ import { UserRole } from "../../../enum";
 import classes from "./Users.module.css";
 import { initialiseEmployees } from "../../../features/user/userListSlice";
 
+import { useNavigate } from "react-router-dom";
+import Button from "../button/Button";
+
 const Users = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
@@ -17,10 +21,11 @@ const Users = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
   const user = userData[0];
   const role = user.role.join("");
+  const usersArray = Object.values(employees);
 
-  const entries = Object.values(employees);
-
-  console.log(role);
+  const handleFormSendClick = (userid: string) => {
+    navigate(`/sendForm/${userid}`);
+  };
 
   useEffect(() => {
     dispatch(initialiseEmployees());
@@ -37,25 +42,41 @@ const Users = () => {
               <th>Full Name</th>
               <th>Title</th>
               <th>Department</th>
+              <th>Last evoluation date</th>
+              <th>Send to evaluation</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            {entries[0] &&
-              entries[0].map((employee: IEmployee, index: number) => (
-                <tr key={index}>
+            {usersArray[0] &&
+              usersArray[0].map((employee: IEmployee, index: number) => (
+                <tr key={employee._id}>
                   <td>{index + 1}</td>
                   <td>
                     {employee.firstName} {employee.surName}
                   </td>
                   <td>{employee.title}</td>
-                  <td>{employee.department}</td>
+                  <td>{employee.department}</td>{" "}
+                  <td>{new Date(Date.now()).toLocaleDateString("en-GB")}</td>
                   <td>
-                    <button>Edit</button>
+                    <Button
+                      variant="standard"
+                      type="button"
+                      onClick={() => handleFormSendClick(employee._id)}
+                    >
+                      Send
+                    </Button>
                   </td>
                   <td>
-                    <button>Delete</button>
+                    <Button variant="primary" type="button">
+                      Edit
+                    </Button>
+                  </td>
+                  <td>
+                    <Button variant="alert" type="button">
+                      Delete
+                    </Button>
                   </td>
                 </tr>
               ))}

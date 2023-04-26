@@ -1,0 +1,332 @@
+{
+  "surveyPacks": [
+    {
+      "_id": "123",
+      "creationDate": "2022-05-01",
+      "updateDate": "2022-05-04",
+      "personBeeingSurveyed": "459",
+      "survey": [
+        {
+          "_id": "456",
+          "surveyName": "Employee Satisfaction Survey",
+          "description": "A survey to measure employee satisfaction",
+          "questions": [
+            {
+              "_id": "789",
+              "category": "Quality focus",
+              "question": "How satisfied are you with the company's culture?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "987",
+              "category": "People skills",
+              "question": "How satisfied are you with the company's culture?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "988",
+              "category": "Self guidance",
+              "question": "How satisfied are you with the company's culture?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "989",
+              "category": "Leadership",
+              "question": "How satisfied are you with the company's culture?",
+              "questionType": "Free form",
+              "description": ""
+            },
+            {
+              "_id": "8990",
+              "category": "Creativity",
+              "question": "How satisfied are you with the company's culture?",
+              "questionType": "Free form",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "participants": [
+        {
+          "user": "5432",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "0987"
+        },
+        {
+          "user": "755645",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "08098"
+        },
+        {
+          "user": "23532",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": false,
+          "_id": "4244425"
+        },
+        {
+          "user": "23509",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240425"
+        },
+        {
+          "user": "2543509",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240025"
+        }
+      ],
+      "deadline": "2022-05-31",
+      "status": "open",
+      "managerapproved": true,
+      "hrapproved": false,
+      "manager": []
+    },
+    {
+      "_id": "125",
+      "creationDate": "2022-07-01",
+      "updateDate": "2022-07-04",
+      "personBeeingSurveyed": "461",
+      "survey": [
+        {
+          "_id": "458",
+          "surveyName": "Annual Performance Review",
+          "description": "A survey to evaluate employee performance",
+          "questions": [
+            {
+              "_id": "791",
+              "category": "Job knowledge",
+              "question": "How would you rate your understanding of your job responsibilities?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "990",
+              "category": "Time management",
+              "question": "How well do you manage your time?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "992",
+              "category": "Problem solving",
+              "question": "How effective are you at solving problems in your job?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "993",
+              "category": "Teamwork",
+              "question": "How well do you work with your team members?",
+              "questionType": "Free form",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "participants": [
+        {
+          "user": "5434",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "0989"
+        },
+        {
+          "user": "755647",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "08100"
+        },
+        {
+          "user": "23534",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": false,
+          "_id": "4244427"
+        },
+        {
+          "user": "23511",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240427"
+        },
+        {
+          "user": "2543511",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240027"
+        }
+      ],
+      "deadline": "2022-07-31",
+      "status": "open",
+      "managerapproved": false,
+      "hrapproved": false,
+      "manager": []
+    },
+    {
+      "_id": "126",
+      "creationDate": "2022-08-01",
+      "updateDate": "2022-08-05",
+      "personBeeingSurveyed": "462",
+      "survey": [
+        {
+          "_id": "459",
+          "surveyName": "Employee Engagement Survey",
+          "description": "A survey to measure employee engagement",
+          "questions": [
+            {
+              "_id": "792",
+              "category": "Job satisfaction",
+              "question": "How satisfied are you with your job?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "994",
+              "category": "Work-life balance",
+              "question": "How well does the company support work-life balance?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "995",
+              "category": "Recognition",
+              "question": "Do you feel recognized for your work?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "996",
+              "category": "Professional growth",
+              "question": "Are there sufficient opportunities for professional growth?",
+              "questionType": "Free form",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "participants": [
+        {
+          "user": "5435",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "0990"
+        },
+        {
+          "user": "755648",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "08101"
+        },
+        {
+          "user": "23535",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": false,
+          "_id": "4244428"
+        },
+        {
+          "user": "23512",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240428"
+        },
+        {
+          "user": "2543512",
+          "acceptance Status": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240028"
+        }
+      ],
+      "deadline": "2022-08-31",
+      "status": "open",
+      "managerapproved": false,
+      "hrapproved": false,
+      "manager": []
+    },
+
+    {
+      "_id": "127",
+      "creationDate": "2022-09-01",
+      "updateDate": "2022-09-05",
+      "personBeeingSurveyed": "463",
+      "survey": [
+        {
+          "_id": "460",
+          "surveyName": "Company Culture Assessment",
+          "description": "A survey to evaluate company culture",
+          "questions": [
+            {
+              "_id": "793",
+              "category": "Values",
+              "question": "Do you feel the company's values align with your own?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "997",
+              "category": "Diversity and Inclusion",
+              "question": "How inclusive do you find the company culture?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "998",
+              "category": "Collaboration",
+              "question": "How would you rate the level of collaboration within the company?",
+              "questionType": "Multiple choice",
+              "description": ""
+            },
+            {
+              "_id": "999",
+              "category": "Leadership",
+              "question": "How effective is the leadership in fostering a positive company culture?",
+              "questionType": "Free form",
+              "description": ""
+            }
+          ]
+        }
+      ],
+      "participants": [
+        {
+          "user": "5436",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "0991"
+        },
+        {
+          "user": "755649",
+          "acceptanceStatus": "Pending",
+          "isSurveyComplete": false,
+          "_id": "08102"
+        },
+        {
+          "user": "23536",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": false,
+          "_id": "4244429"
+        },
+        {
+          "user": "23513",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240429"
+        },
+        {
+          "user": "2543513",
+          "acceptanceStatus": "Accepted",
+          "isSurveyComplete": true,
+          "_id": "4240029"
+        }
+      ],
+      "deadline": "2022-09-30",
+      "status": "open",
+      "managerapproved": false,
+      "hrapproved": false,
+      "manager": []
+    }
+  ]
+}
