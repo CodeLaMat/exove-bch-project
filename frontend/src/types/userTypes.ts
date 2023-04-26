@@ -1,5 +1,5 @@
 export interface IEmployee {
-  id: string;
+  _id: string;
   firstName: string;
   surName: string;
   email: string;
@@ -14,6 +14,7 @@ export interface IEmployee {
   startDate: string;
   role: string;
   image: string;
+  selected?: boolean;
 }
 
 export interface IEmployees {

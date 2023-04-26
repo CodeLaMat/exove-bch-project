@@ -157,10 +157,3 @@
 "image": "fileName.svg",
 "__v": 0
 },]]
-
-const user = userData[0];
-const FullName = user.name.join(" ");
-const nameArray = FullName.split(" ");
-const firstName = nameArray[0];
-const lastName = nameArray[1];
-const role = user.role.join("");

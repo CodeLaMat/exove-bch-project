@@ -1,99 +1,89 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import { ISurvey } from "../../types/dataTypes";
+import {
+  ISurveypack,
+  IParticipant,
+  IQuestion,
+  IQuestions,
+} from "../../types/dataTypes";
 
-interface SurveyPack {
-  _id: string;
-  creationDate: Date;
-  surveySubject: string;
-  survey: ISurvey[];
-  participants: string[];
-  deadline: Date;
-  status: "returned" | "open" | "closed";
-  manager: string;
-  canEdit: boolean;
-  canCreate: boolean;
-}
-
-interface SurveyPackState {
-  surveyPack: SurveyPack;
-}
-
-const initialState: SurveyPackState = {
-  surveyPack: {
-    _id: "",
-    creationDate: new Date(),
-    surveySubject: "",
-    survey: [],
-    participants: ["", "", "", "", ""],
-    deadline: new Date(),
-    status: "returned",
-    manager: "",
-    canEdit: true,
-    canCreate: true,
-  },
+const initialState: ISurveypack = {
+  _id: "",
+  creationDate: "",
+  updateDate: "",
+  personBeingSurveyed: "",
+  survey: [],
+  participants: [],
+  deadline: "",
+  status: "open",
+  managerapproved: false,
+  hrapproved: false,
+  manager: [""],
 };
 
 const surveyPackSlice = createSlice({
   name: "surveyPack",
   initialState,
   reducers: {
-    setSurveySubject(state, action: PayloadAction<string>) {
-      state.surveyPack.surveySubject = action.payload;
+    setSurveyPack: (state, action: PayloadAction<ISurveypack>) => {
+      return action.payload;
     },
-    setParticipant(
-      state,
-      action: PayloadAction<{ index: number; name: string }>
-    ) {
-      state.surveyPack.participants[action.payload.index] = action.payload.name;
+    updateCreationDate: (state, action: PayloadAction<string>) => {
+      state.creationDate = action.payload;
     },
-    editParticipant(
-      state,
-      action: PayloadAction<{ index: number; name: string }>
-    ) {
-      state.surveyPack.participants = state.surveyPack.participants.map(
-        (participant, i) => {
-          if (i === action.payload.index) {
-            return action.payload.name;
-          }
-          return participant;
-        }
+    updateUpdateDate: (state, action: PayloadAction<string>) => {
+      state.updateDate = action.payload;
+    },
+    updatePersonBeingSurveyed: (state, action: PayloadAction<string>) => {
+      state.personBeingSurveyed = action.payload;
+    },
+    addParticipant: (state, action: PayloadAction<IParticipant>) => {
+      state.participants.push(action.payload);
+    },
+    removeParticipant: (state, action: PayloadAction<string>) => {
+      state.participants = state.participants.filter(
+        (participant) => participant.id !== action.payload
       );
     },
-    setManager(state, action: PayloadAction<string>) {
-      state.surveyPack.manager = action.payload;
+    updateDeadline: (state, action: PayloadAction<string>) => {
+      state.deadline = action.payload;
     },
-    editManager(state, action: PayloadAction<string>) {
-      state.surveyPack.manager = action.payload;
+    updateStatus: (
+      state,
+      action: PayloadAction<"open" | "closed" | "inprogress">
+    ) => {
+      state.status = action.payload;
     },
-    setDeadline(state, action: PayloadAction<Date>) {
-      state.surveyPack.deadline = action.payload;
+
+    toggleManagerApproved: (state) => {
+      state.managerapproved = !state.managerapproved;
     },
-    setStatus(state, action: PayloadAction<"returned" | "open" | "closed">) {
-      state.surveyPack.status = action.payload;
+    toggleHrApproved: (state) => {
+      state.hrapproved = !state.hrapproved;
     },
-    setCanEdit(state, action: PayloadAction<boolean>) {
-      state.surveyPack.canEdit = action.payload;
+    addManager: (state, action: PayloadAction<string>) => {
+      state.manager.push(action.payload);
     },
-    setCanCreate(state, action: PayloadAction<boolean>) {
-      state.surveyPack.canCreate = action.payload;
-    },
-    setSurveyPack(state, action: PayloadAction<SurveyPack>) {
-      state.surveyPack = action.payload;
+    removeManager: (state, action: PayloadAction<string>) => {
+      state.manager = state.manager.filter(
+        (manager) => manager !== action.payload
+      );
     },
   },
 });
 
 export const {
-  setSurveySubject,
-  setParticipant,
-  editParticipant,
-  setManager,
-  editManager,
-  setDeadline,
-  setStatus,
-  setCanEdit,
-  setCanCreate,
   setSurveyPack,
+  updateCreationDate,
+  updateUpdateDate,
+  updatePersonBeingSurveyed,
+  addParticipant,
+  removeParticipant,
+  updateDeadline,
+  updateStatus,
+  toggleManagerApproved,
+  toggleHrApproved,
+  addManager,
+  removeManager,
 } = surveyPackSlice.actions;
 
 export default surveyPackSlice.reducer;

@@ -66,18 +66,19 @@ export type RouteConfig = {
 
 export interface IParticipant {
   id: string;
-  acceptencestatus: "declined" | "approved";
-  role: string;
-  status: "filled" | "open";
+  acceptenceStatus: "Pending" | "Accepted" | "Declined";
+  isSurveyComplete: boolean;
+  user: "";
 }
 
 export interface ISurveypack {
   _id: string;
-  creationDate: Date;
-  surveySubject: string[];
+  creationDate: string;
+  updateDate: string;
+  personBeingSurveyed: string;
   survey: ISurvey[];
   participants: IParticipant[];
-  deadline: Date;
+  deadline: string;
   status: "open" | "closed" | "inprogress";
   managerapproved: boolean;
   hrapproved: boolean;

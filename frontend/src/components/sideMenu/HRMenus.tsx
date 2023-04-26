@@ -29,10 +29,10 @@ const HRMenus = () => {
       />
       <MenuItem name="Users" icon={faUsers} link="/users" pageTitle="Users" />
       <MenuItem
-        name="Questionnaire"
+        name="Feedbacks"
         icon={faFileCircleQuestion}
-        link="/questionnaire"
-        pageTitle="Questionnaire"
+        link="/feedbacks"
+        pageTitle="Feedbacks"
       />
       <MenuItem
         name="Analytics"
