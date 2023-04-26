@@ -79,7 +79,6 @@ const SurveyPackSchema = new mongoose.Schema({
         type: mongoose.Schema.Types.ObjectId,
         ref: "user",
         required: [true, "Please add the manager"],
-        default: "",
     },
     managerapproved: {
         type: Boolean,
@@ -90,5 +89,16 @@ const SurveyPackSchema = new mongoose.Schema({
         default: false,
     },
 }, { timestamps: true });
+// SurveyPackSchema.pre("save", async function (next) {
+//   try {
+//     const user = await User.findById(this.personBeingSurveyed);
+//     if (user) {
+//       this.manager = new mongoose.Types.ObjectId(user.work?.reportsTo);
+//     }
+//     next();
+//   } catch (error: any) {
+//     next(error);
+//   }
+// });
 const SurveyPack = mongoose.model("SurveyPack", SurveyPackSchema);
 exports.default = SurveyPack;
