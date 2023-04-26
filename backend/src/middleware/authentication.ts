@@ -40,19 +40,20 @@
 import { Request, Response, NextFunction } from "express";
 import { isTokenValid } from "../util/jwt";
 import { UnauthenticatedError, UnauthorizedError } from "../errors";
-import User from "../models/user";
+//import User from "../models/user";
+import { UserRoles } from "../types/dataTypes";
 
 interface UserType {
-  userId: User["_id"];
-  name: User["displayName"];
-  email: User["email"];
-  role: User["role"];
+  userId: string;
+  name: string;
+  email: string;
+  role: UserRoles;
 }
 
 declare global {
   namespace Express {
     interface Request {
-      user: User | UserType;
+      user: UserType;
     }
   }
 }
@@ -76,7 +77,11 @@ const authenticateUser = async (
 };
 
 const authorizePermissions = (...roles: string[]) => {
-  return (req: Request & { user: User }, res: Response, next: NextFunction) => {
+  return (
+    req: Request & { user: UserType },
+    res: Response,
+    next: NextFunction
+  ) => {
     const userRole = req.user.role;
     if (!roles.includes(userRole)) {
       throw new UnauthorizedError("Unauthorized to access this route");

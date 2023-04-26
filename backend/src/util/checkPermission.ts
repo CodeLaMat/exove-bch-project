@@ -1,8 +1,9 @@
 import { UnauthorizedError } from "../errors";
 import User from "../models/user";
+import { UserRoles } from "../types/dataTypes";
 
 const checkPermissions = (
-  requestUser: { role: User["role"]; userId: User["_id"] },
+  requestUser: { role: UserRoles; userId: string },
   resourceUserId: string
 ): void => {
   if (requestUser.role === "hr") return;
