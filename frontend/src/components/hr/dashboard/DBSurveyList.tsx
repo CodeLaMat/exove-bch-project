@@ -9,31 +9,13 @@ import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const DBSurveyList = () => {
   const dispatch = useAppDispatch();
-  const [surveyList, setsurveyList] = useState<ISurvey[]>([]);
   const surveys: ISurvey[] = useAppSelector(
-    (state: RootState) => state.surveys
+    (state: RootState) => state.surveys.surveys
   );
-  const entries = Object.values(surveys);
-
-  console.log(entries);
-
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-
-  useEffect(() => {
-    axios
-      .get<ISurvey[]>("http://localhost:5010/api/v1/surveys")
-      .then((response) => {
-        setsurveyList(response.data);
-      })
-      .catch((error) => {
-        console.error(error);
-      });
-  }, [setsurveyList]);
-
-  console.log(surveyList);
-
+  
   return (
     <div className={classes.surveys_container}>
       <Table striped bordered hover size="sm">
@@ -46,7 +28,7 @@ const DBSurveyList = () => {
           </tr>
         </thead>
         <tbody>
-          {surveyList.map((survey: ISurvey) => (
+          {surveys.map((survey: ISurvey) => (
             <tr key={survey._id}>
               <td>{survey._id}</td>
               <td>{survey.surveyName}</td>

@@ -8,16 +8,18 @@ import { useAppSelector } from "./hooks/hooks";
 import { sideMenuRoutes } from "./routes/Routes";
 
 const App = () => {
-  const { isAuthenticated, selectedRole } = useAppSelector(
+  const { isAuthenticated, userData } = useAppSelector(
     (state) => state.loginUser
   );
-  const userRoutes = sideMenuRoutes[selectedRole as UserRole];
+
 
   if (!isAuthenticated) {
     return <Login />;
   }
 
-  if (!selectedRole) {
+  const userRoutes = sideMenuRoutes[userData[0].role as UserRole];
+
+  if (!userData[0].role) {
     return null;
   }
 

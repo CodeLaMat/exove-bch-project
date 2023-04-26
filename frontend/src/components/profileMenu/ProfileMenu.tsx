@@ -1,19 +1,15 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./ProfileMenu.module.css";
-import { RootState } from "../../app/store";
-import { IEmployee } from "../../types/userTypes";
 import { useAppSelector } from "../../hooks/hooks";
 
 const ProfileMenu = () => {
-  const userEmail = useAppSelector((state) => state.loginUser.email);
-  const employees: IEmployee[][] = useAppSelector(
-    (state: RootState) => state.employees.employees
-  );
-  const entries = Object.values(employees);
-
-  const currentUser =
-    entries && entries[0]?.find((entry) => entry.email === userEmail);
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  
+  const FullName = userData[0].name.join(" ");
+  const nameArray = FullName.split(" ");
+  const firstName = nameArray[0];
+  const lastName = nameArray[1];
 
   const navigate = useNavigate();
 
@@ -34,20 +30,20 @@ const ProfileMenu = () => {
       <div className={classes.mainNav}>
         <div className={classes.pageHeading}>
           <h4>
-            {currentUser?.surName} {currentUser?.firstName}
+            {userData[0].name}
           </h4>
         </div>
       </div>
       <div className={classes.dropDownNav}>
-        {currentUser?.image === "" ? (
+        {userData[0].imagePath === "" ? (
           <img
             className={classes.roundImage}
-            src={currentUser.image}
-            alt={`${currentUser.firstName} ${currentUser.surName}`}
+            src={userData[0].imagePath}
+            alt={`${userData[0].name}`}
           />
         ) : (
           <div className={classes.placeholder}>
-            <h2>{`${currentUser?.surName[0]}${currentUser?.firstName[0]}`}</h2>
+            <h2>{`${firstName[0]}${lastName[0]}`}</h2>
           </div>
         )}
         <select
@@ -57,13 +53,13 @@ const ProfileMenu = () => {
             changeHandler(e)
           }
         >
-          <option value={currentUser?.firstName} hidden>
+          <option value={firstName} hidden>
             {" "}
-            {currentUser?.surName} {currentUser?.firstName}
+            {userData[0].name}
           </option>
           <option value="myprofile">My Profile</option>
           <option value="Info">Info</option>
-          {currentUser?.role === "hr" && (
+          {userData[0].role === "hr" && (
             <option value="manageUsers">Manage Users</option>
           )}
           <option value="Logout">Logout</option>
