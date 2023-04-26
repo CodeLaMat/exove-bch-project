@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -6,13 +6,15 @@ import { useAppDispatch} from "../../hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import { ldspLoginAsync, User } from "../../features/login/loginSlice";
+import { initialiseEmployees, } from "../../features/user/userListSlice";
 import {
   setIsAuthenticated,
   setSelectedRole,
   setUserEmail,
   setUserData,
 } from "../../features/login/loginSlice";
-import { loginAsync, ldspLoginAsync, User } from "../../features/login/loginSlice";
+
 
 interface LoginProps {}
 
@@ -37,6 +39,7 @@ const Login: React.FC<LoginProps> = () => {
 
           const userData = Object.values(decodedToken) as User[];
           dispatch(setUserData(userData));
+          
 
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
@@ -44,13 +47,14 @@ const Login: React.FC<LoginProps> = () => {
             return;
           }
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          sessionStorage.setItem("userRole", userRole);
+         
           sessionStorage.setItem("isAuthenticated", true.toString());
-          sessionStorage.setItem("userEmail", userEmail);
-
+         
+          await dispatch(initialiseEmployees());
           dispatch(setIsAuthenticated(true));
           dispatch(setUserEmail(userEmail));
           dispatch(setSelectedRole(userRole));
+          
           
           navigate("/");
         } catch (error) {

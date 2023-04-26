@@ -13,6 +13,7 @@ import { initialiseQuestions } from "../../../features/survey/surveySlice";
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const employeesList = useAppSelector((state) => state.employees.employees);
+  console.log("employeesList1", employeesList);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");

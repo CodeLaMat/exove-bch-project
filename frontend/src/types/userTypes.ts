@@ -1,4 +1,5 @@
 export interface IEmployee {
+  _id: string;
   id: string;
   firstName: string;
   surName: string;

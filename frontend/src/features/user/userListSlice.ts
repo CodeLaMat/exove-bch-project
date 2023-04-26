@@ -22,6 +22,7 @@ export const initialiseEmployees = () => {
   return async (dispatch: Dispatch<Action>) => {
     const employees = await employeesService.getAll();
     dispatch(setEmployees(employees));
+    console.log("employees", employees);
   };
 };
 

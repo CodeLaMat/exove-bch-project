@@ -228,6 +228,7 @@ const getAllLdapUsers = async (req, res) => {
 };
 exports.getAllLdapUsers = getAllLdapUsers;
 const getOneUser = async (req, res) => {
+    console.log("getting sngle users");
     const { params: { id: userId }, } = req;
     const user = await user_1.default.findOne({ _id: userId });
     if (!user) {

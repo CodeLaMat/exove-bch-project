@@ -286,6 +286,7 @@ const getAllLdapUsers = async (req: Request, res: Response) => {
 
 
 const getOneUser = async (req: Request, res: Response) => {
+  console.log("getting sngle users");
   const {
     params: { id: userId },
   } = req;
