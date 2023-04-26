@@ -5,8 +5,7 @@ import { ISurvey } from "../types/dataTypes";
 const surveysURL = process.env.SURVEYS_URL || "";
 
 const getAll = async () => {
-  const response = await axios.get(surveysURL);
-  console.log(response.data);
+  const response = await axios.get("http://localhost:5010/api/v1/surveys");
   return response.data;
 };
 

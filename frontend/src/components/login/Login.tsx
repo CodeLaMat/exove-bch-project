@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch} from "../../hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -10,27 +10,34 @@ import {
   setIsAuthenticated,
   setSelectedRole,
   setUserEmail,
+  setUserData,
 } from "../../features/login/loginSlice";
-import { loginAsync } from "../../features/login/loginSlice";
+import { loginAsync, ldspLoginAsync, User } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  const [email, setEmail] = useState("");
+  
+  const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
+
   const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await dispatch(loginAsync({ email: email, password: password }));
+      await dispatch(ldspLoginAsync({ username: userName, password: password }));
       const token = sessionStorage.getItem("token");
       if (token) {
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
-          const userRole = decodedToken.role;
-          const userEmail = decodedToken.email;
+          const userRole = decodedToken.user.role;
+          const userEmail = decodedToken.user.email;
+
+          const userData = Object.values(decodedToken) as User[];
+          dispatch(setUserData(userData));
+
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
@@ -44,6 +51,7 @@ const Login: React.FC<LoginProps> = () => {
           dispatch(setIsAuthenticated(true));
           dispatch(setUserEmail(userEmail));
           dispatch(setSelectedRole(userRole));
+          
           navigate("/");
         } catch (error) {
           console.error(error);
@@ -58,8 +66,6 @@ const Login: React.FC<LoginProps> = () => {
     }
   };
 
-  console.log(sessionStorage.getItem("token"));
-
   return (
     <div className={classes.login_container}>
       <div className={classes.login_box}>
@@ -72,12 +78,12 @@ const Login: React.FC<LoginProps> = () => {
         <Form action="POST" onSubmit={loginHandler}>
           <fieldset>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="email">Email</Form.Label>
+              <Form.Label htmlFor="username">username</Form.Label>
               <Form.Control
-                id="email"
-                placeholder="email"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                id="username"
+                placeholder="username"
+                value={userName}
+                onChange={(event) => setUserName(event.target.value)}
               />
             </Form.Group>
             <Form.Group className="mb-3">

@@ -2,9 +2,9 @@ import axios from "axios";
 
 const questionsURL = process.env.QUESTIONS_URL || "";
 
-const getAll = async () => {
-  const response = await axios.get(questionsURL);
+const getAllQuestions = async () => {
+  const response = await axios.get("http://localhost:5010/api/v1/questions");
   return response.data;
 };
 
-export default { getAll };
+export default { getAllQuestions };
