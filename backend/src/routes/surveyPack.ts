@@ -8,7 +8,6 @@ import {
   deleteSurveyPack,
   getSurveyors,
   updateSurveyors,
-  deleteSurveyors,
 } from "../controllers/surveyPack";
 import {
   authenticateUser,
@@ -24,10 +23,6 @@ router
 //router.route("/employee/:id").patch(updateSurveyPack);
 //router.route("/manager/:id").patch(updateSurveyPack);
 
-router
-  .route("/surveyors/:id")
-  .get(getSurveyors)
-  .patch(updateSurveyors)
-  .delete(deleteSurveyors);
+router.route("/surveyors/:id").get(getSurveyors).patch(updateSurveyors);
 
 export default router;
