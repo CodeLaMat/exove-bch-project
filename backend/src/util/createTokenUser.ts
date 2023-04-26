@@ -1,16 +1,17 @@
 import User from "../models/user";
+import { UserRoles } from "../types/dataTypes";
 interface TokenUser {
-  userId: User["_id"];
-  name: User["displayName"];
-  email: User["email"];
-  role: User["role"];
+  userId: string;
+  name: string;
+  email: string;
+  role: UserRoles;
 }
 
 const createTokenUser = (user: User): TokenUser => {
   return {
     userId: user._id,
-    name: user.displayName,
-    email: user.email,
+    name: user.displayName as string,
+    email: user.email as string,
     role: user.role,
   };
 };
