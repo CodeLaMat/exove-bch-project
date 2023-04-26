@@ -98,7 +98,7 @@ const getOneUser = async (req, res) => {
     if (!user) {
         throw new errors_1.NotFoundError(`No user with id ${userId}`);
     }
-    (0, util_1.checkPermissions)({ role: user.role, userId: user._id }, user._id);
+    (0, util_1.checkPermissions)(req.user, userId);
     res.status(http_status_codes_1.StatusCodes.OK).json({ user });
 };
 exports.getOneUser = getOneUser;

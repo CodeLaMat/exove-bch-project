@@ -25,21 +25,22 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
 const dataTypes_1 = require("../types/dataTypes");
-// type Surveyors = IParticipant & mongoose.Document;
-// const SurveyorsSchema = new mongoose.Schema({
-//   staff: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//   },
-//   acceptanceStatus: {
-//     type: String,
-//     enum: Object.values(SurveyorsAcceptance),
-//   },
-//   status: {
-//     type: String,
-//     enum: Object.values(SurveyorsStatus),
-//   },
-// });
+const SurveyorSchema = new mongoose.Schema({
+    employee: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    acceptanceStatus: {
+        type: String,
+        enum: Object.values(dataTypes_1.SurveyorsAcceptance),
+        default: "Pending",
+    },
+    isSurveyComplete: {
+        type: Boolean,
+        default: false,
+    },
+});
 const SurveyPackSchema = new mongoose.Schema({
     personBeingSurveyed: {
         type: mongoose.Schema.Types.ObjectId,
@@ -51,24 +52,18 @@ const SurveyPackSchema = new mongoose.Schema({
         ref: "survey",
         required: [true, "Please select the survey"],
     },
-    employeesTakingSurvey: [
-        {
-            employee: {
-                type: mongoose.Schema.Types.ObjectId,
-                ref: "User",
+    employeesTakingSurvey: {
+        type: [SurveyorSchema],
+        validate: [
+            {
+                validator: function (val) {
+                    return val.length <= 6;
+                },
+                message: "The maximum number of employees allowed is 6",
             },
-            acceptanceStatus: {
-                type: String,
-                enum: Object.values(dataTypes_1.SurveyorsAcceptance),
-                default: "Pending",
-            },
-            isSurveyComplete: {
-                type: String,
-                enum: Object.values(dataTypes_1.SurveyorsStatus),
-                default: "Open",
-            },
-        },
-    ],
+        ],
+        required: [true, "Please include the employees"],
+    },
     deadline: {
         type: Date,
         required: [true, "Please add deadline"],
