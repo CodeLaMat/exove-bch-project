@@ -10,6 +10,10 @@ import {
   updateSurveyors,
   deleteSurveyors,
 } from "../controllers/surveyPack";
+import {
+  authenticateUser,
+  authorizePermissions,
+} from "../middleware/authentication";
 
 router.route("/").post(createSurveyPack);
 router
@@ -17,6 +21,9 @@ router
   .get(getSurveyPack)
   .patch(updateSurveyPack)
   .delete(deleteSurveyPack);
+//router.route("/employee/:id").patch(updateSurveyPack);
+//router.route("/manager/:id").patch(updateSurveyPack);
+
 router
   .route("/surveyors/:id")
   .get(getSurveyors)

@@ -40,7 +40,7 @@
 import { Request, Response, NextFunction } from "express";
 import { isTokenValid } from "../util/jwt";
 import { UnauthenticatedError, UnauthorizedError } from "../errors";
-//import User from "../models/user";
+import User from "../models/user";
 import { UserRoles } from "../types/dataTypes";
 
 interface UserType {

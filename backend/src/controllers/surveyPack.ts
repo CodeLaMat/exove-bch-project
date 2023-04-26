@@ -2,22 +2,15 @@ import { Request, Response } from "express";
 import SurveyPack from "../models/surveyPack";
 import User from "../models/user";
 import { StatusCodes } from "http-status-codes";
-import { NotFoundError, UnauthorizedError } from "../errors";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 import { checkPermissions } from "../util";
 
 const createSurveyPack = async (req: Request, res: Response) => {
-  const surveyPack = await SurveyPack.create({ ...req.body });
+  const surveyPack = await SurveyPack.create(req.body);
+  if (!surveyPack) {
+    throw new BadRequestError("Please complete the form");
+  }
   res.status(StatusCodes.CREATED).json({ surveyPack });
-  // const userRole = req.user?.role;
-  // console.log(userRole);
-  // if (userRole === "hr") {
-  //   const surveyPack = await SurveyPack.create(req.body);
-  //   return res.status(StatusCodes.CREATED).json({ surveyPack });
-  // } else {
-  //   return res
-  //     .status(StatusCodes.FORBIDDEN)
-  //     .json({ msg: "Not authorized to create surveyPack" });
-  // }
 };
 
 const getSurveyPack = async (req: Request, res: Response) => {
@@ -28,54 +21,45 @@ const getSurveyPack = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
   }
+  checkPermissions(req.user, surveyPackId);
   res.status(StatusCodes.OK).json({ surveyPack });
 };
 
 const updateSurveyPack = async (req: Request, res: Response) => {
-  // const surveyPackId = req.params.id;
-  // const surveyPack = await SurveyPack.findById(surveyPackId);
-  // if (!surveyPack) {
-  //   throw new NotFoundError(`No surveyPack with id ${surveyPack}`);
-  // }
-  // const userRole = req.user?.role;
-  // if (userRole === "hr") {
-  //   const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
-  //     surveyPackId,
-  //     req.body,
-  //     { new: true }
-  //   );
-  //   return res.status(StatusCodes.OK).json(updatedSurveyPack);
-  // } else {
-  //   const { surveyors } = req.body;
-  //   // Check if the user is a surveyor in the surveyPack
-  //   const userIsSurveyor = surveyPack.surveyors.some(
-  //     (surveyor) => surveyor.staff.toString() === userId
-  //   );
-  //   if (!userIsSurveyor) {
-  //     throw new UnauthorizedError(
-  //       "You are not authorized to update this survey pack"
-  //     );
-  //   }
-  //   surveyPack.surveyors = surveyors;
-  //   const updatedSurveyPack = await surveyPack.save();
-  //   return res.status(StatusCodes.OK).json(updatedSurveyPack);
-  // }
+  const {
+    params: { id: surveyPackId },
+    user: { role },
+  } = req;
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
+
+  if (!surveyPack) {
+    throw new NotFoundError(`No product with id : ${surveyPackId}`);
+  }
+  if (role === "hr") {
+    const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
+      surveyPackId,
+      req.body,
+      { new: true, runValidators: true }
+    );
+    return res.status(StatusCodes.OK).json(updatedSurveyPack);
+  } else {
+    const { surveyors } = req.body;
+    surveyPack.employeesTakingSurvey = surveyors;
+    const updatedSurveyPack = await surveyPack.save();
+    return res.status(StatusCodes.OK).json(updatedSurveyPack);
+  }
 };
 
 const deleteSurveyPack = async (req: Request, res: Response) => {
-  const surveyPackId = req.params.id;
-  const userRole = req.user?.role;
-  if (userRole === "hr") {
-    const surveyPack = await SurveyPack.findByIdAndRemove(surveyPackId);
-    if (!surveyPack) {
-      throw new NotFoundError(`No surveyPack with id ${surveyPack}`);
-    }
-    return res.status(StatusCodes.OK).json(surveyPack);
-  } else {
-    return res
-      .status(StatusCodes.FORBIDDEN)
-      .json({ message: "You are not authorized to delete this survey pack" });
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await SurveyPack.findByIdAndRemove({ _id: surveyPackId });
+
+  if (!surveyPack) {
+    throw new NotFoundError(`No product with id : ${surveyPackId}`);
   }
+  res.status(StatusCodes.OK).json({ msg: "Success! SurveyPack removed." });
 };
 
 const getSurveyors = async (req: Request, res: Response) => {
