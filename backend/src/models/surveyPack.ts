@@ -5,6 +5,8 @@ import {
   SurveyPackStatus,
   SurveyorsAcceptance,
 } from "../types/dataTypes";
+// import User from "./user";
+// import { ObjectId } from "mongodb";
 
 type SurveyPackType = ISurveypack & mongoose.Document;
 
@@ -64,7 +66,6 @@ const SurveyPackSchema = new mongoose.Schema(
       type: mongoose.Schema.Types.ObjectId,
       ref: "user",
       required: [true, "Please add the manager"],
-      default: "",
     },
     managerapproved: {
       type: Boolean,
@@ -77,6 +78,18 @@ const SurveyPackSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+// SurveyPackSchema.pre("save", async function (next) {
+//   try {
+//     const user = await User.findById(this.personBeingSurveyed);
+//     if (user) {
+//       this.manager = new mongoose.Types.ObjectId(user.work?.reportsTo);
+//     }
+//     next();
+//   } catch (error: any) {
+//     next(error);
+//   }
+// });
 
 const SurveyPack: Model<SurveyPackType> = mongoose.model<SurveyPackType>(
   "SurveyPack",

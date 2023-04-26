@@ -8,21 +8,40 @@ import {
   deleteSurveyPack,
   getSurveyors,
   updateSurveyors,
+  getManagerApproval,
+  updateManagerApproval,
 } from "../controllers/surveyPack";
 import {
   authenticateUser,
   authorizePermissions,
 } from "../middleware/authentication";
 
-router.route("/").post(createSurveyPack);
+router
+  .route("/")
+  .post(authenticateUser, authorizePermissions("hr"), createSurveyPack);
 router
   .route("/:id")
-  .get(getSurveyPack)
-  .patch(updateSurveyPack)
-  .delete(deleteSurveyPack);
+  .get(authenticateUser, authorizePermissions("hr"), getSurveyPack)
+  .patch(authenticateUser, authorizePermissions("hr"), updateSurveyPack)
+  .delete(authenticateUser, authorizePermissions("hr"), deleteSurveyPack);
 //router.route("/employee/:id").patch(updateSurveyPack);
 //router.route("/manager/:id").patch(updateSurveyPack);
 
-router.route("/surveyors/:id").get(getSurveyors).patch(updateSurveyors);
+router
+  .route("/surveyors/:id")
+  .get(authenticateUser, getSurveyors)
+  .patch(authenticateUser, updateSurveyors);
+router
+  .route("/manager/:id")
+  .get(
+    authenticateUser,
+    authorizePermissions("hr", "manager"),
+    getManagerApproval
+  )
+  .patch(
+    authenticateUser,
+    authorizePermissions("hr", "manager"),
+    updateManagerApproval
+  );
 
 export default router;

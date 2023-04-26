@@ -8,8 +8,19 @@ import {
   getOneSurvey,
   updateSurvey,
 } from "../controllers/surveys";
+import {
+  authenticateUser,
+  authorizePermissions,
+} from "../middleware/authentication";
 
-router.route("/").get(getAllSurveys).post(addSurvey);
-router.route("/:id").get(getOneSurvey).delete(deleteSurvey).patch(updateSurvey);
-
+router
+  .route("/")
+  .get(authenticateUser, authorizePermissions("hr"), getAllSurveys)
+  .post(authenticateUser, authorizePermissions("hr"), addSurvey);
+router
+  .route("/:id")
+  .get(authenticateUser, getOneSurvey)
+  .delete(authenticateUser, deleteSurvey)
+  .patch(authenticateUser, updateSurvey);
+("");
 export default router;

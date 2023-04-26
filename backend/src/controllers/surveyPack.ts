@@ -21,36 +21,27 @@ const getSurveyPack = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
   }
-  checkPermissions(req.user, surveyPackId);
   res.status(StatusCodes.OK).json({ surveyPack });
 };
 
 const updateSurveyPack = async (req: Request, res: Response) => {
   const {
     params: { id: surveyPackId },
-    user: { role },
   } = req;
-  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
-
-  if (!surveyPack) {
-    throw new NotFoundError(`No product with id : ${surveyPackId}`);
-  }
-  if (role === "hr") {
-    await SurveyPack.findByIdAndUpdate(surveyPackId, req.body, {
+  const surveyPack = await SurveyPack.findByIdAndUpdate(
+    { _id: surveyPackId },
+    req.body,
+    {
       new: true,
       runValidators: true,
-    });
-    return res
-      .status(StatusCodes.OK)
-      .json({ msg: "surveyPack successfully updated" });
-  } else {
-    const { surveyors } = req.body;
-    surveyPack.employeesTakingSurvey = surveyors;
-    await surveyPack.save();
-    return res
-      .status(StatusCodes.OK)
-      .json({ msg: "EmployeesTakingSurvey updated successfully" });
+    }
+  );
+  if (!surveyPack) {
+    throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
   }
+  res
+    .status(StatusCodes.OK)
+    .json({ msg: "surveyPack successfully updated", surveyPack: surveyPack });
 };
 
 const deleteSurveyPack = async (req: Request, res: Response) => {
@@ -75,8 +66,8 @@ const getSurveyors = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }
-  const surveyors = surveyPack.employeesTakingSurvey;
-  return res.status(StatusCodes.OK).json({ surveyors });
+  const employeesTakingSurvey = surveyPack.employeesTakingSurvey;
+  return res.status(StatusCodes.OK).json({ employeesTakingSurvey });
 };
 const updateSurveyors = async (req: Request, res: Response) => {
   const {
@@ -91,9 +82,48 @@ const updateSurveyors = async (req: Request, res: Response) => {
 
   surveyPack.employeesTakingSurvey = employeesTakingSurvey;
   await surveyPack.save();
-  return res
-    .status(StatusCodes.OK)
-    .json({ msg: "EmployeesTakingSurvey updated successfully" });
+  return res.status(StatusCodes.OK).json({
+    msg: "EmployeesTakingSurvey updated successfully",
+    employeesTakingSurvey: surveyPack.employeesTakingSurvey,
+  });
+};
+
+const getManagerApproval = async (req: Request, res: Response) => {
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await SurveyPack.findById(
+    { _id: surveyPackId },
+    { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
+  );
+
+  if (!surveyPack) {
+    throw new NotFoundError(`No product with id : ${surveyPackId}`);
+  }
+  res.status(StatusCodes.OK).json({ surveyPack });
+};
+const updateManagerApproval = async (req: Request, res: Response) => {
+  const {
+    params: { id: surveyPackId },
+    body: { employeesTakingSurvey, manager, managerapproved },
+  } = req;
+
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  surveyPack.employeesTakingSurvey = employeesTakingSurvey;
+  surveyPack.manager = manager;
+  surveyPack.managerapproved = managerapproved;
+
+  await surveyPack.save();
+
+  res.status(StatusCodes.ACCEPTED).json({
+    msg: "manager approval successful updated",
+    employeesTakingSurvey: surveyPack.employeesTakingSurvey,
+    managerapproved: surveyPack.managerapproved,
+    manager: surveyPack.manager,
+  });
 };
 
 export {
@@ -103,4 +133,6 @@ export {
   deleteSurveyPack,
   getSurveyors,
   updateSurveyors,
+  getManagerApproval,
+  updateManagerApproval,
 };
