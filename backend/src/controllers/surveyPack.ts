@@ -36,17 +36,20 @@ const updateSurveyPack = async (req: Request, res: Response) => {
     throw new NotFoundError(`No product with id : ${surveyPackId}`);
   }
   if (role === "hr") {
-    const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
-      surveyPackId,
-      req.body,
-      { new: true, runValidators: true }
-    );
-    return res.status(StatusCodes.OK).json(updatedSurveyPack);
+    await SurveyPack.findByIdAndUpdate(surveyPackId, req.body, {
+      new: true,
+      runValidators: true,
+    });
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "surveyPack successfully updated" });
   } else {
     const { surveyors } = req.body;
     surveyPack.employeesTakingSurvey = surveyors;
-    const updatedSurveyPack = await surveyPack.save();
-    return res.status(StatusCodes.OK).json(updatedSurveyPack);
+    await surveyPack.save();
+    return res
+      .status(StatusCodes.OK)
+      .json({ msg: "EmployeesTakingSurvey updated successfully" });
   }
 };
 
@@ -63,13 +66,34 @@ const deleteSurveyPack = async (req: Request, res: Response) => {
 };
 
 const getSurveyors = async (req: Request, res: Response) => {
-  res.send("get surveyors");
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId }).populate(
+    "employeesTakingSurvey"
+  );
+  if (!surveyPack) {
+    throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  const surveyors = surveyPack.employeesTakingSurvey;
+  return res.status(StatusCodes.OK).json({ surveyors });
 };
 const updateSurveyors = async (req: Request, res: Response) => {
-  res.send("update surveyors");
-};
-const deleteSurveyors = async (req: Request, res: Response) => {
-  res.send("delete surveyors");
+  const {
+    params: { id: surveyPackId },
+    body: { employeesTakingSurvey },
+  } = req;
+
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+
+  surveyPack.employeesTakingSurvey = employeesTakingSurvey;
+  await surveyPack.save();
+  return res
+    .status(StatusCodes.OK)
+    .json({ msg: "EmployeesTakingSurvey updated successfully" });
 };
 
 export {
@@ -79,5 +103,4 @@ export {
   deleteSurveyPack,
   getSurveyors,
   updateSurveyors,
-  deleteSurveyors,
 };

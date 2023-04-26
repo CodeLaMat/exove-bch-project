@@ -215,7 +215,7 @@ export interface IParticipant {
   id?: string;
   employee: User[];
   acceptencestatus: SurveyorsAcceptance;
-  isSurveyComplete: SurveyorsStatus;
+  isSurveyComplete: boolean;
 }
 
 export interface ISurveypack {
