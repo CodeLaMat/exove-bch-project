@@ -40,14 +40,7 @@ const createNewClient = () => {
     });
     return client;
 };
-const createNewSearchClient = () => {
-    const client = ldap.createClient({
-        url: "ldap://localhost:389",
-        bindDN: "cn=admin,dc=test,dc=com",
-        bindCredentials: "myadminpassword", // add the admin account password here
-    });
-    return client;
-};
+
 const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -63,7 +56,7 @@ const login = async (req, res) => {
     // }
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) {
-        throw new errors_1.UnauthenticatedError("Invalid Credentials");
+
     }
     // const tokenUser = {
     //   userId: user._id,
@@ -88,8 +81,7 @@ const login = async (req, res) => {
     //   secure: process.env.NODE_ENV === "production",
     //   signed: true,
     // });
-    res.status(http_status_codes_1.StatusCodes.OK).json({
-        user: tokenUser,
+
     });
 };
 exports.login = login;
