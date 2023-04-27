@@ -16,6 +16,7 @@ const SendSurvey = () => {
     const navigate = useNavigate();
     const [selectedUser, setSelectedUser] = useState<IEmployee[][]>([]);
     const [manager, setManager] = useState<IEmployee[]>([]);
+    const [seletedSurvey, setSeletedSurvey] = useState<IEmployee[]>([]);
     const employeesList = useAppSelector((state) => state.employees.employees);
 
     const surveys: ISurvey[] = useAppSelector(
@@ -40,34 +41,26 @@ const SendSurvey = () => {
         return user;
       };
 
-
-    const changeHandler = async (e: React.ChangeEvent<HTMLSelectElement>) => {
-       console.log(e.target.value);
+    const userChangeHandler = async (e: React.ChangeEvent<HTMLSelectElement>) => {
        let userid = e.target.value;
-       const employee = employeesList.users.find((emp: IEmployee) => emp._id === userid);
-
-       console.log('user', employee);
-       console.log('reports to', employee.work.reportsTo);
-       
-       await loadManager(employee.work.reportsTo)
-       
-       console.log("everything complete");
-       console.log("manager", manager);
-        
+       const employee = employeesList.users.find((emp: IEmployee) => emp._id === userid);  
+       await getManager(employee.work.reportsTo);
+       setSelectedUser(employee);  
     };
 
-    
-    console.log('manager1', manager);
-    const loadManager = async(userid: string) => {  
-        console.log('managerId5', userid);
-        const result = await getUserId(userid)
-        console.log("result", result);
+    const surveyChangeHandler = async (e: React.ChangeEvent<HTMLSelectElement>) => {
+       let surveyId = e.target.value;
+       
+    };
+
+    const getManager = async(userid: string) => {      
+        const result = await getUserId(userid)    
         setManager(result);
     }
 
-   
-    console.log('manager1', manager);
-   
+    const SubmitHandler = () => {
+
+    }
 
     return(
         <div className={classes.surveyCreate_container}>
@@ -79,16 +72,17 @@ const SendSurvey = () => {
             </div>
             <div className={classes.top}>
             <div className={classes.surveyForm_container}>
-                <form action="POST" >
+                <Form action="POST" >
                     <div className={classes.formSelect}>
                         <label>Select survey</label>
                         <select
                             name="selection"
                             id="selection"
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                                changeHandler(e)
+                                surveyChangeHandler(e)
                             }
                         >
+                            <option value= "selectsurvey" >Select Survey</option>
                             { surveys.map((survey: ISurvey) => (
                                 <option key={survey._id} value= {survey._id} >{survey.surveyName} </option>
                             ))}
@@ -100,7 +94,7 @@ const SendSurvey = () => {
                             name="selection"
                             id="selection"
                             onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-                                changeHandler(e)
+                                userChangeHandler(e)
                             }
                         >
                             <option value= "selectuser" >Select User</option>
@@ -108,30 +102,25 @@ const SendSurvey = () => {
                                 <option value= {user._id} >{user.surName} {user.firstName} </option>
                             ))}
                         </select>
-                    </div>
-                    
-                    
+                    </div>              
                     <label>
-                        Manager: {manager.length > 0 ? `${manager[0].surName} ${manager[0].firstName}`  : ''}
+                        Manager: {(manager ?? [])[0]?.surName ?? ''} {(manager ?? [])[0]?.firstName ?? ''} 
                     </label>
                     <Accordion
                         defaultActiveKey={["0"]}
                         alwaysOpen
-                        className={classes.Accordion}>
-                        
+                        className={classes.Accordion}>               
                     </Accordion>
                     <div className={classes.submit_button}>
-                        <Button type="submit" variant="primary">
+                        <Button type="submit" onClick={() => SubmitHandler()} variant="primary">
                         Submit
                         </Button>
                     </div>
-                </form>
+                </Form>
             </div>
             </div>
             </div>
-
     )
-    
 };
 
 export default SendSurvey;

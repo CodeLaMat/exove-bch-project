@@ -292,7 +292,8 @@ const getOneUser = async (req: Request, res: Response) => {
   } = req;
   const user = await User.findOne({ _id: userId });
   if (!user) {
-    throw new NotFoundError(`No user with id ${userId}`);
+    // throw new NotFoundError(`No user with id ${userId}`);
+    res.status(401);
   }
   res.status(StatusCodes.OK).json({ user });
 };
