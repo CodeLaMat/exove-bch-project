@@ -79,5 +79,6 @@
   "devDependencies": {
     "@babel/template": "^7.20.7",
     "@types/jsonwebtoken": "^9.0.1"
-  }
+  },
+  "proxy": "http://localhost:5010"
 }
