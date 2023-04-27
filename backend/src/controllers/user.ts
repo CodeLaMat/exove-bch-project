@@ -8,7 +8,6 @@ import {
 } from "../errors";
 import { StatusCodes } from "http-status-codes";
 import jwt from "jsonwebtoken";
-
 // import bcrypt from "bcryptjs";
 import {
   attachCookiesToResponse,
@@ -34,7 +33,7 @@ interface LdapLoginRequestBody {
 }
 
 interface JwtPayload {
-  userId: string;
+  _id: string;
   email: string;
   role: string;
 }
@@ -68,7 +67,7 @@ const login = async (req: Request, res: Response) => {
 
   const isPasswordCorrect = await user.comparePassword(password);
   if (!isPasswordCorrect) {
-    throw new UnauthenticatedError("Invalid password");
+    throw new UnauthenticatedError("Invalid Credentials");
   }
 
   // const tokenUser = {
@@ -97,31 +96,10 @@ const login = async (req: Request, res: Response) => {
   //   signed: true,
   // });
 
-
-  const payload: JwtPayload = {
-    userId: user._id,
-    email: user.email as string,
-    role: user.role,
-  };
-  const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
-    expiresIn: `${process.env.JWT_LIFETIME}`,
-  });
-
-  console.log('token', token);
-
-  const oneDay = 1000 * 60 * 60 * 24;
-  res.cookie("token", token, {
-    httpOnly: true,
-    expires: new Date(Date.now() + oneDay),
-    secure: process.env.NODE_ENV === "production",
-    signed: true,
-  });
-  // attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({
-    user: token,
+    user: tokenUser,
   });
 };
-
 
 const logout = async (req: Request, res: Response) => {
   res.cookie("token", "logout", {
@@ -172,10 +150,8 @@ const getAllUsers = async (req: Request, res: Response) => {
 const ldapLogin = async (req: Request, res: Response) => {
   const { username, password }: LdapLoginRequestBody = req.body;
 
-
   console.log(`${username} is trying to login with ${password} as a pwd`);
   const client = createNewClient();
-
 
   const bindDN = `uid=${username},ou=People,dc=test,dc=com`;
 
@@ -329,9 +305,6 @@ const getAllLdapUsers = async (req: Request, res: Response) => {
   console.log("client unbound");
 };
 
-
-
-
 const getOneUser = async (req: Request, res: Response) => {
   const {
     params: { id: userId },
@@ -366,4 +339,3 @@ export {
   logout,
   showCurrentUser,
 };
-
