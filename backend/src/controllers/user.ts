@@ -50,15 +50,6 @@ const createNewClient = () => {
   return client;
 };
 
-const createNewSearchClient = () => {
-  const client = ldap.createClient({
-    url: "ldap://localhost:389",
-    bindDN: "cn=admin,dc=test,dc=com", // add the admin account DN here
-    bindCredentials: "myadminpassword", // add the admin account password here
-  });
-
-  return client;
-};
 
 const login = async (req: Request, res: Response) => {
   const { email, password }: LoginRequestBody = req.body;
