@@ -1,27 +1,33 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
+// import { Request, Response, NextFunction } from "express";
+// import jwt from "jsonwebtoken";
+// import { UnauthenticatedError } from "../errors";
 Object.defineProperty(exports, "__esModule", { value: true });
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+exports.authorizePermissions = exports.authenticateUser = void 0;
+const jwt_1 = require("../util/jwt");
 const errors_1 = require("../errors");
-const auth = (req, res, next) => {
-    const authHeader = req.headers.authorization;
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-        throw new errors_1.UnauthenticatedError("Authentication Invalid");
+const authenticateUser = async (req, res, next) => {
+    const token = req.signedCookies.token;
+    if (!token) {
+        throw new errors_1.UnauthenticatedError("Authentication invalid");
     }
-    const token = authHeader && authHeader.split(" ")[1];
     try {
-        const decoded = jsonwebtoken_1.default.verify(token, `${process.env.JWT_SECRET}`);
-        req.user = {
-            userId: decoded._id,
-            email: decoded.email,
-            role: decoded.role,
-        };
+        const { userId, name, email, role } = (0, jwt_1.isTokenValid)({ token });
+        req.user = { userId, name, email, role };
         next();
     }
     catch (error) {
         throw new errors_1.UnauthenticatedError("Authentication invalid");
     }
 };
-exports.default = auth;
+exports.authenticateUser = authenticateUser;
+const authorizePermissions = (...roles) => {
+    return (req, res, next) => {
+        const userRole = req.user.role;
+        if (!roles.includes(userRole)) {
+            throw new errors_1.UnauthorizedError("Unauthorized to access this route");
+        }
+        next();
+    };
+};
+exports.authorizePermissions = authorizePermissions;

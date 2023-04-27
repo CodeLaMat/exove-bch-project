@@ -1,8 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const errorHandler = async (err, req, res, next) => {
-    return res
-        .status(500)
-        .json({ msg: "something went wrong, please try again" });
+const http_status_codes_1 = require("http-status-codes");
+const errorHandlerMiddleware = (err, req, res, next) => {
+    console.log(err);
+    let customError = {
+        // set default
+        statusCode: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
+        msg: err.message || "Something went wrong try again later",
+    };
+    return res.status(customError.statusCode).json({ msg: customError.msg });
 };
-exports.default = errorHandler;
+exports.default = errorHandlerMiddleware;
