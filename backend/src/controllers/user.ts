@@ -50,6 +50,15 @@ const createNewClient = () => {
   return client;
 };
 
+const createNewSearchClient = () => {
+  const client = ldap.createClient({
+    url: "ldap://localhost:389",
+    bindDN: "cn=admin,dc=test,dc=com", // add the admin account DN here
+    bindCredentials: "myadminpassword", // add the admin account password here
+  });
+
+  return client;
+};
 
 const login = async (req: Request, res: Response) => {
   const { email, password }: LoginRequestBody = req.body;
@@ -96,6 +105,26 @@ const login = async (req: Request, res: Response) => {
   //   signed: true,
   // });
 
+  const payload: JwtPayload = {
+    userId: user._id,
+    email: user.email as string,
+    email: user.email as string,
+    role: user.role,
+  };
+  const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
+    expiresIn: `${process.env.JWT_LIFETIME}`,
+  });
+
+  console.log("token", token);
+
+  const oneDay = 1000 * 60 * 60 * 24;
+  res.cookie("token", token, {
+    httpOnly: true,
+    expires: new Date(Date.now() + oneDay),
+    secure: process.env.NODE_ENV === "production",
+    signed: true,
+  });
+  // attachCookiesToResponse({ res, user: tokenUser });
   res.status(StatusCodes.OK).json({
     user: tokenUser,
   });
