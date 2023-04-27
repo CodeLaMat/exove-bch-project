@@ -40,6 +40,7 @@ const createNewClient = () => {
     });
     return client;
 };
+
 const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
@@ -55,7 +56,7 @@ const login = async (req, res) => {
     // }
     const isPasswordCorrect = await user.comparePassword(password);
     if (!isPasswordCorrect) {
-        throw new errors_1.UnauthenticatedError("Invalid password");
+
     }
     // const tokenUser = {
     //   userId: user._id,
@@ -80,25 +81,7 @@ const login = async (req, res) => {
     //   secure: process.env.NODE_ENV === "production",
     //   signed: true,
     // });
-    const payload = {
-        userId: user._id,
-        email: user.email,
-        role: user.role,
-    };
-    const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
-        expiresIn: `${process.env.JWT_LIFETIME}`,
-    });
-    console.log('token', token);
-    const oneDay = 1000 * 60 * 60 * 24;
-    res.cookie("token", token, {
-        httpOnly: true,
-        expires: new Date(Date.now() + oneDay),
-        secure: process.env.NODE_ENV === "production",
-        signed: true,
-    });
-    // attachCookiesToResponse({ res, user: tokenUser });
-    res.status(http_status_codes_1.StatusCodes.OK).json({
-        user: token,
+
     });
 };
 exports.login = login;
