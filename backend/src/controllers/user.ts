@@ -18,7 +18,6 @@ import * as ldap from "ldapjs";
 import { SearchEntryObject, SearchOptions } from "ldapjs";
 import { promisify } from "util";
 
-
 interface LdapUser {
   userId: string;
   role: UserRoles;
@@ -51,7 +50,6 @@ const createNewClient = () => {
 
   return client;
 };
-
 
 const login = async (req: Request, res: Response) => {
   const { email, password }: LoginRequestBody = req.body;
@@ -230,7 +228,7 @@ const ldapLogin = async (req: Request, res: Response) => {
         // });
 
         // res.setHeader('Set-Cookie', `jwtToken=${token}; HttpOnly; SameSite=None; Secure`);
-        
+
         res.status(200).send({
           message: "Authentication successful",
           user: userAttributes[0],
