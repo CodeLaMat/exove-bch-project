@@ -18,8 +18,10 @@ import * as ldap from "ldapjs";
 import { SearchEntryObject, SearchOptions } from "ldapjs";
 import { promisify } from "util";
 
+
 interface LdapUser {
-  role: string;
+  userId: string;
+  role: UserRoles;
   name: string;
   email: string;
   phoneNumber: string;
@@ -205,6 +207,7 @@ const ldapLogin = async (req: Request, res: Response) => {
 
         const payload = {
           user: {
+            userId: userData.userid,
             role: userData.description,
             name: userData.cn,
             email: userData.mail,
@@ -217,16 +220,17 @@ const ldapLogin = async (req: Request, res: Response) => {
         const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
           expiresIn: "2d",
         });
-        const oneDay = 1000 * 60 * 60 * 24;
-        res.cookie("token", token, {
-          httpOnly: true,
-          expires: new Date(Date.now() + oneDay),
-          secure: process.env.NODE_ENV === "production",
-          signed: true,
-        });
 
-        console.log("userToken", token);
+        console.log("Token: ", token);
+        // res.cookie("token", token, {
+        //   httpOnly: true,
+        //   secure: true,
+        //   sameSite: "strict",
+        //   expires: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000), // set expiration date to 2 days
+        // });
 
+        // res.setHeader('Set-Cookie', `jwtToken=${token}; HttpOnly; SameSite=None; Secure`);
+        
         res.status(200).send({
           message: "Authentication successful",
           user: userAttributes[0],

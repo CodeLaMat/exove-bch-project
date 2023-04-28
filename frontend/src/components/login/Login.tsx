@@ -12,7 +12,7 @@ import {
   setUserEmail,
   setUserData,
 } from "../../features/login/loginSlice";
-import { loginAsync, ldspLoginAsync, User } from "../../features/login/loginSlice";
+import { ldspLoginAsync, User } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
@@ -29,13 +29,15 @@ const Login: React.FC<LoginProps> = () => {
     try {
       await dispatch(ldspLoginAsync({ username: userName, password: password }));
       const token = sessionStorage.getItem("token");
+      
       if (token) {
+        localStorage.setItem('jwtToken', token);
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
           const userRole = decodedToken.user.role;
           const userEmail = decodedToken.user.email;
-
           const userData = Object.values(decodedToken) as User[];
+
           dispatch(setUserData(userData));
 
           if (!userRole) {
@@ -47,6 +49,7 @@ const Login: React.FC<LoginProps> = () => {
           sessionStorage.setItem("userRole", userRole);
           sessionStorage.setItem("isAuthenticated", true.toString());
           sessionStorage.setItem("userEmail", userEmail);
+
 
           dispatch(setIsAuthenticated(true));
           dispatch(setUserEmail(userEmail));
