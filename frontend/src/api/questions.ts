@@ -2,9 +2,11 @@ import axios from "axios";
 
 const questionsURL = process.env.QUESTIONS_URL || "";
 
-const getAll = async () => {
-  const response = await axios.get(questionsURL);
+const getAllQuestions = async () => {
+  const response = await axios.get(questionsURL, {
+    withCredentials: true // set this to true to send cookies with the request
+  });
   return response.data;
 };
 
-export default { getAll };
+export default { getAllQuestions };

@@ -12,11 +12,8 @@ import {
   setUserEmail,
   setUserData,
 } from "../../features/login/loginSlice";
-import {
-  // loginAsync,
-  ldspLoginAsync,
-  User,
-} from "../../features/login/loginSlice";
+
+import { ldspLoginAsync, User } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
@@ -33,12 +30,15 @@ const Login: React.FC<LoginProps> = () => {
         ldspLoginAsync({ username: userName, password: password })
       );
       const token = sessionStorage.getItem("token");
+
       if (token) {
+        localStorage.setItem("jwtToken", token);
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
           const userRole = decodedToken.user.role;
           const userEmail = decodedToken.user.email;
           const userData = Object.values(decodedToken) as User[];
+
           dispatch(setUserData(userData));
 
           if (!userRole) {

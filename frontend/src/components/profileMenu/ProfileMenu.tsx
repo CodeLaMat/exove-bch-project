@@ -11,8 +11,6 @@ const ProfileMenu = () => {
   const firstName = nameArray[0];
   const lastName = nameArray[1];
 
-  // const [firstName1, lastName] = userData[0].name.split(" ");
-
   const navigate = useNavigate();
 
   const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {

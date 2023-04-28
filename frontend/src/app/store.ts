@@ -10,7 +10,7 @@ import loginSlice from "../features/login/loginSlice";
 import surveySlice from "../features/survey/surveySlice";
 import surveysSlice from "../features/survey/surveysSlice";
 // import { LoginAction } from "./types/loginTypes";
-import surveyPackSlice from "../features/survey/createSurveySlice";
+import surveyPackSlice from "../features/survey/surveyPackSlice";
 import userSlice from "../features/user/userSlice";
 import questionSlice from "../features/form/QuestionSlice";
 

@@ -1,6 +1,9 @@
 import { Request, Response } from "express";
 import * as mongoose from "mongoose";
 import survey from "../models/surveys";
+import { StatusCodes } from "http-status-codes";
+import { NotFoundError } from "../errors";
+import { checkPermissions } from "../util";
 
 const addSurvey = async (req: Request, res: Response) => {
   try {
@@ -49,8 +52,16 @@ const getAllSurveys = async (req: Request, res: Response) => {
   // res.send("gel all surveys");
 };
 const getOneSurvey = async (req: Request, res: Response) => {
-  res.send("get one surveys");
+  const {
+    params: { id: surveyId },
+  } = req;
+  const surVey = await survey.findOne({ _id: surveyId });
+  if (!surVey) {
+    throw new NotFoundError(`No survey with id ${surveyId}`);
+  }
+  res.status(StatusCodes.OK).json({ surVey });
 };
+
 const updateSurvey = async (req: Request, res: Response) => {
   res.send("update one surveys");
 };
