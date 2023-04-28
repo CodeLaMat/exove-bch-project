@@ -1,6 +1,5 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import classes from "./HRDashboard.module.css";
-import axios from "axios";
 import { Table } from "react-bootstrap";
 import { ISurvey } from "../../../types/dataTypes";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
