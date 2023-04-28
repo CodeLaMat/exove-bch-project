@@ -15,8 +15,7 @@ const Dashboard = () => {
   const employeesList = useAppSelector((state) => state.employees.employees);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const user = userData[0];
-  const role = user.role.join("");
+  const role = userData[0].role.join("");
 
   useEffect(() => {
     dispatch(initialiseEmployees());

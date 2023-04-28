@@ -1,6 +1,6 @@
 import React from "react";
 
-import { addParticipant } from "../../../features/survey/createSurveySlice";
+import { addParticipant } from "../../../features/survey/surveyPackSlice";
 import classes from "./SelectParticipants.module.css";
 import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";

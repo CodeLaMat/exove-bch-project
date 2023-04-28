@@ -1,15 +1,16 @@
 import jwt from "jsonwebtoken";
 import { Response } from "express";
-import { User } from "../types/dataTypes";
+import User from "../models/user";
 
 interface Payload {
-  userId: string;
-  email: string;
-  role: string;
+  userId: User["_id"];
+  name: User["displayName"];
+  email: User["email"];
+  role: User["role"];
 }
-interface TokenData {
-  token: string;
-}
+// interface TokenData {
+//   token: string;
+// }
 
 interface AttachCookies {
   res: Response;
@@ -23,8 +24,8 @@ export const createJWT = ({ payload }: { payload: Payload }): string => {
   return token;
 };
 
-export const isTokenValid = ({ token }: { token: string }): TokenData =>
-  jwt.verify(token, `${process.env.JWT_SECRET}`) as TokenData;
+export const isTokenValid = ({ token }: { token: string }): Payload =>
+  jwt.verify(token, `${process.env.JWT_SECRET}`) as Payload;
 
 export const attachCookiesToResponse = ({ res, user }: AttachCookies) => {
   const token = createJWT({ payload: user });

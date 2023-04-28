@@ -34,14 +34,8 @@ export const { setName, setDescription, setQuestions, getAllQuestions } =
 
 export const initialiseQuestions = () => {
   return async (dispatch: AppDispatch) => {
-    const questionsFromStorage = sessionStorage.getItem("questions");
-    if (questionsFromStorage) {
-      const questions = JSON.parse(questionsFromStorage);
-      dispatch(setQuestions(questions));
-    } else {
-      const questions = (await questionsService.getAll()) as IQuestion[];
-      dispatch(setQuestions(questions));
-    }
+    const questions = (await questionsService.getAllQuestions()) as IQuestion[];
+    dispatch(setQuestions(questions));
   };
 };
 

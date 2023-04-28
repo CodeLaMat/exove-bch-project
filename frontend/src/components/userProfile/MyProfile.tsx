@@ -55,7 +55,7 @@ const MyProfile = () => {
             <p>
               {" "}
               <strong>Department: </strong>
-              {currentUser.department}
+              {currentUser.role}
             </p>
             <p>
               {" "}
@@ -64,8 +64,8 @@ const MyProfile = () => {
             </p>
             <p>
               {" "}
-              <strong>About: </strong>
-              {currentUser.about}
+              <strong>Phonenumber: </strong>
+              {/* {currentUser.phoneNumber} */} Phone number
             </p>
             <ul>
               <li>

@@ -20,7 +20,7 @@ import {
   toggleHrApproved,
   addManager,
   removeManager,
-} from "../../../features/survey/createSurveySlice";
+} from "../../../features/survey/surveyPackSlice";
 import Button from "../button/Button";
 import SelectParticipants from "./SelectParticipants";
 
