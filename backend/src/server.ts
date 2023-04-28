@@ -23,7 +23,11 @@ import errorHandlerMiddleware from "./middleware/errorHandler";
 const PORT = process.env.PORT || 5010;
 
 app.use(morgan("tiny"));
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // replace with the origin of your client application
+  credentials: true // enable credentials for all endpoints
+}));
+
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookieParser(`${process.env.JWT_SECRET}`));
