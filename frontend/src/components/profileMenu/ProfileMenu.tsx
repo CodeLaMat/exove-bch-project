@@ -5,7 +5,7 @@ import { useAppSelector } from "../../hooks/hooks";
 
 const ProfileMenu = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
-  
+
   const FullName = userData[0].name.join(" ");
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];
@@ -25,13 +25,13 @@ const ProfileMenu = () => {
     }
   };
 
+  console.log(nameArray);
+
   return (
     <div className={classes.adminNav}>
       <div className={classes.mainNav}>
         <div className={classes.pageHeading}>
-          <h4>
-            {userData[0].name}
-          </h4>
+          <h4>{userData[0].name}</h4>
         </div>
       </div>
       <div className={classes.dropDownNav}>

@@ -12,7 +12,7 @@ const Questionnaire = () => {
 
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
-  
+
   const questions = useAppSelector(
     (state: RootState) => state.survey.questions
   );

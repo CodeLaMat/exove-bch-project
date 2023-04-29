@@ -24,8 +24,8 @@ const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
 const PORT = process.env.PORT || 5010;
 app.use((0, morgan_1.default)("tiny"));
 app.use((0, cors_1.default)({
-    origin: 'http://localhost:3000',
-    credentials: true // enable credentials for all endpoints
+    origin: "http://localhost:3000",
+    credentials: true, // enable credentials for all endpoints
 }));
 app.use(express_1.default.urlencoded({ extended: false }));
 app.use(express_1.default.json());

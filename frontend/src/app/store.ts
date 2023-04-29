@@ -10,8 +10,9 @@ import loginSlice from "../features/login/loginSlice";
 import surveySlice from "../features/survey/surveySlice";
 import surveysSlice from "../features/survey/surveysSlice";
 // import { LoginAction } from "./types/loginTypes";
-// import surveyPackSlice from "../features/survey/createSurveySlice";
+import surveyPackSlice from "../features/survey/surveyPackSlice";
 import userSlice from "../features/user/userSlice";
+import questionSlice from "../features/form/QuestionSlice";
 
 type AppAction = Action<string> | { payload: unknown; type: string };
 
@@ -21,7 +22,8 @@ const rootReducer: Reducer = combineReducers({
   employees: employeeSlice,
   survey: surveySlice,
   surveys: surveysSlice,
-  // surveyPack: surveyPackSlice,
+  question: questionSlice,
+  surveyPack: surveyPackSlice,
 });
 
 export const store = configureStore({

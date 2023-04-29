@@ -11,8 +11,15 @@ import {
   FormData,
   QuestionsByCategory,
 } from "../../../types/dataTypes";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
+import { Modal } from "react-bootstrap";
+import AddQuestion from "../questionnaire/AddQuestions";
+import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const CreateSurvey: React.FC = () => {
+  const { showQuestionModal } = useAppSelector((state) => state.question);
+  const dispatch = useAppDispatch();
   const [questionList, setQuestionList] = useState<IQuestion[]>([]);
   const [surveyName, setSurveyName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
@@ -24,6 +31,13 @@ const CreateSurvey: React.FC = () => {
   });
   const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
+
+  const handleShowModal = () => {
+    dispatch(setShowQuestionModal(true));
+  };
+  const handleCloseModal = () => {
+    dispatch(setShowQuestionModal(false));
+  };
 
   useEffect(() => {
     axios
@@ -80,6 +94,7 @@ const CreateSurvey: React.FC = () => {
       .filter((question) => question) as IQuestion[];
 
     console.log("surveyQuestions: ", surveyQuestions);
+
     setFormData((prevState) => ({
       ...prevState,
       surveyName: surveyName,
@@ -119,6 +134,9 @@ const CreateSurvey: React.FC = () => {
       <div className={classes.back_button}>
         <Button variant="primary" onClick={() => navigate("/surveys")}>
           Back
+        </Button>
+        <Button variant="primary" onClick={handleShowModal}>
+          Add Question
         </Button>
       </div>
       <div className={classes.top}>
@@ -192,6 +210,15 @@ const CreateSurvey: React.FC = () => {
             </div>
           </form>
         </div>
+      </div>
+      <div>
+        <Modal show={showQuestionModal} onHide={handleCloseModal}>
+          <Modal.Header closeButton>
+            <Modal.Title>Add a question</Modal.Title>
+          </Modal.Header>
+          <AddQuestion />
+          <Modal.Footer></Modal.Footer>
+        </Modal>
       </div>
     </div>
   );

@@ -1,14 +1,14 @@
 import { UserRole } from "../../enum";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { ILogin } from '../../types/loginTypes';
+import { ILogin } from "../../types/loginTypes";
 
 import axios from "axios";
 import { URL } from "../../enum";
 
-interface LoginCredentials {
-  email: string;
-  password: string;
-}
+// interface LoginCredentials {
+//   email: string;
+//   password: string;
+// }
 
 interface LdapLoginCredentials {
   username: string;
@@ -26,8 +26,7 @@ const isLoggedInString = sessionStorage.getItem("isAuthenticated");
 
 const initialState: ILogin = {
   isAuthenticated: Boolean(isLoggedInString) || false,
-  selectedRole:
-    (sessionStorage.getItem("userRole") as UserRole) || UserRole.User,
+  selectedRole: (sessionStorage.getItem("userRole") as UserRole) || "",
   userName: "",
   surName: "",
   email: sessionStorage.getItem("userEmail"),
@@ -61,19 +60,19 @@ export const loginSlice = createSlice({
   },
 });
 
-export const loginAsync = createAsyncThunk(
-  "login/loginAsync",
-  async (credentials: LoginCredentials, { dispatch }) => {
-    try {
-      const response = await axios.post(URL.LOGIN_URL, credentials);
-      const token = response.data.user;
-      console.log("Logintoken", response.data.user);
-      sessionStorage.setItem("token", token);
-    } catch (error) {
-      throw new Error("Failed to authenticate user");
-    }
-  }
-);
+// export const loginAsync = createAsyncThunk(
+//   "login/loginAsync",
+//   async (credentials: LoginCredentials, { dispatch }) => {
+//     try {
+//       const response = await axios.post(URL.LOGIN_URL, credentials);
+//       const token = response.data.user;
+//       console.log("Logintoken", response.data.user);
+//       sessionStorage.setItem("token", token);
+//     } catch (error) {
+//       throw new Error("Failed to authenticate user");
+//     }
+//   }
+// );
 export const ldspLoginAsync = createAsyncThunk(
   "login/loginAsync",
   async (credentials: LdapLoginCredentials, { dispatch }) => {
