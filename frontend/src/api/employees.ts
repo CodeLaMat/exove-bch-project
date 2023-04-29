@@ -1,6 +1,5 @@
 import axios from "axios";
-
-const employeesURL = process.env.EMPLOYEES_URL || "";
+import { URL } from "../enum";
 
 const getAll = async () => {
   const response = await axios.get("http://localhost:5010/api/v1/users/user");

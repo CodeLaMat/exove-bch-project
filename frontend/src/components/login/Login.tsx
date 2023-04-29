@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import jwt_decode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
-import { useAppDispatch} from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
 import classes from "./Login.module.css";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
@@ -12,26 +12,27 @@ import {
   setUserEmail,
   setUserData,
 } from "../../features/login/loginSlice";
+
 import { ldspLoginAsync, User } from "../../features/login/loginSlice";
 
 interface LoginProps {}
 
 const Login: React.FC<LoginProps> = () => {
-  
   const [userName, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
-
   const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
-      await dispatch(ldspLoginAsync({ username: userName, password: password }));
+      await dispatch(
+        ldspLoginAsync({ username: userName, password: password })
+      );
       const token = sessionStorage.getItem("token");
-      
+
       if (token) {
-        localStorage.setItem('jwtToken', token);
+        localStorage.setItem("jwtToken", token);
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
           const userRole = decodedToken.user.role;
@@ -49,12 +50,10 @@ const Login: React.FC<LoginProps> = () => {
           sessionStorage.setItem("userRole", userRole);
           sessionStorage.setItem("isAuthenticated", true.toString());
           sessionStorage.setItem("userEmail", userEmail);
-
-
           dispatch(setIsAuthenticated(true));
           dispatch(setUserEmail(userEmail));
           dispatch(setSelectedRole(userRole));
-          
+
           navigate("/");
         } catch (error) {
           console.error(error);

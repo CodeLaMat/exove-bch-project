@@ -1,0 +1,85 @@
+.createForm_container {
+  width: 90%;
+  height: 100%;
+  margin: auto;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.box {
+  border: 1px solid #ddd;
+  height: 80vh;
+}
+.box .steps {
+  border-bottom: 1px solid #ddd;
+}
+.box .steps ul {
+  overflow: hidden;
+}
+.box .steps ul li div {
+  color: #999;
+  padding: 10px 0 15px 45px;
+  position: relative;
+  background: #f5f5f5;
+  width: auto;
+}
+.box .steps ul li div span {
+  font-size: 13px;
+}
+.box .steps ul li:first-child div {
+  width: 135px;
+  padding-left: 15px;
+}
+.box .steps ul li div::before {
+  content: " ";
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid #ddd;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  left: 100%;
+  z-index: 1;
+  margin-left: 1px;
+}
+.box .steps ul li div::after {
+  content: " ";
+  border-top: 50px solid transparent;
+  border-bottom: 50px solid transparent;
+  border-left: 30px solid #f5f5f5;
+  position: absolute;
+  top: 50%;
+  margin-top: -50px;
+  left: 100%;
+  z-index: 2;
+}
+.box .steps ul li.done div {
+  border-color: #51cbff !important;
+  color: #fff !important;
+  background: #51cbff !important;
+}
+.box .steps ul li.done div::after {
+  border-left: 30px solid #20a8d8;
+}
+.box .steps ul li.active div {
+  border-color: #167495 !important;
+  color: #fff !important;
+  background: #167495 !important;
+}
+.box .steps ul li.active div::after {
+  border-left: 30px solid #167495;
+}
+
+.box .step_component {
+  padding: 20px;
+  height: 200px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.box .btn_component {
+  padding: 20px;
+  display: flex;
+  justify-content: space-between;
+}

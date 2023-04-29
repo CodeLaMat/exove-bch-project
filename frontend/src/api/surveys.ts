@@ -4,18 +4,15 @@ import { ISurvey } from "../types/dataTypes";
 
 const surveysURL = process.env.SURVEYS_URL || "";
 
-
-
 const getAll = async () => {
+  const token = localStorage.getItem("jwtToken");
 
-const token = localStorage.getItem('jwtToken');
-
-const response = await axios.get("http://localhost:5010/api/v1/surveys", {
-  withCredentials: true, // set this to true to send cookies with the request
-  headers: {
-    Authorization: `Bearer ${token}`
-  }
-});
+  const response = await axios.get("http://localhost:5010/api/v1/surveys", {
+    withCredentials: true, // set this to true to send cookies with the request
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
   return response.data;
 };
 

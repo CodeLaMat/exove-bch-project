@@ -4,32 +4,44 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./Surveys.module.css";
-import { Table } from "react-bootstrap";
+import { Modal, Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
 import { RootState } from "../../../app/store";
 import { removeSurvey } from "../../../features/survey/surveysSlice";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
+import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
+import AddQuestion from "../../hr/questionnaire/AddQuestions";
 
 const Surveys = () => {
+  const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { selectedRole } = useAppSelector((state) => state.loginUser);
+  const userRole = selectedRole.join("");
+
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
-
-  const userData = useAppSelector((state) => state.loginUser.userData);
-  const role = userData[0].role.join("");
+  const surveysArray = Object.values(surveys);
 
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  
+  console.log(surveys);
+
+  const handleShowModal = () => {
+    dispatch(setShowQuestionModal(true));
+  };
+  const handleCloseModal = () => {
+    dispatch(setShowQuestionModal(false));
+  };
+
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
   };
 
-  if (role === UserRole.HR) {
+  if (userRole === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
         <PageHeading pageTitle="Survey forms" />
@@ -41,6 +53,9 @@ const Surveys = () => {
                 onClick={() => navigate("/createsurvey")}
               >
                 Create new Form
+              </Button>{" "}
+              <Button variant="primary" onClick={handleShowModal}>
+                Add Question
               </Button>
             </div>
             <div className={classes.table_container}>
@@ -55,7 +70,7 @@ const Surveys = () => {
                   </tr>
                 </thead>
                 <tbody>
-                  {surveys.map((survey: ISurvey) => (
+                  {surveysArray.map((survey: ISurvey) => (
                     <tr key={survey._id}>
                       <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>
@@ -83,9 +98,19 @@ const Surveys = () => {
             </div>
           </div>
         </div>
+        <div>
+          <Modal show={showQuestionModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>Add a question</Modal.Title>
+            </Modal.Header>
+            <AddQuestion />
+            <Modal.Footer></Modal.Footer>
+          </Modal>
+        </div>
       </div>
     );
-  } else return null;
+  }
+  return null;
 };
 
 export default Surveys;

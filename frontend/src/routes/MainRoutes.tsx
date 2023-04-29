@@ -11,12 +11,15 @@ import Dashboard from "../components/shared/dashboard/Dashboard";
 import Inbox from "../components/shared/inbox/Inbox";
 import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
-import Questionnaire from "../components/shared/questionnaire/Questionnaire";
+import Feedbacks from "../components/shared/feedbacks/Feedbacks";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
+import FeedbackSingle from "../components/shared/feedbacks/FeedbackSingle";
+import CreateForm from "../components/shared/users/CreateForm";
 
 const MainRoutes = () => {
   const { selectedRole } = useAppSelector((state) => state.loginUser);
+  const userRole = selectedRole.join("");
 
   return (
     <div>
@@ -29,15 +32,13 @@ const MainRoutes = () => {
           <Route
             path="/createsurvey"
             element={
-              selectedRole === UserRole.HR ? (
-                <CreateSurvey />
-              ) : (
-                <Navigate to="/" />
-              )
+              userRole === UserRole.HR ? <CreateSurvey /> : <Navigate to="/" />
             }
           />
           <Route path="/users" element={<Users />}></Route>
-          <Route path="/questionnaire" element={<Questionnaire />}></Route>
+          <Route path="/feedbacks" element={<Feedbacks />}></Route>
+          <Route path="/surveyPack/:id" element={<FeedbackSingle />}></Route>
+          <Route path="/sendForm/:userid" element={<CreateForm />}></Route>
           <Route path="/analytics" element={<Analytics />}></Route>
           <Route path="/filesfolders" element={<FileFolders />}></Route>
           <Route path="/myprofile" element={<MyProfile />}></Route>

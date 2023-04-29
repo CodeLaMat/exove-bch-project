@@ -2,17 +2,29 @@ import React from "react";
 import PageHeading from "../pageHeading/PageHeading";
 import classes from "./MyProfile.module.css";
 import { useAppSelector } from "../../hooks/hooks";
-
+import { IEmployee } from "../../types/userTypes";
+import { RootState } from "../../app/store";
 
 const MyProfile = () => {
+  const userEmail = useAppSelector((state) => state.loginUser.email);
+
   const userData = useAppSelector((state) => state.loginUser.userData);
+  const email = userData.email;
   const FullName = userData[0].name.join(" ");
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];
   const lastName = nameArray[1];
+  const employees: IEmployee[][] = useAppSelector(
+    (state: RootState) => state.employees.employees
+  );
 
- console.log("user:", userData);
-  const currentUser = userData[0];
+  const entries = Object.values(employees);
+
+  const currentUser =
+    entries[0] && entries[0].find((entry) => entry.email === email);
+  console.log("userEmail:", userEmail);
+  console.log("employees:", entries);
+
   if (!currentUser) {
     return <p>User not found.</p>;
   }
@@ -39,9 +51,7 @@ const MyProfile = () => {
             )}
           </div>
           <div className={classes.profileInfo}>
-            <h3>
-              {firstName} {lastName}
-            </h3>
+            <h3>{FullName}</h3>
             <p>
               {" "}
               <strong>Department: </strong>
@@ -55,7 +65,7 @@ const MyProfile = () => {
             <p>
               {" "}
               <strong>Phonenumber: </strong>
-              {currentUser.phoneNumber}
+              {/* {currentUser.phoneNumber} */} Phone number
             </p>
             <ul>
               <li>

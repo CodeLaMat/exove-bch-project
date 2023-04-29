@@ -3,7 +3,6 @@ import { useAppSelector } from "../../../hooks/hooks";
 import { UserRole } from "../../../enum";
 
 const Inbox = () => {
-
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
 
