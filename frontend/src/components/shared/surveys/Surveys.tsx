@@ -17,8 +17,8 @@ const Surveys = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
-  const userRole = selectedRole.join("");
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
 
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
@@ -41,7 +41,7 @@ const Surveys = () => {
     dispatch(removeSurvey(surveyId));
   };
 
-  if (userRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
         <PageHeading pageTitle="Survey forms" />

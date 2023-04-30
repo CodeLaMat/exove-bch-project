@@ -19,9 +19,8 @@ const Users = () => {
   );
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const user = userData[0];
-  const role = user.role.join("");
-  const usersArray = Object.values(employees);
+  const role = userData[0].role.join("");
+  const employeesArray = Object.values(employees);
 
   const handleFormSendClick = (userid: string) => {
     navigate(`/sendForm/${userid}`);
@@ -49,8 +48,8 @@ const Users = () => {
             </tr>
           </thead>
           <tbody>
-            {usersArray[0] &&
-              usersArray[0].map((employee: IEmployee, index: number) => (
+            {employeesArray[0] &&
+              employeesArray[0].map((employee: IEmployee, index: number) => (
                 <tr key={employee._id}>
                   <td>{index + 1}</td>
                   <td>

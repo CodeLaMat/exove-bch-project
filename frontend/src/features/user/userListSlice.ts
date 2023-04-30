@@ -3,8 +3,13 @@ import { createSlice, PayloadAction, Slice } from "@reduxjs/toolkit";
 import employeesService from "../../api/employees";
 import { IEmployee, IEmployees } from "../../types/userTypes";
 
+const storedEmployeesString = sessionStorage.getItem("employees");
+const storedEmployees = storedEmployeesString
+  ? JSON.parse(storedEmployeesString)
+  : [];
+
 const initialState: IEmployees = {
-  employees: [],
+  employees: storedEmployees,
 };
 
 const employeeSlice: Slice<IEmployees> = createSlice({

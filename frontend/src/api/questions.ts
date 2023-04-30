@@ -1,10 +1,9 @@
 import axios from "axios";
-
-const questionsURL = process.env.QUESTIONS_URL || "";
+import { URL } from "../enum";
 
 const getAllQuestions = async () => {
-  const response = await axios.get(questionsURL, {
-    withCredentials: true // set this to true to send cookies with the request
+  const response = await axios.get(URL.QUESTIONS_URL, {
+    withCredentials: true, // set this to true to send cookies with the request
   });
   return response.data;
 };

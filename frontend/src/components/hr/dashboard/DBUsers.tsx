@@ -11,7 +11,7 @@ const DBUsers = () => {
     (state: RootState) => state.employees.employees
   );
 
-  const entries = Object.values(employees);
+  const employeesArray = Object.values(employees);
 
   useEffect(() => {
     dispatch(initialiseEmployees());
@@ -28,8 +28,8 @@ const DBUsers = () => {
         </tr>
       </thead>
       <tbody>
-        {entries[0] &&
-          entries[0].map((user, index) => (
+        {employeesArray[0] &&
+          employeesArray[0].map((user, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>

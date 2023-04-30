@@ -8,12 +8,12 @@ import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {
   setIsAuthenticated,
-  setSelectedRole,
-  setUserEmail,
   setUserData,
 } from "../../features/login/loginSlice";
+import Cookies from "js-cookie";
 
-import { ldspLoginAsync, User } from "../../features/login/loginSlice";
+import { ldspLoginAsync } from "../../features/login/loginSlice";
+import { IUser } from "../../types/loginTypes";
 
 interface LoginProps {}
 
@@ -29,31 +29,32 @@ const Login: React.FC<LoginProps> = () => {
       await dispatch(
         ldspLoginAsync({ username: userName, password: password })
       );
-      const token = sessionStorage.getItem("token");
-
+      const token = Cookies.get("token");
       if (token) {
-        localStorage.setItem("jwtToken", token);
         try {
           const decodedToken: { [key: string]: any } = jwt_decode(token!);
           const userRole = decodedToken.user.role;
-          const userEmail = decodedToken.user.email;
-          const userData = Object.values(decodedToken) as User[];
-
+          const userData = Object.values(decodedToken) as IUser[];
           dispatch(setUserData(userData));
+          const expirationDate = Number(userData[2]);
+          const currentTime = Math.floor(Date.now() / 1000);
+          const remainingTimeInSeconds = expirationDate - currentTime;
 
+          if (remainingTimeInSeconds > 0) {
+            Cookies.set("token", token, {
+              expires: remainingTimeInSeconds / (60 * 60 * 24),
+            });
+          } else {
+            console.error("Token is already expired.");
+            return;
+          }
           if (!userRole) {
             console.error("The token is invalid: could not extract user role.");
             alert("Error logging in: could not extract user role.");
             return;
           }
           axios.defaults.headers.common["Authorization"] = `Bearer ${token}`;
-          sessionStorage.setItem("userRole", userRole);
-          sessionStorage.setItem("isAuthenticated", true.toString());
-          sessionStorage.setItem("userEmail", userEmail);
           dispatch(setIsAuthenticated(true));
-          dispatch(setUserEmail(userEmail));
-          dispatch(setSelectedRole(userRole));
-
           navigate("/");
         } catch (error) {
           console.error(error);

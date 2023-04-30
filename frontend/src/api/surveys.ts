@@ -1,13 +1,11 @@
 import axios from "axios";
 import { URL } from "../enum";
 import { ISurvey } from "../types/dataTypes";
-
-const surveysURL = process.env.SURVEYS_URL || "";
+import Cookies from "js-cookie";
 
 const getAll = async () => {
-  const token = localStorage.getItem("jwtToken");
-
-  const response = await axios.get("http://localhost:5010/api/v1/surveys", {
+  const token = Cookies.get("token");
+  const response = await axios.get(URL.SURVEYS_URL, {
     withCredentials: true, // set this to true to send cookies with the request
     headers: {
       Authorization: `Bearer ${token}`,
