@@ -9,8 +9,7 @@ import employeeSlice from "../features/user/userListSlice";
 import loginSlice from "../features/login/loginSlice";
 import surveySlice from "../features/survey/surveySlice";
 import surveysSlice from "../features/survey/surveysSlice";
-import selectedEmployeesSlice from "../features/survey/paticipantsSlice";
-// import { LoginAction } from "./types/loginTypes";
+// import selectedEmployeesSlice from "../features/survey/paticipantsSlice";
 import surveyPackSlice from "../features/survey/surveyPackSlice";
 import userSlice from "../features/user/userSlice";
 import questionSlice from "../features/form/QuestionSlice";
@@ -25,7 +24,7 @@ const rootReducer: Reducer = combineReducers({
   surveys: surveysSlice,
   question: questionSlice,
   surveyPack: surveyPackSlice,
-  selectedParticipants: selectedEmployeesSlice,
+  // selectedParticipants: selectedEmployeesSlice,
 });
 
 export const store = configureStore({

@@ -63,7 +63,6 @@ export const ldspLoginAsync = createAsyncThunk(
       const response = await axios.post(URL.LOGIN_URL, credentials);
       const token = response.data.token;
       Cookies.set("token", token);
-
       const decodedToken: { [key: string]: any } = jwt_decode(token);
       const userData = Object.values(decodedToken) as IUser[];
       dispatch(setUserData(userData));

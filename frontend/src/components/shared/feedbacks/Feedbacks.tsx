@@ -25,14 +25,19 @@ const Feedbacks: React.FC = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://localhost:4000/surveyPacks");
+        const response = await axios.get(
+          "http://localhost:5010/api/v1/surveyPack"
+        );
         setSurveyPacks(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
     };
     fetchData();
   }, []);
+
+  console.log(surveyPacks);
 
   if (role === UserRole.HR) {
     return (
@@ -57,11 +62,13 @@ const Feedbacks: React.FC = () => {
               <tr key={surveyPack._id}>
                 <td>{index + 1}</td>
                 <td>{surveyPack._id}</td>
-                <td>{surveyPack.participants.length}</td>
+                <td>{surveyPack.employeesTakingSurvey.length}</td>
                 <td>{surveyPack.managerapproved.toString()}</td>
                 <td>{surveyPack.status}</td>
-                <td>{surveyPack.creationDate}</td>
-                <td>{surveyPack.deadline}</td>
+                <td>{surveyPack.createdAt?.toLocaleString()}</td>{" "}
+                {/* Add null/undefined check */}
+                <td>{surveyPack.deadline?.toLocaleString()}</td>{" "}
+                {/* Add null/undefined check */}
                 <td>
                   <Button
                     variant="primary"

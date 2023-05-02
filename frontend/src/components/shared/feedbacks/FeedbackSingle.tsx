@@ -33,8 +33,8 @@ const FeedbackSingle: React.FC = () => {
       {surveyPack ? (
         <div>
           <p>FeedbackPack ID: {surveyPack._id}</p>
-          <p>Creation Date: {surveyPack.creationDate}</p>
-          <p>Deadline: {surveyPack.deadline}</p>
+          {/* <p>Creation Date: {surveyPack.creationDate}</p>
+          <p>Deadline: {surveyPack.deadline}</p> */}
           {/* Add more fields to display other survey pack details */}
         </div>
       ) : (

@@ -23,7 +23,7 @@ const Users = () => {
 
   //Sorting employees by name
   const sortedEmployees = [...employeesArray[0]].sort((a, b) =>
-    a.firstName.localeCompare(b.firstName)
+    (a.firstName || "").localeCompare(b.firstName || "")
   );
 
   const handleFormSendClick = (userid: string) => {

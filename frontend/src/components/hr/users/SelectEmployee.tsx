@@ -27,11 +27,11 @@ const SelectEmployee: React.FC = () => {
 
     if (selectedEmployee) {
       const { firstName, surName, title, image, _id } = selectedEmployee;
-      setFirstName(firstName);
-      setLastName(surName);
-      setTitle(title);
-      setImage(image);
-      setuserID(_id);
+      // setFirstName(firstName);
+      // setLastName(surName);
+      // setTitle(title);
+      // setImage(image);
+      // setuserID(_id);
     }
   }, [userid, employees]);
 

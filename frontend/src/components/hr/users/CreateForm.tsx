@@ -8,17 +8,7 @@ import { IEmployee } from "../../../types/userTypes";
 import { ISurveypack } from "../../../types/dataTypes";
 import {
   setSurveyPack,
-  updateCreationDate,
-  updateUpdateDate,
   updatePersonBeingSurveyed,
-  addParticipant,
-  removeParticipant,
-  updateDeadline,
-  updateStatus,
-  toggleManagerApproved,
-  toggleHrApproved,
-  addManager,
-  removeManager,
 } from "../../../features/survey/surveyPackSlice";
 
 import SelectEmployee from "./SelectEmployee";
