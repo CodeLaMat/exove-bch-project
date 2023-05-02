@@ -28,12 +28,11 @@ const AddQuestion: React.FC = () => {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log("submitted", formData);
 
     axios
       .post("http://localhost:5010/api/v1/questions", formData)
       .then((response) => {
-        console.log("Question response",response);
+        
         // Add logic to handle the response if needed
       })
       .catch((error) => {
