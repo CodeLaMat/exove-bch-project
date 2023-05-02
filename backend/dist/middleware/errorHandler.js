@@ -1,13 +1,16 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const http_status_codes_1 = require("http-status-codes");
+const errors_1 = require("../errors");
+const isCustomAPIError = (err) => {
+    return err instanceof errors_1.CustomAPIError;
+};
 const errorHandlerMiddleware = (err, req, res, next) => {
-    console.log(err);
-    let customError = {
-        // set default
-        statusCode: http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR,
-        msg: err.message || "Something went wrong try again later",
-    };
-    return res.status(customError.statusCode).json({ msg: customError.msg });
+    if (isCustomAPIError(err) && err.statusCode !== undefined) {
+        return res.status(err.statusCode).json({ msg: err.message });
+    }
+    return res
+        .status(http_status_codes_1.StatusCodes.INTERNAL_SERVER_ERROR)
+        .json({ msg: "Something went wrong, please try again" });
 };
 exports.default = errorHandlerMiddleware;
