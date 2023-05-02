@@ -40,8 +40,6 @@ const deleteSurvey = async (req, res) => {
 exports.deleteSurvey = deleteSurvey;
 const getAllSurveys = async (req, res) => {
     try {
-        // res.send("getting all surveys");
-        console.log("getting surveys");
         const getSurveys = await surveys_1.default.find();
         console.log("getSurvey", getSurveys);
         res.status(200).json(getSurveys);
