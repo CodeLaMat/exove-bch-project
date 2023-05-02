@@ -40,7 +40,7 @@ const createNewClient = () => {
     });
     return client;
 };
-const login = async (req, res, next) => {
+const login = async (req, res) => {
     const { email, password } = req.body;
     if (!email || !password) {
         throw new errors_1.BadRequestError("Please provide your name and password");
