@@ -75,7 +75,7 @@ const authenticateUser = async (
 
   const authorizationHeader = req.headers.authorization;
 
-  if (!authorizationHeader || !authorizationHeader.startsWith('Bearer ')) {
+  if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
     throw new UnauthenticatedError("Authentication invalid");
   }
 
@@ -85,15 +85,14 @@ const authenticateUser = async (
     const decodedToken: { [key: string]: any } = jwt_decode(token!);
 
     userRole = decodedToken.user.role[0];
-    
-  
+
     // const { userId, name, email, role } = isTokenValid({ token }) as UserType;
     // req.user = { userId, name, email, role };
     // console.log("req.user", req.user);
     next();
   } catch (error) {
-    // throw new UnauthenticatedError("Authentication invalid");
-    res.status(401).send("Authentication failed");
+    throw new UnauthenticatedError("Authentication failed");
+    //res.status(401).send("Authentication failed");
   }
 };
 
@@ -104,7 +103,6 @@ const authorizePermissions = (...roles: string[]) => {
     next: NextFunction
   ) => {
     if (!roles.includes(userRole)) {
-      
       throw new UnauthorizedError("Unauthorized to access this route");
     }
     next();

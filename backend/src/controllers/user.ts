@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { Request, Response, NextFunction } from "express";
 import User from "../models/user";
 import { UserRoles } from "../types/dataTypes";
 import {
@@ -17,7 +17,6 @@ import {
 import * as ldap from "ldapjs";
 import { SearchEntryObject, SearchOptions } from "ldapjs";
 import { promisify } from "util";
-
 
 interface LdapUser {
   userId: string;
@@ -52,8 +51,7 @@ const createNewClient = () => {
   return client;
 };
 
-
-const login = async (req: Request, res: Response) => {
+const login = async (req: Request, res: Response, next: NextFunction) => {
   const { email, password }: LoginRequestBody = req.body;
   if (!email || !password) {
     throw new BadRequestError("Please provide your name and password");
@@ -98,12 +96,12 @@ const login = async (req: Request, res: Response) => {
   //   signed: true,
   // });
 
-  res.status(StatusCodes.OK).json({
+  return res.status(StatusCodes.OK).json({
     user: tokenUser,
   });
 };
 
-const logout = async (req: Request, res: Response) => {
+const logout = async (req: Request, res: Response, next: NextFunction) => {
   res.cookie("token", "logout", {
     httpOnly: true,
     expires: new Date(Date.now() + 1000),
@@ -111,9 +109,12 @@ const logout = async (req: Request, res: Response) => {
   return res.status(StatusCodes.OK).json({ msg: "user logout" });
 };
 
-const getAllUsers = async (req: Request, res: Response) => {
+const getAllUsers = async (req: Request, res: Response, next: NextFunction) => {
   const users = await User.find({}).sort("role");
-  res.status(StatusCodes.OK).json({ users, count: users.length });
+  if (!users) {
+    throw new NotFoundError("User List not available");
+  }
+  return res.status(StatusCodes.OK).json({ users, count: users.length });
 };
 
 // interface QueryParams {
@@ -230,7 +231,7 @@ const ldapLogin = async (req: Request, res: Response) => {
         // });
 
         // res.setHeader('Set-Cookie', `jwtToken=${token}; HttpOnly; SameSite=None; Secure`);
-        
+
         res.status(200).send({
           message: "Authentication successful",
           user: userAttributes[0],
@@ -309,7 +310,7 @@ const getAllLdapUsers = async (req: Request, res: Response) => {
   console.log("client unbound");
 };
 
-const getOneUser = async (req: Request, res: Response) => {
+const getOneUser = async (req: Request, res: Response, next: NextFunction) => {
   const {
     params: { id: userId },
   } = req;

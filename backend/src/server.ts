@@ -1,3 +1,4 @@
+import "express-async-errors";
 import express, { Request, Response, NextFunction } from "express";
 const app = express();
 import dotenv from "dotenv";
@@ -23,10 +24,12 @@ import errorHandlerMiddleware from "./middleware/errorHandler";
 const PORT = process.env.PORT || 5010;
 
 app.use(morgan("tiny"));
-app.use(cors({
-  origin: 'http://localhost:3000', // replace with the origin of your client application
-  credentials: true // enable credentials for all endpoints
-}));
+app.use(
+  cors({
+    origin: "http://localhost:3001", // replace with the origin of your client application
+    credentials: true, // enable credentials for all endpoints
+  })
+);
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
