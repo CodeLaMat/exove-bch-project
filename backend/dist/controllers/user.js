@@ -80,12 +80,12 @@ const login = async (req, res) => {
     //   secure: process.env.NODE_ENV === "production",
     //   signed: true,
     // });
-    res.status(http_status_codes_1.StatusCodes.OK).json({
+    return res.status(http_status_codes_1.StatusCodes.OK).json({
         user: tokenUser,
     });
 };
 exports.login = login;
-const logout = async (req, res) => {
+const logout = async (req, res, next) => {
     res.cookie("token", "logout", {
         httpOnly: true,
         expires: new Date(Date.now() + 1000),
@@ -93,9 +93,12 @@ const logout = async (req, res) => {
     return res.status(http_status_codes_1.StatusCodes.OK).json({ msg: "user logout" });
 };
 exports.logout = logout;
-const getAllUsers = async (req, res) => {
+const getAllUsers = async (req, res, next) => {
     const users = await user_1.default.find({}).sort("role");
-    res.status(http_status_codes_1.StatusCodes.OK).json({ users, count: users.length });
+    if (!users) {
+        throw new errors_1.NotFoundError("User List not available");
+    }
+    return res.status(http_status_codes_1.StatusCodes.OK).json({ users, count: users.length });
 };
 exports.getAllUsers = getAllUsers;
 // interface QueryParams {
@@ -252,7 +255,7 @@ const getAllLdapUsers = async (req, res) => {
     console.log("client unbound");
 };
 exports.getAllLdapUsers = getAllLdapUsers;
-const getOneUser = async (req, res) => {
+const getOneUser = async (req, res, next) => {
     const { params: { id: userId }, } = req;
     const user = await user_1.default.findOne({ _id: userId });
     if (!user) {

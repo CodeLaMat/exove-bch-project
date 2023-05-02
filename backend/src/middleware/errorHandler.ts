@@ -1,10 +1,10 @@
 import { Request, Response, NextFunction } from "express";
 import { StatusCodes } from "http-status-codes";
+import { CustomAPIError } from "../errors";
 
-interface CustomError {
-  statusCode: number;
-  msg: string;
-}
+const isCustomAPIError = (err: any): err is CustomAPIError => {
+  return err instanceof CustomAPIError;
+};
 
 const errorHandlerMiddleware = (
   err: Error,
@@ -12,13 +12,12 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
-  console.log(err);
-  let customError: CustomError = {
-    // set default
-    statusCode: StatusCodes.INTERNAL_SERVER_ERROR,
-    msg: err.message || "Something went wrong try again later",
-  };
-  return res.status(customError.statusCode).json({ msg: customError.msg });
+  if (isCustomAPIError(err) && err.statusCode !== undefined) {
+    return res.status(err.statusCode).json({ msg: err.message });
+  }
+  return res
+    .status(StatusCodes.INTERNAL_SERVER_ERROR)
+    .json({ msg: "Something went wrong, please try again" });
 };
 
 export default errorHandlerMiddleware;
