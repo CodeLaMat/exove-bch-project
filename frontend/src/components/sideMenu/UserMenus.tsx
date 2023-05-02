@@ -12,6 +12,12 @@ const UserMenus = () => {
         pageTitle="Dashboard"
       />
       <MenuItem name="Inbox" icon={faMessage} link="/inbox" pageTitle="Inbox" />{" "}
+      <MenuItem
+        name="Participants"
+        icon={faMessage}
+        link="/participants"
+        pageTitle="Participants"
+      />{" "}
     </div>
   );
 };

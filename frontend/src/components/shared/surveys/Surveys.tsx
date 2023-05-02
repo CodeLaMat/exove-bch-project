@@ -11,7 +11,7 @@ import { RootState } from "../../../app/store";
 import { removeSurvey } from "../../../features/survey/surveysSlice";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
-import AddQuestion from "../../hr/questionnaire/AddQuestions";
+import AddQuestion from "../../hr/surveys/questionnaire/AddQuestions";
 
 const Surveys = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);

@@ -12,8 +12,8 @@ import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
-import Questionnaire from "../components/shared/feedbacks/Feedbacks";
 import Feedbacks from "../components/shared/feedbacks/Feedbacks";
+import ParticipantSelection from "../components/user/participants/SelectParticipants";
 
 export const sideMenuRoutes: RouteConfig = {
   [UserRole.HR]: [
@@ -114,6 +114,10 @@ export const sideMenuRoutes: RouteConfig = {
         {
           path: "home",
           element: <Dashboard />,
+        },
+        {
+          path: "participants",
+          element: <ParticipantSelection />,
         },
         {
           path: "inbox",

@@ -9,7 +9,7 @@ const MyProfile = () => {
   const userEmail = useAppSelector((state) => state.loginUser.email);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const email = userData.email;
+  const email = userData[0].email;
   const FullName = userData[0].name.join(" ");
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];

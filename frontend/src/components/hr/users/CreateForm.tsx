@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useParams } from "react-router-dom";
-import FirstComponent from "./SelectParticipants";
 import SecondComponent from "./SecondComponent";
 import classes from "./CreateForm.module.css";
 import { RootState } from "../../../app/store";
@@ -21,8 +20,10 @@ import {
   addManager,
   removeManager,
 } from "../../../features/survey/surveyPackSlice";
-import Button from "../button/Button";
+
+import SelectEmployee from "./SelectEmployee";
 import SelectParticipants from "./SelectParticipants";
+import Button from "../../shared/button/Button";
 
 const CreateForm: React.FC = () => {
   const dispatch = useAppDispatch();
@@ -32,15 +33,15 @@ const CreateForm: React.FC = () => {
   const [steps, setSteps] = useState([
     {
       key: "firstStep",
-      label: "My First Step",
+      label: "Select employee",
       isDone: true,
-      component: <SelectParticipants />,
+      component: <SelectEmployee />,
     },
     {
       key: "secondStep",
-      label: "My Second Step",
+      label: "Select Participants",
       isDone: false,
-      component: <SecondComponent />,
+      component: <SelectParticipants />,
     },
     {
       key: "thirdStep",

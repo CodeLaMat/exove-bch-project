@@ -1,11 +1,11 @@
 import React, { useState } from "react";
-import PageHeading from "../../pageHeading/PageHeading";
+import PageHeading from "../../../pageHeading/PageHeading";
 import axios from "axios";
 import classes from "./AddQuestions.module.css";
-import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
-import { useAppDispatch } from "../../../hooks/hooks";
-import { initialiseQuestions } from "../../../features/survey/surveySlice";
-import Button from "../../shared/button/Button";
+import { setShowQuestionModal } from "../../../../features/form/QuestionSlice";
+import { useAppDispatch } from "../../../../hooks/hooks";
+import { initialiseQuestions } from "../../../../features/survey/surveySlice";
+import Button from "../../../shared/button/Button";
 
 const AddQuestion: React.FC = () => {
   const dispatch = useAppDispatch();

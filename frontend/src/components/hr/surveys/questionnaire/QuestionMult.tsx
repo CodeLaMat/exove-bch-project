@@ -2,10 +2,10 @@ import React from "react";
 import Form from "react-bootstrap/Form";
 import Accordion from "react-bootstrap/Accordion";
 import { Card } from "react-bootstrap";
-import { RootState } from "../../../app/store";
-import { useAppSelector, useAppDispatch } from "../../../hooks/hooks";
-import { initialiseQuestions } from "../../../features/survey/surveySlice";
-import { IQuestion } from "../../../types/dataTypes";
+import { RootState } from "../../../../app/store";
+import { useAppSelector, useAppDispatch } from "../../../../hooks/hooks";
+import { initialiseQuestions } from "../../../../features/survey/surveySlice";
+import { IQuestion } from "../../../../types/dataTypes";
 
 function QuestionMult() {
   const dispatch = useAppDispatch();

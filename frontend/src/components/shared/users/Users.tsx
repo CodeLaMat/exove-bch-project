@@ -17,10 +17,14 @@ const Users = () => {
   const employees: IEmployee[][] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
-
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
   const employeesArray = Object.values(employees);
+
+  //Sorting employees by name
+  const sortedEmployees = [...employeesArray[0]].sort((a, b) =>
+    a.firstName.localeCompare(b.firstName)
+  );
 
   const handleFormSendClick = (userid: string) => {
     navigate(`/sendForm/${userid}`);
@@ -41,15 +45,15 @@ const Users = () => {
               <th>Full Name</th>
               <th>Title</th>
               <th>Department</th>
-              <th>Last evoluation date</th>
+              <th>Last evaluation date</th>
               <th>Send to evaluation</th>
               <th>Edit</th>
               <th>Delete</th>
             </tr>
           </thead>
           <tbody>
-            {employeesArray[0] &&
-              employeesArray[0].map((employee: IEmployee, index: number) => (
+            {sortedEmployees &&
+              sortedEmployees.map((employee: IEmployee, index: number) => (
                 <tr key={employee._id}>
                   <td>{index + 1}</td>
                   <td>

@@ -66,9 +66,9 @@ export type RouteConfig = {
 
 export interface IParticipant {
   id: string;
-  acceptenceStatus: "Pending" | "Accepted" | "Declined";
+  acceptanceStatus: "Pending" | "Accepted" | "Declined";
   isSurveyComplete: boolean;
-  user: "";
+  user: string;
 }
 
 export interface ISurveypack {
