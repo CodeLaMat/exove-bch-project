@@ -51,7 +51,7 @@ const createNewClient = () => {
   return client;
 };
 
-const login = async (req: Request, res: Response, next: NextFunction) => {
+const login = async (req: Request, res: Response) => {
   const { email, password }: LoginRequestBody = req.body;
   if (!email || !password) {
     throw new BadRequestError("Please provide your name and password");
