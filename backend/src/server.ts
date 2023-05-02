@@ -26,7 +26,7 @@ const PORT = process.env.PORT || 5010;
 app.use(morgan("tiny"));
 app.use(
   cors({
-    origin: "http://localhost:3001", // replace with the origin of your client application
+    origin: "http://localhost:3000", // replace with the origin of your client application
     credentials: true, // enable credentials for all endpoints
   })
 );
