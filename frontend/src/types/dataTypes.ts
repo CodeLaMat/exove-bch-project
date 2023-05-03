@@ -67,9 +67,13 @@ export type RouteConfig = {
 
 export interface IParticipant {
   id: string;
-  acceptanceStatus: "Pending" | "Accepted" | "Declined";
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
   user: string;
+}
+
+export interface ISurveyPacks {
+  surveyPacks: ISurveypack[];
 }
 
 export type User = {
@@ -82,7 +86,7 @@ export type User = {
   personal?: Record<string, any>;
   about?: Record<string, any>;
   work?: {
-    reportsTo: User["_id"];
+    reportsTo: string;
   };
   title?: string;
   department?: string;
@@ -102,7 +106,7 @@ export interface IEmployee {
   personal?: Record<string, any>;
   about?: Record<string, any>;
   work?: {
-    reportsTo: User["_id"];
+    reportsTo: string;
   };
   title?: string;
   department?: string;
@@ -115,12 +119,12 @@ export interface IEmployee {
 export interface ISurveypack {
   _id: string;
   createdAt: Date;
-  personBeingSurveyed: User["_id"];
+  personBeingSurveyed: string;
   survey: ISurvey[];
   employeesTakingSurvey: IParticipant[];
   deadline: Date;
   status: SurveyPackStatus;
-  manager: User[];
+  manager: string;
   managerapproved: boolean;
   hrapproved: boolean;
 }

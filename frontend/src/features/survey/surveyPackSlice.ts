@@ -1,31 +1,47 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { ISurveypack, IParticipant, User } from "../../types/dataTypes";
+import {
+  // ISurveypack,
+  IParticipant,
+  User,
+  ISurveyPacks,
+} from "../../types/dataTypes";
+import { Dispatch, Action } from "redux";
 import { IEmployee } from "../../types/userTypes";
 import { SurveyPackStatus } from "../../types/dataTypes";
+import surveyPackService from "../../api/surveyPack";
 import axios from "axios";
-import { UserRole } from "../../enum";
+import { ISurvey } from "../../types/dataTypes";
+
+export interface ISurveypack {
+  _id: string;
+  createdAt: Date;
+  personBeingSurveyed: string;
+  survey: ISurvey[];
+  employeesTakingSurvey: IParticipant[];
+  deadline: Date;
+  status: SurveyPackStatus;
+  manager: string;
+  managerapproved: boolean;
+  hrapproved: boolean;
+}
 
 const dateString = "2023-05-01"; // Example date string
 const deadline = new Date(dateString);
+
+const storedSurveyPacksString = sessionStorage.getItem("storedSurveyPacks");
+const storedSurveyPacks = storedSurveyPacksString
+  ? JSON.parse(storedSurveyPacksString)
+  : [];
+
+const initialState: ISurveyPacks = {
+  surveyPacks: storedSurveyPacks,
+};
 
 export interface IEmployeesTakingSurvey {
   acceptanceStatus: "Pending" | "Accepted" | "Declined";
   isSurveyComplete: boolean;
   employee: User;
 }
-
-const initialState: ISurveypack = {
-  _id: "",
-  createdAt: new Date(),
-  personBeingSurveyed: "",
-  survey: [],
-  employeesTakingSurvey: [],
-  deadline: deadline,
-  status: SurveyPackStatus.OPEN,
-  manager: [],
-  managerapproved: false,
-  hrapproved: false,
-};
 
 export const fetchSurveyPack = createAsyncThunk(
   "surveyPack/fetchSurveyPack",
@@ -56,65 +72,44 @@ export const removeSurveyPackAsync = createAsyncThunk(
   }
 );
 
-const surveyPackSlice = createSlice({
-  name: "surveyPack",
+const surveyPacksSlice = createSlice({
+  name: "surveyPacks",
   initialState,
   reducers: {
-    setSurveyPack: (state, action: PayloadAction<ISurveypack>) => {
-      return action.payload;
+    getAllSurveyPacks: (state, action: PayloadAction<ISurveypack[]>) => {
+      state.surveyPacks = action.payload;
+      sessionStorage.setItem(
+        "storedSurveyPacks",
+        JSON.stringify(action.payload)
+      );
     },
-    updatePersonBeingSurveyed: (state, action: PayloadAction<string>) => {
-      state.personBeingSurveyed = action.payload;
-    },
-    updateEmployeesTakingSurvey: (
+    updatePersonBeingSurveyed: (
       state,
-      action: PayloadAction<IParticipant[]>
+      action: PayloadAction<{
+        surveyPackId: string;
+        personBeingSurveyed: string;
+      }>
     ) => {
-      state.employeesTakingSurvey = action.payload;
+      const { surveyPackId, personBeingSurveyed } = action.payload;
+      const surveyPack = state.surveyPacks.find(
+        (pack) => pack._id === surveyPackId
+      );
+      if (surveyPack) {
+        surveyPack.personBeingSurveyed = personBeingSurveyed;
+      }
     },
-
-    updateDeadline: (state, action: PayloadAction<Date>) => {
-      state.deadline = action.payload;
-    },
-    updateStatus: (state, action: PayloadAction<SurveyPackStatus>) => {
-      state.status = action.payload;
-    },
-    updateManager: (state, action: PayloadAction<IEmployee[]>) => {
-      state.manager = action.payload;
-    },
-    updateManagerApproved: (state, action: PayloadAction<boolean>) => {
-      state.managerapproved = action.payload;
-    },
-    updateHrApproved: (state, action: PayloadAction<boolean>) => {
-      state.hrapproved = action.payload;
-    },
-    removeSurveyPack: () => {
-      return initialState;
-    },
-  },
-  extraReducers: (builder) => {
-    builder.addCase(fetchSurveyPack.fulfilled, (state, action) => {
-      return action.payload;
-    });
-    builder.addCase(updateSurveyPack.fulfilled, (state, action) => {
-      return action.payload;
-    });
-    builder.addCase(removeSurveyPackAsync.fulfilled, () => {
-      return initialState;
-    });
   },
 });
 
-export const {
-  setSurveyPack,
-  updatePersonBeingSurveyed,
-  updateEmployeesTakingSurvey,
-  updateDeadline,
-  updateStatus,
-  updateManager,
-  updateManagerApproved,
-  updateHrApproved,
-  removeSurveyPack,
-} = surveyPackSlice.actions;
+export const initialiseSurveyPacks = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    const surveyPacks = await surveyPackService.getAll();
+    // sessionStorage.setItem("storedSurveyPacks", surveyPacks);
+    dispatch(getAllSurveyPacks(surveyPacks));
+  };
+};
 
-export default surveyPackSlice.reducer;
+export const { getAllSurveyPacks, updatePersonBeingSurveyed } =
+  surveyPacksSlice.actions;
+
+export default surveyPacksSlice.reducer;

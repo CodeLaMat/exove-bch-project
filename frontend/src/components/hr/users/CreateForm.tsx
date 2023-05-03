@@ -6,19 +6,18 @@ import classes from "./CreateForm.module.css";
 import { RootState } from "../../../app/store";
 import { IEmployee } from "../../../types/userTypes";
 import { ISurveypack } from "../../../types/dataTypes";
-import {
-  setSurveyPack,
-  updatePersonBeingSurveyed,
-} from "../../../features/survey/surveyPackSlice";
-
+import { updatePersonBeingSurveyed } from "../../../features/survey/surveyPackSlice";
 import SelectEmployee from "./SelectEmployee";
 import SelectParticipants from "./SelectParticipants";
 import Button from "../../shared/button/Button";
+import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice";
 
 const CreateForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const { userid } = useParams<any>();
-  const surveyPack = useAppSelector((state) => state.surveyPack);
+  const surveyPacks = useAppSelector(
+    (state: RootState) => state.surveyPacks.surveyPacks
+  );
 
   const [steps, setSteps] = useState([
     {
@@ -28,17 +27,18 @@ const CreateForm: React.FC = () => {
       component: <SelectEmployee />,
     },
     {
+      key: "thirdStep",
+      label: "My Second Step",
+      isDone: false,
+      component: <SecondComponent />,
+    },
+    {
       key: "secondStep",
       label: "Select Participants",
       isDone: false,
       component: <SelectParticipants />,
     },
-    {
-      key: "thirdStep",
-      label: "My Third Step",
-      isDone: false,
-      component: <SecondComponent />,
-    },
+
     {
       key: "finalStep",
       label: "My Final Step",
@@ -58,15 +58,21 @@ const CreateForm: React.FC = () => {
       (employee) => employee._id === userid
     );
     if (selectedUser) {
-      dispatch(updatePersonBeingSurveyed(selectedUser._id));
+      dispatch(
+        updatePersonBeingSurveyed({
+          surveyPackId: surveyPacks[0]?._id ?? "",
+          personBeingSurveyed: selectedUser._id,
+        })
+      );
     } else {
       console.log("Error: User could not be found");
     }
   };
 
-  console.log(surveyPack.personBeingSurveyed);
+  console.log(surveyPacks[0]?.personBeingSurveyed);
 
   useEffect(() => {
+    dispatch(initialiseSurveyPacks());
     getSelectedUser();
   }, []);
 

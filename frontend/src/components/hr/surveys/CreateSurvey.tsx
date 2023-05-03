@@ -14,7 +14,7 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
 import { Modal } from "react-bootstrap";
-import AddQuestion from "./questionnaire/AddQuestions";
+import AddQuestions from "./questionnaire/AddQuestions";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const CreateSurvey: React.FC = () => {
@@ -216,7 +216,7 @@ const CreateSurvey: React.FC = () => {
           <Modal.Header closeButton>
             <Modal.Title>Add a question</Modal.Title>
           </Modal.Header>
-          <AddQuestion />
+          <AddQuestions />
           <Modal.Footer></Modal.Footer>
         </Modal>
       </div>

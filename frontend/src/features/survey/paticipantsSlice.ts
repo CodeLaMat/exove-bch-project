@@ -15,34 +15,15 @@ interface EmployeesState {
 }
 
 const initialState: EmployeesState = {
-  selectedParticipants: [
-    {
-      id: "643525bf44aa935872a3e400",
-      acceptanceStatus: "Pending",
-      isSurveyComplete: false,
-      user: "643525bf44aa935872a3e415",
-    },
-    {
-      id: "643525bf44aa935872a3e401",
-      acceptanceStatus: "Pending",
-      isSurveyComplete: false,
-      user: "643525bf44aa935872a3e415",
-    },
-    {
-      id: "643525bf44aa935872a3e403",
-      acceptanceStatus: "Pending",
-      isSurveyComplete: false,
-      user: "643525bf44aa935872a3e415",
-    },
-  ],
+  selectedParticipants: [],
   participantsApprovalStatus: {},
 };
 
 export const fetchEmployeesData = createAsyncThunk(
   "employees/fetchEmployeesData",
   async () => {
-    const employees = await employeesService.getAll();
-    return employees;
+    const surveyPacks = await employeesService.getAll();
+    return surveyPacks;
   }
 );
 

@@ -5,6 +5,15 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 import { checkPermissions } from "../util";
 
+const getAllSurveyPacks = async (req: Request, res: Response) => {
+  try {
+    const surveyPacks = await SurveyPack.find();
+    res.status(StatusCodes.OK).json({ surveyPacks });
+  } catch (error) {
+    throw new BadRequestError("Failed to get survey packs");
+  }
+};
+
 const createSurveyPack = async (req: Request, res: Response) => {
   const surveyPack = await SurveyPack.create(req.body);
   if (!surveyPack) {
@@ -127,6 +136,7 @@ const updateManagerApproval = async (req: Request, res: Response) => {
 };
 
 export {
+  getAllSurveyPacks,
   createSurveyPack,
   getSurveyPack,
   updateSurveyPack,
