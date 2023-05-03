@@ -42,10 +42,8 @@ const Users = () => {
               <th>Full Name</th>
               <th>Title</th>
               <th>Department</th>
-              <th>Last evoluation date</th>
-              <th>Send to evaluation</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th>Last evaluation date</th>
+              <th>Start evaluation</th>
             </tr>
           </thead>
           <tbody>
@@ -65,17 +63,7 @@ const Users = () => {
                       type="button"
                       onClick={() => handleFormSendClick(employee._id)}
                     >
-                      Send
-                    </Button>
-                  </td>
-                  <td>
-                    <Button variant="primary" type="button">
-                      Edit
-                    </Button>
-                  </td>
-                  <td>
-                    <Button variant="alert" type="button">
-                      Delete
+                      Start
                     </Button>
                   </td>
                 </tr>

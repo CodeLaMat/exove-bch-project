@@ -66,13 +66,64 @@ export type RouteConfig = {
 
 export interface IParticipant {
   id: string;
+<<<<<<< HEAD
   acceptenceStatus: "Pending" | "Accepted" | "Declined";
   isSurveyComplete: boolean;
   user: "";
+=======
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
+  isSurveyComplete: boolean;
+  user: string;
+}
+
+export interface ISurveyPacks {
+  surveyPacks: ISurveypack[];
+}
+
+export type User = {
+  _id: string;
+  firstName?: string;
+  surName?: string;
+  email?: string;
+  password?: string;
+  displayName?: string;
+  personal?: Record<string, any>;
+  about?: Record<string, any>;
+  work?: {
+    reportsTo: string;
+  };
+  title?: string;
+  department?: string;
+  site?: string;
+  startDate?: Date;
+  role: UserRole;
+  image?: String;
+};
+
+export interface IEmployee {
+  _id: string;
+  firstName?: string;
+  surName?: string;
+  email?: string;
+  password?: string;
+  displayName?: string;
+  personal?: Record<string, any>;
+  about?: Record<string, any>;
+  work?: {
+    reportsTo: string;
+  };
+  title?: string;
+  department?: string;
+  site?: string;
+  startDate?: Date;
+  role: UserRole;
+  image?: String;
+>>>>>>> 2486a3a (SurveyPack and surveyPacks slices created. Fetached surveypacks)
 }
 
 export interface ISurveypack {
   _id: string;
+<<<<<<< HEAD
   creationDate: string;
   updateDate: string;
   personBeingSurveyed: string;
@@ -80,6 +131,15 @@ export interface ISurveypack {
   participants: IParticipant[];
   deadline: string;
   status: "open" | "closed" | "inprogress";
+=======
+  createdAt: Date;
+  personBeingSurveyed: string;
+  survey: ISurvey[];
+  employeesTakingSurvey: IParticipant[];
+  deadline: Date;
+  status: SurveyPackStatus;
+  manager: string;
+>>>>>>> 2486a3a (SurveyPack and surveyPacks slices created. Fetached surveypacks)
   managerapproved: boolean;
   hrapproved: boolean;
   manager: string[];

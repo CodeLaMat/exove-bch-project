@@ -7,7 +7,7 @@ import { useAppDispatch } from "../../../hooks/hooks";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import Button from "../../shared/button/Button";
 
-const AddQuestion: React.FC = () => {
+const AddQuestions: React.FC = () => {
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
     category: "",
@@ -106,4 +106,4 @@ const AddQuestion: React.FC = () => {
   );
 };
 
-export default AddQuestion;
+export default AddQuestions;

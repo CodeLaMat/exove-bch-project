@@ -7,6 +7,7 @@ import classes from "./CreateForm.module.css";
 import { RootState } from "../../../app/store";
 import { IEmployee } from "../../../types/userTypes";
 import { ISurveypack } from "../../../types/dataTypes";
+<<<<<<< HEAD:frontend/src/components/shared/users/CreateForm.tsx
 import {
   setSurveyPack,
   updateCreationDate,
@@ -23,11 +24,20 @@ import {
 } from "../../../features/survey/surveyPackSlice";
 import Button from "../button/Button";
 import SelectParticipants from "./SelectParticipants";
+=======
+import { updatePersonBeingSurveyed } from "../../../features/survey/surveyPackSlice";
+import SelectEmployee from "./SelectEmployee";
+import SelectParticipants from "./SelectParticipants";
+import Button from "../../shared/button/Button";
+import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice";
+>>>>>>> 2486a3a (SurveyPack and surveyPacks slices created. Fetached surveypacks):frontend/src/components/hr/users/CreateForm.tsx
 
 const CreateForm: React.FC = () => {
   const dispatch = useAppDispatch();
   const { userid } = useParams<any>();
-  const surveyPack = useAppSelector((state) => state.surveyPack);
+  const surveyPacks = useAppSelector(
+    (state: RootState) => state.surveyPacks.surveyPacks
+  );
 
   const [steps, setSteps] = useState([
     {
@@ -37,17 +47,18 @@ const CreateForm: React.FC = () => {
       component: <SelectParticipants />,
     },
     {
-      key: "secondStep",
+      key: "thirdStep",
       label: "My Second Step",
       isDone: false,
       component: <SecondComponent />,
     },
     {
-      key: "thirdStep",
-      label: "My Third Step",
+      key: "secondStep",
+      label: "My Second Step",
       isDone: false,
       component: <SecondComponent />,
     },
+
     {
       key: "finalStep",
       label: "My Final Step",
@@ -67,15 +78,21 @@ const CreateForm: React.FC = () => {
       (employee) => employee._id === userid
     );
     if (selectedUser) {
-      dispatch(updatePersonBeingSurveyed(selectedUser._id));
+      dispatch(
+        updatePersonBeingSurveyed({
+          surveyPackId: surveyPacks[0]?._id ?? "",
+          personBeingSurveyed: selectedUser._id,
+        })
+      );
     } else {
       console.log("Error: User could not be found");
     }
   };
 
-  console.log(surveyPack.personBeingSurveyed);
+  console.log(surveyPacks[0]?.personBeingSurveyed);
 
   useEffect(() => {
+    dispatch(initialiseSurveyPacks());
     getSelectedUser();
   }, []);
 

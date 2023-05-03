@@ -14,7 +14,8 @@ import {
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
 import { Modal } from "react-bootstrap";
-import AddQuestion from "../questionnaire/AddQuestions";
+import AddQuestions from "../questionnaire/AddQuestions";
+
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 
 const CreateSurvey: React.FC = () => {
@@ -65,9 +66,13 @@ const CreateSurvey: React.FC = () => {
         .catch((error) => {
           console.error("Error submitting survey data:", error);
         });
-    }
+    };
 
-    if (formData.surveyName && formData.description && formData.questions.length > 0) {
+    if (
+      formData.surveyName &&
+      formData.description &&
+      formData.questions.length > 0
+    ) {
       sendSurvey(formData);
     }
   }, [formData, navigate]);
@@ -81,7 +86,7 @@ const CreateSurvey: React.FC = () => {
   };
 
   const checkboxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked, value} = event.target;
+    const { name, checked, value } = event.target;
 
     if (checked) {
       setCheckedBoxes([...checkedBoxes, value]);
@@ -94,7 +99,7 @@ const CreateSurvey: React.FC = () => {
     e.preventDefault();
 
     setFormSubmitted(true);
-  
+
     const checkedquestions = checkedBoxes;
     const surveyQuestions = checkedquestions
       .map((checkedQuestion) => {
@@ -212,7 +217,7 @@ const CreateSurvey: React.FC = () => {
           <Modal.Header closeButton>
             <Modal.Title>Add a question</Modal.Title>
           </Modal.Header>
-          <AddQuestion />
+          <AddQuestions />
           <Modal.Footer></Modal.Footer>
         </Modal>
       </div>
