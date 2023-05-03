@@ -25,8 +25,6 @@ const ProfileMenu = () => {
     }
   };
 
-  console.log(nameArray);
-
   return (
     <div className={classes.adminNav}>
       <div className={classes.mainNav}>
