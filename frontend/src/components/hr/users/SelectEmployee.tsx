@@ -8,10 +8,15 @@ import PageHeading from "../../pageHeading/PageHeading";
 import ParticipantSelectionModal from "./ParticipantSelectionModal";
 import ManagerSelectionModal from "./ManagerSelectionModal";
 import { useDispatch } from "react-redux";
-import { updateManager } from "../../../features/user/employeesSlice";
+import { AppDispatch } from "../../../app/store";
+
+import {
+  updateManager,
+  updateManagerAsync,
+} from "../../../features/user/employeesSlice";
 
 const SelectEmployee: React.FC = () => {
-  const dispatch = useDispatch();
+  const dispatch = useDispatch<AppDispatch>();
   const { userid } = useParams();
   const userId = userid ?? "";
   const [selectedManager, setSelectedManager] = useState("");
@@ -76,7 +81,7 @@ const SelectEmployee: React.FC = () => {
   }, [manager, employees]);
 
   const handleManagerSelection = (managerId: string) => {
-    dispatch(updateManager({ employeeId: userId, managerId }));
+    dispatch(updateManagerAsync({ employeeId: userId, managerId }));
     setSelectedManager(managerId);
     setIsModalOpen(false);
   };
