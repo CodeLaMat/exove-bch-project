@@ -54,6 +54,4 @@ const surveySchema = new mongoose.Schema(
 
 const survey = mongoose.model("survey", surveySchema);
 
-export default survey;
-
-export default survey;
+export default survey
