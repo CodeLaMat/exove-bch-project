@@ -30,7 +30,6 @@ const Surveys = () => {
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  console.log(surveys);
 
   const handleShowModal = () => {
     dispatch(setShowQuestionModal(true));

@@ -13,7 +13,7 @@ import employees from "../../../api/employees";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  const employeesList = useAppSelector((state) => state.employees.employees);
+  
 
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
