@@ -13,12 +13,6 @@ const addSurvey = async (req: Request, res: Response) => {
       questions: req.body.questions,
     });
 
-    // console.log("survey: ", survey);
-    // res.status(200).json({
-    //   status: 200,
-    //   message: "survey saved successfully" + survey,
-    // })
-
     if (await newSurvey.save()) {
       res.status(200).json({
         status: 200,
@@ -32,15 +26,25 @@ const addSurvey = async (req: Request, res: Response) => {
     });
   }
 };
+
 const deleteSurvey = async (req: Request, res: Response) => {
-  res.send("delete Question");
-};
+  const {
+    params: { id: surveyId },
+  } = req;
+
+  console.log("surveyId-delete", surveyId);
+
+  try {
+    const result = await survey.deleteOne({ _id: surveyId });
+    return res.status(200).send("Survey deleted successfully");
+  } catch (error) {
+    return res.status(500).send("Error deleting survey");
+  };
+}
+
 const getAllSurveys = async (req: Request, res: Response) => {
   try {
-    // res.send("getting all surveys");
-    console.log("getting surveys");
     const getSurveys = await survey.find();
-    console.log("getSurvey", getSurveys);
     res.status(200).json(getSurveys);
   } catch (err: any) {
     res.status(400).json({
@@ -48,9 +52,8 @@ const getAllSurveys = async (req: Request, res: Response) => {
       message: err.message,
     });
   }
-
-  // res.send("gel all surveys");
 };
+
 const getOneSurvey = async (req: Request, res: Response) => {
   const {
     params: { id: surveyId },

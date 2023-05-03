@@ -12,6 +12,7 @@ import { removeSurvey } from "../../../features/survey/surveysSlice";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
 import AddQuestion from "../../hr/questionnaire/AddQuestions";
+import axios from "axios";
 
 const Surveys = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);
@@ -28,7 +29,6 @@ const Surveys = () => {
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  console.log(surveys);
 
   const handleShowModal = () => {
     dispatch(setShowQuestionModal(true));
@@ -39,6 +39,14 @@ const Surveys = () => {
 
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
+    axios
+      .delete(`http://localhost:5010/api/v1/surveys/${surveyId}`)
+      .then((response) => {
+        console.log("Response:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error submitting survey data:", error);
+      });
   };
 
   if (userRole === UserRole.HR) {

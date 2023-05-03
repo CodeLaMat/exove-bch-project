@@ -51,12 +51,28 @@ const CreateSurvey: React.FC = () => {
       });
 
     if (formSubmitted) {
-      console.log("formData: ", formData);
     }
   }, [setQuestionList, formSubmitted, formData]);
 
+  useEffect(() => {
+    const sendSurvey = (formData: FormData) => {
+      axios
+        .post("http://localhost:5010/api/v1/surveys", formData)
+        .then((response) => {
+          console.log("Survey data submitted successfully!");
+          navigate("/surveys");
+        })
+        .catch((error) => {
+          console.error("Error submitting survey data:", error);
+        });
+    }
+
+    if (formData.surveyName && formData.description && formData.questions.length > 0) {
+      sendSurvey(formData);
+    }
+  }, [formData, navigate]);
+
   const onchangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
-    //   setSurvey({ ...survey, [e.target.name]: e.target.value })
     if (e.target.name === "surveyName") {
       setSurveyName(e.target.value);
     } else {
@@ -65,12 +81,10 @@ const CreateSurvey: React.FC = () => {
   };
 
   const checkboxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked, value, id } = event.target;
+    const { name, checked, value} = event.target;
 
     if (checked) {
       setCheckedBoxes([...checkedBoxes, value]);
-      console.log("question list: ", questionList);
-      console.log("value: ", value);
     } else {
       setCheckedBoxes(checkedBoxes.filter((box) => box !== name));
     }
@@ -78,13 +92,10 @@ const CreateSurvey: React.FC = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-    setFormSubmitted(true);
-    console.log("checkedBoxes: ", checkedBoxes);
-    const checkedquestions = checkedBoxes;
-    console.log("checkedquestions: ", checkedquestions);
-    console.log("surveyName: ", surveyName);
-    console.log("description: ", description);
 
+    setFormSubmitted(true);
+  
+    const checkedquestions = checkedBoxes;
     const surveyQuestions = checkedquestions
       .map((checkedQuestion) => {
         return questionList.find(
@@ -92,28 +103,13 @@ const CreateSurvey: React.FC = () => {
         );
       })
       .filter((question) => question) as IQuestion[];
-
-    console.log("surveyQuestions: ", surveyQuestions);
-
     setFormData((prevState) => ({
       ...prevState,
       surveyName: surveyName,
       description: description,
       questions: surveyQuestions,
     }));
-
-    const endpointUrl = "http://localhost:5010/api/v1/surveys";
-
-    // Make the POST request with Axios
-    axios
-      .post(endpointUrl, formData)
-      .then((response) => {
-        console.log("Survey data submitted successfully!");
-        console.log("Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error submitting survey data:", error);
-      });
+    //The survey is sent in the useEffect when all formData fields are changed.
   };
 
   const questionsByCategory: QuestionsByCategory = questionList.reduce(
