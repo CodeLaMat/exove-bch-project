@@ -90,7 +90,7 @@ const SelectEmployee: React.FC = () => {
       <div className={classes.cardsContainer}>
         <div className={classes.cardContainer}>
           {" "}
-          <PageHeading pageTitle={t('Selected employee')} />
+          <PageHeading pageTitle={t("Selected employee")} />
           <div
             key={userID}
             className={classes.employeeCard}
@@ -119,9 +119,9 @@ const SelectEmployee: React.FC = () => {
         </div>
         <div className={classes.cardContainer}>
           {" "}
-          <PageHeading pageTitle={t('Manager')} />{" "}
+          <PageHeading pageTitle={t("Manager")} />{" "}
           <Button variant="standard" onClick={openModal}>
-          {t('Change Manager')}
+            {t("Change Manager")}
           </Button>
           <div key={manager} className={classes.employeeCard}>
             <div className={classes.employeeImage}>

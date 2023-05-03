@@ -25,7 +25,6 @@ const Users = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
@@ -52,16 +51,16 @@ const Users = () => {
   if (role === UserRole.HR) {
     return (
       <div className={classes.users_container}>
-        <PageHeading pageTitle={t('Employee list')}/>
+        <PageHeading pageTitle={t("Employee list")} />
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>#</th>
-              <th>{t('Full Name')}</th>
-              <th>{t('Title')}</th>
-              <th>{t('Department')}</th>
-              <th>{t('Last evaluation date')}</th>
-              <th>{t('Start evaluation')}</th>
+              <th>{t("Full Name")}</th>
+              <th>{t("Title")}</th>
+              <th>{t("Department")}</th>
+              <th>{t("Last evaluation date")}</th>
+              <th>{t("Start evaluation")}</th>
             </tr>
           </thead>
           <tbody>
@@ -81,7 +80,7 @@ const Users = () => {
                       type="button"
                       onClick={() => handleFormSendClick(employee._id)}
                     >
-                      {t('Start')}
+                      {t("Start")}
                     </Button>
                   </td>
                 </tr>

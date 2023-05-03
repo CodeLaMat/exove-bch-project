@@ -51,6 +51,32 @@ const CreateSurvey: React.FC = () => {
         console.error(error);
         // Add logic to handle the error if needed
       });
+
+    if (formSubmitted) {
+    }
+  }, [setQuestionList, formSubmitted, formData]);
+
+  useEffect(() => {
+    const sendSurvey = (formData: FormData) => {
+      axios
+        .post("http://localhost:5010/api/v1/surveys", formData)
+        .then((response) => {
+          console.log("Survey data submitted successfully!");
+          navigate("/surveys");
+        })
+        .catch((error) => {
+          console.error("Error submitting survey data:", error);
+        });
+    };
+
+    if (
+      formData.surveyName &&
+      formData.description &&
+      formData.questions.length > 0
+    ) {
+      sendSurvey(formData);
+    }
+  }, [formData, navigate]);
   }, [setQuestionList]);
 
   const onchangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -92,6 +118,9 @@ const CreateSurvey: React.FC = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+
+    setFormSubmitted(true);
+
 
     const checkedquestions = checkedBoxes;
     const surveyQuestions = checkedquestions

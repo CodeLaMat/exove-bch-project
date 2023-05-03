@@ -125,7 +125,7 @@ export interface ISurveyPacks {
 export interface ISurveypack {
   _id: string;
   createdAt: Date;
-  personBeingSurveyed: User["_id"];
+  personBeingSurveyed: string;
   survey: ISurvey[];
   employeesTakingSurvey: IParticipant[];
   deadline: Date;
