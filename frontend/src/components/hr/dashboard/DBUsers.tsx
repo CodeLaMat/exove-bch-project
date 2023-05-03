@@ -3,11 +3,11 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import Table from "react-bootstrap/Table";
 import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
-import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 const DBUsers = () => {
   const dispatch = useAppDispatch();
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
 
@@ -28,8 +28,8 @@ const DBUsers = () => {
         </tr>
       </thead>
       <tbody>
-        {employeesArray[0] &&
-          employeesArray[0].map((user, index) => (
+        {employeesArray &&
+          employeesArray.map((user, index) => (
             <tr key={index}>
               <td>{index + 1}</td>
               <td>

@@ -3,7 +3,7 @@ import { UserRole } from "../../../enum";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
-import classes from "./Surveys.module.css";
+import classes from "./SelectSurvey.module.css";
 import { Modal, Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
@@ -13,7 +13,7 @@ import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
 import AddQuestion from "../../hr/surveys/questionnaire/AddQuestions";
 
-const Surveys = () => {
+const SelectSurvey = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -49,17 +49,7 @@ const Surveys = () => {
         <PageHeading pageTitle="Survey forms" />
         <div className={classes.top}>
           <div className={classes.maincontent}>
-            <div className={classes.actions}>
-              <Button
-                variant="primary"
-                onClick={() => navigate("/createsurvey")}
-              >
-                Create new Form
-              </Button>{" "}
-              <Button variant="primary" onClick={handleShowModal}>
-                Add Question
-              </Button>
-            </div>
+            <div className={classes.actions}></div>
             <div className={classes.table_container}>
               <Table striped bordered hover size="sm">
                 <thead>
@@ -68,7 +58,7 @@ const Surveys = () => {
                     <th>Survey Name</th>
                     <th>Description</th>
                     <th>Questions</th>
-                    <th>Delete </th>
+                    <th>Select </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,7 +80,7 @@ const Surveys = () => {
                           type="button"
                           onClick={() => handleDelete(survey._id)}
                         >
-                          Delete Form
+                          Select Form
                         </Button>
                       </td>
                     </tr>
@@ -115,4 +105,4 @@ const Surveys = () => {
   return null;
 };
 
-export default Surveys;
+export default SelectSurvey;

@@ -10,7 +10,7 @@ import {
   selectParticipantsByIds,
 } from "../../../features/survey/paticipantsSlice";
 import { IParticipant } from "../../../types/dataTypes";
-import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 const ParticipantSelection = () => {
   const dispatch = useAppDispatch();
@@ -18,13 +18,13 @@ const ParticipantSelection = () => {
   const [currentUser, setCurrentUser] = useState<IEmployee | null>(null);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const employeesArray = Object.values(employees);
 
   //Sorting employees by name
-  const sortedEmployees = [...employeesArray[0]].sort((a, b) =>
+  const sortedEmployees = [...employeesArray].sort((a, b) =>
     a.firstName.localeCompare(b.firstName)
   );
   const selectedParticipants: IParticipant[] = useAppSelector(

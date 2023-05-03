@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useParams } from "react-router-dom";
-import SecondComponent from "./SecondComponent";
+import SelectSurvey from "./SelectSurvey";
 import classes from "./CreateForm.module.css";
 import { RootState } from "../../../app/store";
 import { IEmployee } from "../../../types/userTypes";
 import { ISurveypack } from "../../../types/dataTypes";
-import { updatePersonBeingSurveyed } from "../../../features/survey/surveyPackSlice";
+import { updatePersonBeingSurveyed } from "../../../features/survey/surveyPacksSlice";
 import SelectEmployee from "./SelectEmployee";
 import SelectParticipants from "./SelectParticipants";
 import Button from "../../shared/button/Button";
@@ -14,7 +14,7 @@ import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice
 
 const CreateForm: React.FC = () => {
   const dispatch = useAppDispatch();
-  const { userid } = useParams<any>();
+  const { userid } = useParams<{ userid: string }>();
   const surveyPacks = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
@@ -28,9 +28,9 @@ const CreateForm: React.FC = () => {
     },
     {
       key: "thirdStep",
-      label: "My Second Step",
+      label: "Select survey",
       isDone: false,
-      component: <SecondComponent />,
+      component: <SelectSurvey />,
     },
     {
       key: "secondStep",
@@ -38,23 +38,22 @@ const CreateForm: React.FC = () => {
       isDone: false,
       component: <SelectParticipants />,
     },
-
     {
       key: "finalStep",
       label: "My Final Step",
       isDone: false,
-      component: <SecondComponent />,
+      component: <SelectSurvey />,
     },
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
 
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const employeesArray = Object.values(employees);
 
   const getSelectedUser = () => {
-    const selectedUser = employeesArray[0].find(
+    const selectedUser = employeesArray.find(
       (employee) => employee._id === userid
     );
     if (selectedUser) {
@@ -74,35 +73,22 @@ const CreateForm: React.FC = () => {
   useEffect(() => {
     dispatch(initialiseSurveyPacks());
     getSelectedUser();
-  }, []);
+  }, [dispatch, userid]);
 
   const handleNext = () => {
-    if (steps[steps.length - 1].key === activeStep.key) {
-      alert("You have completed all steps.");
-      return;
-    }
-
     const index = steps.findIndex((x) => x.key === activeStep.key);
-    setSteps((prevStep) =>
-      prevStep.map((x) => {
-        if (x.key === activeStep.key) x.isDone = true;
-        return x;
-      })
-    );
-    setActiveStep(steps[index + 1]);
+    if (index < steps.length - 1) {
+      setActiveStep(steps[index + 1]);
+    } else {
+      alert("You have completed all steps.");
+    }
   };
 
   const handleBack = () => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
-    if (index === 0) return;
-
-    setSteps((prevStep) =>
-      prevStep.map((x) => {
-        if (x.key === activeStep.key) x.isDone = false;
-        return x;
-      })
-    );
-    setActiveStep(steps[index - 1]);
+    if (index > 0) {
+      setActiveStep(steps[index - 1]);
+    }
   };
 
   return (
@@ -111,22 +97,20 @@ const CreateForm: React.FC = () => {
       <div className={classes.box}>
         <div className={classes.steps}>
           <ul className="nav">
-            {steps.map((step, i) => {
-              return (
-                <li
-                  key={i}
-                  className={`${
-                    activeStep.key === step.key ? classes.active : ""
-                  } ${step.isDone ? classes.done : ""}`}
-                >
-                  <div>
-                    Step {i + 1}
-                    <br />
-                    <span>{step.label}</span>
-                  </div>
-                </li>
-              );
-            })}
+            {steps.map((step, i) => (
+              <li
+                key={i}
+                className={`${
+                  activeStep.key === step.key ? classes.active : ""
+                } ${step.isDone ? classes.done : ""}`}
+              >
+                <div>
+                  Step {i + 1}
+                  <br />
+                  <span>{step.label}</span>
+                </div>
+              </li>
+            ))}
           </ul>
         </div>
         <div className={classes.step_component}>{activeStep.component}</div>

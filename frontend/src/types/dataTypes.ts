@@ -72,10 +72,6 @@ export interface IParticipant {
   user: string;
 }
 
-export interface ISurveyPacks {
-  surveyPacks: ISurveypack[];
-}
-
 export type User = {
   _id: string;
   firstName?: string;
@@ -116,10 +112,14 @@ export interface IEmployee {
   image?: String;
 }
 
+export interface ISurveyPacks {
+  surveyPacks: ISurveypack[];
+}
+
 export interface ISurveypack {
   _id: string;
   createdAt: Date;
-  personBeingSurveyed: string;
+  personBeingSurveyed: User["_id"];
   survey: ISurvey[];
   employeesTakingSurvey: IParticipant[];
   deadline: Date;

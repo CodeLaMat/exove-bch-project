@@ -17,5 +17,5 @@
     "noEmit": true,
     "jsx": "react"
   },
-  "include": ["src", "../backend/src/middleware/auth.ts"]
+  "include": ["src", "../backend/src/middleware/auth.ts", "src/**/*.ts"]
 }

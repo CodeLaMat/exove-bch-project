@@ -14,7 +14,7 @@ import { useAppSelector } from "../../../hooks/hooks";
 const Feedbacks: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const employeesArray = Object.values(employees);
@@ -24,7 +24,7 @@ const Feedbacks: React.FC = () => {
   const surveyPacksArray = Object.values(surveyPacks);
 
   const getSurveyedPerson = (personId: string) => {
-    const employee = employeesArray[0].find(
+    const employee = employeesArray.find(
       (employee) => employee._id === personId
     );
     if (employee) {
@@ -34,7 +34,7 @@ const Feedbacks: React.FC = () => {
   };
 
   const getManager = (personId: string) => {
-    const employee = employeesArray[0].find(
+    const employee = employeesArray.find(
       (employee) => employee._id === personId
     );
     if (employee) {
@@ -85,7 +85,7 @@ const Feedbacks: React.FC = () => {
                 }
                 /{surveyPack.employeesTakingSurvey.length}
               </td>
-              <td>{getSurveyedPerson(surveyPack.manager)}</td>
+              <td>{getManager(surveyPack.manager)}</td>
               <td>{surveyPack.managerapproved.toString()}</td>
               <td>{surveyPack.status}</td>
               <td>

@@ -335,7 +335,38 @@ const showCurrentUser = async (req: Request, res: Response) => {
 //   res.send("show stats");
 // };
 
+const updateManager = async (req: Request, res: Response) => {
+  const { id: employeeId } = req.params;
+  const { managerId } = req.body;
+
+  const employee = await User.findOne({ _id: employeeId });
+  if (!employee) {
+    throw new NotFoundError(`Employee with ID ${employeeId} not found`);
+  }
+
+  const manager = await User.findOne({ _id: managerId });
+  if (!manager) {
+    throw new NotFoundError(`Manager with ID ${managerId} not found`);
+  }
+
+  if (employee.work) {
+    employee.work.reportsTo = managerId as User["_id"];
+  } else {
+    employee.work = {
+      reportsTo: managerId as User["_id"],
+    };
+  }
+
+  await employee.save();
+
+  res.status(StatusCodes.OK).json({
+    message: "Manager updated successfully",
+    employee: employee,
+  });
+};
+
 export {
+  updateManager,
   login,
   ldapLogin,
   getAllUsers,

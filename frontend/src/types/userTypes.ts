@@ -7,9 +7,6 @@ export interface IEmployee {
   surName: string;
   email: string;
   password: string;
-  displayName: string;
-  personal: Record<string, any>;
-  about: Record<string, any>;
   work: {
     reportsTo: User["_id"];
   };
@@ -19,7 +16,6 @@ export interface IEmployee {
   startDate: Date;
   role: UserRole;
   image: string;
-  selected?: boolean;
 }
 
 // export interface IEmployee {

@@ -22,13 +22,13 @@ const SelectParticipants: React.FC = () => {
   const selectedParticipants: IParticipant[] = useAppSelector(
     (state: RootState) => state.selectedParticipants.selectedParticipants
   );
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
   const employeesArray = Object.values(employees);
 
   // Sorting employees by name
-  const sortedEmployees = [...employeesArray[0]].sort((a, b) =>
+  const sortedEmployees = [...employeesArray].sort((a, b) =>
     a.firstName.localeCompare(b.firstName)
   );
 
