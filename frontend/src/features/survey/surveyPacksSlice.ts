@@ -1,8 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import {
   ISurveypack,
-  IParticipant,
-  User,
   ISurveyPacks,
   ICreateSurveyPack,
 } from "../../types/dataTypes";

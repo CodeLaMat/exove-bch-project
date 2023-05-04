@@ -10,6 +10,7 @@ import {
   approveParticipant,
   rejectParticipant,
 } from "../../../features/survey/paticipantsSlice";
+
 import Button from "../../shared/button/Button";
 import ParticipantSelectionModal from "./ParticipantSelectionModal";
 
@@ -32,7 +33,6 @@ const SelectParticipants: React.FC = () => {
     a.firstName.localeCompare(b.firstName)
   );
 
-  // Filter the sortedEmployees array to get the selected employees' extra information
   const participants = sortedEmployees.filter((employee) =>
     selectedParticipants.some(
       (participant) =>

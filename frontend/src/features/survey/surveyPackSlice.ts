@@ -24,13 +24,11 @@ interface ISurveyPackData {
 }
 
 interface ISurveyPackState {
-  surveyPack: any | null;
-  surveyPackData: ISurveyPackData;
+  surveyPack: ISurveyPackData;
 }
 
 const initialState: ISurveyPackState = {
-  surveyPack: null,
-  surveyPackData: {
+  surveyPack: {
     personBeingSurveyed: "",
     survey: "",
     employeesTakingSurvey: [],
@@ -47,31 +45,32 @@ const surveyPackSlice = createSlice({
   initialState,
   reducers: {
     setPersonBeingSurveyed: (state, action: PayloadAction<string>) => {
-      state.surveyPackData.personBeingSurveyed = action.payload;
+      state.surveyPack.personBeingSurveyed = action.payload;
     },
     setSurvey: (state, action: PayloadAction<string>) => {
-      state.surveyPackData.survey = action.payload;
+      state.surveyPack.survey = action.payload;
     },
     setEmployeesTakingSurvey: (
       state,
       action: PayloadAction<IEmployeesTakingSurvey[]>
     ) => {
-      state.surveyPackData.employeesTakingSurvey = action.payload;
+      state.surveyPack.employeesTakingSurvey = action.payload;
     },
     setDeadline: (state, action: PayloadAction<Date>) => {
-      state.surveyPackData.deadline = action.payload;
+      state.surveyPack.deadline = action.payload;
     },
     setStatus: (state, action: PayloadAction<SurveyPackStatus>) => {
-      state.surveyPackData.status = action.payload;
+      state.surveyPack.status = action.payload;
     },
-    setManager: (state, action: PayloadAction<string>) => {
-      state.surveyPackData.manager = action.payload;
+    setSurveyManager: (state, action: PayloadAction<string>) => {
+      state.surveyPack.manager = action.payload;
+      console.log("Set surveyPackManager worked");
     },
     setManagerApproved: (state, action: PayloadAction<boolean>) => {
-      state.surveyPackData.managerapproved = action.payload;
+      state.surveyPack.managerapproved = action.payload;
     },
     setHRApproved: (state, action: PayloadAction<boolean>) => {
-      state.surveyPackData.hrapproved = action.payload;
+      state.surveyPack.hrapproved = action.payload;
     },
     setSurveyPack: (state, action: PayloadAction<any>) => {
       state.surveyPack = action.payload;
@@ -84,11 +83,8 @@ export const createNewSurveyPack = createAsyncThunk(
   async (newSurveyPack: ICreateSurveyPack, { dispatch }) => {
     try {
       await surveyPackService.createSurveyPack(newSurveyPack);
-      // Dispatch action to update surveyPack state
       dispatch(setSurveyPack(newSurveyPack));
-    } catch (error) {
-      // Handle error
-    }
+    } catch (error) {}
   }
 );
 
@@ -97,7 +93,7 @@ export const {
   setDeadline,
   setEmployeesTakingSurvey,
   setHRApproved,
-  setManager,
+  setSurveyManager,
   setManagerApproved,
   setPersonBeingSurveyed,
   setStatus,

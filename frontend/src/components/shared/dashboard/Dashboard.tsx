@@ -13,12 +13,9 @@ import employees from "../../../api/employees";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  
 
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
-
-  console.log(employeesList);
 
   useEffect(() => {
     dispatch(initialiseEmployees());

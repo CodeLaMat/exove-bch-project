@@ -48,7 +48,7 @@ export interface ISurveys {
   surveys: ISurvey[];
 }
 
-export interface FormData {
+export interface SurveyFormData {
   surveyName: string;
   description: string;
   questions: IQuestion[];
@@ -99,23 +99,23 @@ export type User = {
 };
 
 export interface IEmployee {
-  _id: string;
-  firstName?: string;
-  surName?: string;
-  email?: string;
-  password?: string;
-  displayName?: string;
-  personal?: Record<string, any>;
-  about?: Record<string, any>;
-  work?: {
+  _id?: string;
+  firstName: string;
+  surName: string;
+  email: string;
+  password: string;
+  displayName: string;
+  personal: Record<string, any>;
+  about: Record<string, any>;
+  work: {
     reportsTo: string;
   };
-  title?: string;
-  department?: string;
-  site?: string;
-  startDate?: Date;
+  title: string;
+  department: string;
+  site: string;
+  startDate: Date;
   role: UserRole;
-  image?: String;
+  image: string;
 }
 
 export interface ISurveyPacks {

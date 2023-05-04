@@ -5,15 +5,12 @@ import { RootState } from "../../../app/store";
 import { useAppSelector } from "../../../hooks/hooks";
 import { useParams } from "react-router";
 import PageHeading from "../../pageHeading/PageHeading";
-import ParticipantSelectionModal from "./ParticipantSelectionModal";
 import ManagerSelectionModal from "./ManagerSelectionModal";
+import { setSurveyManager } from "../../../features/survey/surveyPackSlice";
 import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
-
-import {
-  updateManager,
-  updateManagerAsync,
-} from "../../../features/user/employeesSlice";
+import { updateManagerAsync } from "../../../features/user/employeesSlice";
+import Button from "../../shared/button/Button";
 
 const SelectEmployee: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -35,7 +32,6 @@ const SelectEmployee: React.FC = () => {
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
-
   const sortedEmployees = [...employees].sort((a, b) =>
     a.firstName.localeCompare(b.firstName)
   );
@@ -53,6 +49,7 @@ const SelectEmployee: React.FC = () => {
       setImage(image);
       setuserID(_id);
       setManager(work.reportsTo);
+      dispatch(setSurveyManager(work.reportsTo));
     }
   }, [userid, employees]);
 
@@ -119,7 +116,11 @@ const SelectEmployee: React.FC = () => {
           </div>
         </div>
         <div className={classes.cardContainer}>
-          <PageHeading pageTitle="Manager" />
+          {" "}
+          <PageHeading pageTitle="Manager" />{" "}
+          <Button variant="standard" onClick={openModal}>
+            Change Manager
+          </Button>
           <div key={manager} className={classes.employeeCard}>
             <div className={classes.employeeImage}>
               {managerImage === "" ? (
@@ -140,7 +141,6 @@ const SelectEmployee: React.FC = () => {
               </h5>
               <p>{managerTitle}</p>
             </div>
-            <button onClick={openModal}>Change Manager</button>
           </div>
         </div>
       </div>

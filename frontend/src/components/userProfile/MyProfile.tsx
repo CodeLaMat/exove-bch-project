@@ -6,24 +6,21 @@ import { IEmployee } from "../../types/userTypes";
 import { RootState } from "../../app/store";
 
 const MyProfile = () => {
-  const userEmail = useAppSelector((state) => state.loginUser.email);
-
-  const userData = useAppSelector((state) => state.loginUser.userData);
-  const email = userData[0].email;
-  const FullName = userData[0].name.join(" ");
+  const employees: IEmployee[] = useAppSelector(
+    (state: RootState) => state.employees.employees
+  );
+  const userData = useAppSelector((state) => state.loginUser.userData[0]);
+  const email = userData.email.join("");
+  const FullName = userData.name.join(" ");
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];
   const lastName = nameArray[1];
-  const employees: IEmployee[][] = useAppSelector(
-    (state: RootState) => state.employees.employees
-  );
-
-  const entries = Object.values(employees);
 
   const currentUser =
-    entries[0] && entries[0].find((entry) => entry.email === email);
-  console.log("userEmail:", userEmail);
-  console.log("employees:", entries);
+    employees && employees.find((entry) => entry.email === email);
+  console.log("userEmail:", email);
+  console.log("userData:", userData.email);
+  console.log("CurrentUser:", lastName[0]);
 
   if (!currentUser) {
     return <p>User not found.</p>;
@@ -42,16 +39,18 @@ const MyProfile = () => {
               <img
                 className={classes.roundImage}
                 src={currentUser.image}
-                alt={`${firstName} ${lastName}`}
+                alt={""}
               />
             ) : (
               <div className={classes.placeholder}>
-                <h2>{`${firstName[0]}${lastName[0]}`}</h2>
+                <h2>{`${firstName[0]} ${lastName[0]}`}</h2>
               </div>
             )}
           </div>
           <div className={classes.profileInfo}>
-            <h3>{FullName}</h3>
+            <h3>
+              <strong>Fullname:</strong> {FullName}
+            </h3>
             <p>
               {" "}
               <strong>Department: </strong>
@@ -64,17 +63,19 @@ const MyProfile = () => {
             </p>
             <p>
               {" "}
-              <strong>Phonenumber: </strong>
-              {/* {currentUser.phoneNumber} */} Phone number
+              <strong>Ste: </strong>
+              {currentUser.site}
             </p>
-            <ul>
-              <li>
-                <i className={classes.emailClassName}></i> {currentUser.email}
-              </li>
-              <li>
-                <i className={classes.roleClassName}></i> {currentUser.role}
-              </li>
-            </ul>
+            <p>
+              {" "}
+              <strong>Email: </strong>
+              {currentUser.email}
+            </p>
+            <p>
+              {" "}
+              <strong>Role: </strong>
+              {currentUser.role}
+            </p>
           </div>
         </div>
       </div>

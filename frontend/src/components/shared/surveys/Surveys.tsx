@@ -41,14 +41,6 @@ const Surveys = () => {
 
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
-    axios
-      .delete(`http://localhost:5010/api/v1/surveys/${surveyId}`)
-      .then((response) => {
-        console.log("Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error submitting survey data:", error);
-      });
   };
 
   if (role === UserRole.HR) {

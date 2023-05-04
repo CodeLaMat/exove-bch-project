@@ -12,8 +12,8 @@ import {
 } from "../../../types/dataTypes";
 import {
   createNewSurveyPack,
-  updatePersonBeingSurveyed,
-} from "../../../features/survey/surveyPacksSlice";
+  setPersonBeingSurveyed,
+} from "../../../features/survey/surveyPackSlice";
 import SelectEmployee from "./SelectEmployee";
 import SelectParticipants from "./SelectParticipants";
 import Button from "../../shared/button/Button";
@@ -21,23 +21,26 @@ import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice
 import CheckDataSend from "./CheckDataSend";
 
 const CreateForm: React.FC = () => {
-  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { userid } = useParams<{ userid: string }>();
   const userId = userid ?? "";
-  const surveyPacks = useAppSelector(
-    (state: RootState) => state.surveyPacks.surveyPacks
+  const surveyPack = useAppSelector(
+    (state: RootState) => state.surveyPack.surveyPack
   );
-  const [surveyPackData, setSurveyPackData] = useState({
-    personBeingSurveyed: "",
-    survey: "",
-    employeesTakingSurvey: [],
-    deadline: new Date(),
-    status: SurveyPackStatus.OPEN,
-    manager: "",
-    managerapproved: false,
-    hrapproved: false,
-  });
+  const {
+    personBeingSurveyed,
+    survey,
+    employeesTakingSurvey,
+    deadline,
+    status,
+    manager,
+    managerapproved,
+    hrapproved,
+  } = surveyPack;
+
+  console.log("Person being surveyed", personBeingSurveyed);
+  console.log("Manager", manager);
+  console.log("Survey", survey);
 
   const [steps, setSteps] = useState([
     {
@@ -52,12 +55,12 @@ const CreateForm: React.FC = () => {
       isDone: false,
       component: <SelectSurvey />,
     },
-    {
-      key: "secondStep",
-      label: "Select Participants",
-      isDone: false,
-      component: <SelectParticipants />,
-    },
+    // {
+    //   key: "secondStep",
+    //   label: "Select Participants",
+    //   isDone: false,
+    //   component: <SelectParticipants />,
+    // },
     {
       key: "finalStep",
       label: "Check Data",
@@ -66,22 +69,12 @@ const CreateForm: React.FC = () => {
     },
   ]);
   const [activeStep, setActiveStep] = useState(steps[0]);
-
-  const employees: IEmployee[] = useAppSelector(
-    (state: RootState) => state.employees.employees
-  );
-
-  useEffect(() => {
-    dispatch(initialiseSurveyPacks());
-    // getSelectedUser();
-  }, [dispatch, userid]);
-
   const handleNext = () => {
+    dispatch(setPersonBeingSurveyed(userId));
     const index = steps.findIndex((x) => x.key === activeStep.key);
     if (index < steps.length - 1) {
       setActiveStep(steps[index + 1]);
     } else {
-      // Check if it is the last step
       if (steps[steps.length - 1].key === activeStep.key) {
         handleFormSendClick(userId);
       } else {
@@ -89,7 +82,6 @@ const CreateForm: React.FC = () => {
       }
     }
   };
-
   const handleBack = () => {
     const index = steps.findIndex((x) => x.key === activeStep.key);
     if (index > 0) {
@@ -97,8 +89,16 @@ const CreateForm: React.FC = () => {
     }
   };
 
+  const employees: IEmployee[] = useAppSelector(
+    (state: RootState) => state.employees.employees
+  );
+
+  useEffect(() => {
+    dispatch(initialiseSurveyPacks());
+  }, [dispatch, userid]);
+
   const currentDate = new Date();
-  const deadline = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
+  // const deadline = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
   const handleFormSendClick = (userid: string) => {
     const selectedEmployee = employees.find(
@@ -106,14 +106,14 @@ const CreateForm: React.FC = () => {
     );
     if (selectedEmployee) {
       const newSurveyPack: ICreateSurveyPack = {
-        personBeingSurveyed: selectedEmployee._id,
-        survey: "",
-        employeesTakingSurvey: [],
+        personBeingSurveyed: personBeingSurveyed,
+        survey: survey,
+        employeesTakingSurvey: employeesTakingSurvey,
         deadline: deadline,
-        status: SurveyPackStatus.OPEN,
-        manager: "",
-        managerapproved: false,
-        hrapproved: false,
+        status: status,
+        manager: manager,
+        managerapproved: managerapproved,
+        hrapproved: hrapproved,
       };
       dispatch(createNewSurveyPack(newSurveyPack));
     }

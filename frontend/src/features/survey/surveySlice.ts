@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import questionsService from "../../api/questions";
 import { AppDispatch } from "../../app/store";
-import { IQuestion, ISurvey } from "../../types/dataTypes";
-
+import { IQuestion, ISurvey, SurveyFormData } from "../../types/dataTypes";
+import surveysService from "../../api/surveys";
 const initialSurveyState: ISurvey = {
   _id: "",
   surveyName: "",
@@ -23,19 +23,21 @@ export const surveySlice = createSlice({
     setQuestions: (state, action: PayloadAction<IQuestion[]>) => {
       state.questions = action.payload;
     },
-    getAllQuestions: (state, action: PayloadAction<IQuestion[]>) => {
-      state.questions = action.payload;
-    },
   },
 });
 
-export const { setName, setDescription, setQuestions, getAllQuestions } =
-  surveySlice.actions;
+export const { setName, setDescription, setQuestions } = surveySlice.actions;
 
 export const initialiseQuestions = () => {
   return async (dispatch: AppDispatch) => {
     const questions = (await questionsService.getAllQuestions()) as IQuestion[];
     dispatch(setQuestions(questions));
+  };
+};
+
+export const addSurvey = (newSurvey: SurveyFormData) => {
+  return async (dispatch: AppDispatch) => {
+    const survey = await surveysService.addSurvey(newSurvey);
   };
 };
 

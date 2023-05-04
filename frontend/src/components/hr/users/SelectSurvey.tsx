@@ -4,7 +4,6 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./SelectSurvey.module.css";
 import { InputGroup, Table } from "react-bootstrap";
-import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
 import { RootState } from "../../../app/store";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
@@ -12,6 +11,7 @@ import { setSurvey } from "../../../features/survey/surveyPackSlice";
 
 const SelectSurvey = () => {
   const dispatch = useAppDispatch();
+  const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null);
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
 
@@ -23,10 +23,9 @@ const SelectSurvey = () => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
 
-  const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null);
-
   const handleSelect = (survey: ISurvey) => {
     setSelectedSurvey(survey);
+    dispatch(setSurvey(survey._id));
   };
 
   console.log(selectedSurvey);
@@ -45,28 +44,22 @@ const SelectSurvey = () => {
           <div className={classes.maincontent}>
             <div className={classes.actions}></div>
             <div className={classes.table_container}>
-              <Table striped bordered hover size="sm">
+              <Table striped bordered hover size="md">
                 <thead>
                   <tr>
-                    <th>Survey ID</th>
                     <th>Survey Name</th>
                     <th>Description</th>
-                    <th>Questions</th>
+                    <th>Number of questions</th>
                     <th>Select</th>
                   </tr>
                 </thead>
                 <tbody>
                   {surveys.map((survey: ISurvey) => (
                     <tr key={survey._id}>
-                      <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>
                       <td>{survey.description}</td>
                       <td>
-                        <ul>
-                          {survey.questions.map((question) => (
-                            <li key={question._id}>{question.question}</li>
-                          ))}
-                        </ul>
+                        <ul>{survey.questions.length}</ul>
                       </td>
                       <td>
                         <InputGroup>
