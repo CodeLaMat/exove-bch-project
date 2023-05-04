@@ -36,7 +36,7 @@ const SelectParticipants: React.FC = () => {
   const participants = sortedEmployees.filter((employee) =>
     selectedParticipants.some(
       (participant) =>
-        participant.id === employee._id && participant.user === userid
+        participant.id === employee._id && participant.employee === userid
     )
   );
 

@@ -19,5 +19,5 @@ export enum URL {
   SURVEYS_URL = "http://localhost:5010/api/v1/surveys",
   LOGIN_URL = "http://localhost:5010/api/v1/users/auth/ldaplogin",
   LOGIN2_URL = "http://localhost:5000/auth",
-  SURVEYPACKS_URL = "http://localhost:5010/api/v1/surveyPack/",
+  SURVEYPACKS_URL = "http://localhost:5010/api/v1/surveyPack",
 }

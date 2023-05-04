@@ -15,15 +15,34 @@ interface EmployeesState {
 }
 
 const initialState: EmployeesState = {
-  selectedParticipants: [],
+  selectedParticipants: [
+    {
+      id: "643525bf44aa935872a3e400",
+      acceptanceStatus: "Pending",
+      isSurveyComplete: false,
+      employee: "643525bf44aa935872a3e415",
+    },
+    {
+      id: "643525bf44aa935872a3e401",
+      acceptanceStatus: "Pending",
+      isSurveyComplete: false,
+      employee: "643525bf44aa935872a3e415",
+    },
+    {
+      id: "643525bf44aa935872a3e403",
+      acceptanceStatus: "Pending",
+      isSurveyComplete: false,
+      employee: "643525bf44aa935872a3e415",
+    },
+  ],
   participantsApprovalStatus: {},
 };
 
 export const fetchEmployeesData = createAsyncThunk(
   "employees/fetchEmployeesData",
   async () => {
-    const surveyPacks = await employeesService.getAll();
-    return surveyPacks;
+    const employees = await employeesService.getAll();
+    return employees;
   }
 );
 
@@ -103,7 +122,7 @@ export const selectParticipantsByIds =
       id,
       acceptanceStatus: "Pending",
       isSurveyComplete: false,
-      user: userId,
+      employee: userId,
     }));
     dispatch(selectParticipant(participants));
   };

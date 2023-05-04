@@ -4,6 +4,7 @@ import {
   IParticipant,
   User,
   ISurveyPacks,
+  ICreateSurveyPack,
 } from "../../types/dataTypes";
 import { Dispatch, Action } from "redux";
 import { IEmployee } from "../../types/userTypes";
@@ -23,7 +24,7 @@ const initialState: ISurveyPacks = {
 export interface IEmployeesTakingSurvey {
   acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
-  employee: User;
+  employee: string;
 }
 
 const surveyPacksSlice = createSlice({
@@ -37,9 +38,7 @@ const surveyPacksSlice = createSlice({
         JSON.stringify(action.payload)
       );
     },
-    createSurveyPack: (state, action: PayloadAction<ISurveypack>) => {
-      state.surveyPacks.push(action.payload);
-    },
+
     updatePersonBeingSurveyed: (
       state,
       action: PayloadAction<{
@@ -65,17 +64,18 @@ export const initialiseSurveyPacks = () => {
   };
 };
 
-export const createNewSurveyPack = (surveyPack: ISurveypack) => {
-  return async (dispatch: Dispatch<Action>) => {
-    const newSurveyPack = await surveyPackService.createSurveyPack(surveyPack);
-    dispatch(createSurveyPack(newSurveyPack));
-  };
-};
+export const createNewSurveyPack = createAsyncThunk(
+  "surveyPacks/createNewSurveyPack",
+  async (newSurveyPack: ICreateSurveyPack, { dispatch }) => {
+    try {
+      await surveyPackService.createSurveyPack(newSurveyPack);
+    } catch (error) {
+      // Handle error
+    }
+  }
+);
 
-export const {
-  getAllSurveyPacks,
-  createSurveyPack,
-  updatePersonBeingSurveyed,
-} = surveyPacksSlice.actions;
+export const { getAllSurveyPacks, updatePersonBeingSurveyed } =
+  surveyPacksSlice.actions;
 
 export default surveyPacksSlice.reducer;

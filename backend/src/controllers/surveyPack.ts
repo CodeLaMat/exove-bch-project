@@ -15,11 +15,17 @@ const getAllSurveyPacks = async (req: Request, res: Response) => {
 };
 
 const createSurveyPack = async (req: Request, res: Response) => {
-  const surveyPack = await SurveyPack.create(req.body);
-  if (!surveyPack) {
-    throw new BadRequestError("Please complete the form");
+  try {
+    console.log("Request Body:", req.body);
+    const surveyPack = await SurveyPack.create(req.body);
+    if (!surveyPack) {
+      throw new BadRequestError("Please complete the form");
+    }
+    res.status(StatusCodes.CREATED).json({ surveyPack });
+  } catch (error) {
+    console.error("Error creating survey pack:", error);
+    throw new BadRequestError("Failed to create survey pack");
   }
-  res.status(StatusCodes.CREATED).json({ surveyPack });
 };
 
 const getSurveyPack = async (req: Request, res: Response) => {

@@ -12,6 +12,8 @@ const errorHandlerMiddleware = (
   res: Response,
   next: NextFunction
 ) => {
+  console.error(err.stack);
+
   if (isCustomAPIError(err) && err.statusCode !== undefined) {
     return res.status(err.statusCode).json({ msg: err.message });
   }

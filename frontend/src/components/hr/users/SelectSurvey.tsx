@@ -1,47 +1,41 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { UserRole } from "../../../enum";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
-import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./SelectSurvey.module.css";
-import { Modal, Table } from "react-bootstrap";
+import { InputGroup, Table } from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
 import { RootState } from "../../../app/store";
-import { removeSurvey } from "../../../features/survey/surveysSlice";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
-import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
-import AddQuestion from "../../hr/surveys/questionnaire/AddQuestions";
+import { setSurvey } from "../../../features/survey/surveyPackSlice";
 
 const SelectSurvey = () => {
-  const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
 
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
-  const surveysArray = Object.values(surveys);
-
-  console.log(surveysArray);
 
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  console.log(surveys);
 
-  const handleShowModal = () => {
-    dispatch(setShowQuestionModal(true));
-  };
-  const handleCloseModal = () => {
-    dispatch(setShowQuestionModal(false));
+  const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null);
+
+  const handleSelect = (survey: ISurvey) => {
+    setSelectedSurvey(survey);
   };
 
-  const handleDelete = (surveyId: string) => {
-    dispatch(removeSurvey(surveyId));
-  };
+  console.log(selectedSurvey);
+
+  useEffect(() => {
+    if (selectedSurvey) {
+      dispatch(setSurvey(selectedSurvey._id));
+    }
+  }, [dispatch, selectedSurvey]);
 
   if (role === UserRole.HR) {
     return (
@@ -58,11 +52,11 @@ const SelectSurvey = () => {
                     <th>Survey Name</th>
                     <th>Description</th>
                     <th>Questions</th>
-                    <th>Select </th>
+                    <th>Select</th>
                   </tr>
                 </thead>
                 <tbody>
-                  {surveysArray.map((survey: ISurvey) => (
+                  {surveys.map((survey: ISurvey) => (
                     <tr key={survey._id}>
                       <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>
@@ -75,13 +69,16 @@ const SelectSurvey = () => {
                         </ul>
                       </td>
                       <td>
-                        <Button
-                          variant="primary"
-                          type="button"
-                          onClick={() => handleDelete(survey._id)}
-                        >
-                          Select Form
-                        </Button>
+                        <InputGroup>
+                          <InputGroup.Radio
+                            aria-label="Radio button for following text input"
+                            type="radio"
+                            name="survey"
+                            value={survey}
+                            checked={selectedSurvey?._id === survey._id}
+                            onChange={() => handleSelect(survey)}
+                          />
+                        </InputGroup>
                       </td>
                     </tr>
                   ))}
@@ -89,15 +86,6 @@ const SelectSurvey = () => {
               </Table>
             </div>
           </div>
-        </div>
-        <div>
-          <Modal show={showQuestionModal} onHide={handleCloseModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>Add a question</Modal.Title>
-            </Modal.Header>
-            <AddQuestion />
-            <Modal.Footer></Modal.Footer>
-          </Modal>
         </div>
       </div>
     );

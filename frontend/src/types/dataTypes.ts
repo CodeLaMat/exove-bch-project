@@ -69,7 +69,13 @@ export interface IParticipant {
   id: string;
   acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
-  user: string;
+  employee: string;
+}
+
+export interface IEmployeesTakingSurvey {
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
+  isSurveyComplete: boolean;
+  employee: string;
 }
 
 export type User = {
@@ -121,6 +127,19 @@ export interface ISurveypack {
   createdAt: Date;
   personBeingSurveyed: User["_id"];
   survey: ISurvey[];
+  employeesTakingSurvey: IParticipant[];
+  deadline: Date;
+  status: SurveyPackStatus;
+  manager: string;
+  managerapproved: boolean;
+  hrapproved: boolean;
+}
+
+export interface ICreateSurveyPack {
+  _id?: string;
+  createdAt?: string;
+  personBeingSurveyed: User["_id"];
+  survey: string;
   employeesTakingSurvey: IParticipant[];
   deadline: Date;
   status: SurveyPackStatus;

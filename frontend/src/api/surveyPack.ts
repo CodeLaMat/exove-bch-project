@@ -1,24 +1,35 @@
 import axios from "axios";
 import { URL } from "../enum";
-import { IParticipant, ISurvey, ISurveypack, User } from "../types/dataTypes";
+import {
+  ICreateSurveyPack,
+  IEmployeesTakingSurvey,
+  ISurvey,
+  User,
+} from "../types/dataTypes";
+import Cookies from "js-cookie";
 
 const getAll = async () => {
-  try {
-    const response = await axios.get(URL.SURVEYPACKS_URL);
-    console.log("API response:", response);
-    return response.data;
-  } catch (error) {
-    console.error("Error fetching survey packs:", error);
-    throw error;
-  }
+  const token = Cookies.get("token");
+  const response = await axios.get(URL.SURVEYPACKS_URL, {
+    withCredentials: true, // set this to true to send cookies with the request
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  });
+  return response.data;
 };
 
 const createSurveyPack = async (
-  surveyPack: ISurveypack
-): Promise<ISurveypack> => {
+  surveyPack: ICreateSurveyPack
+): Promise<ICreateSurveyPack> => {
+  const token = Cookies.get("token");
   try {
-    const response = await axios.post(URL.SURVEYPACKS_URL, surveyPack);
-    console.log("API response:", response);
+    const response = await axios.post(URL.SURVEYPACKS_URL, surveyPack, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    console.log("API response:", response.data);
     return response.data;
   } catch (error) {
     console.error("Error creating survey pack:", error);
@@ -30,11 +41,17 @@ const updatePersonBeingSurveyed = async (
   surveyPackId: string,
   personBeingSurveyed: User[]
 ): Promise<void> => {
+  const token = Cookies.get("token");
   try {
     const response = await axios.patch(
       `${URL.SURVEYPACKS_URL}/surveypacks/${surveyPackId}`,
       {
         personBeingSurveyed,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     console.log("API response:", response);
@@ -48,11 +65,17 @@ const updateSurvey = async (
   surveyPackId: string,
   survey: ISurvey[]
 ): Promise<void> => {
+  const token = Cookies.get("token");
   try {
     const response = await axios.patch(
       `${URL.SURVEYPACKS_URL}/surveypacks/${surveyPackId}`,
       {
         survey,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     console.log("API response:", response);
@@ -64,13 +87,19 @@ const updateSurvey = async (
 
 const addParticipant = async (
   surveyPackId: string,
-  participant: IParticipant
+  participant: IEmployeesTakingSurvey
 ): Promise<void> => {
+  const token = Cookies.get("token");
   try {
     const response = await axios.post(
       `${URL.SURVEYPACKS_URL}/surveypacks/${surveyPackId}/participants`,
       {
         participant,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
       }
     );
     console.log("API response:", response);

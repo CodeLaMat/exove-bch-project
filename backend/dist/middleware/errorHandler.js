@@ -6,6 +6,7 @@ const isCustomAPIError = (err) => {
     return err instanceof errors_1.CustomAPIError;
 };
 const errorHandlerMiddleware = (err, req, res, next) => {
+    console.error(err.stack);
     if (isCustomAPIError(err) && err.statusCode !== undefined) {
         return res.status(err.statusCode).json({ msg: err.message });
     }

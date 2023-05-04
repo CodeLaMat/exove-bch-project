@@ -10,6 +10,14 @@ import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
+import { createNewSurveyPack } from "../../../features/survey/surveyPacksSlice";
+import {
+  ICreateSurveyPack,
+  IParticipant,
+  ISurvey,
+  SurveyPackStatus,
+  User,
+} from "../../../types/dataTypes";
 
 const Users = () => {
   const dispatch = useAppDispatch();
@@ -25,6 +33,9 @@ const Users = () => {
   const sortedEmployees = [...employeesArray].sort((a, b) =>
     (a.firstName || "").localeCompare(b.firstName || "")
   );
+
+  const currentDate = new Date();
+  const deadline = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
   const handleFormSendClick = (userid: string) => {
     navigate(`/sendForm/${userid}`);
