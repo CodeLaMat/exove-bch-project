@@ -109,7 +109,6 @@ const Feedbacks: React.FC = () => {
       </Table>
     </div>
   );
-
   return null;
 };
 
