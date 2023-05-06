@@ -18,6 +18,8 @@ const Dashboard = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
 
+  console.log(employeesList);
+
   useEffect(() => {
     dispatch(initialiseEmployees());
     dispatch(initialiseQuestions());
@@ -28,23 +30,23 @@ const Dashboard = () => {
       <div>
         <div>
           <div>
-            <PageHeading pageTitle={t('Dashboard')} />{" "}
+            <PageHeading pageTitle={t("Dashboard")} />{" "}
           </div>
           <div className={classes.dashboard_container}>
             <div className={classes.dashboard_chart}>
-              <h2>{t('Survey Summary')}</h2>
+              <h2>{t("Survey Summary")}</h2>
               <SurveySummaryChart />
             </div>{" "}
             <div className={classes.dashboard_gap}></div>
             <div className={classes.dashboard_progress}>
-              <h2>{t('Survey Progress')}</h2>
+              <h2>{t("Survey Progress")}</h2>
               <ProgressBar />
             </div>
             <div className={classes.dashboard_surList}>
-              <h2>{t('List of Surveys')}</h2> <DBSurveyList />
+              <h2>{t("List of Surveys")}</h2> <DBSurveyList />
             </div>{" "}
             <div className={classes.dashboard_emplList}>
-              <h2>{t('Employees')}</h2>
+              <h2>{t("Employees")}</h2>
 
               <DBUsers />
             </div>

@@ -25,9 +25,9 @@ const DBUsers = () => {
       <thead>
         <tr>
           <th>#</th>
-          <th>{t('Full Name')}</th>
-          <th>{t('Title')}</th>
-          <th>{t('Department')}</th>
+          <th>{t("Full Name")}</th>
+          <th>{t("Title")}</th>
+          <th>{t("Department")}</th>
         </tr>
       </thead>
       <tbody>
