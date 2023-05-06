@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showCurrentUser = exports.logout = exports.getOneUser = exports.getAllLdapUsers = exports.getAllUsers = exports.ldapLogin = exports.login = void 0;
+exports.showCurrentUser = exports.logout = exports.getOneUser = exports.getAllLdapUsers = exports.getAllUsers = exports.ldapLogin = exports.login = exports.updateManager = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const errors_1 = require("../errors");
 const http_status_codes_1 = require("http-status-codes");
@@ -269,3 +269,38 @@ const showCurrentUser = async (req, res) => {
     res.status(http_status_codes_1.StatusCodes.OK).json({ user: req.user });
 };
 exports.showCurrentUser = showCurrentUser;
+// const register = async (req: Request, res: Response) => {
+//   res.send("user register");
+// };
+// const updateUser = async (req: Request, res: Response) => {
+//   res.send("show stats");
+// };
+// const deleteUser = async (req: Request, res: Response) => {
+//   res.send("show stats");
+// };
+const updateManager = async (req, res) => {
+    const { id: employeeId } = req.params;
+    const { managerId } = req.body;
+    const employee = await user_1.default.findOne({ _id: employeeId });
+    if (!employee) {
+        throw new errors_1.NotFoundError(`Employee with ID ${employeeId} not found`);
+    }
+    const manager = await user_1.default.findOne({ _id: managerId });
+    if (!manager) {
+        throw new errors_1.NotFoundError(`Manager with ID ${managerId} not found`);
+    }
+    if (employee.work) {
+        employee.work.reportsTo = managerId;
+    }
+    else {
+        employee.work = {
+            reportsTo: managerId,
+        };
+    }
+    await employee.save();
+    res.status(http_status_codes_1.StatusCodes.OK).json({
+        message: "Manager updated successfully",
+        employee: employee,
+    });
+};
+exports.updateManager = updateManager;
