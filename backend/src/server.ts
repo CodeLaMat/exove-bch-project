@@ -16,6 +16,7 @@ import questionRouter from "./routes/questions";
 import responsesRouter from "./routes/responses";
 import surveyRouter from "./routes/surveys";
 import surveyPackRouter from "./routes/surveyPack";
+import sendEmailRouter from "./routes/sendEmail";
 
 //middleware
 import notFoundMiddleware from "./middleware/notFound";
@@ -44,6 +45,7 @@ app.use("/api/v1/responses", responsesRouter);
 app.use("/api/v1/surveys", surveyRouter);
 app.use("/api/v1/questions", questionRouter);
 app.use("/api/v1/surveyPack", surveyPackRouter);
+app.use("/api/v1/send", sendEmailRouter);
 
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);

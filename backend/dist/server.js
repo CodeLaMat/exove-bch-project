@@ -19,6 +19,7 @@ const questions_1 = __importDefault(require("./routes/questions"));
 const responses_1 = __importDefault(require("./routes/responses"));
 const surveys_1 = __importDefault(require("./routes/surveys"));
 const surveyPack_1 = __importDefault(require("./routes/surveyPack"));
+const sendEmail_1 = __importDefault(require("./routes/sendEmail"));
 //middleware
 const notFound_1 = __importDefault(require("./middleware/notFound"));
 const errorHandler_1 = __importDefault(require("./middleware/errorHandler"));
@@ -39,6 +40,7 @@ app.use("/api/v1/responses", responses_1.default);
 app.use("/api/v1/surveys", surveys_1.default);
 app.use("/api/v1/questions", questions_1.default);
 app.use("/api/v1/surveyPack", surveyPack_1.default);
+app.use("/api/v1/send", sendEmail_1.default);
 app.use(notFound_1.default);
 app.use(errorHandler_1.default);
 const start = async () => {
