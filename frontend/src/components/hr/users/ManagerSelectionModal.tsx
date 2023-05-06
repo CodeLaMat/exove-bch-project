@@ -4,7 +4,6 @@ import classes from "./ParticipantSelectionModal.module.css";
 import { IEmployee } from "../../../types/userTypes";
 import { useTranslation } from "react-i18next";
 
-
 type ManagerSelectionModalProps = {
   isOpen: boolean;
   onRequestClose: () => void;
@@ -30,7 +29,7 @@ const ManagerSelectionModal: React.FC<ManagerSelectionModalProps> = ({
       dialogClassName={classes.overlay}
     >
       <Modal.Header closeButton>
-        <Modal.Title>{t('Select a Manager')}</Modal.Title>
+        <Modal.Title>{t("Select a Manager")}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className={classes.employeeList}>

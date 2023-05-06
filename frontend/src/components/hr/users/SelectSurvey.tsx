@@ -41,7 +41,7 @@ const SelectSurvey = () => {
   if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
-        <PageHeading pageTitle={t('Survey forms')} />
+        <PageHeading pageTitle={t("Survey forms")} />
         <div className={classes.top}>
           <div className={classes.maincontent}>
             <div className={classes.actions}></div>
@@ -49,10 +49,10 @@ const SelectSurvey = () => {
               <Table striped bordered hover size="md">
                 <thead>
                   <tr>
-                    <th>{t('Survey Name')}</th>
-                    <th>{t('Description')}</th>
-                    <th>{t('Number of questions')}</th>
-                    <th>{t('Select')}</th>
+                    <th>{t("Survey Name")}</th>
+                    <th>{t("Description")}</th>
+                    <th>{t("Number of questions")}</th>
+                    <th>{t("Select")}</th>
                   </tr>
                 </thead>
                 <tbody>
