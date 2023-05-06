@@ -7,12 +7,12 @@ import ProgressBar from "../../hr/dashboard/ProgressBar";
 import DBUsers from "../../hr/dashboard/DBUsers";
 import DBSurveyList from "../../hr/dashboard/DBSurveyList";
 import { UserRole } from "../../../enum";
-import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
+import employees from "../../../api/employees";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
-  
 
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");

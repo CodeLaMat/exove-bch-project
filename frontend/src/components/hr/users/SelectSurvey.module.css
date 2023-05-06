@@ -1,0 +1,40 @@
+.surveys_container {
+  width: 90%;
+  height: 100%;
+  padding: 2rem;
+  margin: auto;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.top {
+  display: flex;
+  justify-content: center;
+  margin-top: 4rem;
+  align-items: center;
+  padding: 20px;
+  overflow-y: scroll;
+  height: 50vh;
+}
+
+.actions {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.table_container {
+  overflow-x: auto;
+  margin-top: 14rem;
+}
+
+th {
+  font-weight: bold;
+  text-align: left;
+}
+
+td {
+  vertical-align: middle;
+  padding: 10px;
+  margin: 10px;
+}

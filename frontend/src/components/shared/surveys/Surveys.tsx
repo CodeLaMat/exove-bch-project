@@ -18,13 +18,15 @@ const Surveys = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
-  const userRole = selectedRole.join("");
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
 
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
   const surveysArray = Object.values(surveys);
+
+  console.log(surveysArray);
 
   useEffect(() => {
     dispatch(initialiseSurveys());
@@ -39,17 +41,9 @@ const Surveys = () => {
 
   const handleDelete = (surveyId: string) => {
     dispatch(removeSurvey(surveyId));
-    axios
-      .delete(`http://localhost:5010/api/v1/surveys/${surveyId}`)
-      .then((response) => {
-        console.log("Response:", response.data);
-      })
-      .catch((error) => {
-        console.error("Error submitting survey data:", error);
-      });
   };
 
-  if (userRole === UserRole.HR) {
+  if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
         <PageHeading pageTitle="Survey forms" />

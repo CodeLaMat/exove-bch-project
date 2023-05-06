@@ -14,9 +14,10 @@ export type QuestionsByCategory = {
   [key in Categories]: IQuestion[];
 };
 
-export enum surveyStatus {
-  COMPLETED = "Completed",
+export enum SurveyPackStatus {
   OPEN = "Open",
+  INPROGRESS = "in_progress",
+  CLOSED = "Closed",
 }
 
 export enum Question_Type {
@@ -47,7 +48,7 @@ export interface ISurveys {
   surveys: ISurvey[];
 }
 
-export interface FormData {
+export interface SurveyFormData {
   surveyName: string;
   description: string;
   questions: IQuestion[];
@@ -66,21 +67,83 @@ export type RouteConfig = {
 
 export interface IParticipant {
   id: string;
-  acceptenceStatus: "Pending" | "Accepted" | "Declined";
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
-  user: "";
+  employee: string;
+}
+
+export interface IEmployeesTakingSurvey {
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
+  isSurveyComplete: boolean;
+  employee: string;
+}
+
+export type User = {
+  _id: string;
+  firstName?: string;
+  surName?: string;
+  email?: string;
+  password?: string;
+  displayName?: string;
+  personal?: Record<string, any>;
+  about?: Record<string, any>;
+  work?: {
+    reportsTo: string;
+  };
+  title?: string;
+  department?: string;
+  site?: string;
+  startDate?: Date;
+  role: UserRole;
+  image?: String;
+};
+
+export interface IEmployee {
+  _id?: string;
+  firstName: string;
+  surName: string;
+  email: string;
+  password: string;
+  displayName: string;
+  personal: Record<string, any>;
+  about: Record<string, any>;
+  work: {
+    reportsTo: string;
+  };
+  title: string;
+  department: string;
+  site: string;
+  startDate: Date;
+  role: UserRole;
+  image: string;
+}
+
+export interface ISurveyPacks {
+  surveyPacks: ISurveypack[];
 }
 
 export interface ISurveypack {
   _id: string;
-  creationDate: string;
-  updateDate: string;
-  personBeingSurveyed: string;
+  createdAt: Date;
+  personBeingSurveyed: User["_id"];
   survey: ISurvey[];
-  participants: IParticipant[];
-  deadline: string;
-  status: "open" | "closed" | "inprogress";
+  employeesTakingSurvey: IParticipant[];
+  deadline: Date;
+  status: SurveyPackStatus;
+  manager: string;
   managerapproved: boolean;
   hrapproved: boolean;
-  manager: string[];
+}
+
+export interface ICreateSurveyPack {
+  _id?: string;
+  createdAt?: string;
+  personBeingSurveyed: User["_id"];
+  survey: string;
+  employeesTakingSurvey: IParticipant[];
+  deadline: Date;
+  status: SurveyPackStatus;
+  manager: string;
+  managerapproved: boolean;
+  hrapproved: boolean;
 }

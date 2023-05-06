@@ -8,14 +8,15 @@ import Button from "../../shared/button/Button";
 import Form from "react-bootstrap/Form";
 import {
   IQuestion,
-  FormData,
+  SurveyFormData,
   QuestionsByCategory,
 } from "../../../types/dataTypes";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
 import { Modal } from "react-bootstrap";
-import AddQuestion from "../questionnaire/AddQuestions";
+import AddQuestions from "../questionnaire/AddQuestions";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
+import { addSurvey } from "../../../features/survey/surveySlice";
 
 const CreateSurvey: React.FC = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);
@@ -24,12 +25,11 @@ const CreateSurvey: React.FC = () => {
   const [surveyName, setSurveyName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
-  const [formData, setFormData] = useState<FormData>({
+  const [formData, setFormData] = useState<SurveyFormData>({
     surveyName: "",
     description: "",
     questions: [],
   });
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const navigate = useNavigate();
 
   const handleShowModal = () => {
@@ -49,28 +49,7 @@ const CreateSurvey: React.FC = () => {
         console.error(error);
         // Add logic to handle the error if needed
       });
-
-    if (formSubmitted) {
-    }
-  }, [setQuestionList, formSubmitted, formData]);
-
-  useEffect(() => {
-    const sendSurvey = (formData: FormData) => {
-      axios
-        .post("http://localhost:5010/api/v1/surveys", formData)
-        .then((response) => {
-          console.log("Survey data submitted successfully!");
-          navigate("/surveys");
-        })
-        .catch((error) => {
-          console.error("Error submitting survey data:", error);
-        });
-    }
-
-    if (formData.surveyName && formData.description && formData.questions.length > 0) {
-      sendSurvey(formData);
-    }
-  }, [formData, navigate]);
+  }, [setQuestionList]);
 
   const onchangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.name === "surveyName") {
@@ -81,7 +60,7 @@ const CreateSurvey: React.FC = () => {
   };
 
   const checkboxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, checked, value} = event.target;
+    const { name, checked, value } = event.target;
 
     if (checked) {
       setCheckedBoxes([...checkedBoxes, value]);
@@ -90,11 +69,28 @@ const CreateSurvey: React.FC = () => {
     }
   };
 
+  const sendSurvey = async (formData: SurveyFormData) => {
+    try {
+      await dispatch(addSurvey(formData));
+      console.log("Survey data submitted successfully!");
+      navigate("/surveys");
+    } catch (error) {
+      console.error("Error submitting survey data:", error);
+    }
+  };
+  useEffect(() => {
+    if (
+      formData.surveyName &&
+      formData.description &&
+      formData.questions.length > 0
+    ) {
+      sendSurvey(formData);
+    }
+  }, [formData, navigate]);
+
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
 
-    setFormSubmitted(true);
-  
     const checkedquestions = checkedBoxes;
     const surveyQuestions = checkedquestions
       .map((checkedQuestion) => {
@@ -103,13 +99,12 @@ const CreateSurvey: React.FC = () => {
         );
       })
       .filter((question) => question) as IQuestion[];
-    setFormData((prevState) => ({
-      ...prevState,
+
+    setFormData({
       surveyName: surveyName,
       description: description,
       questions: surveyQuestions,
-    }));
-    //The survey is sent in the useEffect when all formData fields are changed.
+    });
   };
 
   const questionsByCategory: QuestionsByCategory = questionList.reduce(
@@ -212,7 +207,7 @@ const CreateSurvey: React.FC = () => {
           <Modal.Header closeButton>
             <Modal.Title>Add a question</Modal.Title>
           </Modal.Header>
-          <AddQuestion />
+          <AddQuestions />
           <Modal.Footer></Modal.Footer>
         </Modal>
       </div>

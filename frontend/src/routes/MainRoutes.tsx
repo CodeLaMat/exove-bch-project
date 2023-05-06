@@ -15,11 +15,13 @@ import Feedbacks from "../components/shared/feedbacks/Feedbacks";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
 import FeedbackSingle from "../components/shared/feedbacks/FeedbackSingle";
-import CreateForm from "../components/shared/users/CreateForm";
+
+import ParticipantSelection from "../components/user/participants/SelectParticipants";
+import CreateForm from "../components/hr/users/CreateForm";
 
 const MainRoutes = () => {
-  const { selectedRole } = useAppSelector((state) => state.loginUser);
-  const userRole = selectedRole.join("");
+  const userData = useAppSelector((state) => state.loginUser.userData);
+  const role = userData[0].role.join("");
 
   return (
     <div>
@@ -32,11 +34,15 @@ const MainRoutes = () => {
           <Route
             path="/createsurvey"
             element={
-              userRole === UserRole.HR ? <CreateSurvey /> : <Navigate to="/" />
+              role === UserRole.HR ? <CreateSurvey /> : <Navigate to="/" />
             }
           />
           <Route path="/users" element={<Users />}></Route>
           <Route path="/feedbacks" element={<Feedbacks />}></Route>
+          <Route
+            path="/participants"
+            element={<ParticipantSelection />}
+          ></Route>
           <Route path="/surveyPack/:id" element={<FeedbackSingle />}></Route>
           <Route path="/sendForm/:userid" element={<CreateForm />}></Route>
           <Route path="/analytics" element={<Analytics />}></Route>

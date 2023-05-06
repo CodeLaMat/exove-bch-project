@@ -9,7 +9,7 @@
 
 .box {
   border: 1px solid #ddd;
-  height: 80vh;
+  height: 100%;
 }
 .box .steps {
   border-bottom: 1px solid #ddd;
@@ -63,20 +63,22 @@
   border-left: 30px solid #20a8d8;
 }
 .box .steps ul li.active div {
-  border-color: #167495 !important;
+  border-color: #081a51 !important;
   color: #fff !important;
-  background: #167495 !important;
+  background: #081a51 !important;
 }
 .box .steps ul li.active div::after {
-  border-left: 30px solid #167495;
+  border-left: 30px solid #081a51;
 }
 
 .box .step_component {
-  padding: 20px;
-  height: 200px;
+  margin: 20px;
+  padding: 10px;
+  /* height: 430px; */
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow-x: auto;
 }
 .box .btn_component {
   padding: 20px;

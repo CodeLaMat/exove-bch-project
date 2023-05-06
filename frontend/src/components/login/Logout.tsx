@@ -4,7 +4,8 @@ import { useNavigate } from "react-router-dom";
 import Button from "../shared/button/Button";
 import classes from "./Logout.module.css";
 import { setIsAuthenticated } from "../../features/login/loginSlice";
-import { useAppDispatch, useAppSelector } from "../../hooks/hooks";
+import { useAppDispatch } from "../../hooks/hooks";
+import Cookies from "js-cookie";
 
 const LogoutPage = () => {
   const dispatch = useAppDispatch();
@@ -13,12 +14,8 @@ const LogoutPage = () => {
 
   const handleLogout = (event: React.FormEvent<HTMLButtonElement>) => {
     event.preventDefault();
-
-    sessionStorage.removeItem("token");
-    sessionStorage.removeItem("userRole");
-    sessionStorage.removeItem("userEmail");
-    sessionStorage.removeItem("isAuthenticated");
     axios.defaults.headers.common["Authorization"] = "";
+    Cookies.remove("token");
     dispatch(setIsAuthenticated(false));
   };
 

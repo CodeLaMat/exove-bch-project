@@ -3,8 +3,13 @@ import surveysService from "../../api/surveys";
 import { ISurvey, ISurveys } from "../../types/dataTypes";
 import { AppDispatch } from "../../app/store";
 
+const storedSurveysString = sessionStorage.getItem("surveys");
+const storedSurveys = storedSurveysString
+  ? JSON.parse(storedSurveysString)
+  : [];
+
 const initialSurveysState: ISurveys = {
-  surveys: [],
+  surveys: storedSurveys,
 };
 
 export const surveysSlice = createSlice({
@@ -13,7 +18,7 @@ export const surveysSlice = createSlice({
   reducers: {
     getAllSurveys: (state, action: PayloadAction<ISurvey[]>) => {
       state.surveys = action.payload;
-      // sessionStorage.setItem("surveys", JSON.stringify(action.payload));
+      sessionStorage.setItem("surveys", JSON.stringify(action.payload));
     },
     deleteSurvey: (state, action: PayloadAction<string>) => {
       state.surveys = state.surveys.filter(
@@ -27,8 +32,8 @@ export const { getAllSurveys } = surveysSlice.actions;
 
 export const initialiseSurveys = () => {
   return async (dispatch: AppDispatch) => {
-      const surveys = await surveysService.getAll();
-      dispatch(getAllSurveys(surveys));
+    const surveys = await surveysService.getAll();
+    dispatch(getAllSurveys(surveys));
   };
 };
 

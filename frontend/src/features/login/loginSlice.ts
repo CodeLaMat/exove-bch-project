@@ -1,36 +1,46 @@
-import { UserRole } from "../../enum";
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
+import jwt_decode from "jwt-decode";
 import { ILogin } from "../../types/loginTypes";
-
+import { IUser } from "../../types/loginTypes";
 import axios from "axios";
 import { URL } from "../../enum";
-
-// interface LoginCredentials {
-//   email: string;
-//   password: string;
-// }
+import Cookies from "js-cookie";
 
 interface LdapLoginCredentials {
   username: string;
   password: string;
 }
-export type User = {
-  id: number;
-  userName: string;
-  surName: string;
-  role: string;
-  email: string;
+
+const checkAuthStatus = () => {
+  const token = Cookies.get("token");
+  if (token) {
+    const decodedToken: { [key: string]: any } = jwt_decode(token);
+    const userData = Object.values(decodedToken) as IUser[];
+    const expirationTime = Number(userData[2]);
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (expirationTime > currentTime) {
+      return { userData, isAuthenticated: true };
+    }
+  }
+  return { userData: [], isAuthenticated: false };
 };
 
-const isLoggedInString = sessionStorage.getItem("isAuthenticated");
+const removeExpiredToken = () => {
+  const token = Cookies.get("token");
+  if (token) {
+    const decodedToken: { [key: string]: any } = jwt_decode(token);
+    const expirationTime = Number(decodedToken.exp);
+    const currentTime = Math.floor(Date.now() / 1000);
+    if (expirationTime <= currentTime) {
+      Cookies.remove("token");
+    }
+  }
+};
+removeExpiredToken();
 
 const initialState: ILogin = {
-  isAuthenticated: Boolean(isLoggedInString) || false,
-  selectedRole: (sessionStorage.getItem("userRole") as UserRole) || "",
-  userName: "",
-  surName: "",
-  email: sessionStorage.getItem("userEmail"),
-  userData: [] as User[],
+  isAuthenticated: checkAuthStatus().isAuthenticated,
+  userData: checkAuthStatus().userData,
 };
 
 export const loginSlice = createSlice({
@@ -38,63 +48,31 @@ export const loginSlice = createSlice({
   initialState,
   reducers: {
     setIsAuthenticated: (state, action: PayloadAction<boolean>) => {
-      sessionStorage.setItem("token", action.payload ? "true" : "");
       state.isAuthenticated = action.payload;
     },
-    setSelectedRole: (state, action: PayloadAction<UserRole>) => {
-      sessionStorage.setItem("userRole", action.payload);
-      state.selectedRole = action.payload;
-    },
-    setUserName: (state, action: PayloadAction<string>) => {
-      state.userName = action.payload;
-    },
-    setSurName: (state, action: PayloadAction<string>) => {
-      state.surName = action.payload;
-    },
-    setUserEmail: (state, action: PayloadAction<string>) => {
-      state.email = action.payload;
-    },
-    setUserData: (state, action: PayloadAction<User[]>) => {
+    setUserData: (state, action: PayloadAction<IUser[]>) => {
       state.userData = action.payload;
     },
   },
 });
 
-// export const loginAsync = createAsyncThunk(
-//   "login/loginAsync",
-//   async (credentials: LoginCredentials, { dispatch }) => {
-//     try {
-//       const response = await axios.post(URL.LOGIN_URL, credentials);
-//       const token = response.data.user;
-//       console.log("Logintoken", response.data.user);
-//       sessionStorage.setItem("token", token);
-//     } catch (error) {
-//       throw new Error("Failed to authenticate user");
-//     }
-//   }
-// );
 export const ldspLoginAsync = createAsyncThunk(
   "login/loginAsync",
   async (credentials: LdapLoginCredentials, { dispatch }) => {
     try {
       const response = await axios.post(URL.LOGIN_URL, credentials);
       const token = response.data.token;
-      sessionStorage.setItem("token", token);
+      Cookies.set("token", token);
+      const decodedToken: { [key: string]: any } = jwt_decode(token);
+      const userData = Object.values(decodedToken) as IUser[];
+      dispatch(setUserData(userData));
+      dispatch(setIsAuthenticated(true));
     } catch (error) {
       throw new Error("Failed to authenticate user");
     }
   }
 );
 
-export const {
-  setIsAuthenticated,
-  setSelectedRole,
-  setUserName,
-  setSurName,
-  setUserEmail,
-  setUserData,
-} = loginSlice.actions;
+export const { setIsAuthenticated, setUserData } = loginSlice.actions;
 
 export default loginSlice.reducer;
-
-export { initialState as appInitialState };

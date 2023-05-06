@@ -5,12 +5,27 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 import { checkPermissions } from "../util";
 
-const createSurveyPack = async (req: Request, res: Response) => {
-  const surveyPack = await SurveyPack.create(req.body);
-  if (!surveyPack) {
-    throw new BadRequestError("Please complete the form");
+const getAllSurveyPacks = async (req: Request, res: Response) => {
+  try {
+    const surveyPacks = await SurveyPack.find();
+    res.status(StatusCodes.OK).json({ surveyPacks });
+  } catch (error) {
+    throw new BadRequestError("Failed to get survey packs");
   }
-  res.status(StatusCodes.CREATED).json({ surveyPack });
+};
+
+const createSurveyPack = async (req: Request, res: Response) => {
+  try {
+    console.log("Request Body:", req.body);
+    const surveyPack = await SurveyPack.create(req.body);
+    if (!surveyPack) {
+      throw new BadRequestError("Please complete the form");
+    }
+    res.status(StatusCodes.CREATED).json({ surveyPack });
+  } catch (error) {
+    console.error("Error creating survey pack:", error);
+    throw new BadRequestError("Failed to create survey pack");
+  }
 };
 
 const getSurveyPack = async (req: Request, res: Response) => {
@@ -127,6 +142,7 @@ const updateManagerApproval = async (req: Request, res: Response) => {
 };
 
 export {
+  getAllSurveyPacks,
   createSurveyPack,
   getSurveyPack,
   updateSurveyPack,

@@ -3,16 +3,33 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = void 0;
+exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = void 0;
 const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
-const createSurveyPack = async (req, res) => {
-    const surveyPack = await surveyPack_1.default.create(req.body);
-    if (!surveyPack) {
-        throw new errors_1.BadRequestError("Please complete the form");
+const getAllSurveyPacks = async (req, res) => {
+    try {
+        const surveyPacks = await surveyPack_1.default.find();
+        res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPacks });
     }
-    res.status(http_status_codes_1.StatusCodes.CREATED).json({ surveyPack });
+    catch (error) {
+        throw new errors_1.BadRequestError("Failed to get survey packs");
+    }
+};
+exports.getAllSurveyPacks = getAllSurveyPacks;
+const createSurveyPack = async (req, res) => {
+    try {
+        console.log("Request Body:", req.body);
+        const surveyPack = await surveyPack_1.default.create(req.body);
+        if (!surveyPack) {
+            throw new errors_1.BadRequestError("Please complete the form");
+        }
+        res.status(http_status_codes_1.StatusCodes.CREATED).json({ surveyPack });
+    }
+    catch (error) {
+        console.error("Error creating survey pack:", error);
+        throw new errors_1.BadRequestError("Failed to create survey pack");
+    }
 };
 exports.createSurveyPack = createSurveyPack;
 const getSurveyPack = async (req, res) => {

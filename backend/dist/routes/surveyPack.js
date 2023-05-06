@@ -6,6 +6,7 @@ const surveyPack_1 = require("../controllers/surveyPack");
 const authentication_1 = require("../middleware/authentication");
 router
     .route("/")
+    .get(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.getAllSurveyPacks)
     .post(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.createSurveyPack);
 router
     .route("/:id")

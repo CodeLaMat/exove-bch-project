@@ -8,14 +8,10 @@ import ManagerMenus from "./ManagerMenu";
 import UserMenus from "./UserMenus";
 
 const Sidemenu = () => {
-  const { isAuthenticated } = useAppSelector(
-    (state) => state.loginUser
-  );
+  const { isAuthenticated } = useAppSelector((state) => state.loginUser);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const user = userData[0];
-  
-  const role = user.role.join("");
+  const role = userData[0].role.join("");
 
   return (
     <div className={classes.sideMenu_content}>

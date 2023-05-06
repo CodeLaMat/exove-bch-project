@@ -6,22 +6,36 @@ import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import { UserRole } from "../../../enum";
 import classes from "./Users.module.css";
-import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
+import { createNewSurveyPack } from "../../../features/survey/surveyPacksSlice";
+import {
+  ICreateSurveyPack,
+  IParticipant,
+  ISurvey,
+  SurveyPackStatus,
+  User,
+} from "../../../types/dataTypes";
 
 const Users = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
-
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const user = userData[0];
-  const role = user.role.join("");
-  const usersArray = Object.values(employees);
+  const role = userData[0].role.join("");
+  const employeesArray = Object.values(employees);
+
+  //Sorting employees by name
+  const sortedEmployees = [...employeesArray].sort((a, b) =>
+    (a.firstName || "").localeCompare(b.firstName || "")
+  );
+
+  const currentDate = new Date();
+  const deadline = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
 
   const handleFormSendClick = (userid: string) => {
     navigate(`/sendForm/${userid}`);
@@ -42,15 +56,13 @@ const Users = () => {
               <th>Full Name</th>
               <th>Title</th>
               <th>Department</th>
-              <th>Last evoluation date</th>
-              <th>Send to evaluation</th>
-              <th>Edit</th>
-              <th>Delete</th>
+              <th>Last evaluation date</th>
+              <th>Start evaluation</th>
             </tr>
           </thead>
           <tbody>
-            {usersArray[0] &&
-              usersArray[0].map((employee: IEmployee, index: number) => (
+            {sortedEmployees &&
+              sortedEmployees.map((employee: IEmployee, index: number) => (
                 <tr key={employee._id}>
                   <td>{index + 1}</td>
                   <td>
@@ -65,17 +77,7 @@ const Users = () => {
                       type="button"
                       onClick={() => handleFormSendClick(employee._id)}
                     >
-                      Send
-                    </Button>
-                  </td>
-                  <td>
-                    <Button variant="primary" type="button">
-                      Edit
-                    </Button>
-                  </td>
-                  <td>
-                    <Button variant="alert" type="button">
-                      Delete
+                      Start
                     </Button>
                   </td>
                 </tr>

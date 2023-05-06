@@ -10,6 +10,7 @@ import {
   updateSurveyors,
   getManagerApproval,
   updateManagerApproval,
+  getAllSurveyPacks,
 } from "../controllers/surveyPack";
 import {
   authenticateUser,
@@ -18,6 +19,7 @@ import {
 
 router
   .route("/")
+  .get(authenticateUser, authorizePermissions("hr"), getAllSurveyPacks)
   .post(authenticateUser, authorizePermissions("hr"), createSurveyPack);
 router
   .route("/:id")
