@@ -76,10 +76,6 @@ export interface IParticipant {
   user: string;
 }
 
-export interface ISurveyPacks {
-  surveyPacks: ISurveypack[];
-}
-
 export type User = {
   _id: string;
   firstName?: string;
@@ -121,6 +117,10 @@ export interface IEmployee {
 >>>>>>> 2486a3a (SurveyPack and surveyPacks slices created. Fetached surveypacks)
 }
 
+export interface ISurveyPacks {
+  surveyPacks: ISurveypack[];
+}
+
 export interface ISurveypack {
   _id: string;
 <<<<<<< HEAD
@@ -133,7 +133,7 @@ export interface ISurveypack {
   status: "open" | "closed" | "inprogress";
 =======
   createdAt: Date;
-  personBeingSurveyed: string;
+  personBeingSurveyed: User["_id"];
   survey: ISurvey[];
   employeesTakingSurvey: IParticipant[];
   deadline: Date;

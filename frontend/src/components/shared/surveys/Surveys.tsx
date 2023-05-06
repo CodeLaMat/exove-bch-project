@@ -26,6 +26,8 @@ const Surveys = () => {
   );
   const surveysArray = Object.values(surveys);
 
+  console.log(surveysArray);
+
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);

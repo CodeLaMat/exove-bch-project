@@ -6,7 +6,7 @@ import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import { UserRole } from "../../../enum";
 import classes from "./Users.module.css";
-import { initialiseEmployees } from "../../../features/user/userListSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
@@ -14,14 +14,21 @@ import Button from "../button/Button";
 const Users = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
 
+<<<<<<< HEAD
   const userData = useAppSelector((state) => state.loginUser.userData);
   const user = userData[0];
   const role = user.role.join("");
   const usersArray = Object.values(employees);
+=======
+  //Sorting employees by name
+  const sortedEmployees = [...employeesArray].sort((a, b) =>
+    (a.firstName || "").localeCompare(b.firstName || "")
+  );
+>>>>>>> 4b5e56f (update manager added in controller, surveyPaks slice updated, services updated)
 
   const handleFormSendClick = (userid: string) => {
     navigate(`/sendForm/${userid}`);

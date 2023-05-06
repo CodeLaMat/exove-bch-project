@@ -64,7 +64,7 @@ const initialState: ISurveyPacks = {
 };
 
 export interface IEmployeesTakingSurvey {
-  acceptanceStatus: "Pending" | "Accepted" | "Declined";
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
   employee: User;
 }

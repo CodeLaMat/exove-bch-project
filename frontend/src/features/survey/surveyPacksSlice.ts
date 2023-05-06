@@ -11,65 +11,20 @@ import { SurveyPackStatus } from "../../types/dataTypes";
 import surveyPackService from "../../api/surveyPack";
 import Cookies from "js-cookie";
 
-// const dateString = "2023-05-01"; // Example date string
-// const deadline = new Date(dateString);
-
-// const storedSurveyPacksString = Cookies.get("storedSurveyPacks");
-// const storedSurveyPacks = storedSurveyPacksString
-//   ? JSON.parse(storedSurveyPacksString)
-//   : [];
+const storedSurveyPacksString = sessionStorage.getItem("storedSurveyPacks");
+const storedSurveyPacks = storedSurveyPacksString
+  ? JSON.parse(storedSurveyPacksString)
+  : [];
 
 const initialState: ISurveyPacks = {
-  surveyPacks: [],
+  surveyPacks: storedSurveyPacks || [],
 };
 
 export interface IEmployeesTakingSurvey {
-  acceptanceStatus: "Pending" | "Accepted" | "Declined";
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
   employee: User;
 }
-
-// const initialState: ISurveypack = {
-//   _id: "",
-//   createdAt: new Date(),
-//   personBeingSurveyed: "",
-//   survey: [],
-//   employeesTakingSurvey: [],
-//   deadline: deadline,
-//   status: SurveyPackStatus.OPEN,
-//   manager: [],
-//   managerapproved: false,
-//   hrapproved: false,
-// };
-
-// export const fetchSurveyPack = createAsyncThunk(
-//   "surveyPack/fetchSurveyPack",
-//   async () => {
-//     const response = await axios.get("http://localhost:5010/api/v1/surveyPack");
-//     return response.data;
-//   }
-// );
-
-// export const updateSurveyPack = createAsyncThunk(
-//   "surveyPack/updateSurveyPack",
-//   async (updatedSurveyPack: ISurveypack) => {
-//     const response = await axios.patch(
-//       `http://localhost:5010/api/v1/surveyPack/${updatedSurveyPack._id}`,
-//       updatedSurveyPack
-//     );
-//     return response.data;
-//   }
-// );
-
-// export const removeSurveyPackAsync = createAsyncThunk(
-//   "surveyPack/removeSurveyPack",
-//   async (surveyPackId: string) => {
-//     await axios.delete(
-//       `http://localhost:5010/api/v1/surveyPack/${surveyPackId}`
-//     );
-//     return surveyPackId;
-//   }
-// );
 
 const surveyPacksSlice = createSlice({
   name: "surveyPacks",
@@ -77,7 +32,28 @@ const surveyPacksSlice = createSlice({
   reducers: {
     getAllSurveyPacks: (state, action: PayloadAction<ISurveypack[]>) => {
       state.surveyPacks = action.payload;
-      // Cookies.set("storedSurveyPacks", JSON.stringify(action.payload));
+      sessionStorage.setItem(
+        "storedSurveyPacks",
+        JSON.stringify(action.payload)
+      );
+    },
+    createSurveyPack: (state, action: PayloadAction<ISurveypack>) => {
+      state.surveyPacks.push(action.payload);
+    },
+    updatePersonBeingSurveyed: (
+      state,
+      action: PayloadAction<{
+        surveyPackId: string;
+        personBeingSurveyed: string;
+      }>
+    ) => {
+      const { surveyPackId, personBeingSurveyed } = action.payload;
+      const surveyPack = state.surveyPacks.find(
+        (pack) => pack._id === surveyPackId
+      );
+      if (surveyPack) {
+        surveyPack.personBeingSurveyed = personBeingSurveyed;
+      }
     },
   },
 });
@@ -89,6 +65,17 @@ export const initialiseSurveyPacks = () => {
   };
 };
 
-export const { getAllSurveyPacks } = surveyPacksSlice.actions;
+export const createNewSurveyPack = (surveyPack: ISurveypack) => {
+  return async (dispatch: Dispatch<Action>) => {
+    const newSurveyPack = await surveyPackService.createSurveyPack(surveyPack);
+    dispatch(createSurveyPack(newSurveyPack));
+  };
+};
+
+export const {
+  getAllSurveyPacks,
+  createSurveyPack,
+  updatePersonBeingSurveyed,
+} = surveyPacksSlice.actions;
 
 export default surveyPacksSlice.reducer;

@@ -5,7 +5,7 @@ import {
   combineReducers,
   Reducer,
 } from "@reduxjs/toolkit";
-import employeeSlice from "../features/user/userListSlice";
+import employeesSlice from "../features/user/employeesSlice";
 import loginSlice from "../features/login/loginSlice";
 import surveySlice from "../features/survey/surveySlice";
 import surveysSlice from "../features/survey/surveysSlice";
@@ -18,7 +18,7 @@ type AppAction = Action<string> | { payload: unknown; type: string };
 const rootReducer: Reducer = combineReducers({
   loginUser: loginSlice,
   user: userSlice,
-  employees: employeeSlice,
+  employees: employeesSlice,
   survey: surveySlice,
   surveys: surveysSlice,
   question: questionSlice,

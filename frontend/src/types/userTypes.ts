@@ -3,8 +3,12 @@ export interface IEmployee {
   firstName: string;
   surName: string;
   email: string;
+<<<<<<< HEAD
   personal: string;
   about: string;
+=======
+  password: string;
+>>>>>>> 4b5e56f (update manager added in controller, surveyPaks slice updated, services updated)
   work: {
     reportsTo: string;
   };
@@ -14,7 +18,6 @@ export interface IEmployee {
   startDate: string;
   role: string;
   image: string;
-  selected?: boolean;
 }
 
 export interface IEmployees {

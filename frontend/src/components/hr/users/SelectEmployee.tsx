@@ -1,70 +1,151 @@
 import React, { useEffect, useState } from "react";
-import classes from "./SelectParticipants.module.css";
+import classes from "./SelectEmployee.module.css";
 import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import { useAppSelector } from "../../../hooks/hooks";
 import { useParams } from "react-router";
 import PageHeading from "../../pageHeading/PageHeading";
+import ParticipantSelectionModal from "./ParticipantSelectionModal";
+import ManagerSelectionModal from "./ManagerSelectionModal";
+import { useDispatch } from "react-redux";
+import { updateManager } from "../../../features/user/employeesSlice";
 
 const SelectEmployee: React.FC = () => {
+  const dispatch = useDispatch();
   const { userid } = useParams();
-
+  const userId = userid ?? "";
+  const [selectedManager, setSelectedManager] = useState("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [title, setTitle] = useState("");
   const [image, setImage] = useState("");
   const [userID, setuserID] = useState("");
+  const [manager, setManager] = useState("");
+  const [managerFirstName, setManagerFirstName] = useState("");
+  const [managerLastName, setManagerLastName] = useState("");
+  const [managerTitle, setManagerTitle] = useState("");
+  const [managerImage, setManagerImage] = useState("");
 
-  const employees: IEmployee[][] = useAppSelector(
+  const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
-  const employeesArray = Object.values(employees);
+
+  const sortedEmployees = [...employees].sort((a, b) =>
+    a.firstName.localeCompare(b.firstName)
+  );
 
   useEffect(() => {
-    const selectedEmployee = employeesArray[0].find(
+    const selectedEmployee = employees.find(
       (employee) => employee._id === userid
     );
 
     if (selectedEmployee) {
-      const { firstName, surName, title, image, _id } = selectedEmployee;
+      const { firstName, surName, title, image, _id, work } = selectedEmployee;
       setFirstName(firstName);
       setLastName(surName);
       setTitle(title);
       setImage(image);
       setuserID(_id);
+      setManager(work.reportsTo);
     }
   }, [userid, employees]);
 
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
+
+  useEffect(() => {
+    if (manager) {
+      const selectedManager = employees.find(
+        (employee) => employee._id === manager
+      );
+
+      if (selectedManager) {
+        const { firstName, surName, title, image } = selectedManager;
+        setManagerFirstName(firstName);
+        setManagerLastName(surName);
+        setManagerTitle(title);
+        setManagerImage(image);
+      }
+    }
+  }, [manager, employees]);
+
+  const handleManagerSelection = (managerId: string) => {
+    dispatch(updateManager({ employeeId: userId, managerId }));
+    setSelectedManager(managerId);
+    setIsModalOpen(false);
+  };
+
   return (
     <div className={classes.container}>
-      <PageHeading pageTitle="Select employee" />
-      <div className={classes.cardContainer}>
-        <div
-          key={userID}
-          className={classes.employeeCard}
-          // onClick={() => handleEmployeeSelection(employee._id)}
-        >
-          <div className={classes.employeeImage}>
-            {image === "" ? (
-              <img
-                className={classes.employee_roundImage}
-                src={image}
-                alt={`${firstName} ${lastName}`}
-              />
-            ) : (
-              <div className={classes.employee_placeholder}>
-                <h2>{`${firstName[0]}${lastName[0]}`}</h2>
-              </div>
-            )}
+      <div className={classes.cardsContainer}>
+        <div className={classes.cardContainer}>
+          {" "}
+          <PageHeading pageTitle="Selected employee" />
+          <div
+            key={userID}
+            className={classes.employeeCard}
+            // onClick={() => handleEmployeeSelection(employee._id)}
+          >
+            <div className={classes.employeeImage}>
+              {image === "" ? (
+                <img
+                  className={classes.employee_roundImage}
+                  src={image}
+                  alt={`${firstName} ${lastName}`}
+                />
+              ) : (
+                <div className={classes.employee_placeholder}>
+                  <h2>{`${firstName[0]}${lastName[0]}`}</h2>
+                </div>
+              )}
+            </div>
+            <div className={classes.details}>
+              <h5>
+                {firstName} {lastName}
+              </h5>
+              <p>{title}</p>
+            </div>
           </div>
-          <div className={classes.details}>
-            <h5>
-              {firstName} {lastName}
-            </h5>
-            <p>{title}</p>
+        </div>
+        <div className={classes.cardContainer}>
+          <PageHeading pageTitle="Manager" />
+          <div key={manager} className={classes.employeeCard}>
+            <div className={classes.employeeImage}>
+              {managerImage === "" ? (
+                <img
+                  className={classes.employee_roundImage}
+                  src={managerImage}
+                  alt={`${managerFirstName} ${managerLastName}`}
+                />
+              ) : (
+                <div className={classes.employee_placeholder}>
+                  <h2>{`${managerFirstName[0]}${managerLastName[0]}`}</h2>
+                </div>
+              )}
+            </div>
+            <div className={classes.details}>
+              <h5>
+                {managerFirstName} {managerLastName}
+              </h5>
+              <p>{managerTitle}</p>
+            </div>
+            <button onClick={openModal}>Change Manager</button>
           </div>
         </div>
       </div>
+      <ManagerSelectionModal
+        isOpen={isModalOpen}
+        onRequestClose={closeModal}
+        selectedManager={selectedManager}
+        onManagerSelect={handleManagerSelection}
+        allEmployees={sortedEmployees}
+      />
     </div>
   );
 };
