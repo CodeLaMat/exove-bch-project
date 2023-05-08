@@ -1,0 +1,8 @@
+{
+    "login" : "Login",
+    "username" : "Username",
+    "password" : "Password",
+    "loginGreeting" : "Welcome back! Please enter your email and password to log in and access your account. If you have forgotten your password, you can reset it by clicking the 'Forgot Password' link below the login form.",
+    "keepMeLogged" : "Keep you loged in"
+
+}

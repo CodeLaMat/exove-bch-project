@@ -14,6 +14,8 @@ import Cookies from "js-cookie";
 
 import { ldspLoginAsync } from "../../features/login/loginSlice";
 import { IUser } from "../../types/loginTypes";
+import LanguageSwitcher from '../shared/Translation';
+import { useTranslation } from "react-i18next";
 
 interface LoginProps {}
 
@@ -22,6 +24,7 @@ const Login: React.FC<LoginProps> = () => {
   const [password, setPassword] = useState("");
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   const loginHandler = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -71,17 +74,16 @@ const Login: React.FC<LoginProps> = () => {
 
   return (
     <div className={classes.login_container}>
+      <LanguageSwitcher />
       <div className={classes.login_box}>
-        <h3>Login</h3>
+        <h3>{t('login')}</h3>
         <div className={classes.login_text}>
-          Welcome back! Please enter your email and password to log in and
-          access your account. If you have forgotten your password, you can
-          reset it by clicking the "Forgot Password" link below the login form.
+        {t('loginGreeting')}
         </div>
         <Form action="POST" onSubmit={loginHandler}>
           <fieldset>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="username">username</Form.Label>
+              <Form.Label htmlFor="username">{t('username')}</Form.Label>
               <Form.Control
                 id="username"
                 placeholder="username"
@@ -90,7 +92,7 @@ const Login: React.FC<LoginProps> = () => {
               />
             </Form.Group>
             <Form.Group className="mb-3">
-              <Form.Label htmlFor="password">Password</Form.Label>
+              <Form.Label htmlFor="password">{t('password')}</Form.Label>
               <Form.Control
                 id="passwordInput"
                 type="password"
@@ -103,10 +105,10 @@ const Login: React.FC<LoginProps> = () => {
               <Form.Check
                 type="checkbox"
                 id="disabledFieldsetCheck"
-                label="Keep you loged in"
+                label={t('keepMeLogged')}
               />
             </Form.Group>
-            <Button type="submit">Login</Button>
+            <Button type="submit">{t('login')}</Button>
           </fieldset>
         </Form>
       </div>

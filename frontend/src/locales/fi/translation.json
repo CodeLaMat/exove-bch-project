@@ -1,0 +1,8 @@
+{
+    "login": "Kirjaudu sisään",
+    "username" : "käyttäjätunnus",
+    "password" : "Salasana",
+    "loginGreeting" : "Tervetuloa takaisin! Anna sähköpostiosoitteesi ja salasanasi kirjautuaksesi sisään ja käyttääksesi tiliäsi. Jos olet unohtanut salasanasi, voit nollata sen napsauttamalla kirjautumislomakkeen alla olevaa 'Unohditko salasanasi' -linkkiä.",
+    "keepMeLogged" : "Pidä minut kirjautuneena sisään"
+
+}
