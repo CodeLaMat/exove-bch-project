@@ -9,11 +9,31 @@ function LanguageSwitcher() {
     localStorage.setItem('language', lng);
   };
 
+  const changeHandler = (e) => {
+    if (e.target.value === "en") {
+     changeLanguage('en');
+    }  else {
+      changeLanguage('fi');
+    }
+  };
+
   return (
     <div>
-      <button onClick={() => changeLanguage('en')}>English</button>
-      <button onClick={() => changeLanguage('fi')}>Suomi</button>
+      <select
+          name="selection"
+          id="selection"
+          onChange={(e) =>
+            changeHandler(e)
+          }
+        >
+          <option value="en">English</option>
+          <option value="fi">Finnish</option>
+          
+        </select>
+
     </div>
+
+    
   );
 }
 
