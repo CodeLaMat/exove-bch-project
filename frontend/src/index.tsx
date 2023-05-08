@@ -19,7 +19,7 @@ i18n
   .use(initReactI18next)
   .init({
     fallbackLng: 'en',
-    debug: true,
+    debug: false,
     resources: {
       en: {
         translation: require('./locales/en/translation.json'),

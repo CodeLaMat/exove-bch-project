@@ -11,42 +11,53 @@ import {
   faFileImport,
 } from "@fortawesome/free-solid-svg-icons";
 
+import { useTranslation } from "react-i18next";
+
 const HRMenus = () => {
+  const { t } = useTranslation();
   return (
     <div>
       <MenuItem
-        name="DashBoard"
+        name={t('Dashboard')}
         icon={faChartSimple}
         link="/home"
-        pageTitle="Dashboard"
+        pageTitle={t('Dashboard')}
       />
-      <MenuItem name="Inbox" icon={faMessage} link="/inbox" pageTitle="Inbox" />{" "}
+      <MenuItem 
+        name={t('Users')} 
+        icon={faMessage} 
+        link="/inbox" 
+        pageTitle={t('Users')} />{" "}
       <MenuItem
-        name="Surveys"
+        name={t('Surveys')}
         icon={faSquarePollVertical}
         link="/surveys"
-        pageTitle="Surveys"
+        pageTitle={t('Surveys')}
       />
-      <MenuItem name="Users" icon={faUsers} link="/users" pageTitle="Users" />
+      <MenuItem 
+        name={t('Users')} 
+        icon={faUsers} 
+        link="/users" 
+        pageTitle={t('Users')} />
       <MenuItem
-        name="Feedbacks"
+        name={t('Feedback')}
         icon={faFileCircleQuestion}
         link="/feedbacks"
-        pageTitle="Feedbacks"
+        pageTitle={t('Feedback')}
       />
       <MenuItem
-        name="Analytics"
+        name={t('Analytics')}
         icon={faChartPie}
         link="/analytics"
-        pageTitle="Analytics"
+        pageTitle={t('Analytics')}
       />{" "}
       <div className={classes.menulist}>
-        <h6 className={classes.sideMenu_headers}>Other features</h6>
+        <h6 className={classes.sideMenu_headers}>{t('File & Foldes')}</h6>
         <MenuItem
-          name="File & Folders"
+          name={t('File & Foldes')}
           icon={faFileImport}
           link="/filesfolders"
-          pageTitle="File & Foldes"
+          pageTitle={t('File & Foldes')}
         />
       </div>
     </div>

@@ -18,10 +18,14 @@ import {
   SurveyPackStatus,
   User,
 } from "../../../types/dataTypes";
+import { useTranslation } from "react-i18next";
 
 const Users = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
+
+
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
@@ -48,16 +52,16 @@ const Users = () => {
   if (role === UserRole.HR) {
     return (
       <div className={classes.users_container}>
-        <PageHeading pageTitle="Employee list" />
+        <PageHeading pageTitle={t('Employee list')}/>
         <Table striped bordered hover>
           <thead>
             <tr>
               <th>#</th>
-              <th>Full Name</th>
-              <th>Title</th>
-              <th>Department</th>
-              <th>Last evaluation date</th>
-              <th>Start evaluation</th>
+              <th>{t('Full Name')}</th>
+              <th>{t('Title')}</th>
+              <th>{t('Department')}</th>
+              <th>{t('Last evaluation date')}</th>
+              <th>{t('Start evaluation')}</th>
             </tr>
           </thead>
           <tbody>

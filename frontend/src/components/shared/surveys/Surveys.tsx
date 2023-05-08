@@ -12,12 +12,13 @@ import { removeSurvey } from "../../../features/survey/surveysSlice";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
 import AddQuestion from "../../hr/questionnaire/AddQuestions";
-import axios from "axios";
+import { useTranslation } from "react-i18next";
 
 const Surveys = () => {
   const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { t } = useTranslation();
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
 
@@ -46,7 +47,7 @@ const Surveys = () => {
   if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
-        <PageHeading pageTitle="Survey forms" />
+        <PageHeading pageTitle={t('Survey forms')} />
         <div className={classes.top}>
           <div className={classes.maincontent}>
             <div className={classes.actions}>
@@ -54,21 +55,21 @@ const Surveys = () => {
                 variant="primary"
                 onClick={() => navigate("/createsurvey")}
               >
-                Create new Form
+                {t('Create new Form')}
               </Button>{" "}
               <Button variant="primary" onClick={handleShowModal}>
-                Add Question
+              {t('Add Question')}
               </Button>
             </div>
             <div className={classes.table_container}>
               <Table striped bordered hover size="sm">
                 <thead>
                   <tr>
-                    <th>Survey ID</th>
-                    <th>Survey Name</th>
-                    <th>Description</th>
-                    <th>Questions</th>
-                    <th>Delete </th>
+                    <th>{t('Survey ID')}</th>
+                    <th>{t('Survey Name')}</th>
+                    <th>{t('Description')}</th>
+                    <th>{t('Questions')}</th>
+                    <th>{t('Delete')} </th>
                   </tr>
                 </thead>
                 <tbody>
@@ -90,7 +91,7 @@ const Surveys = () => {
                           type="button"
                           onClick={() => handleDelete(survey._id)}
                         >
-                          Delete Form
+                          {t('Delete Form')}
                         </Button>
                       </td>
                     </tr>
@@ -103,7 +104,7 @@ const Surveys = () => {
         <div>
           <Modal show={showQuestionModal} onHide={handleCloseModal}>
             <Modal.Header closeButton>
-              <Modal.Title>Add a question</Modal.Title>
+              <Modal.Title>{t('Add Question')}</Modal.Title>
             </Modal.Header>
             <AddQuestion />
             <Modal.Footer></Modal.Footer>
