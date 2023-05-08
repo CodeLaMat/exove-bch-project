@@ -1,12 +1,13 @@
 import jwt from "jsonwebtoken";
 import { Response } from "express";
 import User from "../models/user";
+import { UserRoles } from "../types/dataTypes";
 
 interface Payload {
-  userId: User["_id"];
-  name: User["displayName"];
-  email: User["email"];
-  role: User["role"];
+  userId: string;
+  name: string;
+  email: string;
+  role: UserRoles;
 }
 // interface TokenData {
 //   token: string;

@@ -28,22 +28,14 @@ exports.updateManagerApproval =
 const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
+const user_1 = __importDefault(require("../models/user"));
+const util_1 = require("../util");
 const getAllSurveyPacks = async (req, res) => {
-  try {
-    const surveyPacks = await surveyPack_1.default.find();
-    res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPacks });
-  } catch (error) {
-    throw new errors_1.BadRequestError("Failed to get survey packs");
+  const surveyPacks = await surveyPack_1.default.find();
+  if (!surveyPacks) {
+    throw new errors_1.NotFoundError(`No surveyPacks found`);
   }
-};
-exports.getAllSurveyPacks = getAllSurveyPacks;
-const getAllSurveyPacks = async (req, res) => {
-  try {
-    const surveyPacks = await surveyPack_1.default.find();
-    res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPacks });
-  } catch (error) {
-    throw new errors_1.BadRequestError("Failed to get survey packs");
-  }
+  res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPacks });
 };
 exports.getAllSurveyPacks = getAllSurveyPacks;
 const createSurveyPack = async (req, res) => {
@@ -52,6 +44,23 @@ const createSurveyPack = async (req, res) => {
     const surveyPack = await surveyPack_1.default.create(req.body);
     if (!surveyPack) {
       throw new errors_1.BadRequestError("Please complete the form");
+    }
+    const personBeingSurveyed = await user_1.default.findById(
+      surveyPack.personBeingSurveyed
+    );
+    if (!personBeingSurveyed) {
+      throw new errors_1.NotFoundError("personBeingSurveyed not found");
+    }
+    try {
+      await (0, util_1.sendUserEmail)({
+        name: personBeingSurveyed.displayName,
+        email: personBeingSurveyed.email,
+        senderEmail: req.user.email,
+        senderName: req.user.name,
+      });
+      console.log("Email sent successfully");
+    } catch (error) {
+      console.error("Error sending email: ", error);
     }
     res.status(http_status_codes_1.StatusCodes.CREATED).json({ surveyPack });
   } catch (error) {
@@ -85,6 +94,25 @@ const updateSurveyPack = async (req, res) => {
   );
   if (!surveyPack) {
     throw new errors_1.NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  }
+  res
+    .status(http_status_codes_1.StatusCodes.OK)
+    .json({ msg: "surveyPack successfully updated", surveyPack: surveyPack });
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await surveyPack_1.default.findByIdAndUpdate(
+    { _id: surveyPackId },
+    req.body,
+    {
+      new: true,
+      runValidators: true,
+    }
+  );
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  }
+  if (surveyPack.hrapproved === true) {
   }
   res
     .status(http_status_codes_1.StatusCodes.OK)

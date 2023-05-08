@@ -221,12 +221,12 @@ export interface IParticipant {
 export interface ISurveypack {
   _id: string;
   createdAt: Date;
-  personBeingSurveyed: User[];
-  survey: ISurvey[];
+  personBeingSurveyed: User;
+  survey: ISurvey;
   employeesTakingSurvey: IParticipant[];
   deadline: Date;
   status: SurveyPackStatus;
-  manager: User[];
+  manager: User;
   managerapproved: boolean;
   hrapproved: boolean;
 }

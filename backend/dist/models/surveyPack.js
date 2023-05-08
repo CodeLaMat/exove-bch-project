@@ -44,7 +44,7 @@ const SurveyorSchema = new mongoose.Schema({
 const SurveyPackSchema = new mongoose.Schema({
     personBeingSurveyed: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
         required: [true, "Please select the employee to survey"],
     },
     survey: {
@@ -77,7 +77,7 @@ const SurveyPackSchema = new mongoose.Schema({
     },
     manager: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "user",
+        ref: "User",
         required: [true, "Please add the manager"],
     },
     managerapproved: {
@@ -89,16 +89,5 @@ const SurveyPackSchema = new mongoose.Schema({
         default: false,
     },
 }, { timestamps: true });
-// SurveyPackSchema.pre("save", async function (next) {
-//   try {
-//     const user = await User.findById(this.personBeingSurveyed);
-//     if (user) {
-//       this.manager = new mongoose.Types.ObjectId(user.work?.reportsTo);
-//     }
-//     next();
-//   } catch (error: any) {
-//     next(error);
-//   }
-// });
 const SurveyPack = mongoose.model("SurveyPack", SurveyPackSchema);
 exports.default = SurveyPack;
