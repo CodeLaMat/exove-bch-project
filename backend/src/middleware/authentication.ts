@@ -45,7 +45,7 @@ import { UserRoles } from "../types/dataTypes";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 
-let userRole: string = "";
+//let userRole: string = "";
 
 interface UserType {
   userId: string;
@@ -62,37 +62,45 @@ declare global {
   }
 }
 
+// const authenticateUser = async (
+//   req: Request,
+//   res: Response,
+//   next: NextFunction
+// ) => {
+
+//   const authorizationHeader = req.headers.authorization;
+
+//   if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+//     throw new UnauthenticatedError("Authentication invalid");
+//   }
+
+//   const token = authorizationHeader.substring(7);
+
+//   try {
+//     const decodedToken: { [key: string]: any } = jwt_decode(token!);
+
+//     userRole = decodedToken.user.role[0];
+//     next();
+//   } catch (error) {
+//     throw new UnauthenticatedError("Authentication failed");
+//     //res.status(401).send("Authentication failed");
+//   }
+// };
 const authenticateUser = async (
   req: Request,
   res: Response,
   next: NextFunction
 ) => {
-  // const token = req.signedCookies.token;
-  // console.log("cookie",req.signedCookies.token);
-  // if (!token) {
-  //   throw new UnauthenticatedError("Authentication invalid");
-  // }
-
-  const authorizationHeader = req.headers.authorization;
-
-  if (!authorizationHeader || !authorizationHeader.startsWith("Bearer ")) {
+  const token = req.signedCookies.token;
+  if (!token) {
     throw new UnauthenticatedError("Authentication invalid");
   }
-
-  const token = authorizationHeader.substring(7);
-
   try {
-    const decodedToken: { [key: string]: any } = jwt_decode(token!);
-
-    userRole = decodedToken.user.role[0];
-
-    // const { userId, name, email, role } = isTokenValid({ token }) as UserType;
-    // req.user = { userId, name, email, role };
-    // console.log("req.user", req.user);
+    const { userId, name, email, role } = isTokenValid({ token }) as UserType;
+    req.user = { userId, name, email, role };
     next();
   } catch (error) {
     throw new UnauthenticatedError("Authentication failed");
-    //res.status(401).send("Authentication failed");
   }
 };
 
@@ -102,7 +110,7 @@ const authorizePermissions = (...roles: string[]) => {
     res: Response,
     next: NextFunction
   ) => {
-    if (!roles.includes(userRole)) {
+    if (!roles.includes(req.user.role)) {
       throw new UnauthorizedError("Unauthorized to access this route");
     }
     next();

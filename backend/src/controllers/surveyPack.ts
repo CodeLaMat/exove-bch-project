@@ -1,23 +1,39 @@
 import { Request, Response } from "express";
 import SurveyPack from "../models/surveyPack";
-import User from "../models/user";
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
-import { checkPermissions } from "../util";
+import { BadRequestError, NotFoundError } from "../errors";
+import User from "../models/user";
+import { sendUserEmail } from "../util";
 
 const getAllSurveyPacks = async (req: Request, res: Response) => {
-  try {
-    const surveyPacks = await SurveyPack.find();
-    res.status(StatusCodes.OK).json({ surveyPacks });
-  } catch (error) {
-    throw new BadRequestError("Failed to get survey packs");
+  const surveyPacks = await SurveyPack.find();
+  if (!surveyPacks) {
+    throw new NotFoundError(`No surveyPacks found`);
   }
+  res.status(StatusCodes.OK).json({ surveyPacks });
 };
 
 const createSurveyPack = async (req: Request, res: Response) => {
   const surveyPack = await SurveyPack.create(req.body);
   if (!surveyPack) {
     throw new BadRequestError("Please complete the form");
+  }
+  const personBeingSurveyed = await User.findById(
+    surveyPack.personBeingSurveyed
+  );
+  if (!personBeingSurveyed) {
+    throw new NotFoundError("personBeingSurveyed not found");
+  }
+  try {
+    await sendUserEmail({
+      name: personBeingSurveyed.displayName as string,
+      email: personBeingSurveyed.email as string,
+      senderEmail: req.user.email,
+      senderName: req.user.name,
+    });
+    console.log("Email sent successfully");
+  } catch (error) {
+    console.error("Error sending email: ", error);
   }
   res.status(StatusCodes.CREATED).json({ surveyPack });
 };
@@ -47,6 +63,8 @@ const updateSurveyPack = async (req: Request, res: Response) => {
   );
   if (!surveyPack) {
     throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  }
+  if (surveyPack.hrapproved === true) {
   }
   res
     .status(StatusCodes.OK)
