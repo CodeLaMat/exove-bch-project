@@ -1,7 +1,4 @@
-.pageHeading {
-  display: flex;
-  align-items: center;
-  background-color: #ffffff;
+.pageHeading {  
   height: 3vh;
   font-size: 15px;
   font-weight: 400;

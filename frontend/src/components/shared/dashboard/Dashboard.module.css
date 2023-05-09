@@ -4,6 +4,14 @@
   grid-template-rows: repeat(25, 1fr);
 }
 
+.pageheading {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  width: 50%;
+}
+
 .dashboard_chart {
   background: white;
   grid-column: 2/17;
