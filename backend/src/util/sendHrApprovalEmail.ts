@@ -1,20 +1,24 @@
 import sendEmail from "./sendEmail";
 
-interface EmailDetails {
+export interface EmailDetails {
   receiverName: string;
   receiverEmail: string;
+  senderEmail: string;
+  senderName: string;
   employeeName: string;
 }
 
-const sendParticipantEmail = async ({
+const sendHrApprovalEmail = async ({
+  senderName,
+  senderEmail,
   receiverName,
   receiverEmail,
   employeeName,
 }: EmailDetails) => {
-  const message = `<p> ${employeeName} has chosen you to evaluate his/her performance. Please sign into the EXOVE evaluation platform and validate this request </p>`;
+  const message = `<p>Please sign into the EXOVE Evaluation platform and complete the  evaluation of ${employeeName}</p>`;
 
   return sendEmail({
-    from: `Essi Salomaa <essisalomaa@test.com>`,
+    from: `${senderName} <${senderEmail}>`,
     to: receiverEmail,
     subject: `EXOVE Evaluation for ${employeeName}`,
     html: `<h4>Hello, ${receiverName}!</h4>
@@ -22,4 +26,4 @@ const sendParticipantEmail = async ({
   });
 };
 
-export default sendParticipantEmail;
+export default sendHrApprovalEmail;

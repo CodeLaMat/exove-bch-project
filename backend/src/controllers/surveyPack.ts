@@ -3,7 +3,11 @@ import SurveyPack from "../models/surveyPack";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError } from "../errors";
 import User from "../models/user";
-import { sendUserEmail } from "../util";
+import {
+  sendUserEmail,
+  sendHrApprovalEmail,
+  sendParticipantEmail,
+} from "../util";
 
 const getAllSurveyPacks = async (req: Request, res: Response) => {
   const surveyPacks = await SurveyPack.find();
@@ -31,7 +35,6 @@ const createSurveyPack = async (req: Request, res: Response) => {
       senderEmail: req.user.email,
       senderName: req.user.name,
     });
-    console.log("Email sent successfully");
   } catch (error) {
     console.error("Error sending email: ", error);
   }
@@ -50,25 +53,57 @@ const getSurveyPack = async (req: Request, res: Response) => {
 };
 
 const updateSurveyPack = async (req: Request, res: Response) => {
-  const {
-    params: { id: surveyPackId },
-  } = req;
-  const surveyPack = await SurveyPack.findByIdAndUpdate(
-    { _id: surveyPackId },
+  const { id: surveyPackId } = req.params;
+
+  const surveyPack = await SurveyPack.findById(surveyPackId);
+  if (!surveyPack) {
+    throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  }
+  const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
+    surveyPackId,
     req.body,
     {
       new: true,
       runValidators: true,
     }
   );
-  if (!surveyPack) {
-    throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  if (
+    updatedSurveyPack!.hrapproved === true &&
+    updatedSurveyPack!.employeesTakingSurvey.length === 6 &&
+    updatedSurveyPack!.employeesTakingSurvey.every((status) => {
+      return status.acceptanceStatus === "Approved";
+    })
+  ) {
+    const [surveyors, reviewee] = await Promise.all([
+      User.find({
+        _id: {
+          $in: updatedSurveyPack!.employeesTakingSurvey.map(
+            (status) => status.employee
+          ),
+        },
+      }),
+      User.findById(updatedSurveyPack!.personBeingSurveyed),
+    ]);
+    for (const surveyor of surveyors) {
+      try {
+        if (reviewee) {
+          await sendHrApprovalEmail({
+            receiverEmail: surveyor.email as string,
+            receiverName: surveyor.displayName as string,
+            employeeName: reviewee.displayName as string,
+            senderEmail: req.user.email,
+            senderName: req.user.name,
+          });
+        }
+      } catch (error) {
+        console.error(`Error sending email to ${surveyor.email}`, error);
+      }
+    }
   }
-  if (surveyPack.hrapproved === true) {
-  }
-  res
-    .status(StatusCodes.OK)
-    .json({ msg: "surveyPack successfully updated", surveyPack: surveyPack });
+  res.status(StatusCodes.OK).json({
+    msg: "surveyPack successfully updated",
+    surveyPack: updatedSurveyPack,
+  });
 };
 
 const deleteSurveyPack = async (req: Request, res: Response) => {
@@ -106,9 +141,39 @@ const updateSurveyors = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }
-
   surveyPack.employeesTakingSurvey = employeesTakingSurvey;
   await surveyPack.save();
+  if (
+    surveyPack.employeesTakingSurvey.length === 6 &&
+    surveyPack.employeesTakingSurvey.every((status) => {
+      return status.acceptanceStatus === "Declined";
+    })
+  ) {
+    const [surveyors, reviewee] = await Promise.all([
+      User.find({
+        _id: {
+          $in: surveyPack.employeesTakingSurvey.map(
+            (status) => status.employee
+          ),
+        },
+      }),
+      User.findById(surveyPack.personBeingSurveyed),
+    ]);
+    for (const surveyor of surveyors) {
+      try {
+        if (reviewee) {
+          await sendParticipantEmail({
+            receiverEmail: surveyor.email as string,
+            receiverName: surveyor.displayName as string,
+            employeeName: reviewee.displayName as string,
+          });
+        }
+      } catch (error) {
+        console.error(`Error sending email to ${surveyor.email}`, error);
+      }
+    }
+  }
+
   return res.status(StatusCodes.OK).json({
     msg: "EmployeesTakingSurvey updated successfully",
     employeesTakingSurvey: surveyPack.employeesTakingSurvey,

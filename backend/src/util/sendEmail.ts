@@ -13,7 +13,7 @@ const sendEmail = async ({ from, to, subject, html }: EmailKeys) => {
 
   const transporter = nodemailer.createTransport(nodemailerConfig);
 
-  return transporter.sendMail({
+  let mailOptions = await transporter.sendMail({
     from,
     to,
     subject,

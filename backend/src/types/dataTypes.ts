@@ -213,8 +213,8 @@ export interface ISurvey {
 // }
 export interface IParticipant {
   id?: string;
-  employee: User[];
-  acceptencestatus: SurveyorsAcceptance;
+  employee: User;
+  acceptanceStatus: SurveyorsAcceptance;
   isSurveyComplete: boolean;
 }
 

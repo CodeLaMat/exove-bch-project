@@ -13,14 +13,13 @@ const sendUserEmail = async ({
   name,
   email,
 }: EmailDetails) => {
-  console.log("Sending email to:", name, email, senderEmail);
   const message =
-    "<p>Please sign into the EXOVE Survey plateform and include the names of five other employees and one manager to evaluate you</p>";
+    "<p>Please sign into the EXOVE Evaluation platform and include the names of five other employees and one manager to evaluate you</p>";
 
   return sendEmail({
     from: `${senderName} <${senderEmail}>`,
     to: email,
-    subject: "Add Survey Participants",
+    subject: "EXOVE Evaluation! Choose your Evaluators",
     html: `<h4>Hello, ${name}!</h4>
     ${message}`,
   });

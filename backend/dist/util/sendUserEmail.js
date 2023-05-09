@@ -5,12 +5,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sendEmail_1 = __importDefault(require("./sendEmail"));
 const sendUserEmail = async ({ senderName, senderEmail, name, email, }) => {
-    console.log("Sending email to:", name, email, senderEmail);
-    const message = "<p>Please sign into the EXOVE Survey plateform and include the names of five other employees and one manager to evaluate you</p>";
+    const message = "<p>Please sign into the EXOVE Evaluation platform and include the names of five other employees and one manager to evaluate you</p>";
     return (0, sendEmail_1.default)({
         from: `${senderName} <${senderEmail}>`,
         to: email,
-        subject: "Add Survey Participants",
+        subject: "EXOVE Evaluation! Choose your Evaluators",
         html: `<h4>Hello, ${name}!</h4>
     ${message}`,
     });
