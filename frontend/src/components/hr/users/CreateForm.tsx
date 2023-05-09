@@ -19,9 +19,11 @@ import SelectParticipants from "./SelectParticipants";
 import Button from "../../shared/button/Button";
 import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice";
 import CheckDataSend from "./CheckDataSend";
+import { useTranslation } from "react-i18next";
 
 const CreateForm: React.FC = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
   const { userid } = useParams<{ userid: string }>();
   const userId = userid ?? "";
   const surveyPack = useAppSelector(
@@ -121,7 +123,7 @@ const CreateForm: React.FC = () => {
 
   return (
     <div className={classes.createForm_container}>
-      <h4>Create Survey Pack</h4>
+      <h4>{t("Create Survey Pack")}</h4>
       <div className={classes.box}>
         <div className={classes.steps}>
           <ul className="nav">
@@ -133,9 +135,9 @@ const CreateForm: React.FC = () => {
                 } ${step.isDone ? classes.done : ""}`}
               >
                 <div>
-                  Step {i + 1}
+                {t("Step")} {i + 1}
                   <br />
-                  <span>{step.label}</span>
+                  <span>{t(`${step.label}`)}</span>
                 </div>
               </li>
             ))}
@@ -149,10 +151,10 @@ const CreateForm: React.FC = () => {
             onClick={handleBack}
             disabled={steps[0].key === activeStep.key}
           >
-            Back
+            {t("Back")}
           </Button>
           <Button type="button" onClick={handleNext} variant="primary">
-            {steps[steps.length - 1].key !== activeStep.key ? "Next" : "Submit"}
+            {steps[steps.length - 1].key !== activeStep.key ? t("Next") : t("Submit")}
           </Button>
         </div>
       </div>

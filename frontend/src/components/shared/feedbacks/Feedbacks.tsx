@@ -103,7 +103,7 @@ const Feedbacks: React.FC = () => {
                   type="button"
                   onClick={() => handleSurveyPackClick(surveyPack._id)}
                 >
-                  Open
+                  {t('Open')}
                 </Button>
               </td>
             </tr>

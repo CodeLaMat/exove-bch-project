@@ -49,6 +49,7 @@
     "Site" : "Site",
     "Email" : "Email",
     "Role" : "Role",
+    "Start" : "Start",
     "User not found" : "User not found",
     "Free form" : "Free form",
     "Multiple choice" : "Multiple choice",
@@ -62,7 +63,26 @@
     "Leadership" : "Leadership",
     "Readiness for change" : "Readiness for change",
     "Creativity" : "Creativity",
-    "General Evaluation" : "General Evaluation"
+    "General Evaluation" : "General Evaluation",
+    "Create Survey Pack" : "Create Survey Pack",
+    "Step" : "Step",
+    "Select employee" : "Select employee",
+    "Select survey" : "Select survey",
+    "Check Data" : "Check Data",
+    "Next" : "Next",
+    "Select" : "Select",
+    "Selected employee" : "Selected employee",
+    "Change Manager" : "Change Manager",
+    "Select a Manager" : "Select a Manager",
+    "Number of questions" : "Number of questions",
+    "Logout" : "Logout",
+    "Are you sure you want to logout" : "Are you sure you want to logout",
+    "Cancel" : "Cancel",
+    "Clear" : "Clear",
+    "Select participants" : "Select participants"
+    
+    
+    
     
 }
     

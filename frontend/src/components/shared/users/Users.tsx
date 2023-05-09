@@ -81,7 +81,7 @@ const Users = () => {
                       type="button"
                       onClick={() => handleFormSendClick(employee._id)}
                     >
-                      Start
+                      {t('Start')}
                     </Button>
                   </td>
                 </tr>
