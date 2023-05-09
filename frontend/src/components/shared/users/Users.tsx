@@ -7,6 +7,7 @@ import { RootState } from "../../../app/store";
 import { UserRole } from "../../../enum";
 import classes from "./Users.module.css";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";

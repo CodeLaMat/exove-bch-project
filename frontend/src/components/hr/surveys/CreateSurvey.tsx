@@ -68,7 +68,13 @@ const CreateSurvey: React.FC = () => {
           console.error("Error submitting survey data:", error);
         });
     };
+    };
 
+    if (
+      formData.surveyName &&
+      formData.description &&
+      formData.questions.length > 0
+    ) {
     if (
       formData.surveyName &&
       formData.description &&
@@ -88,6 +94,7 @@ const CreateSurvey: React.FC = () => {
   };
 
   const checkboxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, checked, value } = event.target;
     const { name, checked, value } = event.target;
 
     if (checked) {
@@ -238,6 +245,7 @@ const CreateSurvey: React.FC = () => {
           <Modal.Header closeButton>
             <Modal.Title>{t('Add Question')}</Modal.Title>
           </Modal.Header>
+          <AddQuestions />
           <AddQuestions />
           <Modal.Footer></Modal.Footer>
         </Modal>

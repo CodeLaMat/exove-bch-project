@@ -47,3 +47,4 @@ const updateManager = async (employeeId: string, managerId: string) => {
 };
 
 export default { getAll, updateManager };
+export default { getAll, updateManager };

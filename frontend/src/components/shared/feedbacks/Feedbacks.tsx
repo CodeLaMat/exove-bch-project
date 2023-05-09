@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
 import Table from "react-bootstrap/Table";
 import classes from "./Feedbacks.module.css";
@@ -51,6 +53,7 @@ const Feedbacks: React.FC = () => {
     dispatch(initialiseSurveyPacks());
   }, [dispatch]);
 
+  console.log("surveyPacks", surveyPacks);
   console.log("surveyPacks", surveyPacks);
 
   const handleSurveyPackClick = (id: string) => {
