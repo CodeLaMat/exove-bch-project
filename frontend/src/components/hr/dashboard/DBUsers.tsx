@@ -4,9 +4,12 @@ import Table from "react-bootstrap/Table";
 import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
+import { useTranslation } from "react-i18next";
 
 const DBUsers = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
@@ -22,9 +25,9 @@ const DBUsers = () => {
       <thead>
         <tr>
           <th>#</th>
-          <th>Full Name</th>
-          <th>Title</th>
-          <th>Department</th>
+          <th>{t('Full Name')}</th>
+          <th>{t('Title')}</th>
+          <th>{t('Department')}</th>
         </tr>
       </thead>
       <tbody>

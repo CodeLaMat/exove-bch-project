@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./ProfileMenu.module.css";
 import { useAppSelector } from "../../hooks/hooks";
+import LanguageSwitcher from "../shared/Translation";
 
 const ProfileMenu = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
@@ -31,6 +32,10 @@ const ProfileMenu = () => {
         <div className={classes.pageHeading}>
           <h4>{userData[0].name}</h4>
         </div>
+        <div className={classes.LanguageSwitcher}>
+          <LanguageSwitcher />
+        </div>
+        
       </div>
       <div className={classes.dropDownNav}>
         {userData[0].imagePath === "" ? (

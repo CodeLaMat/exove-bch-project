@@ -4,8 +4,11 @@ import classes from "./MyProfile.module.css";
 import { useAppSelector } from "../../hooks/hooks";
 import { IEmployee } from "../../types/userTypes";
 import { RootState } from "../../app/store";
+import { useTranslation } from "react-i18next";
 
 const MyProfile = () => {
+  const { t } = useTranslation();
+
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
@@ -23,7 +26,7 @@ const MyProfile = () => {
   console.log("CurrentUser:", lastName[0]);
 
   if (!currentUser) {
-    return <p>User not found.</p>;
+    return <p>{t('User not found')}.</p>;
   }
 
   return (
@@ -31,7 +34,7 @@ const MyProfile = () => {
       <PageHeading pageTitle="Profile" />
       <div className={classes.userProfile}>
         <div className={classes.userHeading}>
-          <h2>User profile</h2>
+          <h2>{t('User profile')}</h2>
         </div>
         <div className={classes.profileContent}>
           <div className={classes.profileImage}>
@@ -49,31 +52,31 @@ const MyProfile = () => {
           </div>
           <div className={classes.profileInfo}>
             <h3>
-              <strong>Fullname:</strong> {FullName}
+              <strong>{t('Fullname')}:</strong> {FullName}
             </h3>
             <p>
               {" "}
-              <strong>Department: </strong>
+              <strong>{t('Department')}: </strong>
               {currentUser.role}
             </p>
             <p>
               {" "}
-              <strong>Title: </strong>
+              <strong>{t('Title')}Title: </strong>
               {currentUser.title}
             </p>
             <p>
               {" "}
-              <strong>Ste: </strong>
+              <strong>{t('Site')}: </strong>
               {currentUser.site}
             </p>
             <p>
               {" "}
-              <strong>Email: </strong>
+              <strong>{t('Email')}: </strong>
               {currentUser.email}
             </p>
             <p>
               {" "}
-              <strong>Role: </strong>
+              <strong>{t('Role')}: </strong>
               {currentUser.role}
             </p>
           </div>

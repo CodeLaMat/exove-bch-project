@@ -17,8 +17,10 @@ import { Modal } from "react-bootstrap";
 import AddQuestions from "../questionnaire/AddQuestions";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { addSurvey } from "../../../features/survey/surveySlice";
+import { useTranslation } from "react-i18next";
 
 const CreateSurvey: React.FC = () => {
+  const { t } = useTranslation();
   const { showQuestionModal } = useAppSelector((state) => state.question);
   const dispatch = useAppDispatch();
   const [questionList, setQuestionList] = useState<IQuestion[]>([]);
@@ -121,24 +123,24 @@ const CreateSurvey: React.FC = () => {
 
   return (
     <div className={classes.surveyCreate_container}>
-      <PageHeading pageTitle="Create Survey" />{" "}
+      <PageHeading pageTitle={t('Create Survey')} />{" "}
       <div className={classes.back_button}>
         <Button variant="primary" onClick={() => navigate("/surveys")}>
-          Back
+        {t('Back')}
         </Button>
         <Button variant="primary" onClick={handleShowModal}>
-          Add Question
+        {t('Add Question')}
         </Button>
       </div>
       <div className={classes.top}>
         <div className={classes.surveyForm_container}>
           <form action="POST" onSubmit={submitHandler}>
             <label>
-              Survey Name:
+            {t('Survey Name')}:
               <input type="text" name="surveyName" onChange={onchangeHandler} />
             </label>
             <label>
-              Description:
+            {t('Description')}:
               <input
                 type="text"
                 name="description"
@@ -153,14 +155,14 @@ const CreateSurvey: React.FC = () => {
               {Object.entries(questionsByCategory).map(
                 ([category, questions], index) => (
                   <Accordion.Item eventKey={category} key={category}>
-                    <Accordion.Header>{category}</Accordion.Header>
+                    <Accordion.Header>{t(`${category}`)}</Accordion.Header>
                     <Accordion.Body>
                       <table className={classes.table}>
                         <thead>
                           <tr>
-                            <th>Question</th>
-                            <th>Question type</th>
-                            <th>Choose</th>
+                            <th>{t('Question')}</th>
+                            <th>{t('Question type')}</th>
+                            <th>{t('Choose')}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -170,10 +172,10 @@ const CreateSurvey: React.FC = () => {
                               className={index % 2 === 0 ? "" : "highlight"}
                             >
                               <td className={classes.table_cell}>
-                                {question.question}
+                              {t(`${question.question}`)}
                               </td>
                               <td className={classes.table_cell}>
-                                {question.questionType}
+                              {t(`${question.questionType}`)}
                               </td>
                               <td className={classes.table_cell}>
                                 <Form.Check
@@ -196,7 +198,7 @@ const CreateSurvey: React.FC = () => {
             </Accordion>
             <div className={classes.submit_button}>
               <Button type="submit" variant="primary">
-                Submit
+              {t('Submit')}
               </Button>
             </div>
           </form>
@@ -205,7 +207,7 @@ const CreateSurvey: React.FC = () => {
       <div>
         <Modal show={showQuestionModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
-            <Modal.Title>Add a question</Modal.Title>
+            <Modal.Title>{t('Add Question')}</Modal.Title>
           </Modal.Header>
           <AddQuestions />
           <Modal.Footer></Modal.Footer>

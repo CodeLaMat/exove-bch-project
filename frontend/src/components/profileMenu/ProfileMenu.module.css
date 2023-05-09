@@ -15,6 +15,16 @@
   cursor: pointer;
 }
 
+.pageHeading h4{
+  margin-left: 2.5rem;
+}
+
+.LanguageSwitcher{
+  margin-left: 2.5rem;
+}
+
+
+
 .mainNav {
   display: flex;
   align-items: center;

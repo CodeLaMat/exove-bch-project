@@ -5,9 +5,11 @@ import { IEmployee, ISurvey } from "../../../types/dataTypes";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router";
 import classes from "./CheckDataSent.module.css";
+import { useTranslation } from "react-i18next";
 
 const CheckDataSend = () => {
   const dispatch = useDispatch<AppDispatch>();
+  const { t } = useTranslation();
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -82,7 +84,7 @@ const CheckDataSend = () => {
   return (
     <div className={classes.survey_card}>
       <div className={classes.employee_card}>
-        <h3>Selected employee</h3>
+        <h3>{t('Selected employee')}</h3>
         <h4>
           <span>
             {firstName} {lastName}
@@ -91,7 +93,7 @@ const CheckDataSend = () => {
       </div>
 
       <div className={classes.manager_card}>
-        <h3>Manager</h3>
+        <h3>{t('Manager')}</h3>
         <h4>
           <span>
             {managerFirstName} {managerLastName}
@@ -100,22 +102,22 @@ const CheckDataSend = () => {
       </div>
 
       <div className={classes.survey_questions}>
-        <h3>Survey Questions</h3>
+        <h3>{t('Survey Questions')}</h3>
         {selectedSurvey && (
           <>
-            <p>Survey Name: {selectedSurvey.surveyName}</p>
-            <p>Description: {selectedSurvey.description}</p>
+            <p>{t('Survey Name')}: {selectedSurvey.surveyName}</p>
+            <p>{t('Description')}: {selectedSurvey.description}</p>
 
             <ul>
               {selectedSurvey.questions.map((question, index) => (
                 <li key={index}>
-                  <strong>Category:</strong> {question.category}
+                  <strong>{t('Category')}:</strong> {t(`${question.category}`)}
                   <br />
-                  <strong>Question {index + 1}:</strong> {question.question}
+                  <strong>{t('Question')}: {index + 1}:</strong> {question.question}
                   <br />
-                  <strong>Type:</strong> {question.questionType}
+                  <strong>{t('Type')}:</strong>{t(`${question.questionType}`)}
                   <br />
-                  <strong>Description:</strong> {question.description}
+                  <strong>{t('Description')}:</strong> {question.description}
                 </li>
               ))}
             </ul>
