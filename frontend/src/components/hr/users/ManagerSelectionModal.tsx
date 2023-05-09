@@ -2,6 +2,8 @@ import React from "react";
 import { FormCheck, Modal } from "react-bootstrap";
 import classes from "./ParticipantSelectionModal.module.css";
 import { IEmployee } from "../../../types/userTypes";
+import { useTranslation } from "react-i18next";
+
 
 type ManagerSelectionModalProps = {
   isOpen: boolean;
@@ -18,6 +20,8 @@ const ManagerSelectionModal: React.FC<ManagerSelectionModalProps> = ({
   onManagerSelect,
   allEmployees,
 }) => {
+  const { t } = useTranslation();
+
   return (
     <Modal
       show={isOpen}
@@ -26,7 +30,7 @@ const ManagerSelectionModal: React.FC<ManagerSelectionModalProps> = ({
       dialogClassName={classes.overlay}
     >
       <Modal.Header closeButton>
-        <Modal.Title>Select a Manager</Modal.Title>
+        <Modal.Title>{t('Select a Manager')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <div className={classes.employeeList}>

@@ -11,6 +11,7 @@ import { useDispatch } from "react-redux";
 import { AppDispatch } from "../../../app/store";
 import { updateManagerAsync } from "../../../features/user/employeesSlice";
 import Button from "../../shared/button/Button";
+import { useTranslation } from "react-i18next";
 
 const SelectEmployee: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -28,6 +29,7 @@ const SelectEmployee: React.FC = () => {
   const [managerLastName, setManagerLastName] = useState("");
   const [managerTitle, setManagerTitle] = useState("");
   const [managerImage, setManagerImage] = useState("");
+  const { t } = useTranslation();
 
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
@@ -88,7 +90,7 @@ const SelectEmployee: React.FC = () => {
       <div className={classes.cardsContainer}>
         <div className={classes.cardContainer}>
           {" "}
-          <PageHeading pageTitle="Selected employee" />
+          <PageHeading pageTitle={t('Selected employee')} />
           <div
             key={userID}
             className={classes.employeeCard}
@@ -117,9 +119,9 @@ const SelectEmployee: React.FC = () => {
         </div>
         <div className={classes.cardContainer}>
           {" "}
-          <PageHeading pageTitle="Manager" />{" "}
+          <PageHeading pageTitle={t('Manager')} />{" "}
           <Button variant="standard" onClick={openModal}>
-            Change Manager
+          {t('Change Manager')}
           </Button>
           <div key={manager} className={classes.employeeCard}>
             <div className={classes.employeeImage}>

@@ -155,7 +155,7 @@ const CreateSurvey: React.FC = () => {
               {Object.entries(questionsByCategory).map(
                 ([category, questions], index) => (
                   <Accordion.Item eventKey={category} key={category}>
-                    <Accordion.Header>{category}</Accordion.Header>
+                    <Accordion.Header>{t(`${category}`)}</Accordion.Header>
                     <Accordion.Body>
                       <table className={classes.table}>
                         <thead>
@@ -172,10 +172,10 @@ const CreateSurvey: React.FC = () => {
                               className={index % 2 === 0 ? "" : "highlight"}
                             >
                               <td className={classes.table_cell}>
-                                {question.question}
+                              {t(`${question.question}`)}
                               </td>
                               <td className={classes.table_cell}>
-                                {question.questionType}
+                              {t(`${question.questionType}`)}
                               </td>
                               <td className={classes.table_cell}>
                                 <Form.Check

@@ -49,6 +49,7 @@
     "Site" : "paikka",
     "Email" : "Sähköposti",
     "Role" : "Rooli",
+    "Start" : "alkaa",
     "User not found" : "Käyttäjää ei löydy",
     "Free form" : "Vapaa muoto",
     "Multiple choice" : "Monivalinta",
@@ -62,6 +63,22 @@
     "Leadership" : "johtajisto",
     "Readiness for change" : "Valmius muutokseen",
     "Creativity" : "Luovuus",
-    "General Evaluation" : "Yleinen arviointi"
+    "General Evaluation" : "Yleinen arviointi",
+    "Step" : "Vaihe",
+    "Next" : "Seuraava",
+    "Select" : "Valitse",
+    "Create Survey Pack" : "Luo kyselypaketti",
+    "Select employee" : "Valitse työntekijä",
+    "Select survey" : "Valitse kysely",
+    "Check Data" : "Tarkista tiedot",
+    "Selected employee" : "Valittu työntekijä",
+    "Change Manager" : "Muuta Manageria",
+    "Select a Manager" : "Valitse johtaja",
+    "Number of questions" : "Kysymysten määrä",
+    "Logout" : "Kirjautua ulos",
+    "Are you sure you want to logout" : "Haluatko varmasti kirjautua ulos",
+    "Cancel" : "Peruuttaa",
+    "Clear" : "tyhjentää",
+    "Select participants" : "Valitse osallistujat"
 
 }

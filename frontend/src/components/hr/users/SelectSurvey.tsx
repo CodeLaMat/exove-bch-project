@@ -8,12 +8,14 @@ import { ISurvey } from "../../../types/dataTypes";
 import { RootState } from "../../../app/store";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { setSurvey } from "../../../features/survey/surveyPackSlice";
+import { useTranslation } from "react-i18next";
 
 const SelectSurvey = () => {
   const dispatch = useAppDispatch();
   const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null);
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
+  const { t } = useTranslation();
 
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
@@ -39,7 +41,7 @@ const SelectSurvey = () => {
   if (role === UserRole.HR) {
     return (
       <div className={classes.surveys_container}>
-        <PageHeading pageTitle="Survey forms" />
+        <PageHeading pageTitle={t('Survey forms')} />
         <div className={classes.top}>
           <div className={classes.maincontent}>
             <div className={classes.actions}></div>
@@ -47,10 +49,10 @@ const SelectSurvey = () => {
               <Table striped bordered hover size="md">
                 <thead>
                   <tr>
-                    <th>Survey Name</th>
-                    <th>Description</th>
-                    <th>Number of questions</th>
-                    <th>Select</th>
+                    <th>{t('Survey Name')}</th>
+                    <th>{t('Description')}</th>
+                    <th>{t('Number of questions')}</th>
+                    <th>{t('Select')}</th>
                   </tr>
                 </thead>
                 <tbody>
