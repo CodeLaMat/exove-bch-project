@@ -8,7 +8,7 @@ const nodemailerConfig_1 = __importDefault(require("./nodemailerConfig"));
 const sendEmail = async ({ from, to, subject, html }) => {
     let testAccount = await nodemailer_1.default.createTestAccount();
     const transporter = nodemailer_1.default.createTransport(nodemailerConfig_1.default);
-    return transporter.sendMail({
+    let mailOptions = await transporter.sendMail({
         from,
         to,
         subject,

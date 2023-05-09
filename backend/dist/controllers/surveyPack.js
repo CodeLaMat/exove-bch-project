@@ -33,7 +33,6 @@ const createSurveyPack = async (req, res) => {
             senderEmail: req.user.email,
             senderName: req.user.name,
         });
-        console.log("Email sent successfully");
     }
     catch (error) {
         console.error("Error sending email: ", error);
@@ -51,19 +50,49 @@ const getSurveyPack = async (req, res) => {
 };
 exports.getSurveyPack = getSurveyPack;
 const updateSurveyPack = async (req, res) => {
-    const { params: { id: surveyPackId }, } = req;
-    const surveyPack = await surveyPack_1.default.findByIdAndUpdate({ _id: surveyPackId }, req.body, {
-        new: true,
-        runValidators: true,
-    });
+    const { id: surveyPackId } = req.params;
+    const surveyPack = await surveyPack_1.default.findById(surveyPackId);
     if (!surveyPack) {
         throw new errors_1.NotFoundError(`No surveyPack with id ${surveyPackId}`);
     }
-    if (surveyPack.hrapproved === true) {
+    const updatedSurveyPack = await surveyPack_1.default.findByIdAndUpdate(surveyPackId, req.body, {
+        new: true,
+        runValidators: true,
+    });
+    if (updatedSurveyPack.hrapproved === true &&
+        updatedSurveyPack.employeesTakingSurvey.length === 6 &&
+        updatedSurveyPack.employeesTakingSurvey.every((status) => {
+            return status.acceptanceStatus === "Approved";
+        })) {
+        const [surveyors, reviewee] = await Promise.all([
+            user_1.default.find({
+                _id: {
+                    $in: updatedSurveyPack.employeesTakingSurvey.map((status) => status.employee),
+                },
+            }),
+            user_1.default.findById(updatedSurveyPack.personBeingSurveyed),
+        ]);
+        for (const surveyor of surveyors) {
+            try {
+                if (reviewee) {
+                    await (0, util_1.sendHrApprovalEmail)({
+                        receiverEmail: surveyor.email,
+                        receiverName: surveyor.displayName,
+                        employeeName: reviewee.displayName,
+                        senderEmail: req.user.email,
+                        senderName: req.user.name,
+                    });
+                }
+            }
+            catch (error) {
+                console.error(`Error sending email to ${surveyor.email}`, error);
+            }
+        }
     }
-    res
-        .status(http_status_codes_1.StatusCodes.OK)
-        .json({ msg: "surveyPack successfully updated", surveyPack: surveyPack });
+    res.status(http_status_codes_1.StatusCodes.OK).json({
+        msg: "surveyPack successfully updated",
+        surveyPack: updatedSurveyPack,
+    });
 };
 exports.updateSurveyPack = updateSurveyPack;
 const deleteSurveyPack = async (req, res) => {
@@ -93,6 +122,33 @@ const updateSurveyors = async (req, res) => {
     }
     surveyPack.employeesTakingSurvey = employeesTakingSurvey;
     await surveyPack.save();
+    if (surveyPack.employeesTakingSurvey.length === 6 &&
+        surveyPack.employeesTakingSurvey.every((status) => {
+            return status.acceptanceStatus === "Declined";
+        })) {
+        const [surveyors, reviewee] = await Promise.all([
+            user_1.default.find({
+                _id: {
+                    $in: surveyPack.employeesTakingSurvey.map((status) => status.employee),
+                },
+            }),
+            user_1.default.findById(surveyPack.personBeingSurveyed),
+        ]);
+        for (const surveyor of surveyors) {
+            try {
+                if (reviewee) {
+                    await (0, util_1.sendParticipantEmail)({
+                        receiverEmail: surveyor.email,
+                        receiverName: surveyor.displayName,
+                        employeeName: reviewee.displayName,
+                    });
+                }
+            }
+            catch (error) {
+                console.error(`Error sending email to ${surveyor.email}`, error);
+            }
+        }
+    }
     return res.status(http_status_codes_1.StatusCodes.OK).json({
         msg: "EmployeesTakingSurvey updated successfully",
         employeesTakingSurvey: surveyPack.employeesTakingSurvey,
