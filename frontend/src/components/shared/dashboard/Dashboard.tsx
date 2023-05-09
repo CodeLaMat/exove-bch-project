@@ -10,6 +10,8 @@ import { UserRole } from "../../../enum";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
+import GenericPdfDownloader from "./pdfDownloader";
+
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -26,11 +28,16 @@ const Dashboard = () => {
   if (role === UserRole.HR) {
     return (
       <div>
+        <GenericPdfDownloader
+          downloadFileName="DashboardPDF" 
+          rootElementId="dashboardPdf" 
+        />
         <div>
+       
           <div>
             <PageHeading pageTitle={t("Dashboard")} />{" "}
           </div>
-          <div className={classes.dashboard_container}>
+          <div className={classes.dashboard_container} id="dashboardPdf">
             <div className={classes.dashboard_chart}>
               <h2>{t("Survey Summary")}</h2>
               <SurveySummaryChart />
