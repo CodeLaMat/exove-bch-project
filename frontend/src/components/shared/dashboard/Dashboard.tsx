@@ -28,14 +28,13 @@ const Dashboard = () => {
   if (role === UserRole.HR) {
     return (
       <div>
-        <GenericPdfDownloader
+        <div>
+          <div className={classes.pageheading}>
+            <PageHeading pageTitle={t('Dashboard')} />{" "}
+            <GenericPdfDownloader
           downloadFileName="DashboardPDF" 
           rootElementId="dashboardPdf" 
         />
-        <div>
-       
-          <div>
-            <PageHeading pageTitle={t('Dashboard')} />{" "}
           </div>
           <div className={classes.dashboard_container} id="dashboardPdf">
             <div className={classes.dashboard_chart}>
