@@ -12,7 +12,6 @@ import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
 import GenericPdfDownloader from "./pdfDownloader";
 
-
 const Dashboard = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -29,11 +28,10 @@ const Dashboard = () => {
     return (
       <div>
         <GenericPdfDownloader
-          downloadFileName="DashboardPDF" 
-          rootElementId="dashboardPdf" 
+          downloadFileName="DashboardPDF"
+          rootElementId="dashboardPdf"
         />
         <div>
-       
           <div>
             <PageHeading pageTitle={t("Dashboard")} />{" "}
           </div>
