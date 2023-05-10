@@ -34,7 +34,7 @@ const UserDashboard = () => {
 
   return (
     <div className={classes.userDashContainer}>
-      <PageHeading pageTitle="Profile" />
+      <PageHeading pageTitle="Dashboard" />
       <div className={classes.userInfoContainer}>
         <div className={classes.userImageContainer}>
           {currentUser.image === "" ? (

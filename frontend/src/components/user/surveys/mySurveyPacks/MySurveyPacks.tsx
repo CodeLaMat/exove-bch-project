@@ -8,6 +8,7 @@ import { useNavigate } from "react-router";
 import SurveyPackCard from "./MySurveyPackCard";
 import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
 import { initialiseEmployees } from "../../../../features/user/employeesSlice";
+import PageHeading from "../../../pageHeading/PageHeading";
 
 const MySurveyPacks = () => {
   useEffect(() => {
@@ -41,17 +42,19 @@ const MySurveyPacks = () => {
 
   return (
     <div className={classes.mySurveyPack_container}>
-      {" "}
-      <h2>You will be evaluated</h2>
-      <div className={classes.includedSurveyPacks}>
-        {includedSurveyPacks.map((surveyPack) => (
-          <SurveyPackCard
-            key={surveyPack._id}
-            surveyPack={surveyPack}
-            employees={employees}
-            handleSurveyPackClick={handleSurveyPackClick}
-          />
-        ))}
+      <PageHeading pageTitle="My Surveys" />
+      <div className={classes.mySurveyPack_container}>
+        <h4>You will be evaluated</h4>
+        <div className={classes.includedSurveyPacks}>
+          {includedSurveyPacks.map((surveyPack) => (
+            <SurveyPackCard
+              key={surveyPack._id}
+              surveyPack={surveyPack}
+              employees={employees}
+              handleSurveyPackClick={handleSurveyPackClick}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
