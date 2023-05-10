@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import React, { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
+
 import Table from "react-bootstrap/Table";
 import classes from "./Feedbacks.module.css";
 import { IEmployee, ISurveypack } from "../../../types/dataTypes";
@@ -11,7 +11,6 @@ import { RootState, AppDispatch } from "../../../app/store";
 import Button from "../../shared/button/Button";
 import PageHeading from "../../pageHeading/PageHeading";
 import { useAppSelector } from "../../../hooks/hooks";
-import { useTranslation } from "react-i18next";
 import { useTranslation } from "react-i18next";
 
 const Feedbacks: React.FC = () => {

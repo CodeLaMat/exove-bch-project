@@ -6,12 +6,9 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../app/store";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 
 const DBSurveyList = () => {
   const dispatch = useAppDispatch();
-  const { t } = useTranslation();
-
   const { t } = useTranslation();
 
   const surveys: ISurvey[] = useAppSelector(

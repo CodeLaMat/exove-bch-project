@@ -12,7 +12,6 @@ import { AppDispatch } from "../../../app/store";
 import { updateManagerAsync } from "../../../features/user/employeesSlice";
 import Button from "../../shared/button/Button";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 
 const SelectEmployee: React.FC = () => {
   const dispatch = useDispatch<AppDispatch>();
@@ -30,7 +29,6 @@ const SelectEmployee: React.FC = () => {
   const [managerLastName, setManagerLastName] = useState("");
   const [managerTitle, setManagerTitle] = useState("");
   const [managerImage, setManagerImage] = useState("");
-  const { t } = useTranslation();
   const { t } = useTranslation();
 
   const employees: IEmployee[] = useAppSelector(

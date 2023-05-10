@@ -11,19 +11,6 @@ const getAll = async () => {
   });
   return response.data;
 };
-const updateManager = async (employeeId: string, managerId: string) => {
-  try {
-    const response = await axios.put(
-      `${URL.EMPLOYEES_URL}/${employeeId}/manager`,
-      {
-        managerId: managerId,
-      }
-    );
-    return response.data;
-  } catch (error) {
-    throw new Error("Failed to update manager");
-  }
-};
 
 const updateManager = async (employeeId: string, managerId: string) => {
   const token = Cookies.get("token");
@@ -46,5 +33,4 @@ const updateManager = async (employeeId: string, managerId: string) => {
   }
 };
 
-export default { getAll, updateManager };
 export default { getAll, updateManager };

@@ -9,14 +9,12 @@ import { RootState } from "../../../app/store";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { setSurvey } from "../../../features/survey/surveyPackSlice";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 
 const SelectSurvey = () => {
   const dispatch = useAppDispatch();
   const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null);
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
-  const { t } = useTranslation();
   const { t } = useTranslation();
 
   const surveys: ISurvey[] = useAppSelector(

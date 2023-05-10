@@ -7,10 +7,8 @@ import { useAppDispatch } from "../../../hooks/hooks";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import Button from "../../shared/button/Button";
 import { useTranslation } from "react-i18next";
-import { useTranslation } from "react-i18next";
 
 const AddQuestions: React.FC = () => {
-  const { t } = useTranslation();
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const [formData, setFormData] = useState({
@@ -113,5 +111,4 @@ const AddQuestions: React.FC = () => {
   );
 };
 
-export default AddQuestions;
 export default AddQuestions;

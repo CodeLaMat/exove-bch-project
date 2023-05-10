@@ -51,39 +51,7 @@ const CreateSurvey: React.FC = () => {
         console.error(error);
         // Add logic to handle the error if needed
       });
-
-    if (formSubmitted) {
-    }
-  }, [setQuestionList, formSubmitted, formData]);
-
-  useEffect(() => {
-    const sendSurvey = (formData: FormData) => {
-      axios
-        .post("http://localhost:5010/api/v1/surveys", formData)
-        .then((response) => {
-          console.log("Survey data submitted successfully!");
-          navigate("/surveys");
-        })
-        .catch((error) => {
-          console.error("Error submitting survey data:", error);
-        });
-    };
-    };
-
-    if (
-      formData.surveyName &&
-      formData.description &&
-      formData.questions.length > 0
-    ) {
-    if (
-      formData.surveyName &&
-      formData.description &&
-      formData.questions.length > 0
-    ) {
-      sendSurvey(formData);
-    }
-  }, [formData, navigate]);
-  }, [setQuestionList]);
+  }, [setQuestionList, formData]);
 
   const onchangeHandler = (e: React.ChangeEvent<HTMLInputElement>): void => {
     if (e.target.name === "surveyName") {
@@ -95,7 +63,6 @@ const CreateSurvey: React.FC = () => {
 
   const checkboxHandler = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, checked, value } = event.target;
-    const { name, checked, value } = event.target;
 
     if (checked) {
       setCheckedBoxes([...checkedBoxes, value]);
@@ -104,16 +71,16 @@ const CreateSurvey: React.FC = () => {
     }
   };
 
-  const sendSurvey = async (formData: SurveyFormData) => {
-    try {
-      await dispatch(addSurvey(formData));
-      console.log("Survey data submitted successfully!");
-      navigate("/surveys");
-    } catch (error) {
-      console.error("Error submitting survey data:", error);
-    }
-  };
   useEffect(() => {
+    const sendSurvey = async (formData: SurveyFormData) => {
+      try {
+        await dispatch(addSurvey(formData));
+        console.log("Survey data submitted successfully!");
+        navigate("/surveys");
+      } catch (error) {
+        console.error("Error submitting survey data:", error);
+      }
+    };
     if (
       formData.surveyName &&
       formData.description &&
@@ -125,9 +92,6 @@ const CreateSurvey: React.FC = () => {
 
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
-    setFormSubmitted(true);
-
 
     const checkedquestions = checkedBoxes;
     const surveyQuestions = checkedquestions
@@ -159,24 +123,24 @@ const CreateSurvey: React.FC = () => {
 
   return (
     <div className={classes.surveyCreate_container}>
-      <PageHeading pageTitle={t('Create Survey')} />{" "}
+      <PageHeading pageTitle={t("Create Survey")} />{" "}
       <div className={classes.back_button}>
         <Button variant="primary" onClick={() => navigate("/surveys")}>
-        {t('Back')}
+          {t("Back")}
         </Button>
         <Button variant="primary" onClick={handleShowModal}>
-        {t('Add Question')}
+          {t("Add Question")}
         </Button>
       </div>
       <div className={classes.top}>
         <div className={classes.surveyForm_container}>
           <form action="POST" onSubmit={submitHandler}>
             <label>
-            {t('Survey Name')}:
+              {t("Survey Name")}:
               <input type="text" name="surveyName" onChange={onchangeHandler} />
             </label>
             <label>
-            {t('Description')}:
+              {t("Description")}:
               <input
                 type="text"
                 name="description"
@@ -196,9 +160,9 @@ const CreateSurvey: React.FC = () => {
                       <table className={classes.table}>
                         <thead>
                           <tr>
-                            <th>{t('Question')}</th>
-                            <th>{t('Question type')}</th>
-                            <th>{t('Choose')}</th>
+                            <th>{t("Question")}</th>
+                            <th>{t("Question type")}</th>
+                            <th>{t("Choose")}</th>
                           </tr>
                         </thead>
                         <tbody>
@@ -208,10 +172,10 @@ const CreateSurvey: React.FC = () => {
                               className={index % 2 === 0 ? "" : "highlight"}
                             >
                               <td className={classes.table_cell}>
-                              {t(`${question.question}`)}
+                                {t(`${question.question}`)}
                               </td>
                               <td className={classes.table_cell}>
-                              {t(`${question.questionType}`)}
+                                {t(`${question.questionType}`)}
                               </td>
                               <td className={classes.table_cell}>
                                 <Form.Check
@@ -234,7 +198,7 @@ const CreateSurvey: React.FC = () => {
             </Accordion>
             <div className={classes.submit_button}>
               <Button type="submit" variant="primary">
-              {t('Submit')}
+                {t("Submit")}
               </Button>
             </div>
           </form>
@@ -243,9 +207,8 @@ const CreateSurvey: React.FC = () => {
       <div>
         <Modal show={showQuestionModal} onHide={handleCloseModal}>
           <Modal.Header closeButton>
-            <Modal.Title>{t('Add Question')}</Modal.Title>
+            <Modal.Title>{t("Add Question")}</Modal.Title>
           </Modal.Header>
-          <AddQuestions />
           <AddQuestions />
           <Modal.Footer></Modal.Footer>
         </Modal>
