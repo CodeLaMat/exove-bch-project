@@ -5,8 +5,11 @@ import { useAppSelector } from "../../hooks/hooks";
 import { IEmployee } from "../../types/userTypes";
 import { RootState } from "../../app/store";
 import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const MyProfile = () => {
+  const { t } = useTranslation();
+
   const { t } = useTranslation();
 
   const employees: IEmployee[] = useAppSelector(

@@ -5,15 +5,19 @@ import { IEmployee } from "../../../types/userTypes";
 import { RootState } from "../../../app/store";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { useTranslation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 
 const DBUsers = () => {
   const dispatch = useAppDispatch();
+  const { t } = useTranslation();
+
   const { t } = useTranslation();
 
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
 
+  const employeesArray = Object.values(employees);
   const employeesArray = Object.values(employees);
 
   useEffect(() => {
@@ -31,6 +35,8 @@ const DBUsers = () => {
         </tr>
       </thead>
       <tbody>
+        {employeesArray &&
+          employeesArray.map((user, index) => (
         {employeesArray &&
           employeesArray.map((user, index) => (
             <tr key={index}>
