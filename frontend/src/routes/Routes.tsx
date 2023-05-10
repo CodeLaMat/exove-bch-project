@@ -12,7 +12,7 @@ import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
-import Feedbacks from "../components/shared/feedbacks/Feedbacks";
+import Feedbacks from "../components/hr/feedbacks/Feedbacks";
 import Inbox from "../components/shared/surveyPacks/SurveyPacks";
 import SurveyPacks from "../components/user/surveys/mySurveyPacks/MySurveyPacks";
 

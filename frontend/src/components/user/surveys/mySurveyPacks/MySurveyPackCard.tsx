@@ -20,11 +20,13 @@ const SurveyPackCard: React.FC<SurveyPackCardProps> = ({
       <Card.Body>
         <Card.Title>
           {surveyPack.personBeingSurveyed &&
-            employees.find((e) => e._id === surveyPack.personBeingSurveyed)
-              ?.firstName +
+            employees.find(
+              (employee) => employee._id === surveyPack.personBeingSurveyed
+            )?.firstName +
               " " +
-              employees.find((e) => e._id === surveyPack.personBeingSurveyed)
-                ?.surName}
+              employees.find(
+                (employee) => employee._id === surveyPack.personBeingSurveyed
+              )?.surName}
         </Card.Title>
         <Card.Subtitle className="mb-2 text-muted">
           {new Date(surveyPack.createdAt).toLocaleDateString()}

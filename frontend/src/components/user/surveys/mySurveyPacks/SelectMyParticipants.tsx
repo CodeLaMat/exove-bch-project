@@ -58,7 +58,7 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
     setSelectedParticipants(selectedParticipantsFromStore);
   }, [dispatch]);
 
-  const handleParticipantSelection = (participantId: string) => {
+  const participantSelectionHandler = (participantId: string) => {
     const isSelected = participants.includes(participantId);
 
     if (isSelected) {
@@ -88,18 +88,18 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
   };
 
   const handleSubmit = () => {
+    setShowToast(true);
     dispatch(
       updateEmployeesTakingSurvey({
         surveyPackId: surveyPack,
         updatedParticipants: selectedParticipants,
       })
     );
-    setShowToast(true);
-    setParticipants([]);
     setTimeout(() => {
       setShowToast(false);
     }, 3000);
     dispatch(initialiseSurveyPacks());
+    setParticipants([]);
   };
 
   const handleRemoveParticipants = () => {
@@ -120,7 +120,7 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
             className={`${classes.employeeCard} ${
               participants.includes(employee._id) ? classes.selected : ""
             }`}
-            onClick={() => handleParticipantSelection(employee._id)}
+            onClick={() => participantSelectionHandler(employee._id)}
           >
             <div className={classes.details}>
               <h5>

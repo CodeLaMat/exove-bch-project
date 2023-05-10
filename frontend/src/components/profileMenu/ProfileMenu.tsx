@@ -35,7 +35,6 @@ const ProfileMenu = () => {
         <div className={classes.LanguageSwitcher}>
           <LanguageSwitcher />
         </div>
-        
       </div>
       <div className={classes.dropDownNav}>
         {userData[0].imagePath === "" ? (
@@ -52,8 +51,8 @@ const ProfileMenu = () => {
         <select
           name="selection"
           id="selection"
-          onChange={(e: React.ChangeEvent<HTMLSelectElement>) =>
-            changeHandler(e)
+          onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
+            changeHandler(event)
           }
         >
           <option value={firstName} hidden>

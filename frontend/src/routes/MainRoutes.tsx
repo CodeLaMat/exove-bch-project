@@ -8,13 +8,12 @@ import MyProfile from "../components/userProfile/MyProfile";
 import Main from "./templates/main/Main";
 import CreateSurvey from "../components/hr/surveys/CreateSurvey";
 import Dashboard from "../components/shared/dashboard/Dashboard";
-import Inbox from "../components/shared/surveyPacks/SurveyPacks";
 import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
-import Feedbacks from "../components/shared/feedbacks/Feedbacks";
+import Feedbacks from "../components/hr/feedbacks/Feedbacks";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
-import FeedbackSingle from "../components/shared/feedbacks/FeedbackSingle";
+import FeedbackSingle from "../components/hr/feedbacks/FeedbackSingle";
 
 import CreateForm from "../components/hr/users/CreateForm";
 import SurveyPackDetails from "../components/user/surveys/mySurveyPacks/MySurveyPackDetails";
@@ -32,21 +31,21 @@ const MainRoutes = () => {
         <Route path="/" element={<Main />}>
           <Route index element={<Dashboard />}></Route>
           <Route path="/home" element={<Dashboard />}></Route>
-          <Route path="/mysurveypacks" element={<Inbox />}></Route>
+          <Route path="/mysurveypacks" element={<SurveyPacks />}></Route>
           <Route
             path="/mysurveypacks/:packid"
             element={<SurveyPackDetails />}
           ></Route>{" "}
-          <Route path="/surveys" element={<Surveys />}></Route>{" "}
+          <Route path="/survey_forms" element={<Surveys />}></Route>{" "}
           <Route
             path="/createsurvey"
             element={
               role === UserRole.HR ? <CreateSurvey /> : <Navigate to="/" />
             }
           />
-          <Route path="/users" element={<Users />}></Route>
+          <Route path="/employees" element={<Users />}></Route>
           <Route path="/feedbacks" element={<Feedbacks />}></Route>{" "}
-          <Route path="/feedbacks/:id" element={<FeedbackSingle />}></Route>
+          <Route path="/feedbacks/:packid" element={<FeedbackSingle />}></Route>
           <Route
             path="/othersurveypacks"
             element={<OtherSurveyPacks />}
