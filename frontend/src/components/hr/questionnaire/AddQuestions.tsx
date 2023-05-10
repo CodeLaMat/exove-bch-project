@@ -47,26 +47,30 @@ const AddQuestions: React.FC = () => {
     <div className={classes.addQuestionForm_container}>
       <form className={classes.addQuestionForm_form} onSubmit={handleSubmit}>
         <label className={classes.addQuestionForm_label}>
-        {t('Category')}:
+          {t("Category")}:
           <select
             className={classes.addQuestionForm_select}
             name="category"
             value={formData.category}
             onChange={handleChange}
           >
-            <option value="">{t('Select a category')}</option>
-            <option value="Quality focus">{t('Quality focus')}</option>
-            <option value="People skills">{t('People skills')}</option>
-            <option value="Self guidance">{t('Self guidance')}</option>
-            <option value="Leadership">{t('Leadership')}</option>
-            <option value="Readiness for change">{t('Readiness for change')}</option>
-            <option value="Creativity">{t('Creativity')}</option>
-            <option value="General Evaluation">{t('General Evaluation')}</option>
+            <option value="">{t("Select a category")}</option>
+            <option value="Quality focus">{t("Quality focus")}</option>
+            <option value="People skills">{t("People skills")}</option>
+            <option value="Self guidance">{t("Self guidance")}</option>
+            <option value="Leadership">{t("Leadership")}</option>
+            <option value="Readiness for change">
+              {t("Readiness for change")}
+            </option>
+            <option value="Creativity">{t("Creativity")}</option>
+            <option value="General Evaluation">
+              {t("General Evaluation")}
+            </option>
           </select>
         </label>
 
         <label className={classes.addQuestionForm_label}>
-        {t('Question')}:
+          {t("Question")}:
           <input
             className={classes.addQuestionForm_select}
             type="text"
@@ -77,7 +81,7 @@ const AddQuestions: React.FC = () => {
         </label>
 
         <label className={classes.addQuestionForm_label}>
-        {t('Description')}:
+          {t("Description")}:
           <textarea
             className={classes.addQuestionForm_select}
             name="description"
@@ -87,24 +91,25 @@ const AddQuestions: React.FC = () => {
         </label>
 
         <label className={classes.addQuestionForm_label}>
-        {t('Question type')}:
+          {t("Question type")}:
           <select
             className={classes.addQuestionForm_select}
             name="questionType"
             value={formData.questionType}
             onChange={handleChange}
           >
-            <option value="">{t('Select a question type')}</option>
-            <option value="Multiple choice">{t('Multiple choice')}</option>
-            <option value="Free form">{t('Free form')}</option>
+            <option value="">{t("Select a question type")}</option>
+            <option value="Multiple choice">{t("Multiple choice")}</option>
+            <option value="Free form">{t("Free form")}</option>
           </select>
         </label>
         <Button variant="primary" type="submit">
-        {t('Submit')}
+          {t("Submit")}
         </Button>
       </form>
     </div>
   );
 };
 
+export default AddQuestions;
 export default AddQuestions;

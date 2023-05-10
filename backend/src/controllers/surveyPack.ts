@@ -1,31 +1,44 @@
 import { Request, Response } from "express";
 import SurveyPack from "../models/surveyPack";
-import User from "../models/user";
 import { StatusCodes } from "http-status-codes";
-import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
-import { checkPermissions } from "../util";
+import { BadRequestError, NotFoundError } from "../errors";
+import User from "../models/user";
+import {
+  sendUserEmail,
+  sendHrApprovalEmail,
+  sendParticipantEmail,
+} from "../util";
 
 const getAllSurveyPacks = async (req: Request, res: Response) => {
-  try {
-    const surveyPacks = await SurveyPack.find();
-    res.status(StatusCodes.OK).json({ surveyPacks });
-  } catch (error) {
-    throw new BadRequestError("Failed to get survey packs");
+  const surveyPacks = await SurveyPack.find();
+  if (!surveyPacks) {
+    throw new NotFoundError(`No surveyPacks found`);
   }
+  res.status(StatusCodes.OK).json({ surveyPacks });
 };
 
 const createSurveyPack = async (req: Request, res: Response) => {
-  try {
-    console.log("Request Body:", req.body);
-    const surveyPack = await SurveyPack.create(req.body);
-    if (!surveyPack) {
-      throw new BadRequestError("Please complete the form");
-    }
-    res.status(StatusCodes.CREATED).json({ surveyPack });
-  } catch (error) {
-    console.error("Error creating survey pack:", error);
-    throw new BadRequestError("Failed to create survey pack");
+  const surveyPack = await SurveyPack.create(req.body);
+  if (!surveyPack) {
+    throw new BadRequestError("Please complete the form");
   }
+  const personBeingSurveyed = await User.findById(
+    surveyPack.personBeingSurveyed
+  );
+  if (!personBeingSurveyed) {
+    throw new NotFoundError("personBeingSurveyed not found");
+  }
+  try {
+    await sendUserEmail({
+      name: personBeingSurveyed.displayName as string,
+      email: personBeingSurveyed.email as string,
+      senderEmail: req.user.email,
+      senderName: req.user.name,
+    });
+  } catch (error) {
+    console.error("Error sending email: ", error);
+  }
+  res.status(StatusCodes.CREATED).json({ surveyPack });
 };
 
 const getSurveyPack = async (req: Request, res: Response) => {
@@ -40,23 +53,57 @@ const getSurveyPack = async (req: Request, res: Response) => {
 };
 
 const updateSurveyPack = async (req: Request, res: Response) => {
-  const {
-    params: { id: surveyPackId },
-  } = req;
-  const surveyPack = await SurveyPack.findByIdAndUpdate(
-    { _id: surveyPackId },
+  const { id: surveyPackId } = req.params;
+
+  const surveyPack = await SurveyPack.findById(surveyPackId);
+  if (!surveyPack) {
+    throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  }
+  const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
+    surveyPackId,
     req.body,
     {
       new: true,
       runValidators: true,
     }
   );
-  if (!surveyPack) {
-    throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  if (
+    updatedSurveyPack!.hrapproved === true &&
+    updatedSurveyPack!.employeesTakingSurvey.length === 6 &&
+    updatedSurveyPack!.employeesTakingSurvey.every((status) => {
+      return status.acceptanceStatus === "Approved";
+    })
+  ) {
+    const [surveyors, reviewee] = await Promise.all([
+      User.find({
+        _id: {
+          $in: updatedSurveyPack!.employeesTakingSurvey.map(
+            (status) => status.employee
+          ),
+        },
+      }),
+      User.findById(updatedSurveyPack!.personBeingSurveyed),
+    ]);
+    for (const surveyor of surveyors) {
+      try {
+        if (reviewee) {
+          await sendHrApprovalEmail({
+            receiverEmail: surveyor.email as string,
+            receiverName: surveyor.displayName as string,
+            employeeName: reviewee.displayName as string,
+            senderEmail: req.user.email,
+            senderName: req.user.name,
+          });
+        }
+      } catch (error) {
+        console.error(`Error sending email to ${surveyor.email}`, error);
+      }
+    }
   }
-  res
-    .status(StatusCodes.OK)
-    .json({ msg: "surveyPack successfully updated", surveyPack: surveyPack });
+  res.status(StatusCodes.OK).json({
+    msg: "surveyPack successfully updated",
+    surveyPack: updatedSurveyPack,
+  });
 };
 
 const deleteSurveyPack = async (req: Request, res: Response) => {
@@ -94,9 +141,39 @@ const updateSurveyors = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }
-
   surveyPack.employeesTakingSurvey = employeesTakingSurvey;
   await surveyPack.save();
+  if (
+    surveyPack.employeesTakingSurvey.length === 6 &&
+    surveyPack.employeesTakingSurvey.every((status) => {
+      return status.acceptanceStatus === "Declined";
+    })
+  ) {
+    const [surveyors, reviewee] = await Promise.all([
+      User.find({
+        _id: {
+          $in: surveyPack.employeesTakingSurvey.map(
+            (status) => status.employee
+          ),
+        },
+      }),
+      User.findById(surveyPack.personBeingSurveyed),
+    ]);
+    for (const surveyor of surveyors) {
+      try {
+        if (reviewee) {
+          await sendParticipantEmail({
+            receiverEmail: surveyor.email as string,
+            receiverName: surveyor.displayName as string,
+            employeeName: reviewee.displayName as string,
+          });
+        }
+      } catch (error) {
+        console.error(`Error sending email to ${surveyor.email}`, error);
+      }
+    }
+  }
+
   return res.status(StatusCodes.OK).json({
     msg: "EmployeesTakingSurvey updated successfully",
     employeesTakingSurvey: surveyPack.employeesTakingSurvey,

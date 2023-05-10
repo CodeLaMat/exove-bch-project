@@ -13,7 +13,6 @@ import { IParticipant } from "../../../types/dataTypes";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { useTranslation } from "react-i18next";
 
-
 const ParticipantSelection = () => {
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
@@ -84,7 +83,7 @@ const ParticipantSelection = () => {
 
   return (
     <div className={classes.participantSelection}>
-      <PageHeading pageTitle={t('Select participants')} />
+      <PageHeading pageTitle={t("Select participants")} />
       <div className={classes.cardContainer}>
         {sortedEmployees.map((employee) => (
           <div
@@ -123,7 +122,7 @@ const ParticipantSelection = () => {
         disabled={participants.length !== 5}
         onClick={handleSubmit}
       >
-        {t('Submit')}
+        {t("Submit")}
       </Button>
 
       <Button
@@ -131,7 +130,7 @@ const ParticipantSelection = () => {
         className={classes.submitButton}
         onClick={handleRemoveParticipants}
       >
-        {t('Clear')}
+        {t("Clear")}
       </Button>
     </div>
   );

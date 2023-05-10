@@ -1,5 +1,7 @@
 import React, { useEffect } from "react";
+import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
 import { useSelector, useDispatch } from "react-redux";
 import Table from "react-bootstrap/Table";
 import classes from "./Feedbacks.module.css";
@@ -15,7 +17,6 @@ const Feedbacks: React.FC = () => {
   const navigate = useNavigate();
   const dispatch: AppDispatch = useDispatch();
   const { t } = useTranslation();
-
 
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
@@ -53,6 +54,7 @@ const Feedbacks: React.FC = () => {
   }, [dispatch]);
 
   console.log("surveyPacks", surveyPacks);
+  console.log("surveyPacks", surveyPacks);
 
   const handleSurveyPackClick = (id: string) => {
     navigate(`/surveyPack/${id}`);
@@ -60,19 +62,19 @@ const Feedbacks: React.FC = () => {
 
   return (
     <div className={classes.users_container}>
-      <PageHeading pageTitle={t('Feedback')}/>
+      <PageHeading pageTitle={t("Feedback")} />
       <Table striped bordered hover>
         <thead>
           <tr>
             <th>N</th>
-            <th>{t('Surveyed person')}</th>
-            <th>{t('Approved Participants')}</th>
-            <th>{t('Manager')}</th>
-            <th>{t('Manager Approved')}</th>
-            <th>{t('Status')}</th>
-            <th>{t('Creation date')}</th>
-            <th>{t('Deadline')}</th>
-            <th>{t('Open')}</th>
+            <th>{t("Surveyed person")}</th>
+            <th>{t("Approved Participants")}</th>
+            <th>{t("Manager")}</th>
+            <th>{t("Manager Approved")}</th>
+            <th>{t("Status")}</th>
+            <th>{t("Creation date")}</th>
+            <th>{t("Deadline")}</th>
+            <th>{t("Open")}</th>
           </tr>
         </thead>
         <tbody>
@@ -103,7 +105,7 @@ const Feedbacks: React.FC = () => {
                   type="button"
                   onClick={() => handleSurveyPackClick(surveyPack._id)}
                 >
-                  {t('Open')}
+                  {t("Open")}
                 </Button>
               </td>
             </tr>
