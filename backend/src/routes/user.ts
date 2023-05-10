@@ -19,7 +19,11 @@ router.route("/auth/login").post(login);
 router.route("/auth/ldaplogin").post(ldapLogin);
 router
   .route("/user")
-  .get(authenticateUser, authorizePermissions("hr"), getAllUsers);
+  .get(
+    authenticateUser,
+    authorizePermissions("hr", "user", "manager"),
+    getAllUsers
+  );
 router.route("/user/:id").get(authenticateUser, getOneUser);
 router
   .route("/user/:id/manager")

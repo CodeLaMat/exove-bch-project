@@ -10,6 +10,7 @@ import { UserRole } from "../../../enum";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import employees from "../../../api/employees";
+import UserDashboard from "../../user/dashboard/UserDashboard";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -52,7 +53,11 @@ const Dashboard = () => {
       </div>
     );
   } else if (role === UserRole.User) {
-    return <div>Component for employee role</div>;
+    return (
+      <div>
+        <UserDashboard />
+      </div>
+    );
   } else if (role === UserRole.Manager) {
     return <div>Component for manager role</div>;
   } else return null;

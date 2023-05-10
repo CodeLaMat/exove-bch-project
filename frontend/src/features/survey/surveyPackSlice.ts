@@ -56,6 +56,7 @@ const surveyPackSlice = createSlice({
     ) => {
       state.surveyPack.employeesTakingSurvey = action.payload;
     },
+
     setDeadline: (state, action: PayloadAction<Date>) => {
       state.surveyPack.deadline = action.payload;
     },

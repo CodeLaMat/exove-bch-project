@@ -52,7 +52,7 @@ const Feedbacks: React.FC = () => {
   console.log("surveyPacks", surveyPacks);
 
   const handleSurveyPackClick = (id: string) => {
-    navigate(`/surveyPack/${id}`);
+    navigate(`/feedbacks/${id}`);
   };
 
   return (

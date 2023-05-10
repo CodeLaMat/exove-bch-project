@@ -3,12 +3,10 @@ import {
   ISurveypack,
   ISurveyPacks,
   ICreateSurveyPack,
+  IParticipantInput,
 } from "../../types/dataTypes";
 import { Dispatch, Action } from "redux";
-import { IEmployee } from "../../types/userTypes";
-import { SurveyPackStatus } from "../../types/dataTypes";
 import surveyPackService from "../../api/surveyPack";
-import Cookies from "js-cookie";
 
 const storedSurveyPacksString = sessionStorage.getItem("storedSurveyPacks");
 const storedSurveyPacks = storedSurveyPacksString
@@ -18,12 +16,6 @@ const storedSurveyPacks = storedSurveyPacksString
 const initialState: ISurveyPacks = {
   surveyPacks: storedSurveyPacks || [],
 };
-
-export interface IEmployeesTakingSurvey {
-  acceptanceStatus: "Pending" | "Approved" | "Declined";
-  isSurveyComplete: boolean;
-  employee: string;
-}
 
 const surveyPacksSlice = createSlice({
   name: "surveyPacks",
@@ -61,6 +53,26 @@ export const initialiseSurveyPacks = () => {
     dispatch(getAllSurveyPacks(surveyPacks));
   };
 };
+
+export const updateEmployeesTakingSurvey = createAsyncThunk(
+  "surveyPacks/updateEmployeesTakingSurveyInSurveyPack",
+  async (
+    {
+      surveyPackId,
+      updatedParticipants,
+    }: { surveyPackId: string; updatedParticipants: IParticipantInput[] },
+    { dispatch }
+  ) => {
+    try {
+      await surveyPackService.updateEmployeesTakingSurvey(
+        surveyPackId,
+        updatedParticipants
+      );
+      const updatedSurveyPacks = await surveyPackService.getAll();
+      dispatch(getAllSurveyPacks(updatedSurveyPacks));
+    } catch (error) {}
+  }
+);
 
 export const createNewSurveyPack = createAsyncThunk(
   "surveyPacks/createNewSurveyPack",

@@ -11,12 +11,17 @@ const UserMenus = () => {
         link="/home"
         pageTitle="Dashboard"
       />
-      <MenuItem name="Inbox" icon={faMessage} link="/inbox" pageTitle="Inbox" />{" "}
       <MenuItem
-        name="Participants"
+        name="Surveys"
         icon={faMessage}
-        link="/participants"
-        pageTitle="Participants"
+        link="/othersurveypacks"
+        pageTitle="Survey Packs"
+      />{" "}
+      <MenuItem
+        name="My Surveys"
+        icon={faMessage}
+        link="/mysurveypacks"
+        pageTitle="My Survey Packs"
       />{" "}
     </div>
   );

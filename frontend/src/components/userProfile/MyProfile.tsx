@@ -28,7 +28,6 @@ const MyProfile = () => {
 
   return (
     <div className={classes.MyProfile}>
-      <PageHeading pageTitle="Profile" />
       <div className={classes.userProfile}>
         <div className={classes.userHeading}>
           <h2>User profile</h2>
@@ -63,7 +62,7 @@ const MyProfile = () => {
             </p>
             <p>
               {" "}
-              <strong>Ste: </strong>
+              <strong>Site: </strong>
               {currentUser.site}
             </p>
             <p>

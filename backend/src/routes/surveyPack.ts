@@ -19,12 +19,16 @@ import {
 
 router
   .route("/")
-  .get(authenticateUser, authorizePermissions("hr"), getAllSurveyPacks)
+  .get(authenticateUser, authorizePermissions("hr", "user"), getAllSurveyPacks)
   .post(authenticateUser, authorizePermissions("hr"), createSurveyPack);
 router
   .route("/:id")
   .get(authenticateUser, authorizePermissions("hr"), getSurveyPack)
-  .patch(authenticateUser, authorizePermissions("hr"), updateSurveyPack)
+  .patch(
+    authenticateUser,
+    authorizePermissions("hr", "user", "manager"),
+    updateSurveyPack
+  )
   .delete(authenticateUser, authorizePermissions("hr"), deleteSurveyPack);
 //router.route("/employee/:id").patch(updateSurveyPack);
 //router.route("/manager/:id").patch(updateSurveyPack);

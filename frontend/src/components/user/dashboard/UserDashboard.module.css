@@ -1,0 +1,138 @@
+.userDashContainer {
+  background-color: #ccd2e3;
+}
+
+.userInfoContainer {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  padding: 20px;
+  width: 35%;
+  height: 85%;
+  left: 20%;
+  margin-top: 10px;
+  background: #1ea9ff0e;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+.userImageContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 250px;
+  width: 250px;
+  background-color: #afb3d1;
+  border-radius: 50%;
+}
+
+.roundImage {
+  display: block;
+  width: 100%;
+  max-width: 300px;
+  height: 300px;
+  border-radius: 50%;
+}
+
+.placeholder {
+  color: #ccd2e3;
+  font-size: 80px;
+}
+
+.userInfoId {
+  color: #1c1f37;
+}
+
+.profileContainer {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  margin: 60px;
+}
+
+.profileRow {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.profileLabel {
+  font-weight: bold;
+  margin-right: 20px;
+}
+
+.profileData {
+  font-size: 16px;
+  flex-grow: 1;
+}
+
+.userPerformContainer {
+  position: absolute;
+  padding: 20px;
+  width: 35%;
+  height: 85%;
+  left: 60%;
+  margin-top: 10px;
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin: 20px;
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.color {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.qualityColor {
+  background-color: #fd1f9b;
+}
+
+.socialColor {
+  background-color: #264083;
+}
+
+.selfColor {
+  background-color: #30d987;
+}
+
+.leaderColor {
+  background-color: #6342ff;
+}
+
+.changeColor {
+  background-color: #f0f410;
+}
+
+.categoryName {
+  font-size: 14px;
+  width: 150px;
+}
+
+.categoryPercentage {
+  font-size: 14px;
+  margin-left: 200px;
+}
+
+.data {
+  font-size: 14px;
+  margin-left: 10px;
+}
