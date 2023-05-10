@@ -25,7 +25,6 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
   >([]);
   const [participants, setParticipants] = useState<string[]>([]);
   const [participantsName, setParticipantsName] = useState<string[]>([]);
-  const [currentUser, setCurrentUser] = useState<IEmployee | null>(null);
   const [showToast, setShowToast] = useState(false);
 
   const employees: IEmployee[] = useAppSelector(
