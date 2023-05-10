@@ -11,6 +11,7 @@ import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
 import GenericPdfDownloader from "./pdfDownloader";
+import UserDashboard from "../../user/dashboard/UserDashboard";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
