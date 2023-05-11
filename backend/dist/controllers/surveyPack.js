@@ -4,7 +4,22 @@ var __importDefault =
   function (mod) {
     return mod && mod.__esModule ? mod : { default: mod };
   };
+var __importDefault =
+  (this && this.__importDefault) ||
+  function (mod) {
+    return mod && mod.__esModule ? mod : { default: mod };
+  };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.updateManagerApproval =
+  exports.getManagerApproval =
+  exports.updateSurveyors =
+  exports.getSurveyors =
+  exports.deleteSurveyPack =
+  exports.updateSurveyPack =
+  exports.getSurveyPack =
+  exports.createSurveyPack =
+  exports.getAllSurveyPacks =
+    void 0;
 exports.updateManagerApproval =
   exports.getManagerApproval =
   exports.updateSurveyors =
@@ -28,6 +43,11 @@ const getAllSurveyPacks = async (req, res) => {
     throw new errors_1.NotFoundError(`No surveyPacks found`);
   }
   res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPacks });
+  const surveyPacks = await surveyPack_1.default.find();
+  if (!surveyPacks) {
+    throw new errors_1.NotFoundError(`No surveyPacks found`);
+  }
+  res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPacks });
 };
 exports.getAllSurveyPacks = getAllSurveyPacks;
 const createSurveyPack = async (req, res) => {
@@ -45,8 +65,8 @@ const createSurveyPack = async (req, res) => {
     await (0, util_1.sendUserEmail)({
       name: personBeingSurveyed.displayName,
       email: personBeingSurveyed.email,
-      senderEmail: `essisalomaa@test.com`,
-      senderName: `Essi Salomaa`,
+      senderEmail: req.user.email,
+      senderName: req.user.name,
     });
   } catch (error) {
     console.error("Error sending email: ", error);
@@ -55,6 +75,14 @@ const createSurveyPack = async (req, res) => {
 };
 exports.createSurveyPack = createSurveyPack;
 const getSurveyPack = async (req, res) => {
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await surveyPack_1.default.findOne({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`No surveyPack with id ${surveyPackId}`);
+  }
+  res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPack });
   const {
     params: { id: surveyPackId },
   } = req;
@@ -103,61 +131,19 @@ const updateSurveyPack = async (req, res) => {
             receiverEmail: surveyor.email,
             receiverName: surveyor.displayName,
             employeeName: reviewee.displayName,
-            senderEmail: `essisalomaa@test.com`,
-            senderName: `Essi Salomaa`,
+            senderEmail: req.user.email,
+            senderName: req.user.name,
           });
         }
       } catch (error) {
         console.error(`Error sending email to ${surveyor.email}`, error);
       }
     }
-    const surveys = await surveys_1.default.findById(
-      updatedSurveyPack === null || updatedSurveyPack === void 0
-        ? void 0
-        : updatedSurveyPack.survey
-    );
-    if (!surveys) {
-      throw new errors_1.NotFoundError("surveys not found");
-    }
-    const allResponses = surveys.questions.map((question) => {
-      return {
-        question: question._id,
-        response: "",
-      };
-    });
-    const totalResponses =
-      updatedSurveyPack === null || updatedSurveyPack === void 0
-        ? void 0
-        : updatedSurveyPack.employeesTakingSurvey.map((e) => ({
-            employeeTakingSurvey: e.employee,
-            allResponses: allResponses,
-          }));
-    const responsePack = responses_1.default.create({
-      surveyPack:
-        updatedSurveyPack === null || updatedSurveyPack === void 0
-          ? void 0
-          : updatedSurveyPack._id,
-      personBeingSurveyed:
-        updatedSurveyPack === null || updatedSurveyPack === void 0
-          ? void 0
-          : updatedSurveyPack.personBeingSurveyed,
-      survey:
-        updatedSurveyPack === null || updatedSurveyPack === void 0
-          ? void 0
-          : updatedSurveyPack.survey,
-      totalResponses: totalResponses,
-    });
-    return res.status(http_status_codes_1.StatusCodes.OK).json({
-      msg: "surveyPack successfully updated and responsePack created",
-      surveyPack: updatedSurveyPack,
-      responsePack: responsePack,
-    });
-  } else {
-    return res.status(http_status_codes_1.StatusCodes.OK).json({
-      msg: "surveyPack successfully updated",
-      surveyPack: updatedSurveyPack,
-    });
   }
+  res.status(http_status_codes_1.StatusCodes.OK).json({
+    msg: "surveyPack successfully updated",
+    surveyPack: updatedSurveyPack,
+  });
 };
 exports.updateSurveyPack = updateSurveyPack;
 const deleteSurveyPack = async (req, res) => {
@@ -173,9 +159,39 @@ const deleteSurveyPack = async (req, res) => {
   res
     .status(http_status_codes_1.StatusCodes.OK)
     .json({ msg: "Success! SurveyPack removed." });
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await surveyPack_1.default.findByIdAndRemove({
+    _id: surveyPackId,
+  });
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`No product with id : ${surveyPackId}`);
+  }
+  res
+    .status(http_status_codes_1.StatusCodes.OK)
+    .json({ msg: "Success! SurveyPack removed." });
 };
 exports.deleteSurveyPack = deleteSurveyPack;
 const getSurveyors = async (req, res) => {
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await surveyPack_1.default
+    .findById(
+      { _id: surveyPackId },
+      { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
+    )
+    .populate("employeesTakingSurvey")
+    .populate("survey");
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  const employeesTakingSurvey = surveyPack.employeesTakingSurvey;
+  const survey = surveyPack.survey;
+  return res
+    .status(http_status_codes_1.StatusCodes.OK)
+    .json({ employeesTakingSurvey: employeesTakingSurvey, survey: survey });
   const {
     params: { id: surveyPackId },
   } = req;
@@ -241,6 +257,50 @@ const updateSurveyors = async (req, res) => {
     msg: "EmployeesTakingSurvey updated successfully",
     employeesTakingSurvey: surveyPack.employeesTakingSurvey,
   });
+  const {
+    params: { id: surveyPackId },
+    body: { employeesTakingSurvey },
+  } = req;
+  const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  surveyPack.employeesTakingSurvey = employeesTakingSurvey;
+  await surveyPack.save();
+  if (
+    surveyPack.employeesTakingSurvey.length === 6 &&
+    surveyPack.employeesTakingSurvey.every((status) => {
+      return status.acceptanceStatus === "Declined";
+    })
+  ) {
+    const [surveyors, reviewee] = await Promise.all([
+      user_1.default.find({
+        _id: {
+          $in: surveyPack.employeesTakingSurvey.map(
+            (status) => status.employee
+          ),
+        },
+      }),
+      user_1.default.findById(surveyPack.personBeingSurveyed),
+    ]);
+    for (const surveyor of surveyors) {
+      try {
+        if (reviewee) {
+          await (0, util_1.sendParticipantEmail)({
+            receiverEmail: surveyor.email,
+            receiverName: surveyor.displayName,
+            employeeName: reviewee.displayName,
+          });
+        }
+      } catch (error) {
+        console.error(`Error sending email to ${surveyor.email}`, error);
+      }
+    }
+  }
+  return res.status(http_status_codes_1.StatusCodes.OK).json({
+    msg: "EmployeesTakingSurvey updated successfully",
+    employeesTakingSurvey: surveyPack.employeesTakingSurvey,
+  });
 };
 exports.updateSurveyors = updateSurveyors;
 const getManagerApproval = async (req, res) => {
@@ -255,9 +315,38 @@ const getManagerApproval = async (req, res) => {
     throw new errors_1.NotFoundError(`No product with id : ${surveyPackId}`);
   }
   res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPack });
+  const {
+    params: { id: surveyPackId },
+  } = req;
+  const surveyPack = await surveyPack_1.default.findById(
+    { _id: surveyPackId },
+    { survey: 1, employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
+  );
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`No product with id : ${surveyPackId}`);
+  }
+  res.status(http_status_codes_1.StatusCodes.OK).json({ surveyPack });
 };
 exports.getManagerApproval = getManagerApproval;
 const updateManagerApproval = async (req, res) => {
+  const {
+    params: { id: surveyPackId },
+    body: { employeesTakingSurvey, manager, managerapproved },
+  } = req;
+  const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  surveyPack.employeesTakingSurvey = employeesTakingSurvey;
+  surveyPack.manager = manager;
+  surveyPack.managerapproved = managerapproved;
+  await surveyPack.save();
+  res.status(http_status_codes_1.StatusCodes.ACCEPTED).json({
+    msg: "manager approval successful updated",
+    employeesTakingSurvey: surveyPack.employeesTakingSurvey,
+    managerapproved: surveyPack.managerapproved,
+    manager: surveyPack.manager,
+  });
   const {
     params: { id: surveyPackId },
     body: { employeesTakingSurvey, manager, managerapproved },

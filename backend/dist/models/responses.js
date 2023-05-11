@@ -26,6 +26,8 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
 const QuestionResponseSchema = new mongoose.Schema({
     question: {
+const QuestionResponseSchema = new mongoose.Schema({
+    questionId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Question",
         required: true,
@@ -36,6 +38,12 @@ const QuestionResponseSchema = new mongoose.Schema({
 });
 const SurveyResponsesSchema = new mongoose.Schema({
     employeeTakingSurvey: {
+    response: {
+        type: String,
+    },
+});
+const SurveyResponsesSchema = new mongoose.Schema({
+    employeeTakingSurveyId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -49,6 +57,15 @@ const ResponsePackSchema = new mongoose.Schema({
         required: true,
     },
     personBeingSurveyed: {
+    allResponses: [QuestionResponseSchema],
+});
+const ResponsePackSchema = new mongoose.Schema({
+    surveyPack: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SurveyPack",
+        required: true,
+    },
+    personBeingSurveyedId: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
@@ -69,6 +86,7 @@ const ResponsePackSchema = new mongoose.Schema({
             },
         },
     ],
+    totalResponses: [SurveyResponsesSchema],
 }, { timestamps: true });
 ResponsePackSchema.statics.calculateSumResponse = async function (personBeingSurveyedId) {
     const result = await this.aggregate([
@@ -124,5 +142,7 @@ ResponsePackSchema.statics.calculateSumResponse = async function (personBeingSur
     ]);
     return result;
 };
+const ResponsePack = mongoose.model("ResponsePack", ResponsePackSchema);
+exports.default = ResponsePack;
 const ResponsePack = mongoose.model("ResponsePack", ResponsePackSchema);
 exports.default = ResponsePack;

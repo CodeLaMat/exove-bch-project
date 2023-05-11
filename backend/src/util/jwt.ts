@@ -3,9 +3,10 @@ import { Response } from "express";
 import User from "../models/user";
 import { UserRoles } from "../types/dataTypes";
 import { ObjectId } from "mongodb";
+import { ObjectId } from "mongodb";
 
 interface Payload {
-  userId: ObjectId | string;
+  userId: ObjectId;
   name: string;
   email: string;
   role: UserRoles;
