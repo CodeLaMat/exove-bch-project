@@ -200,9 +200,6 @@ export interface IQuestion {
 // export interface IQuestions {
 //   question: IQuestion[];
 // }
-// export interface IQuestions {
-//   question: IQuestion[];
-// }
 
 export interface ISurvey {
   _id: string;
@@ -232,6 +229,25 @@ export interface ISurveypack {
   manager: User;
   managerapproved: boolean;
   hrapproved: boolean;
+}
+
+export interface IQuestionResponse {
+  _id: string;
+  questionId: Partial<IQuestion>;
+  response: number | string;
+}
+
+export interface ISurveyResponses {
+  _id: string;
+  employeeTakingSurveyId: User;
+  allResponses: IQuestionResponse[];
+}
+
+export interface IResponsePack {
+  _id: string;
+  surveyPackId: Partial<ISurveypack>;
+  totalResponses: ISurveyResponses[];
+  createdAt: Date;
 }
 
 export interface IQuestionResponse {

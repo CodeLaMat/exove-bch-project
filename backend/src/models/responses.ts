@@ -1,12 +1,11 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
 import { IResponsePack } from "../types/dataTypes";
-import { IResponsePack } from "../types/dataTypes";
 
 type ResponseType = IResponsePack & mongoose.Document;
 
 const QuestionResponseSchema = new mongoose.Schema({
-  question: {
+  questionId: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
     required: true,
@@ -16,39 +15,28 @@ const QuestionResponseSchema = new mongoose.Schema({
   },
 });
 
-// const SurveyResponsesSchema = new mongoose.Schema({
-//   employeeTakingSurvey: {
-//     type: mongoose.Schema.Types.ObjectId,
-//     ref: "User",
-//     required: true,
-//   },
-//   allResponses: [QuestionResponseSchema],
-// });
+const SurveyResponsesSchema = new mongoose.Schema({
+  employeeTakingSurveyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  allResponses: [QuestionResponseSchema],
+});
 
 const ResponsePackSchema = new mongoose.Schema(
   {
     surveyPack: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "SurveyPack",
-      ref: "SurveyPack",
       required: true,
     },
-    personBeingSurveyed: {
+    personBeingSurveyedId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    employeeTakingSurvey: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    survey: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "survey",
-      required: true,
-    },
-    allResponses: [QuestionResponseSchema],
+    totalResponses: [SurveyResponsesSchema],
   },
   { timestamps: true }
 );
@@ -56,7 +44,9 @@ const ResponsePackSchema = new mongoose.Schema(
 const ResponsePack: Model<ResponseType> = mongoose.model<ResponseType>(
   "ResponsePack",
   ResponsePackSchema
+const ResponsePack: Model<ResponseType> = mongoose.model<ResponseType>(
+  "ResponsePack",
+  ResponsePackSchema
 );
 
-export default ResponsePack;
 export default ResponsePack;
