@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
-import { RootState } from "../../../../app/store";
-import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../app/store";
+import { IEmployee, ISurveypack } from "../../../types/dataTypes";
 import classes from "./MySurveyPacks.module.css";
 import { useNavigate } from "react-router";
 
 import SurveyPackCard from "./MySurveyPackCard";
-import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
-import { initialiseEmployees } from "../../../../features/user/employeesSlice";
-import PageHeading from "../../../pageHeading/PageHeading";
+import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
+import PageHeading from "../../pageHeading/PageHeading";
 
 const MySurveyPacks = () => {
   useEffect(() => {
@@ -37,7 +37,7 @@ const MySurveyPacks = () => {
   );
 
   const handleSurveyPackClick = (packid: string) => {
-    navigate(`/usersurveypacks/${packid}`);
+    navigate(`/mysurveypacks/${packid}`);
   };
 
   return (

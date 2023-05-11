@@ -15,7 +15,7 @@ import { useAppSelector } from "../../../../hooks/hooks";
 import { Categories } from "../../../../types/dataTypes";
 
 const OtherSurveyPackDetails: React.FC = () => {
-  const { packid } = useParams();
+  const { userpackid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
   const surveyPacks: ISurveypack[] = useAppSelector(
@@ -31,7 +31,7 @@ const OtherSurveyPackDetails: React.FC = () => {
   const surveysArray = Object.values(surveys);
   const surveyPacksArray = Object.values(surveyPacks);
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
-  const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === packid);
+  const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === userpackid);
 
   const manager = employees.find((e) => e._id === surveyPack.manager);
 
@@ -46,7 +46,7 @@ const OtherSurveyPackDetails: React.FC = () => {
   };
 
   const foundSurveyPack: ISurveypack | undefined = cleanedSurveyPacks.find(
-    (pack) => pack._id === packid
+    (pack) => pack._id === userpackid
   );
   let survey: ISurvey | undefined;
 

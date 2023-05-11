@@ -15,7 +15,12 @@ const ManagerMenus = () => {
         link="/home"
         pageTitle="Dashboard"
       />
-      <MenuItem name="Inbox" icon={faMessage} link="/inbox" pageTitle="Inbox" />{" "}
+      <MenuItem
+        name="Surveys"
+        icon={faMessage}
+        link="/manager_other"
+        pageTitle="Inbox"
+      />{" "}
       <MenuItem
         name="Surveys"
         icon={faSquarePollVertical}

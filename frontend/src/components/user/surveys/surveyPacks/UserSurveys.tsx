@@ -10,7 +10,7 @@ import { IParticipant } from "../../../../types/dataTypes";
 import MySurveyPackCard from "./MySurveyPackCard";
 import { initialiseSurveys } from "../../../../features/survey/surveysSlice";
 
-const OtherSurveyPacks: React.FC = () => {
+const UserSurveys: React.FC = () => {
   useEffect(() => {
     dispatch(initialiseSurveyPacks());
     dispatch(initialiseEmployees());
@@ -41,8 +41,8 @@ const OtherSurveyPacks: React.FC = () => {
 
   console.log(excludedSurveyPacks);
 
-  const handleSurveyPackClick = (packid: string) => {
-    navigate(`/othersurveypacks/${packid}`);
+  const handleSurveyPackClick = (userpackid: string) => {
+    navigate(`/surveys/${userpackid}`);
   };
 
   return (
@@ -63,4 +63,4 @@ const OtherSurveyPacks: React.FC = () => {
   );
 };
 
-export default OtherSurveyPacks;
+export default UserSurveys;

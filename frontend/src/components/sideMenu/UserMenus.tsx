@@ -14,13 +14,13 @@ const UserMenus = () => {
       <MenuItem
         name="Surveys"
         icon={faMessage}
-        link="/othersurveypacks"
+        link="/surveys"
         pageTitle="Survey Packs"
       />{" "}
       <MenuItem
         name="My Surveys"
         icon={faMessage}
-        link="/mysurveypacks"
+        link="/usersurveypacks"
         pageTitle="My Survey Packs"
       />{" "}
     </div>

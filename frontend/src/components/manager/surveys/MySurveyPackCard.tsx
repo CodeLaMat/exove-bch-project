@@ -1,7 +1,7 @@
 import React from "react";
-import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
-import Button from "../../../shared/button/Button";
-import classes from "./MySurveyPackCard.module.css";
+import { IEmployee, ISurveypack } from "../../../types/dataTypes";
+import Button from "../../shared/button/Button";
+import classes from "./SurveyPackCard.module.css";
 import { Card, ListGroup } from "react-bootstrap";
 
 interface SurveyPackCardProps {

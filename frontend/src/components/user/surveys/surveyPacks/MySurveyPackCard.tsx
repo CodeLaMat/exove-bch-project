@@ -6,7 +6,7 @@ import { Card, ListGroup } from "react-bootstrap";
 interface SurveyPackCardProps {
   surveyPack: ISurveypack;
   employees: IEmployee[];
-  handleSurveyPackClick: (packid: string) => void;
+  handleSurveyPackClick: (userpackid: string) => void;
 }
 
 const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
