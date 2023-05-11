@@ -33,7 +33,7 @@ const ResponsePackSchema = new mongoose.Schema(
     },
     personBeingSurveyed: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "SurveyPack",
       required: true,
     },
     employeeTakingSurvey: {
