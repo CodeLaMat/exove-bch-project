@@ -1,44 +1,49 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
-import { ResponseModel } from "../types/dataTypes";
+import { IResponsePack } from "../types/dataTypes";
 
-type ResponseType = ResponseModel & mongoose.Document;
+type ResponseType = IResponsePack & mongoose.Document;
 
-const ResponseSchema = new mongoose.Schema(
+const QuestionResponseSchema = new mongoose.Schema({
+  questionId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Question",
+    required: true,
+  },
+  response: {
+    type: String,
+  },
+});
+
+const SurveyResponsesSchema = new mongoose.Schema({
+  employeeTakingSurveyId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  allResponses: [QuestionResponseSchema],
+});
+
+const ResponsePackSchema = new mongoose.Schema(
   {
-    questionID: {
+    surveyPack: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Question",
+      ref: "SurveyPack",
       required: true,
     },
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    evaluatedID: {
+    personBeingSurveyedId: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    assignedEvaluations: {
-      type: Array,
-      required: true,
-    },
-    response: {
-      type: mongoose.Schema.Types.Mixed,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
+    totalResponses: [SurveyResponsesSchema],
   },
   { timestamps: true }
 );
 
-const Responses: Model<ResponseType> = mongoose.model<ResponseType>(
-  "Responses",
-  ResponseSchema
+const ResponsePack: Model<ResponseType> = mongoose.model<ResponseType>(
+  "ResponsePack",
+  ResponsePackSchema
 );
 
-export default Responses;
+export default ResponsePack;
