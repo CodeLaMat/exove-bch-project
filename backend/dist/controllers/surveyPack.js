@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = void 0;
+exports.updateManager = exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = void 0;
 const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
@@ -182,3 +182,17 @@ const updateManagerApproval = async (req, res) => {
     });
 };
 exports.updateManagerApproval = updateManagerApproval;
+const updateManager = async (req, res) => {
+    const { params: { id: surveyPackId }, body: { manager }, } = req;
+    const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
+    if (!surveyPack) {
+        throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
+    }
+    surveyPack.manager = manager;
+    await surveyPack.save();
+    res.status(http_status_codes_1.StatusCodes.ACCEPTED).json({
+        msg: "Manager successfully updated",
+        manager: surveyPack.manager,
+    });
+};
+exports.updateManager = updateManager;

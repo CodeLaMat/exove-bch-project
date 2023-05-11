@@ -5,10 +5,10 @@ import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
 import classes from "./MySurveyPacks.module.css";
 import { useNavigate } from "react-router";
 
-import SurveyPackCard from "./MySurveyPackCard";
 import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
 import { initialiseEmployees } from "../../../../features/user/employeesSlice";
 import PageHeading from "../../../pageHeading/PageHeading";
+import MySurveyPackCard from "./MySurveyPackCard";
 
 const MySurveyPacks = () => {
   useEffect(() => {
@@ -42,17 +42,18 @@ const MySurveyPacks = () => {
 
   return (
     <div className={classes.mySurveyPack_container}>
-      <PageHeading pageTitle="My Surveys" />
       <div className={classes.mySurveyPack_container}>
-        <h4>You will be evaluated</h4>
+        <h2>You will be evaluated</h2>
         <div className={classes.includedSurveyPacks}>
           {includedSurveyPacks.map((surveyPack) => (
-            <SurveyPackCard
-              key={surveyPack._id}
-              surveyPack={surveyPack}
-              employees={employees}
-              handleSurveyPackClick={handleSurveyPackClick}
-            />
+            <div>
+              <MySurveyPackCard
+                key={surveyPack._id}
+                surveyPack={surveyPack}
+                employees={employees}
+                handleSurveyPackClick={handleSurveyPackClick}
+              />
+            </div>
           ))}
         </div>
       </div>

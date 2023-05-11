@@ -7,16 +7,18 @@ import {
 import { RootState } from "../../app/store";
 import employeesService from "../../api/employees";
 import { IEmployee } from "../../types/userTypes";
-import { IParticipant } from "../../types/dataTypes";
+import { IParticipant, IParticipantInput } from "../../types/dataTypes";
 
 interface EmployeesState {
-  selectedParticipants: IParticipant[];
+  selectedParticipants: IParticipantInput[];
   participantsApprovalStatus: Record<string, boolean>;
+  managerSelected: boolean;
 }
 
 const initialState: EmployeesState = {
   selectedParticipants: [],
   participantsApprovalStatus: {},
+  managerSelected: false,
 };
 
 export const fetchEmployeesData = createAsyncThunk(
@@ -31,17 +33,18 @@ export const selectedEmployeesSlice = createSlice({
   name: "selectedEmployees",
   initialState,
   reducers: {
-    selectParticipant: (state, action: PayloadAction<IParticipant[]>) => {
+    selectParticipant: (state, action: PayloadAction<IParticipantInput[]>) => {
       const selectedParticipants = action.payload;
       state.selectedParticipants.push(...selectedParticipants);
     },
-
     deselectParticipant: (state, action: PayloadAction<string[]>) => {
       const deselectedParticipantIds = action.payload;
       state.selectedParticipants = state.selectedParticipants.filter(
-        (participant) => !deselectedParticipantIds.includes(participant.id)
+        (participant) =>
+          !deselectedParticipantIds.includes(participant.employee)
       );
     },
+
     removeParticipants: (state) => {
       state.selectedParticipants = [];
     },
@@ -51,12 +54,17 @@ export const selectedEmployeesSlice = createSlice({
     rejectParticipant: (state, action: PayloadAction<string>) => {
       state.participantsApprovalStatus[action.payload] = false;
     },
+
+    setManagerSelected: (state, action: PayloadAction<boolean>) => {
+      state.managerSelected = action.payload;
+    },
   },
 });
 
 export const {
   selectParticipant,
   deselectParticipant,
+  setManagerSelected,
   approveParticipant,
   rejectParticipant,
   removeParticipants,

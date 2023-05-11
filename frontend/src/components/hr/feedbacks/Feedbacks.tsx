@@ -107,7 +107,7 @@ const Feedbacks: React.FC = () => {
                 >
                   {
                     surveyPack.employeesTakingSurvey.filter(
-                      (employee) => employee.acceptanceStatus === "Approved"
+                      (employee) => employee.acceptanceStatus !== "Pending"
                     ).length
                   }
                 </span>

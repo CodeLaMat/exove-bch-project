@@ -13,9 +13,8 @@ import {
 } from "../../../types/dataTypes";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { setShowQuestionModal } from "../../../features/form/QuestionSlice";
-import { Modal } from "react-bootstrap";
+import { Modal, Toast } from "react-bootstrap";
 import AddQuestions from "../questionnaire/AddQuestions";
-import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import { addSurvey } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
 
@@ -27,6 +26,7 @@ const CreateSurvey: React.FC = () => {
   const [surveyName, setSurveyName] = useState<string>("");
   const [description, setDescription] = useState<string>("");
   const [checkedBoxes, setCheckedBoxes] = useState<string[]>([]);
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const [formData, setFormData] = useState<SurveyFormData>({
     surveyName: "",
     description: "",
@@ -71,28 +71,9 @@ const CreateSurvey: React.FC = () => {
     }
   };
 
-  useEffect(() => {
-    const sendSurvey = async (formData: SurveyFormData) => {
-      try {
-        await dispatch(addSurvey(formData));
-        console.log("Survey data submitted successfully!");
-        navigate("/surveys");
-      } catch (error) {
-        console.error("Error submitting survey data:", error);
-      }
-    };
-    if (
-      formData.surveyName &&
-      formData.description &&
-      formData.questions.length > 0
-    ) {
-      sendSurvey(formData);
-    }
-  }, [formData, navigate]);
-
   const submitHandler = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
-
+    setIsFormSubmitted(true);
     const checkedquestions = checkedBoxes;
     const surveyQuestions = checkedquestions
       .map((checkedQuestion) => {
@@ -108,6 +89,25 @@ const CreateSurvey: React.FC = () => {
       questions: surveyQuestions,
     });
   };
+
+  useEffect(() => {
+    const sendSurvey = async (formData: SurveyFormData) => {
+      try {
+        await dispatch(addSurvey(formData));
+        console.log("Survey data submitted successfully!");
+      } catch (error) {
+        console.error("Error submitting survey data:", error);
+      } finally {
+      }
+    };
+    if (
+      formData.surveyName &&
+      formData.description &&
+      formData.questions.length > 0
+    ) {
+      sendSurvey(formData);
+    }
+  }, [formData, navigate, dispatch]);
 
   const questionsByCategory: QuestionsByCategory = questionList.reduce(
     (acc, question) => {
@@ -211,7 +211,23 @@ const CreateSurvey: React.FC = () => {
           </Modal.Header>
           <AddQuestions />
           <Modal.Footer></Modal.Footer>
-        </Modal>
+        </Modal>{" "}
+        <Toast
+          className={classes.toast}
+          show={isFormSubmitted}
+          autohide
+          delay={3000}
+          bg="info"
+          onClose={() => {
+            setIsFormSubmitted(false);
+            navigate("/surveys");
+          }}
+        >
+          <Toast.Header>
+            <strong className="mr-auto">The Form Submitted</strong>
+          </Toast.Header>
+          <Toast.Body>The created form have been sent successfully.</Toast.Body>
+        </Toast>
       </div>
     </div>
   );

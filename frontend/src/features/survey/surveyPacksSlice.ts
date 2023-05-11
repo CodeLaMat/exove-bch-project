@@ -44,6 +44,21 @@ const surveyPacksSlice = createSlice({
         surveyPack.personBeingSurveyed = personBeingSurveyed;
       }
     },
+    updateManager: (
+      state,
+      action: PayloadAction<{
+        surveyPackId: string;
+        manager: string;
+      }>
+    ) => {
+      const { surveyPackId, manager } = action.payload;
+      const surveyPack = state.surveyPacks.find(
+        (pack) => pack._id === surveyPackId
+      );
+      if (surveyPack) {
+        surveyPack.manager = manager;
+      }
+    },
   },
 });
 
@@ -53,6 +68,25 @@ export const initialiseSurveyPacks = () => {
     dispatch(getAllSurveyPacks(surveyPacks));
   };
 };
+
+export const updateManagerInSurvey = createAsyncThunk(
+  "surveyPacks/updateManagerInSurveyPack",
+  async (
+    {
+      surveyPackId,
+      participantId,
+    }: { surveyPackId: string; participantId: string },
+    { dispatch }
+  ) => {
+    try {
+      await surveyPackService.updateManager(surveyPackId, participantId);
+      const updatedSurveyPacks = await surveyPackService.getAll();
+      dispatch(getAllSurveyPacks(updatedSurveyPacks));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const updateEmployeesTakingSurvey = createAsyncThunk(
   "surveyPacks/updateEmployeesTakingSurveyInSurveyPack",
@@ -85,7 +119,7 @@ export const createNewSurveyPack = createAsyncThunk(
   }
 );
 
-export const { getAllSurveyPacks, updatePersonBeingSurveyed } =
+export const { getAllSurveyPacks, updatePersonBeingSurveyed, updateManager } =
   surveyPacksSlice.actions;
 
 export default surveyPacksSlice.reducer;

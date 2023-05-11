@@ -59,3 +59,10 @@ form input[type="checkbox"] {
 .Accordion {
   width: 70vw;
 }
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}

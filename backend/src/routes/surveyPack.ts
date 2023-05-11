@@ -11,6 +11,7 @@ import {
   getManagerApproval,
   updateManagerApproval,
   getAllSurveyPacks,
+  updateManager,
 } from "../controllers/surveyPack";
 import {
   authenticateUser,
@@ -48,6 +49,14 @@ router
     authenticateUser,
     authorizePermissions("hr", "manager"),
     updateManagerApproval
+  );
+
+router
+  .route("/manager-update/:id")
+  .patch(
+    authenticateUser,
+    authorizePermissions("hr", "manager", "user"),
+    updateManager
   );
 
 export default router;

@@ -4,7 +4,6 @@ import classes from "./Sidemenu.module.css";
 import {
   faSquarePollVertical,
   faChartSimple,
-  faMessage,
   faUsers,
   faFileCircleQuestion,
   faChartPie,
@@ -26,7 +25,7 @@ const HRMenus = () => {
       <MenuItem
         name={t("Survey Forms")}
         icon={faSquarePollVertical}
-        link="/survey_forms"
+        link="/surveys"
         pageTitle={t("Survey Forms")}
       />
       <MenuItem

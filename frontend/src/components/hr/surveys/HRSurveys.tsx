@@ -4,7 +4,13 @@ import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { useNavigate } from "react-router-dom";
 import PageHeading from "../../pageHeading/PageHeading";
 import classes from "./HRSurveys.module.css";
-import { Modal, Table } from "react-bootstrap";
+import {
+  Modal,
+  Table,
+  Dropdown,
+  Tooltip,
+  OverlayTrigger,
+} from "react-bootstrap";
 import Button from "../../shared/button/Button";
 import { ISurvey } from "../../../types/dataTypes";
 import { RootState } from "../../../app/store";
@@ -65,7 +71,6 @@ const HRSurveys = () => {
               <Table striped bordered hover size="sm">
                 <thead>
                   <tr>
-                    <th>{t("Survey ID")}</th>
                     <th>{t("Survey Name")}</th>
                     <th>{t("Description")}</th>
                     <th>{t("Questions")}</th>
@@ -75,15 +80,38 @@ const HRSurveys = () => {
                 <tbody>
                   {surveysArray.map((survey: ISurvey) => (
                     <tr key={survey._id}>
-                      <td>{survey._id}</td>
                       <td>{survey.surveyName}</td>
-                      <td>{survey.description}</td>
+                      <OverlayTrigger
+                        overlay={
+                          <Tooltip id={`tooltip-${survey._id}`}>
+                            {survey.description}
+                          </Tooltip>
+                        }
+                      >
+                        <td
+                          className="text-truncate"
+                          style={{ maxWidth: "900px" }}
+                        >
+                          {survey.description}
+                        </td>
+                      </OverlayTrigger>
                       <td>
-                        <ul>
-                          {survey.questions.map((question) => (
-                            <li key={question._id}>{question.question}</li>
-                          ))}
-                        </ul>
+                        <Dropdown>
+                          <Dropdown.Toggle
+                            variant="secondary"
+                            id="dropdown-basic"
+                          >
+                            {t("View Questions")}
+                          </Dropdown.Toggle>
+
+                          <Dropdown.Menu>
+                            {survey.questions.map((question) => (
+                              <Dropdown.Item key={question._id}>
+                                {question.question}
+                              </Dropdown.Item>
+                            ))}
+                          </Dropdown.Menu>
+                        </Dropdown>
                       </td>
                       <td>
                         <Button
@@ -91,7 +119,7 @@ const HRSurveys = () => {
                           type="button"
                           onClick={() => handleDelete(survey._id)}
                         >
-                          {t("Delete Form")}
+                          {t("Delete")}
                         </Button>
                       </td>
                     </tr>

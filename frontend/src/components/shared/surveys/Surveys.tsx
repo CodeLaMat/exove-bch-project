@@ -6,7 +6,7 @@ import { RootState } from "../../../app/store";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import HRSurveys from "../../hr/surveys/HRSurveys";
 import ManagerSurveys from "../../manager/surveys/ManagerSurveys";
-import UserSurveys from "../../user/surveys/surveyPacks/UserSurveys";
+import UserSurveys from "../../user/surveys/surveyPacks/UserSurveyPacks";
 
 const Surveys = () => {
   const dispatch = useAppDispatch();

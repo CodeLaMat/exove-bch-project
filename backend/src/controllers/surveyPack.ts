@@ -218,6 +218,26 @@ const updateManagerApproval = async (req: Request, res: Response) => {
   });
 };
 
+const updateManager = async (req: Request, res: Response) => {
+  const {
+    params: { id: surveyPackId },
+    body: { manager },
+  } = req;
+
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  surveyPack.manager = manager;
+
+  await surveyPack.save();
+
+  res.status(StatusCodes.ACCEPTED).json({
+    msg: "Manager successfully updated",
+    manager: surveyPack.manager,
+  });
+};
+
 export {
   getAllSurveyPacks,
   createSurveyPack,
@@ -228,4 +248,5 @@ export {
   updateSurveyors,
   getManagerApproval,
   updateManagerApproval,
+  updateManager,
 };

@@ -1,9 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
-import classes from "./SelectMyParticipants.module.css";
+import classes from "./SelectMyManager.module.css";
 import { RootState } from "../../../../app/store";
 import { IEmployee } from "../../../../types/userTypes";
-import { removeParticipants } from "../../../../features/survey/paticipantsSlice";
+import {
+  deselectParticipant,
+  removeParticipants,
+  selectParticipant,
+  setManagerSelected,
+} from "../../../../features/survey/paticipantsSlice";
 import { IParticipant, IParticipantInput } from "../../../../types/dataTypes";
 import Button from "../../../shared/button/Button";
 import { Toast } from "react-bootstrap";
@@ -14,18 +19,16 @@ import {
 } from "../../../../features/survey/surveyPacksSlice";
 
 interface SelectMyParticipantsProps {
+  setSelectedManager: React.Dispatch<React.SetStateAction<null>>;
   surveyPackId: string;
 }
 
-const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
+const SelectMyManager: React.FC<SelectMyParticipantsProps> = ({
   surveyPackId,
 }) => {
   const dispatch = useAppDispatch();
-  const [selectedParticipants, setSelectedParticipants] = useState<
-    IParticipantInput[]
-  >([]);
-  const [participants, setParticipants] = useState<string[]>([]);
-  const [participantsName, setParticipantsName] = useState<string[]>([]);
+  const [manager, setManager] = useState<string[]>([]);
+  const [ManagerName, setManagerName] = useState<string[]>([]);
   const [showToast, setShowToast] = useState(false);
 
   const employees: IEmployee[] = useAppSelector(
@@ -37,91 +40,88 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
   const sortedEmployees = [...employeesArray].sort((a, b) =>
     a.firstName.localeCompare(b.firstName)
   );
+
   const selectedParticipantsFromStore: IParticipant[] = useAppSelector(
     (state: RootState) => state.selectedParticipants.selectedParticipants
   );
 
   useEffect(() => {
     const names: string[] = [];
-    participants.forEach((participantId) => {
+    manager.forEach((managerid) => {
       const foundUser = sortedEmployees.find((employee) => {
-        return employee._id === participantId;
+        return employee._id === managerid;
       });
       if (foundUser) {
         const name = `${foundUser.firstName} ${foundUser.surName}`;
         names.push(name);
       }
     });
-    setParticipantsName(names);
-  }, [participants]);
+    setManagerName(names);
+  }, [manager]);
 
-  useEffect(() => {
-    setSelectedParticipants(selectedParticipantsFromStore);
-  }, [dispatch]);
+  const managerSelectionHandler = (participantId: string) => {
+    const foundUser = sortedEmployees.find((employee) => {
+      return employee._id === participantId;
+    });
 
-  const participantSelectionHandler = (participantId: string) => {
-    const isSelected = participants.includes(participantId);
+    if (foundUser) {
+      const newParticipant: IParticipantInput = {
+        acceptanceStatus: "Pending",
+        isSurveyComplete: false,
+        employee: participantId,
+      };
 
-    if (isSelected) {
-      const updatedParticipants = participants.filter(
-        (id) => id !== participantId
-      );
-      setParticipants(updatedParticipants);
-      setSelectedParticipants((prev) =>
-        prev.filter((participant) => participant.employee !== participantId)
-      );
-    } else {
-      if (participants.length < 5) {
-        const foundUser = sortedEmployees.find((employee) => {
-          return employee._id === participantId;
-        });
-        if (foundUser) {
-          const newParticipant: IParticipantInput = {
-            acceptanceStatus: "Pending",
-            isSurveyComplete: false,
-            employee: participantId,
-          };
-          setSelectedParticipants((prev) => [...prev, newParticipant]);
-          setParticipants((prev) => [...prev, participantId]);
-        }
+      if (manager.includes(participantId)) {
+        // If the manager is already selected, deselect the manager
+        dispatch(deselectParticipant([participantId]));
+
+        setManager([]);
+        dispatch(setManagerSelected(false));
+      } else {
+        // Deselect any previously selected manager
+        dispatch(deselectParticipant(manager));
+        dispatch(selectParticipant([newParticipant]));
+        setManager([participantId]);
       }
     }
+    dispatch(updateManagerInSurvey({ surveyPackId, participantId }));
   };
 
+  // handleSubmit
   const handleSubmit = () => {
     setShowToast(true);
     dispatch(
       updateEmployeesTakingSurvey({
         surveyPackId: surveyPackId,
-        updatedParticipants: selectedParticipants,
+        updatedParticipants: selectedParticipantsFromStore,
       })
     );
+    dispatch(setManagerSelected(true));
     setTimeout(() => {
       setShowToast(false);
     }, 3000);
     dispatch(initialiseSurveyPacks());
-    setParticipants([]);
+
+    setManager([]);
   };
 
   const handleRemoveParticipants = () => {
     dispatch(removeParticipants());
-    setParticipants([]);
-    setSelectedParticipants([]);
+    setManager([]);
+    dispatch(setManagerSelected(false));
   };
 
   return (
     <div className={classes.participantSelection}>
-      <div>
-        Selected participants:{participantsName && participantsName.join(",")}
-      </div>
+      <div>Selected participants:{ManagerName}</div>
       <div className={classes.cardContainer}>
         {sortedEmployees.map((employee) => (
           <div
             key={employee._id}
             className={`${classes.employeeCard} ${
-              participants.includes(employee._id) ? classes.selected : ""
+              manager.includes(employee._id) ? classes.selected : ""
             }`}
-            onClick={() => participantSelectionHandler(employee._id)}
+            onClick={() => managerSelectionHandler(employee._id)}
           >
             <div className={classes.details}>
               <h5>
@@ -135,7 +135,7 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
       <Button
         variant="primary"
         className={classes.submitButton}
-        disabled={participants.length !== 5}
+        disabled={manager.length !== 1}
         onClick={handleSubmit}
       >
         Submit
@@ -159,4 +159,4 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
   );
 };
 
-export default SelectMyParticipants;
+export default SelectMyManager;
