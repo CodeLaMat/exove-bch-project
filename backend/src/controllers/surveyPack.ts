@@ -122,14 +122,20 @@ const getSurveyors = async (req: Request, res: Response) => {
   const {
     params: { id: surveyPackId },
   } = req;
-  const surveyPack = await SurveyPack.findById({ _id: surveyPackId }).populate(
-    "employeesTakingSurvey"
-  );
+  const surveyPack = await SurveyPack.findById(
+    { _id: surveyPackId },
+    { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
+  )
+    .populate("employeesTakingSurvey")
+    .populate("survey");
   if (!surveyPack) {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }
   const employeesTakingSurvey = surveyPack.employeesTakingSurvey;
-  return res.status(StatusCodes.OK).json({ employeesTakingSurvey });
+  const survey = surveyPack.survey;
+  return res
+    .status(StatusCodes.OK)
+    .json({ employeesTakingSurvey: employeesTakingSurvey, survey: survey });
 };
 const updateSurveyors = async (req: Request, res: Response) => {
   const {
@@ -186,7 +192,7 @@ const getManagerApproval = async (req: Request, res: Response) => {
   } = req;
   const surveyPack = await SurveyPack.findById(
     { _id: surveyPackId },
-    { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
+    { survey: 1, employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
   );
 
   if (!surveyPack) {

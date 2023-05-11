@@ -33,8 +33,6 @@ router
     updateSurveyPack
   )
   .delete(authenticateUser, authorizePermissions("hr"), deleteSurveyPack);
-//router.route("/employee/:id").patch(updateSurveyPack);
-//router.route("/manager/:id").patch(updateSurveyPack);
 
 router
   .route("/surveyors/:id")
