@@ -13,8 +13,6 @@ router
     .get(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.getSurveyPack)
     .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.updateSurveyPack)
     .delete(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.deleteSurveyPack);
-//router.route("/employee/:id").patch(updateSurveyPack);
-//router.route("/manager/:id").patch(updateSurveyPack);
 router
     .route("/surveyors/:id")
     .get(authentication_1.authenticateUser, surveyPack_1.getSurveyors)
