@@ -15,7 +15,11 @@ import {
 
 router
   .route("/")
-  .get(authenticateUser, authorizePermissions("hr"), getAllSurveys)
+  .get(
+    authenticateUser,
+    authorizePermissions("hr", "user", "manager"),
+    getAllSurveys
+  )
   .post(authenticateUser, authorizePermissions("hr"), addSurvey);
 router
   .route("/:id")

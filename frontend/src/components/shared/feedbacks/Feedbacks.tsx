@@ -1,8 +1,8 @@
 import React, { useEffect } from "react";
-import React, { useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { useSelector, useDispatch } from "react-redux";
+
 import Table from "react-bootstrap/Table";
 import classes from "./Feedbacks.module.css";
 import { IEmployee, ISurveypack } from "../../../types/dataTypes";
@@ -57,7 +57,7 @@ const Feedbacks: React.FC = () => {
   console.log("surveyPacks", surveyPacks);
 
   const handleSurveyPackClick = (id: string) => {
-    navigate(`/surveyPack/${id}`);
+    navigate(`/feedbacks/${id}`);
   };
 
   return (

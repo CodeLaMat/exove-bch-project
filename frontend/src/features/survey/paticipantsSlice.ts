@@ -15,26 +15,7 @@ interface EmployeesState {
 }
 
 const initialState: EmployeesState = {
-  selectedParticipants: [
-    {
-      id: "643525bf44aa935872a3e400",
-      acceptanceStatus: "Pending",
-      isSurveyComplete: false,
-      employee: "643525bf44aa935872a3e415",
-    },
-    {
-      id: "643525bf44aa935872a3e401",
-      acceptanceStatus: "Pending",
-      isSurveyComplete: false,
-      employee: "643525bf44aa935872a3e415",
-    },
-    {
-      id: "643525bf44aa935872a3e403",
-      acceptanceStatus: "Pending",
-      isSurveyComplete: false,
-      employee: "643525bf44aa935872a3e415",
-    },
-  ],
+  selectedParticipants: [],
   participantsApprovalStatus: {},
 };
 

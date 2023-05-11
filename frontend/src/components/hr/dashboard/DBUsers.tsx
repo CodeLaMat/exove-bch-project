@@ -15,7 +15,6 @@ const DBUsers = () => {
   );
 
   const employeesArray = Object.values(employees);
-  const employeesArray = Object.values(employees);
 
   useEffect(() => {
     dispatch(initialiseEmployees());
@@ -32,8 +31,6 @@ const DBUsers = () => {
         </tr>
       </thead>
       <tbody>
-        {employeesArray &&
-          employeesArray.map((user, index) => (
         {employeesArray &&
           employeesArray.map((user, index) => (
             <tr key={index}>

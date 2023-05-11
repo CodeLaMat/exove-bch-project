@@ -1,0 +1,52 @@
+/* SurveyPackDetails.module.css */
+.surveyPackDetails {
+  padding: 1rem;
+  display: flex;
+  height: 100%;
+  flex-direction: column;
+  align-items: center;
+}
+
+.descriptionBox {
+  border: 1px solid #ccc;
+  padding: 10px;
+  margin: 10px 0;
+  border-radius: 5px;
+}
+
+input[type="range"] {
+  background: radial-gradient(circle at left, #ede0e0c9 0%, #7bc2e5 100%);
+}
+
+input[type="range"] {
+  height: 10px;
+  width: 100%;
+  margin: 20px 0;
+}
+
+input[type="range"]:focus {
+  outline: none;
+}
+
+input[type="range"]::-webkit-slider-runnable-track {
+  width: 100%;
+  height: 5px;
+  cursor: pointer;
+  background: #ddd;
+  border-radius: 25px;
+}
+
+input[type="range"]::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  height: 30px;
+  width: 30px;
+  margin-top: -12px;
+  border-radius: 50%;
+  background: #7a96b5;
+  cursor: pointer;
+  border: none;
+}
+
+.questionDescription {
+  color: #acaebd;
+}

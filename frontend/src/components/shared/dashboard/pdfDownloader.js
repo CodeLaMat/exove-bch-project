@@ -1,22 +1,19 @@
-import React from 'react';
+import React from "react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
 
-const GenericPdfDownloader = ({rootElementId , downloadFileName}) => {
+const GenericPdfDownloader = ({ rootElementId, downloadFileName }) => {
+  const downloadPdfDocument = () => {
+    const input = document.getElementById(rootElementId);
+    html2canvas(input).then((canvas) => {
+      const imgData = canvas.toDataURL("image/png");
+      const pdf = new jsPDF();
+      pdf.addImage(imgData, "JPEG", 0, 15, -200, -175);
+      pdf.save(`${downloadFileName}.pdf`);
+    });
+  };
 
-    const downloadPdfDocument = () => {
-        const input = document.getElementById(rootElementId);
-        html2canvas(input)
-            .then((canvas) => {
-                const imgData = canvas.toDataURL('image/png');
-                const pdf = new jsPDF();
-                pdf.addImage(imgData, 'JPEG', 0, 15, -200, -175);
-                pdf.save(`${downloadFileName}.pdf`);
-            })
-    }
-
-    return <button onClick={downloadPdfDocument}>Download Pdf</button>
-
-}
+  return <button onClick={downloadPdfDocument}>Download Pdf</button>;
+};
 
 export default GenericPdfDownloader;

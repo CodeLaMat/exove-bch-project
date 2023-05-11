@@ -57,12 +57,6 @@ const CreateForm: React.FC = () => {
       isDone: false,
       component: <SelectSurvey />,
     },
-    // {
-    //   key: "secondStep",
-    //   label: "Select Participants",
-    //   isDone: false,
-    //   component: <SelectParticipants />,
-    // },
     {
       key: "finalStep",
       label: "Check Data",

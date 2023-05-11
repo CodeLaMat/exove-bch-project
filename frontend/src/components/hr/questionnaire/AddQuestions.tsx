@@ -112,4 +112,3 @@ const AddQuestions: React.FC = () => {
 };
 
 export default AddQuestions;
-export default AddQuestions;

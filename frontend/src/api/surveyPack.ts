@@ -2,7 +2,8 @@ import axios from "axios";
 import { URL } from "../enum";
 import {
   ICreateSurveyPack,
-  IEmployeesTakingSurvey,
+  IParticipant,
+  IParticipantInput,
   ISurvey,
   User,
 } from "../types/dataTypes";
@@ -87,7 +88,7 @@ const updateSurvey = async (
 
 const addParticipant = async (
   surveyPackId: string,
-  participant: IEmployeesTakingSurvey
+  participant: IParticipantInput
 ): Promise<void> => {
   const token = Cookies.get("token");
   try {
@@ -109,8 +110,33 @@ const addParticipant = async (
   }
 };
 
+const updateEmployeesTakingSurvey = async (
+  surveyPackId: string,
+  updatedParticipants: IParticipantInput[]
+): Promise<void> => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.patch(
+      `${URL.SURVEYPACKS_URL}/surveyors/${surveyPackId}`,
+      {
+        employeesTakingSurvey: updatedParticipants,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("API response:", response);
+  } catch (error) {
+    console.error("Error updating employeesTakingSurvey:", error);
+    throw error;
+  }
+};
+
 export default {
   getAll,
+  updateEmployeesTakingSurvey,
   updatePersonBeingSurveyed,
   updateSurvey,
   addParticipant,

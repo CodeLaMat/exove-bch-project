@@ -1,0 +1,10 @@
+.excludedSurveyPacks {
+  margin-top: 20px;
+  display: flex;
+  gap: 1rem;
+}
+
+.otherSurveyPack_container {
+  margin: 30px;
+  height: 82vh;
+}

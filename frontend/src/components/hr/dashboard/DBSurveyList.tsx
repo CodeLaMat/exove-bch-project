@@ -17,16 +17,16 @@ const DBSurveyList = () => {
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
-  
+
   return (
     <div className={classes.surveys_container}>
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
-            <th>{t('Survey ID')}</th>
-            <th>{t('Survey Name')}</th>
-            <th>{t('Description')}</th>
-            <th>{t('Questions')}</th>
+            <th>{t("Survey ID")}</th>
+            <th>{t("Survey Name")}</th>
+            <th>{t("Description")}</th>
+            <th>{t("Questions")}</th>
           </tr>
         </thead>
         <tbody>

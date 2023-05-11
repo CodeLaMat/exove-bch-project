@@ -65,13 +65,6 @@ export type RouteConfig = {
   }[];
 };
 
-export interface IParticipant {
-  id: string;
-  acceptanceStatus: "Pending" | "Approved" | "Declined";
-  isSurveyComplete: boolean;
-  employee: string;
-}
-
 export interface IEmployeesTakingSurvey {
   acceptanceStatus: "Pending" | "Approved" | "Declined";
   isSurveyComplete: boolean;
@@ -121,12 +114,21 @@ export interface IEmployee {
 export interface ISurveyPacks {
   surveyPacks: ISurveypack[];
 }
+export interface IParticipantInput {
+  acceptanceStatus: "Pending" | "Approved" | "Declined";
+  isSurveyComplete: boolean;
+  employee: string;
+}
+
+export interface IParticipant extends IParticipantInput {
+  id: string;
+}
 
 export interface ISurveypack {
   _id: string;
   createdAt: Date;
   personBeingSurveyed: User["_id"];
-  survey: ISurvey[];
+  survey: string;
   employeesTakingSurvey: IParticipant[];
   deadline: Date;
   status: SurveyPackStatus;
@@ -140,7 +142,7 @@ export interface ICreateSurveyPack {
   createdAt?: string;
   personBeingSurveyed: User["_id"];
   survey: string;
-  employeesTakingSurvey: IParticipant[];
+  employeesTakingSurvey: IParticipantInput[];
   deadline: Date;
   status: SurveyPackStatus;
   manager: string;

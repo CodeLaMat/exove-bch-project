@@ -8,11 +8,10 @@ import DBUsers from "../../hr/dashboard/DBUsers";
 import DBSurveyList from "../../hr/dashboard/DBSurveyList";
 import { UserRole } from "../../../enum";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
-import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
 import GenericPdfDownloader from "./pdfDownloader";
-
+import UserDashboard from "../../user/dashboard/UserDashboard";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -20,10 +19,6 @@ const Dashboard = () => {
 
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
-
-  console.log(employeesList);
-
-  console.log(employeesList);
 
   useEffect(() => {
     dispatch(initialiseEmployees());
@@ -33,15 +28,13 @@ const Dashboard = () => {
   if (role === UserRole.HR) {
     return (
       <div>
-        <div>
-
-          <div className={classes.pageheading}>
-            <PageHeading pageTitle={t('Dashboard')} />{" "}
-            <GenericPdfDownloader
-          downloadFileName="DashboardPDF" 
-          rootElementId="dashboardPdf" 
+        <GenericPdfDownloader
+          downloadFileName="DashboardPDF"
+          rootElementId="dashboardPdf"
         />
-
+        <div>
+          <div>
+            <PageHeading pageTitle={t("Dashboard")} />{" "}
           </div>
           <div className={classes.dashboard_container} id="dashboardPdf">
             <div className={classes.dashboard_chart}>
@@ -66,7 +59,11 @@ const Dashboard = () => {
       </div>
     );
   } else if (role === UserRole.User) {
-    return <div>Component for employee role</div>;
+    return (
+      <div>
+        <UserDashboard />
+      </div>
+    );
   } else if (role === UserRole.Manager) {
     return <div>Component for manager role</div>;
   } else return null;

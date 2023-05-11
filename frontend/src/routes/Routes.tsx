@@ -7,13 +7,14 @@ import Layout from "../pages/Layout";
 import CreateSurvey from "../components/hr/surveys/CreateSurvey";
 import { RouteConfig } from "../types/dataTypes";
 import Dashboard from "../components/shared/dashboard/Dashboard";
-import Inbox from "../components/shared/inbox/Inbox";
+
 import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
 import Feedbacks from "../components/shared/feedbacks/Feedbacks";
-import ParticipantSelection from "../components/user/participants/SelectParticipants";
+import Inbox from "../components/shared/surveyPacks/SurveyPacks";
+import SurveyPacks from "../components/user/surveys/mySurveyPacks/MySurveyPacks";
 
 export const sideMenuRoutes: RouteConfig = {
   [UserRole.HR]: [
@@ -26,7 +27,7 @@ export const sideMenuRoutes: RouteConfig = {
           element: <Dashboard />,
         },
         {
-          path: "inbox",
+          path: "surveypacks",
           element: <Inbox />,
         },
         {
@@ -79,7 +80,7 @@ export const sideMenuRoutes: RouteConfig = {
           element: <Dashboard />,
         },
         {
-          path: "inbox",
+          path: "surveypacks",
           element: <Inbox />,
         },
 
@@ -116,11 +117,11 @@ export const sideMenuRoutes: RouteConfig = {
           element: <Dashboard />,
         },
         {
-          path: "participants",
-          element: <ParticipantSelection />,
+          path: "surveypacks",
+          element: <SurveyPacks />,
         },
         {
-          path: "inbox",
+          path: "mysurveypacks",
           element: <Inbox />,
         },
         {

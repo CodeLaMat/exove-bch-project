@@ -6,7 +6,7 @@ const surveys_1 = require("../controllers/surveys");
 const authentication_1 = require("../middleware/authentication");
 router
     .route("/")
-    .get(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveys_1.getAllSurveys)
+    .get(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "user", "manager"), surveys_1.getAllSurveys)
     .post(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveys_1.addSurvey);
 router
     .route("/:id")

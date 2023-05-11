@@ -1,6 +1,6 @@
 import React from "react";
 import { FormCheck, Modal } from "react-bootstrap";
-import classes from "./ParticipantSelectionModal.module.css";
+import classes from "./ManagerSelectionModal.module.css";
 import { IEmployee } from "../../../types/userTypes";
 import { useTranslation } from "react-i18next";
 

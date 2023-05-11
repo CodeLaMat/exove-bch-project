@@ -230,3 +230,22 @@ export interface ISurveypack {
   managerapproved: boolean;
   hrapproved: boolean;
 }
+
+export interface IQuestionResponse {
+  _id: string;
+  questionId: string;
+  response: number | string;
+}
+
+export interface ISurveyResponses {
+  _id: string;
+  responses: IQuestionResponse[];
+  employeeIdTakingSurvey: string;
+}
+
+export interface IResponsePack {
+  _id: string;
+  surveyPackId: string;
+  responses: ISurveyResponses[];
+  createdAt: Date;
+}
