@@ -5,8 +5,6 @@ import {
   SurveyPackStatus,
   SurveyorsAcceptance,
 } from "../types/dataTypes";
-// import User from "./user";
-// import { ObjectId } from "mongodb";
 
 type SurveyPackType = ISurveypack & mongoose.Document;
 
