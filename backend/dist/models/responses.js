@@ -25,7 +25,7 @@ var __importStar = (this && this.__importStar) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
 const QuestionResponseSchema = new mongoose.Schema({
-    questionId: {
+    question: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Question",
         required: true,
@@ -34,26 +34,36 @@ const QuestionResponseSchema = new mongoose.Schema({
         type: String,
     },
 });
-const SurveyResponsesSchema = new mongoose.Schema({
-    employeeTakingSurveyId: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "User",
-        required: true,
-    },
-    allResponses: [QuestionResponseSchema],
-});
+// const SurveyResponsesSchema = new mongoose.Schema({
+//   employeeTakingSurvey: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+//   allResponses: [QuestionResponseSchema],
+// });
 const ResponsePackSchema = new mongoose.Schema({
     surveyPack: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "SurveyPack",
         required: true,
     },
-    personBeingSurveyedId: {
+    personBeingSurveyed: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "User",
         required: true,
     },
-    totalResponses: [SurveyResponsesSchema],
+    employeeTakingSurvey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    survey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "survey",
+        required: true,
+    },
+    allResponses: [QuestionResponseSchema],
 }, { timestamps: true });
 const ResponsePack = mongoose.model("ResponsePack", ResponsePackSchema);
 exports.default = ResponsePack;

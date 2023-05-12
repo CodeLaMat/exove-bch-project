@@ -9,24 +9,24 @@ const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const addResponse = async (req, res) => {
-    const employeeTakingSurveyId = req.user.userId.toString();
+    const employeeTakingSurvey = req.user.userId.toString();
     const { surveyPack: surveyPackId } = req.body;
     const surveyPack = await surveyPack_1.default.findOne({ _id: surveyPackId });
     if (!surveyPack) {
         throw new errors_1.NotFoundError(`No surveyPack with id: ${surveyPackId}`);
     }
-    const isValidEmployee = surveyPack.employeesTakingSurvey.find((employee) => employee.employee.toString() === employeeTakingSurveyId);
+    const isValidEmployee = surveyPack.employeesTakingSurvey.find((employee) => employee.employee.toString() === employeeTakingSurvey);
     if (!isValidEmployee) {
         throw new errors_1.UnauthorizedError("Your not authorized to take this survey");
     }
     const alreadySubmitted = await responses_1.default.findOne({
         surveyPack: surveyPackId,
-        employeeTakingSurveyId: req.user.userId,
+        employeeTakingSurvey: req.user.userId,
     });
     if (alreadySubmitted) {
         throw new errors_1.BadRequestError("Already submitted an Evaluation for this employee");
     }
-    req.body.employeeTakingSurveyId = req.user.userId;
+    req.body.employeeTakingSurvey = req.user.userId;
     const responsePack = await responses_1.default.create(req.body);
     res.status(http_status_codes_1.StatusCodes.CREATED).json({ responsePack });
 };
@@ -61,6 +61,7 @@ const updateResponse = async (req, res) => {
 };
 exports.updateResponse = updateResponse;
 const showStats = async (req, res) => {
+    let stats = await responses_1.default.aggregate([]);
     res.send("show stats");
 };
 exports.showStats = showStats;
