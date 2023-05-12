@@ -3,6 +3,10 @@ import ResponsePack from "../models/responses";
 import SurveyPack from "../models/surveyPack";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
+import ResponsePack from "../models/responses";
+import SurveyPack from "../models/surveyPack";
+import { StatusCodes } from "http-status-codes";
+import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 
 const addResponse = async (req: Request, res: Response) => {
   const employeeTakingSurvey = req.user.userId.toString();
@@ -46,7 +50,32 @@ const getSingleResponse = async (req: Request, res: Response) => {
     throw new NotFoundError(`No responsePack with id ${responsePackId}`);
   }
   res.status(StatusCodes.OK).json({ responsePack });
+  const responsePack = await ResponsePack.find({}).populate({
+    path: "personBeingSurveyedId",
+    select: "totalResponses",
+  });
+  res.status(StatusCodes.OK).json({ responsePack });
 };
+const getSingleResponse = async (req: Request, res: Response) => {
+  const { id: responsePackId } = req.params;
+  const responsePack = await ResponsePack.findOne({ _id: responsePackId });
+  if (!responsePack) {
+    throw new NotFoundError(`No responsePack with id ${responsePackId}`);
+  }
+  res.status(StatusCodes.OK).json({ responsePack });
+};
+const updateResponse = async (req: Request, res: Response) => {
+  const { id: responsePackId } = req.params;
+  const { totalResponses } = req.body;
+  const responsePack = await ResponsePack.findOne({ _id: responsePackId });
+  if (!responsePack) {
+    throw new NotFoundError(`No responsePack with id ${responsePackId}`);
+  }
+
+  responsePack.totalResponses = totalResponses;
+
+  await responsePack.save();
+  res.status(StatusCodes.OK).json({ responsePack });
 const updateResponse = async (req: Request, res: Response) => {
   const { id: responsePackId } = req.params;
   const { totalResponses } = req.body;
@@ -65,6 +94,13 @@ const showStats = async (req: Request, res: Response) => {
   res.send("show stats");
 };
 
+export {
+  addResponse,
+  getAllResponses,
+  getSingleResponse,
+  updateResponse,
+  showStats,
+};
 export {
   addResponse,
   getAllResponses,

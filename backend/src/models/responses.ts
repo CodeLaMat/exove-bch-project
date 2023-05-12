@@ -33,7 +33,7 @@ const ResponsePackSchema = new mongoose.Schema(
     },
     personBeingSurveyed: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
+      ref: "SurveyPack",
       required: true,
     },
     employeeTakingSurvey: {
@@ -54,6 +54,10 @@ const ResponsePackSchema = new mongoose.Schema(
 const ResponsePack: Model<ResponseType> = mongoose.model<ResponseType>(
   "ResponsePack",
   ResponsePackSchema
+const ResponsePack: Model<ResponseType> = mongoose.model<ResponseType>(
+  "ResponsePack",
+  ResponsePackSchema
 );
 
+export default ResponsePack;
 export default ResponsePack;
