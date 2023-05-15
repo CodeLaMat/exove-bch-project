@@ -59,6 +59,21 @@ const surveyPacksSlice = createSlice({
         surveyPack.manager = manager;
       }
     },
+    updateSurveyPack: (
+      state,
+      action: PayloadAction<{
+        surveyPackId: string;
+        changes: Partial<ISurveypack>;
+      }>
+    ) => {
+      const { surveyPackId, changes } = action.payload;
+      const surveyPack = state.surveyPacks.find(
+        (pack) => pack._id === surveyPackId
+      );
+      if (surveyPack) {
+        Object.assign(surveyPack, changes);
+      }
+    },
   },
 });
 
@@ -68,6 +83,25 @@ export const initialiseSurveyPacks = () => {
     dispatch(getAllSurveyPacks(surveyPacks));
   };
 };
+
+export const updateSurveyPack = createAsyncThunk(
+  "surveyPacks/updateSurveyPack",
+  async (
+    {
+      surveyPackId,
+      changes,
+    }: { surveyPackId: string; changes: Partial<ICreateSurveyPack> },
+    { dispatch }
+  ) => {
+    try {
+      await surveyPackService.updateSurveyPack(surveyPackId, changes);
+      const updatedSurveyPacks = await surveyPackService.getAll();
+      dispatch(getAllSurveyPacks(updatedSurveyPacks));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
 
 export const updateManagerInSurvey = createAsyncThunk(
   "surveyPacks/updateManagerInSurveyPack",
@@ -115,6 +149,28 @@ export const createNewSurveyPack = createAsyncThunk(
       await surveyPackService.createSurveyPack(newSurveyPack);
     } catch (error) {
       // Handle error
+    }
+  }
+);
+
+export const sendReminderEmailToUser = createAsyncThunk(
+  "surveyPacks/sendReminderEmail",
+  async (
+    {
+      surveyPackId,
+      personBeingSurveyed,
+    }: { surveyPackId: string; personBeingSurveyed: string },
+    { dispatch }
+  ) => {
+    try {
+      await surveyPackService.sendReminderEmail(
+        surveyPackId,
+        personBeingSurveyed
+      );
+      const updatedSurveyPacks = await surveyPackService.getAll();
+      dispatch(getAllSurveyPacks(updatedSurveyPacks));
+    } catch (error) {
+      console.error(error);
     }
   }
 );

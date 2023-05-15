@@ -9,7 +9,7 @@ interface SurveyPackCardProps {
   handleSurveyPackClick: (userpackid: string) => void;
 }
 
-const UserSurveyPackCard: React.FC<SurveyPackCardProps> = ({
+const TeamPackCard: React.FC<SurveyPackCardProps> = ({
   surveyPack,
   employees,
   handleSurveyPackClick,
@@ -70,4 +70,4 @@ const UserSurveyPackCard: React.FC<SurveyPackCardProps> = ({
   );
 };
 
-export default UserSurveyPackCard;
+export default TeamPackCard;

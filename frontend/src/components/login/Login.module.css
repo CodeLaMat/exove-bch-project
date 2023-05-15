@@ -1,24 +1,36 @@
 .login_container {
   background-color: #e6ebfd;
   display: flex;
-  flex-direction: column;
   align-items: center;
   justify-content: center;
   height: 100vh;
 }
 
 .login_box {
-  display: grid;
-  grid-template-columns: 2fr 2fr;
-  padding: 40px;
+  display: flex;
+  flex-direction: row;
+  padding: 30px;
   background-color: #081a51;
   color: white;
   width: 50%;
   height: 60%;
   border-radius: 10px;
-  gap: 10px;
+  gap: 3rem;
+}
+
+.login_greeting {
+  align-self: center;
+  width: 50%;
+}
+
+.login_form {
+  align-self: center;
 }
 
 .login_input {
   margin-top: 40px;
+}
+
+.language {
+  margin-top: 2rem;
 }

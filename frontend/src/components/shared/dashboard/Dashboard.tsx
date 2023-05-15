@@ -29,10 +29,6 @@ const Dashboard = () => {
   if (role === UserRole.HR) {
     return (
       <div>
-        <GenericPdfDownloader
-          downloadFileName="DashboardPDF"
-          rootElementId="dashboardPdf"
-        />
         <div>
           <div>
             <PageHeading pageTitle={t("Dashboard")} />{" "}
@@ -55,7 +51,11 @@ const Dashboard = () => {
 
               <DBUsers />
             </div>
-          </div>
+          </div>{" "}
+          <GenericPdfDownloader
+            downloadFileName="DashboardPDF"
+            rootElementId="dashboardPdf"
+          />
         </div>
       </div>
     );

@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import classes from "./ProfileMenu.module.css";
 import { useAppSelector } from "../../hooks/hooks";
+import Dropdown from "react-bootstrap/Dropdown";
 import LanguageSwitcher from "../shared/Translation";
 
 const ProfileMenu = () => {
@@ -14,59 +15,49 @@ const ProfileMenu = () => {
 
   const navigate = useNavigate();
 
-  const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "myprofile") {
-      navigate("/myprofile");
-    } else if (e.target.value === "Info") {
-      navigate("/info");
-    } else if (e.target.value === "Manage Users") {
-      navigate("/info");
-    } else {
-      navigate("/logout");
+  const handleSelect = (eventKey: string | null) => {
+    if (eventKey) {
+      navigate(`/${eventKey}`);
     }
   };
 
   return (
-    <div className={classes.adminNav}>
-      <div className={classes.mainNav}>
-        <div className={classes.pageHeading}>
-          <h4>{userData[0].name}</h4>
+    <div className={classes.nav_container}>
+      <div className={classes.adminNav}>
+        <div className={classes.mainNav}>
+          {/* <div className={classes.pageHeading}>
+            <h4>{userData[0].name}</h4>
+          </div> */}
         </div>
-        <div className={classes.LanguageSwitcher}>
-          <LanguageSwitcher />
-        </div>
-      </div>
-      <div className={classes.dropDownNav}>
-        {userData[0].imagePath === "" ? (
-          <img
-            className={classes.roundImage}
-            src={userData[0].imagePath}
-            alt={`${userData[0].name}`}
-          />
-        ) : (
-          <div className={classes.placeholder}>
-            <h2>{`${firstName[0]}${lastName[0]}`}</h2>
-          </div>
-        )}
-        <select
-          name="selection"
-          id="selection"
-          onChange={(event: React.ChangeEvent<HTMLSelectElement>) =>
-            changeHandler(event)
-          }
-        >
-          <option value={firstName} hidden>
-            {" "}
-            {userData[0].name}
-          </option>
-          <option value="myprofile">My Profile</option>
-          <option value="Info">Info</option>
-          {userData[0].role === "hr" && (
-            <option value="manageUsers">Manage Users</option>
+        <div className={classes.dropDownNav}>
+          {userData[0].imagePath === "" ? (
+            <img
+              className={classes.roundImage}
+              src={userData[0].imagePath}
+              alt={`${userData[0].name}`}
+            />
+          ) : (
+            <div className={classes.placeholder}>
+              <h2>{`${firstName[0]}${lastName[0]}`}</h2>
+            </div>
           )}
-          <option value="Logout">Logout</option>
-        </select>
-      </div>
+          <Dropdown onSelect={handleSelect}>
+            <Dropdown.Toggle variant="dark" size="sm" id="dropdown-basic">
+              {userData[0].name}
+            </Dropdown.Toggle>
+
+            <Dropdown.Menu variant="dark">
+              <Dropdown.Item eventKey="myprofile">My Profile</Dropdown.Item>
+              {userData[0].role === "hr" && (
+                <Dropdown.Item eventKey="manageUsers">
+                  Manage Users
+                </Dropdown.Item>
+              )}
+              <Dropdown.Item eventKey="logout">Logout</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        </div>
+      </div>{" "}
     </div>
   );
 };

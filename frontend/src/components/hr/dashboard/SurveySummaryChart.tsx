@@ -97,7 +97,7 @@ const SurveySummaryChart = () => {
           margin={{
             top: 20,
             right: 10,
-            bottom: 10,
+            bottom: 0,
             left: 10,
           }}
         >

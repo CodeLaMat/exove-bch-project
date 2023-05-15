@@ -4,7 +4,6 @@ import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { useAppDispatch } from "../../hooks/hooks";
 import classes from "./Login.module.css";
-import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
 import {
   setIsAuthenticated,
@@ -14,8 +13,9 @@ import Cookies from "js-cookie";
 
 import { ldspLoginAsync } from "../../features/login/loginSlice";
 import { IUser } from "../../types/loginTypes";
-import LanguageSwitcher from '../shared/Translation';
+import LanguageSwitcher from "../shared/Translation";
 import { useTranslation } from "react-i18next";
+import Button from "../shared/button/Button";
 
 interface LoginProps {}
 
@@ -74,43 +74,50 @@ const Login: React.FC<LoginProps> = () => {
 
   return (
     <div className={classes.login_container}>
-      <LanguageSwitcher />
       <div className={classes.login_box}>
-        <h3>{t('login')}</h3>
-        <div className={classes.login_text}>
-        {t('loginGreeting')}
+        <div className={classes.login_greeting}>
+          <div className={classes.login_text}>
+            {t("loginGreeting")}
+            <div className={classes.language}>
+              <LanguageSwitcher />
+            </div>
+          </div>{" "}
         </div>
-        <Form action="POST" onSubmit={loginHandler}>
-          <fieldset>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="username">{t('username')}</Form.Label>
-              <Form.Control
-                id="username"
-                placeholder="username"
-                value={userName}
-                onChange={(event) => setUserName(event.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Label htmlFor="password">{t('password')}</Form.Label>
-              <Form.Control
-                id="passwordInput"
-                type="password"
-                placeholder="password"
-                value={password}
-                onChange={(event) => setPassword(event.target.value)}
-              />
-            </Form.Group>
-            <Form.Group className="mb-3">
-              <Form.Check
-                type="checkbox"
-                id="disabledFieldsetCheck"
-                label={t('keepMeLogged')}
-              />
-            </Form.Group>
-            <Button type="submit">{t('login')}</Button>
-          </fieldset>
-        </Form>
+        <div className={classes.login_form}>
+          <Form action="POST" onSubmit={loginHandler}>
+            <fieldset>
+              <Form.Group className="mb-3">
+                {/* <Form.Label htmlFor="username">{t("username")}</Form.Label> */}
+                <Form.Control
+                  id="username"
+                  placeholder="username"
+                  value={userName}
+                  onChange={(event) => setUserName(event.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-4">
+                {/* <Form.Label htmlFor="password">{t("password")}</Form.Label> */}
+                <Form.Control
+                  id="passwordInput"
+                  type="password"
+                  placeholder="password"
+                  value={password}
+                  onChange={(event) => setPassword(event.target.value)}
+                />
+              </Form.Group>
+              <Form.Group className="mb-4">
+                <Form.Check
+                  type="checkbox"
+                  id="disabledFieldsetCheck"
+                  label={t("keepMeLogged")}
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit">
+                {t("login")}
+              </Button>
+            </fieldset>
+          </Form>
+        </div>
       </div>
     </div>
   );

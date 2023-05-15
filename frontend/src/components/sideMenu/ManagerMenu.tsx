@@ -1,9 +1,10 @@
 import React from "react";
-import MenuItem from "../shared/MenuItem";
+import MenuItem from "./MenuItem";
 import {
   faSquarePollVertical,
   faChartSimple,
-  faMessage,
+  faFileCircleQuestion,
+  faUsers,
 } from "@fortawesome/free-solid-svg-icons";
 
 const ManagerMenus = () => {
@@ -16,16 +17,22 @@ const ManagerMenus = () => {
         pageTitle="Dashboard"
       />
       <MenuItem
-        name="Surveys"
-        icon={faMessage}
-        link="/manager_other"
-        pageTitle="Inbox"
+        name="Team Surveys"
+        icon={faUsers}
+        link="managerteam"
+        pageTitle="Team Surveys"
       />{" "}
       <MenuItem
-        name="Surveys"
+        name="Evaluations"
         icon={faSquarePollVertical}
-        link="/surveys"
-        pageTitle="Surveys"
+        link="/managerevaluations"
+        pageTitle="Manager Evaluations"
+      />
+      <MenuItem
+        name="My Surveys"
+        icon={faFileCircleQuestion}
+        link="/managersurveypacks"
+        pageTitle="Manager Surveys"
       />
     </div>
   );

@@ -5,8 +5,9 @@ import { ISurvey } from "../../../types/dataTypes";
 import { RootState } from "../../../app/store";
 import { initialiseSurveys } from "../../../features/survey/surveysSlice";
 import HRSurveys from "../../hr/surveys/HRSurveys";
-import ManagerSurveys from "../../manager/surveys/ManagerSurveys";
-import UserSurveys from "../../user/surveys/surveyPacks/UserSurveyPacks";
+
+import UserSurveys from "../../user/surveys/evaluations/EvaluationsUser";
+import EvaluationsManager from "../../manager/surveys/evaluations/EvaluationsManager";
 
 const Surveys = () => {
   const dispatch = useAppDispatch();
@@ -39,7 +40,7 @@ const Surveys = () => {
   } else if (role === UserRole.Manager) {
     return (
       <div>
-        <ManagerSurveys />
+        <EvaluationsManager />
       </div>
     );
   } else return null;

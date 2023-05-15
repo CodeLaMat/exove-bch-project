@@ -2,15 +2,18 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
 import { RootState } from "../../../../app/store";
 import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
-import classes from "./UserSurveyPacks.module.css";
+import classes from "./ManagerTeam.module.css";
 import { useNavigate } from "react-router";
 import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
 import { initialiseEmployees } from "../../../../features/user/employeesSlice";
 import { IParticipant } from "../../../../types/dataTypes";
 import { initialiseSurveys } from "../../../../features/survey/surveysSlice";
-import UserSurveyPackCard from "./UserSurveyPackCard";
+import TeamPackCard from "./TeamPackCard";
+import PageHeading from "../../../pageHeading/PageHeading";
+import { useTranslation } from "react-i18next";
 
-const UserSurveys: React.FC = () => {
+const ManagerTeam: React.FC = () => {
+  const { t } = useTranslation();
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const employees: IEmployee[] = useAppSelector(
@@ -27,11 +30,11 @@ const UserSurveys: React.FC = () => {
   const userEmail = userData.email.join("");
   const userId = employees.find((e) => e.email === userEmail)?._id ?? "";
 
-  const excludedSurveyPacks = cleanedSurveyPacks.filter((surveyPack) =>
-    surveyPack.employeesTakingSurvey.some(
-      (participant: IParticipant) => participant.employee === userId
-    )
+  const teamSurveyPacks = cleanedSurveyPacks.filter((surveyPack) =>
+    surveyPack.manager?.includes(userId)
   );
+
+  console.log("UserEmail", userEmail);
 
   useEffect(() => {
     dispatch(initialiseSurveyPacks());
@@ -39,27 +42,30 @@ const UserSurveys: React.FC = () => {
     dispatch(initialiseSurveys());
   }, []);
 
-  const handleSurveyPackClick = (userpackid: string) => {
-    navigate(`/surveys/${userpackid}`);
+  const handleSurveyPackClick = (teampackid: string) => {
+    navigate(`/managerteam/${teampackid}`);
   };
 
   return (
-    <div className={classes.otherSurveyPack_container}>
+    <div>
+      <PageHeading pageTitle={t("Team Surveys")} />
       <div className={classes.otherSurveyPack_container}>
-        <h2>Waiting for evaluation</h2>
-        <div className={classes.excludedSurveyPacks}>
-          {excludedSurveyPacks.map((surveyPack) => (
-            <UserSurveyPackCard
-              key={surveyPack._id}
-              surveyPack={surveyPack}
-              employees={employees}
-              handleSurveyPackClick={handleSurveyPackClick}
-            />
-          ))}
+        <div className={classes.otherSurveyPack_container}>
+          <h3>Your subordinates</h3>
+          <div className={classes.excludedSurveyPacks}>
+            {teamSurveyPacks.map((teamPack) => (
+              <TeamPackCard
+                key={teamPack._id}
+                surveyPack={teamPack}
+                employees={employees}
+                handleSurveyPackClick={handleSurveyPackClick}
+              />
+            ))}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default UserSurveys;
+export default ManagerTeam;

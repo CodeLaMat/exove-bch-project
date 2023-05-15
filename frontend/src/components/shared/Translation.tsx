@@ -1,4 +1,6 @@
 import React from "react";
+import Dropdown from "react-bootstrap/Dropdown";
+import DropdownButton from "react-bootstrap/DropdownButton";
 import { useTranslation } from "react-i18next";
 
 function LanguageSwitcher() {
@@ -9,24 +11,21 @@ function LanguageSwitcher() {
     localStorage.setItem("language", lng);
   };
 
-  const changeHandler = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if (e.target.value === "en") {
-      changeLanguage("en");
-    } else {
-      changeLanguage("fi");
-    }
-  };
-
   return (
     <div>
-      <select
-        name="selection"
+      <DropdownButton
         id="selection"
-        onChange={(e) => changeHandler(e)}
+        title="Language"
+        variant="secondary"
+        size="sm"
       >
-        <option value="en">English</option>
-        <option value="fi">Finnish</option>
-      </select>
+        <Dropdown.Item onClick={() => changeLanguage("en")}>
+          English
+        </Dropdown.Item>
+        <Dropdown.Item onClick={() => changeLanguage("fi")}>
+          Suomi
+        </Dropdown.Item>
+      </DropdownButton>
     </div>
   );
 }

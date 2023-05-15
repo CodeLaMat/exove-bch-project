@@ -17,10 +17,12 @@ interface Iprops {
   name: string;
   link: string;
   pageTitle: string;
+  disabled?: boolean;
   onClick?: () => (() => void) | undefined;
 }
+
 const MenuItem = (props: Iprops) => {
-  const { icon, name, link } = props;
+  const { icon, name, link, pageTitle, disabled = false } = props;
   return (
     <div className={classes.menuItem}>
       <FontAwesomeIcon icon={icon}></FontAwesomeIcon>
