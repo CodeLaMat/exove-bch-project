@@ -1,80 +1,128 @@
 "use strict";
-var __createBinding =
-  (this && this.__createBinding) ||
-  (Object.create
-    ? function (o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        var desc = Object.getOwnPropertyDescriptor(m, k);
-        if (
-          !desc ||
-          ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)
-        ) {
-          desc = {
-            enumerable: true,
-            get: function () {
-              return m[k];
-            },
-          };
-        }
-        Object.defineProperty(o, k2, desc);
-      }
-    : function (o, m, k, k2) {
-        if (k2 === undefined) k2 = k;
-        o[k2] = m[k];
-      });
-var __setModuleDefault =
-  (this && this.__setModuleDefault) ||
-  (Object.create
-    ? function (o, v) {
-        Object.defineProperty(o, "default", { enumerable: true, value: v });
-      }
-    : function (o, v) {
-        o["default"] = v;
-      });
-var __importStar =
-  (this && this.__importStar) ||
-  function (mod) {
+var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
+}) : (function(o, m, k, k2) {
+    if (k2 === undefined) k2 = k;
+    o[k2] = m[k];
+}));
+var __setModuleDefault = (this && this.__setModuleDefault) || (Object.create ? (function(o, v) {
+    Object.defineProperty(o, "default", { enumerable: true, value: v });
+}) : function(o, v) {
+    o["default"] = v;
+});
+var __importStar = (this && this.__importStar) || function (mod) {
     if (mod && mod.__esModule) return mod;
     var result = {};
-    if (mod != null)
-      for (var k in mod)
-        if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k))
-          __createBinding(result, mod, k);
+    if (mod != null) for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
     __setModuleDefault(result, mod);
     return result;
-  };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
-const ResponseSchema = new mongoose.Schema(
-  {
-    questionID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Question",
-      required: true,
-    },
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    evaluatedID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    assignedEvaluations: {
-      type: Array,
-      required: true,
+const QuestionResponseSchema = new mongoose.Schema({
+    question: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Question",
+        required: true,
     },
     response: {
-      type: mongoose.Schema.Types.Mixed,
+        type: String,
     },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
+});
+const SurveyResponsesSchema = new mongoose.Schema({
+    employeeTakingSurvey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
     },
-  },
-  { timestamps: true }
-);
-const Responses = mongoose.model("Responses", ResponseSchema);
-exports.default = Responses;
+    allResponses: [QuestionResponseSchema],
+});
+const ResponsePackSchema = new mongoose.Schema({
+    surveyPack: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "SurveyPack",
+        required: true,
+    },
+    personBeingSurveyed: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "User",
+        required: true,
+    },
+    survey: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "survey",
+        required: true,
+    },
+    totalResponses: [SurveyResponsesSchema],
+    result: [
+        {
+            category: {
+                type: String,
+            },
+            sumResponse: {
+                type: Number,
+            },
+        },
+    ],
+}, { timestamps: true });
+ResponsePackSchema.statics.calculateSumResponse = async function (personBeingSurveyedId) {
+    const result = await this.aggregate([
+        {
+            $match: {
+                personBeingSurveyed: personBeingSurveyedId,
+            },
+        },
+        {
+            $unwind: "$totalResponses",
+        },
+        {
+            $unwind: "$totalResponses.allResponses",
+        },
+        {
+            $lookup: {
+                from: "questions",
+                localField: "totalResponses.allResponses.question",
+                foreignField: "_id",
+                as: "question",
+            },
+        },
+        {
+            $unwind: "$question",
+        },
+        {
+            $match: {
+                "question.questionType": "Multiple choice",
+            },
+        },
+        {
+            $addFields: {
+                responseValue: {
+                    $convert: {
+                        input: "$totalResponses.allResponses.response",
+                        to: "double",
+                        onError: 0,
+                        onNull: 0,
+                    },
+                },
+            },
+        },
+        {
+            $group: {
+                _id: {
+                    category: "$question.category",
+                },
+                sumResponse: {
+                    $sum: "$responseValue",
+                },
+            },
+        },
+    ]);
+    return result;
+};
+const ResponsePack = mongoose.model("ResponsePack", ResponsePackSchema);
+exports.default = ResponsePack;

@@ -10,7 +10,6 @@ const addResponse = async (req: Request, res: Response) => {
   const { name: employeeName } = req.user;
   const { allResponses } = req.body;
 
-  // check if user is listed as an 'employeeTakingSurvey' in the 'responosePack'
   const responsePack = await ResponsePack.findOne({ _id: responsePackId });
   if (!responsePack) {
     throw new NotFoundError(`No responsePack with id: ${responsePackId}`);
@@ -28,10 +27,8 @@ const addResponse = async (req: Request, res: Response) => {
       `User ${employeeName} is not authorized to add responses to this survey`
     );
   }
-  // update the 'totalResponses' object with the new responses
 
   for (const { question, response } of allResponses) {
-    // Find the 'allResponses' object corresponding to the current question
     const currentEmployeeResponse = employeeTakingSurvey.allResponses.find(
       (response) => response.question._id?.toString() === question
     );
@@ -40,7 +37,7 @@ const addResponse = async (req: Request, res: Response) => {
         `User ${employeeName} has already submitted a response for this question`
       );
     }
-    // Update the 'allResponses' object with the new response
+
     if (currentEmployeeResponse) {
       currentEmployeeResponse.response = response;
     } else {
