@@ -11,7 +11,7 @@ const addQuestion = async (req, res) => {
             question: req.body.question,
             category: req.body.category,
             description: req.body.description,
-            QuestionType: req.body.questionType,
+            questionType: req.body.questionType,
             // add any other necessary fields here
         });
         if (await question.save()) {
