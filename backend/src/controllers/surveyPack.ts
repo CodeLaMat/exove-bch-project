@@ -8,6 +8,8 @@ import {
   sendHrApprovalEmail,
   sendParticipantEmail,
 } from "../util";
+import ResponsePack from "../models/responses";
+import survey from "../models/surveys";
 
 const getAllSurveyPacks = async (req: Request, res: Response) => {
   const surveyPacks = await SurveyPack.find();
@@ -32,8 +34,8 @@ const createSurveyPack = async (req: Request, res: Response) => {
     await sendUserEmail({
       name: personBeingSurveyed.displayName as string,
       email: personBeingSurveyed.email as string,
-      senderEmail: req.user.email,
-      senderName: req.user.name,
+      senderEmail: `essisalomaa@test.com`,
+      senderName: `Essi Salomaa`,
     });
   } catch (error) {
     console.error("Error sending email: ", error);
@@ -91,19 +93,49 @@ const updateSurveyPack = async (req: Request, res: Response) => {
             receiverEmail: surveyor.email as string,
             receiverName: surveyor.displayName as string,
             employeeName: reviewee.displayName as string,
-            senderEmail: req.user.email,
-            senderName: req.user.name,
+            senderEmail: `essisalomaa@test.com`,
+            senderName: `Essi Salomaa`,
           });
         }
       } catch (error) {
         console.error(`Error sending email to ${surveyor.email}`, error);
       }
     }
+    const surveys = await survey.findById(updatedSurveyPack?.survey);
+    if (!surveys) {
+      throw new NotFoundError("surveys not found");
+    }
+    const allResponses = surveys.questions.map((question) => {
+      return {
+        question: question._id,
+        response: "",
+      };
+    });
+
+    const totalResponses = updatedSurveyPack?.employeesTakingSurvey.map(
+      (e) => ({
+        employeeTakingSurvey: e.employee,
+        allResponses: allResponses,
+      })
+    );
+
+    const responsePack = ResponsePack.create({
+      surveyPack: updatedSurveyPack?._id,
+      personBeingSurveyed: updatedSurveyPack?.personBeingSurveyed,
+      survey: updatedSurveyPack?.survey,
+      totalResponses: totalResponses,
+    });
+    return res.status(StatusCodes.OK).json({
+      msg: "surveyPack successfully updated and responsePack created",
+      surveyPack: updatedSurveyPack,
+      responsePack: responsePack,
+    });
+  } else {
+    return res.status(StatusCodes.OK).json({
+      msg: "surveyPack successfully updated",
+      surveyPack: updatedSurveyPack,
+    });
   }
-  res.status(StatusCodes.OK).json({
-    msg: "surveyPack successfully updated",
-    surveyPack: updatedSurveyPack,
-  });
 };
 
 const deleteSurveyPack = async (req: Request, res: Response) => {
