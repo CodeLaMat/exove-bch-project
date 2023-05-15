@@ -21,10 +21,7 @@ const MyProfile = () => {
 
   const currentUser =
     employees && employees.find((entry) => entry.email === email);
-  console.log("userEmail:", email);
-  console.log("userData:", userData.email);
-  console.log("CurrentUser:", lastName[0]);
-
+ 
   if (!currentUser) {
     return <p>{t("User not found")}.</p>;
   }

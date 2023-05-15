@@ -65,7 +65,6 @@ const surveyPackSlice = createSlice({
     },
     setSurveyManager: (state, action: PayloadAction<string>) => {
       state.surveyPack.manager = action.payload;
-      console.log("Set surveyPackManager worked");
     },
     setManagerApproved: (state, action: PayloadAction<boolean>) => {
       state.surveyPack.managerapproved = action.payload;

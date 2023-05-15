@@ -26,7 +26,7 @@ const updateManager = async (employeeId: string, managerId: string) => {
         },
       }
     );
-    console.log("update Manager", response.data);
+
     return response.data;
   } catch (error) {
     throw new Error("Failed to update manager");
