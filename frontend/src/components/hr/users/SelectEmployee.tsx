@@ -91,11 +91,7 @@ const SelectEmployee: React.FC = () => {
         <div className={classes.cardContainer}>
           {" "}
           <PageHeading pageTitle={t("Selected employee")} />
-          <div
-            key={userID}
-            className={classes.employeeCard}
-            // onClick={() => handleEmployeeSelection(employee._id)}
-          >
+          <div key={userID} className={classes.employeeCard}>
             <div className={classes.employeeImage}>
               {image === "" ? (
                 <img

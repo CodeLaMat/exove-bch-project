@@ -2,21 +2,15 @@ import React, { useEffect } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
 import { RootState } from "../../../../app/store";
 import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
-import classes from "./OtherSurveyPacks.module.css";
+import classes from "./UserSurveyPacks.module.css";
 import { useNavigate } from "react-router";
 import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
 import { initialiseEmployees } from "../../../../features/user/employeesSlice";
 import { IParticipant } from "../../../../types/dataTypes";
-import MySurveyPackCard from "./MySurveyPackCard";
 import { initialiseSurveys } from "../../../../features/survey/surveysSlice";
+import UserSurveyPackCard from "./UserSurveyPackCard";
 
-const OtherSurveyPacks: React.FC = () => {
-  useEffect(() => {
-    dispatch(initialiseSurveyPacks());
-    dispatch(initialiseEmployees());
-    dispatch(initialiseSurveys());
-  }, []);
-
+const UserSurveys: React.FC = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const employees: IEmployee[] = useAppSelector(
@@ -39,28 +33,33 @@ const OtherSurveyPacks: React.FC = () => {
     )
   );
 
-  console.log(excludedSurveyPacks);
+  useEffect(() => {
+    dispatch(initialiseSurveyPacks());
+    dispatch(initialiseEmployees());
+    dispatch(initialiseSurveys());
+  }, []);
 
-  const handleSurveyPackClick = (packid: string) => {
-    navigate(`/othersurveypacks/${packid}`);
+  const handleSurveyPackClick = (userpackid: string) => {
+    navigate(`/surveys/${userpackid}`);
   };
 
   return (
     <div className={classes.otherSurveyPack_container}>
-      {" "}
-      <h2>Waiting for evaluation</h2>
-      <div className={classes.excludedSurveyPacks}>
-        {excludedSurveyPacks.map((surveyPack) => (
-          <MySurveyPackCard
-            key={surveyPack._id}
-            surveyPack={surveyPack}
-            employees={employees}
-            handleSurveyPackClick={handleSurveyPackClick}
-          />
-        ))}
+      <div className={classes.otherSurveyPack_container}>
+        <h2>Waiting for evaluation</h2>
+        <div className={classes.excludedSurveyPacks}>
+          {excludedSurveyPacks.map((surveyPack) => (
+            <UserSurveyPackCard
+              key={surveyPack._id}
+              surveyPack={surveyPack}
+              employees={employees}
+              handleSurveyPackClick={handleSurveyPackClick}
+            />
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default OtherSurveyPacks;
+export default UserSurveys;

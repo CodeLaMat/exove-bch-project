@@ -1,8 +1,6 @@
 import React, { useEffect } from "react";
-
 import { useNavigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-
 import Table from "react-bootstrap/Table";
 import classes from "./Feedbacks.module.css";
 import { IEmployee, ISurveypack } from "../../../types/dataTypes";
@@ -53,11 +51,14 @@ const Feedbacks: React.FC = () => {
     dispatch(initialiseSurveyPacks());
   }, [dispatch]);
 
-  console.log("surveyPacks", surveyPacks);
-  console.log("surveyPacks", surveyPacks);
+  const handleSurveyPackClick = (packid: string) => {
+    // const surveyPack = surveyPacksArray[0]?.find((pack) => pack._id === id);
 
-  const handleSurveyPackClick = (id: string) => {
-    navigate(`/feedbacks/${id}`);
+    // if (surveyPack && surveyPack.employeesTakingSurvey.length > 0) {
+    navigate(`/feedbacks/${packid}`);
+    // } else {
+    //   navigate(`/participants/${id}`);
+    // }
   };
 
   return (
@@ -82,12 +83,34 @@ const Feedbacks: React.FC = () => {
             <tr key={surveyPack._id}>
               <td>{index + 1}</td>
               <td>{getSurveyedPerson(surveyPack.personBeingSurveyed)}</td>
-              <td>
-                {
+              <td
+                className={`${
                   surveyPack.employeesTakingSurvey.filter(
                     (employee) => employee.acceptanceStatus === "Approved"
-                  ).length
-                }
+                  ).length === 6
+                    ? classes.acceptance_approved
+                    : ""
+                }`}
+              >
+                <span
+                  className={`${
+                    surveyPack.employeesTakingSurvey.filter(
+                      (employee) => employee.acceptanceStatus === "Declined"
+                    ).length > 0
+                      ? classes.acceptance_declined
+                      : surveyPack.employeesTakingSurvey.filter(
+                          (employee) => employee.acceptanceStatus === "Approved"
+                        ).length > 0
+                      ? classes.acceptance_approved
+                      : classes.acceptanceStatus_default
+                  }`}
+                >
+                  {
+                    surveyPack.employeesTakingSurvey.filter(
+                      (employee) => employee.acceptanceStatus !== "Pending"
+                    ).length
+                  }
+                </span>
                 /{surveyPack.employeesTakingSurvey.length}
               </td>
               <td>{getManager(surveyPack.manager)}</td>

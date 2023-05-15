@@ -134,7 +134,32 @@ const updateEmployeesTakingSurvey = async (
   }
 };
 
+const updateManager = async (
+  surveyPackId: string,
+  manager: string
+): Promise<void> => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.patch(
+      `${URL.SURVEYPACKS_URL}/manager-update/${surveyPackId}`,
+      {
+        manager,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("API response:", response);
+  } catch (error) {
+    console.error("Error updating manager:", error);
+    throw error;
+  }
+};
+
 export default {
+  updateManager,
   getAll,
   updateEmployeesTakingSurvey,
   updatePersonBeingSurveyed,

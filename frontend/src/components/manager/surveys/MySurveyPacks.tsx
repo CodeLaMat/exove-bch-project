@@ -1,14 +1,14 @@
 import React, { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
-import { RootState } from "../../../../app/store";
-import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
+import { RootState } from "../../../app/store";
+import { IEmployee, ISurveypack } from "../../../types/dataTypes";
 import classes from "./MySurveyPacks.module.css";
 import { useNavigate } from "react-router";
 
-import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
-import { initialiseEmployees } from "../../../../features/user/employeesSlice";
-import PageHeading from "../../../pageHeading/PageHeading";
-import MySurveyPackCard from "./MySurveyPackCard";
+import SurveyPackCard from "./MySurveyPackCard";
+import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice";
+import { initialiseEmployees } from "../../../features/user/employeesSlice";
+import PageHeading from "../../pageHeading/PageHeading";
 
 const MySurveyPacks = () => {
   useEffect(() => {
@@ -37,23 +37,22 @@ const MySurveyPacks = () => {
   );
 
   const handleSurveyPackClick = (packid: string) => {
-    navigate(`/usersurveypacks/${packid}`);
+    navigate(`/mysurveypacks/${packid}`);
   };
 
   return (
     <div className={classes.mySurveyPack_container}>
+      <PageHeading pageTitle="My Surveys" />
       <div className={classes.mySurveyPack_container}>
-        <h2>You will be evaluated</h2>
+        <h4>You will be evaluated</h4>
         <div className={classes.includedSurveyPacks}>
           {includedSurveyPacks.map((surveyPack) => (
-            <div>
-              <MySurveyPackCard
-                key={surveyPack._id}
-                surveyPack={surveyPack}
-                employees={employees}
-                handleSurveyPackClick={handleSurveyPackClick}
-              />
-            </div>
+            <SurveyPackCard
+              key={surveyPack._id}
+              surveyPack={surveyPack}
+              employees={employees}
+              handleSurveyPackClick={handleSurveyPackClick}
+            />
           ))}
         </div>
       </div>

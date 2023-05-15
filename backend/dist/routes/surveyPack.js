@@ -23,4 +23,7 @@ router
     .route("/manager/:id")
     .get(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "manager"), surveyPack_1.getManagerApproval)
     .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "manager"), surveyPack_1.updateManagerApproval);
+router
+    .route("/manager-update/:id")
+    .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "manager", "user"), surveyPack_1.updateManager);
 exports.default = router;

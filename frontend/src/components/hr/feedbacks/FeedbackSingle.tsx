@@ -1,21 +1,21 @@
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router";
-import { RootState } from "../../../../app/store";
+import { RootState } from "../../../app/store";
 import {
   IEmployee,
   IParticipant,
   IQuestion,
   ISurvey,
   ISurveypack,
-} from "../../../../types/dataTypes";
-import classes from "./OtherSurveyPackDetails.module.css";
-import Button from "../../../shared/button/Button";
+} from "../../../types/dataTypes";
+import classes from "./MySurveyPackDetails.module.css";
+import Button from "../../shared/button/Button";
 import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
-import { useAppSelector } from "../../../../hooks/hooks";
-import { Categories } from "../../../../types/dataTypes";
+import { useAppSelector } from "../../../hooks/hooks";
+import { Categories } from "../../../types/dataTypes";
 
-const OtherSurveyPackDetails: React.FC = () => {
-  const { userpackid } = useParams();
+const FeedbackSingle: React.FC = () => {
+  const { packid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
   const surveyPacks: ISurveypack[] = useAppSelector(
@@ -31,7 +31,7 @@ const OtherSurveyPackDetails: React.FC = () => {
   const surveysArray = Object.values(surveys);
   const surveyPacksArray = Object.values(surveyPacks);
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
-  const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === userpackid);
+  const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === packid);
 
   const manager = employees.find((e) => e._id === surveyPack.manager);
 
@@ -46,7 +46,7 @@ const OtherSurveyPackDetails: React.FC = () => {
   };
 
   const foundSurveyPack: ISurveypack | undefined = cleanedSurveyPacks.find(
-    (pack) => pack._id === userpackid
+    (pack) => pack._id === packid
   );
   let survey: ISurvey | undefined;
 
@@ -128,7 +128,7 @@ const OtherSurveyPackDetails: React.FC = () => {
               {new Date(surveyPack.createdAt).toLocaleDateString()}
             </ListGroup.Item>
           </ListGroup>{" "}
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
+          <ListGroup horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
               Deadline:{" "}
             </ListGroup.Item>
@@ -136,11 +136,11 @@ const OtherSurveyPackDetails: React.FC = () => {
               {new Date(surveyPack.deadline).toLocaleDateString()}
             </ListGroup.Item>
           </ListGroup>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
+          <ListGroup horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>Status: </ListGroup.Item>
             <ListGroup.Item variant="info">{surveyPack.status}</ListGroup.Item>
           </ListGroup>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
+          <ListGroup horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
               Manager:{" "}
             </ListGroup.Item>
@@ -148,7 +148,7 @@ const OtherSurveyPackDetails: React.FC = () => {
               {manager?.firstName + "" + manager?.surName}
             </ListGroup.Item>
           </ListGroup>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
+          <ListGroup horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
               Manager Approved:{" "}
             </ListGroup.Item>
@@ -156,7 +156,7 @@ const OtherSurveyPackDetails: React.FC = () => {
               {surveyPack.managerapproved ? "Yes" : "No"}
             </ListGroup.Item>
           </ListGroup>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
+          <ListGroup horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
               HR Approved:{" "}
             </ListGroup.Item>
@@ -164,7 +164,7 @@ const OtherSurveyPackDetails: React.FC = () => {
               {surveyPack.hrapproved ? "Yes" : "No"}
             </ListGroup.Item>
           </ListGroup>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
+          <ListGroup horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
               Participants of this survey:{" "}
             </ListGroup.Item>
@@ -219,45 +219,7 @@ const OtherSurveyPackDetails: React.FC = () => {
                                   className="my-3"
                                   style={{ fontSize: "20px" }}
                                 >
-                                  {/* Add the question number here */}
                                   {qIndex + 1}. {question.question}
-                                  {question.questionType ===
-                                  "Multiple choice" ? (
-                                    <Form>
-                                      <Form.Group
-                                        controlId={`range-${qIndex}`}
-                                        className="my-4"
-                                      >
-                                        <Form.Label>
-                                          <span
-                                            className={
-                                              classes.questionDescription
-                                            }
-                                          >
-                                            {" "}
-                                            Evaluation from 1 to 5
-                                          </span>
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="range"
-                                          min="1"
-                                          max="5"
-                                          defaultValue="3"
-                                          className="my-4"
-                                        />
-                                      </Form.Group>
-                                    </Form>
-                                  ) : (
-                                    <Form>
-                                      <Form.Group controlId="formBasicText">
-                                        <Form.Control
-                                          type="text"
-                                          placeholder="Enter your answer"
-                                          className="my-4"
-                                        />
-                                      </Form.Group>
-                                    </Form>
-                                  )}
                                 </ListGroup.Item>
                               ))}
                             </ListGroup>
@@ -279,4 +241,4 @@ const OtherSurveyPackDetails: React.FC = () => {
   );
 };
 
-export default OtherSurveyPackDetails;
+export default FeedbackSingle;

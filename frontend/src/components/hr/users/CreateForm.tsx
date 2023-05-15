@@ -5,26 +5,24 @@ import SelectSurvey from "./SelectSurvey";
 import classes from "./CreateForm.module.css";
 import { RootState } from "../../../app/store";
 import { IEmployee } from "../../../types/userTypes";
-import {
-  ICreateSurveyPack,
-  ISurveypack,
-  SurveyPackStatus,
-} from "../../../types/dataTypes";
+import { ICreateSurveyPack } from "../../../types/dataTypes";
 import {
   createNewSurveyPack,
   setPersonBeingSurveyed,
 } from "../../../features/survey/surveyPackSlice";
 import SelectEmployee from "./SelectEmployee";
-import SelectParticipants from "./SelectParticipants";
 import Button from "../../shared/button/Button";
 import { initialiseSurveyPacks } from "../../../features/survey/surveyPacksSlice";
 import CheckDataSend from "./CheckDataSend";
 import { useTranslation } from "react-i18next";
+import { Toast } from "react-bootstrap";
 
 const CreateForm: React.FC = () => {
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { t } = useTranslation();
   const { userid } = useParams<{ userid: string }>();
+  const [isFormSubmitted, setIsFormSubmitted] = useState<boolean>(false);
   const userId = userid ?? "";
   const surveyPack = useAppSelector(
     (state: RootState) => state.surveyPack.surveyPack
@@ -93,9 +91,6 @@ const CreateForm: React.FC = () => {
     dispatch(initialiseSurveyPacks());
   }, [dispatch, userid]);
 
-  const currentDate = new Date();
-  // const deadline = new Date(currentDate.getTime() + 30 * 24 * 60 * 60 * 1000);
-
   const handleFormSendClick = (userid: string) => {
     const selectedEmployee = employees.find(
       (employee) => employee._id === userid
@@ -112,7 +107,12 @@ const CreateForm: React.FC = () => {
         hrapproved: hrapproved,
       };
       dispatch(createNewSurveyPack(newSurveyPack));
+      setIsFormSubmitted(true);
     }
+    setTimeout(() => {
+      setIsFormSubmitted(false);
+      navigate("/employees");
+    }, 3000);
   };
 
   return (
@@ -129,7 +129,7 @@ const CreateForm: React.FC = () => {
                 } ${step.isDone ? classes.done : ""}`}
               >
                 <div>
-                {t("Step")} {i + 1}
+                  {t("Step")} {i + 1}
                   <br />
                   <span>{t(`${step.label}`)}</span>
                 </div>
@@ -148,9 +148,22 @@ const CreateForm: React.FC = () => {
             {t("Back")}
           </Button>
           <Button type="button" onClick={handleNext} variant="primary">
-            {steps[steps.length - 1].key !== activeStep.key ? t("Next") : t("Submit")}
+            {steps[steps.length - 1].key !== activeStep.key
+              ? t("Next")
+              : t("Submit")}
           </Button>
         </div>
+        <Toast
+          className={classes.toast}
+          show={isFormSubmitted}
+          autohide
+          bg="info"
+        >
+          <Toast.Header>
+            <strong className="mr-auto">The Form Submitted</strong>
+          </Toast.Header>
+          <Toast.Body>The created form have been sent successfully.</Toast.Body>
+        </Toast>
       </div>
     </div>
   );

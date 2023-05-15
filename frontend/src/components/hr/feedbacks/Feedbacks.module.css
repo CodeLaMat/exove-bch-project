@@ -1,0 +1,28 @@
+.users_container {
+  width: 90%;
+  height: 100%;
+  margin: auto;
+  padding: 2rem;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.users_container table {
+  font-size: 18px;
+}
+
+.acceptance_declined {
+  color: red;
+  font-weight: 800;
+}
+
+.acceptance_approved {
+  color: rgb(143, 210, 84);
+  font-weight: 600;
+  font-size: 20px;
+}
+
+.acceptanceStatus_default {
+  color: rgb(22, 23, 22);
+  font-size: 18px;
+}

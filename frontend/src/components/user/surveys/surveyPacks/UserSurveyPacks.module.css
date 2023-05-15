@@ -1,18 +1,18 @@
-.mySurveyPack_container {
-  margin: 30px;
-  height: 82vh;
-}
-
-.includedSurveyPacks {
+.excludedSurveyPacks {
   display: flex;
   flex-wrap: wrap;
   gap: 1rem;
   margin-top: 20px;
 }
 
+.otherSurveyPack_container {
+  margin: 30px;
+  height: 82vh;
+}
+
 /* Responsive */
 @media (max-width: 768px) {
-  .includedSurveyPacks > div {
+  .excludedSurveyPacks > div {
     flex: 1 0 100%;
     max-width: 100%;
   }

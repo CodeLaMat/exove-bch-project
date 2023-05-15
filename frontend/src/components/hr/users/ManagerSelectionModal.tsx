@@ -38,7 +38,11 @@ const ManagerSelectionModal: React.FC<ManagerSelectionModalProps> = ({
               <FormCheck
                 type="checkbox"
                 label={`${employee.firstName} ${employee.surName}`}
-                onClick={() => onManagerSelect(employee._id)}
+                onChange={(event) => {
+                  if (event.target.checked) {
+                    onManagerSelect(employee._id);
+                  }
+                }}
               />
             </div>
           ))}

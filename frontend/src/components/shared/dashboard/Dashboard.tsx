@@ -12,6 +12,7 @@ import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
 import GenericPdfDownloader from "./pdfDownloader";
 import UserDashboard from "../../user/dashboard/UserDashboard";
+import ManagerDashboard from "../../manager/dashboard/ManagerDashboard";
 
 const Dashboard = () => {
   const dispatch = useAppDispatch();
@@ -65,7 +66,11 @@ const Dashboard = () => {
       </div>
     );
   } else if (role === UserRole.Manager) {
-    return <div>Component for manager role</div>;
+    return (
+      <div>
+        <ManagerDashboard />
+      </div>
+    );
   } else return null;
 };
 

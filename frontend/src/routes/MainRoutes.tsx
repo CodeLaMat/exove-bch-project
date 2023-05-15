@@ -8,19 +8,16 @@ import MyProfile from "../components/userProfile/MyProfile";
 import Main from "./templates/main/Main";
 import CreateSurvey from "../components/hr/surveys/CreateSurvey";
 import Dashboard from "../components/shared/dashboard/Dashboard";
-import Inbox from "../components/shared/surveyPacks/SurveyPacks";
 import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
-import Feedbacks from "../components/shared/feedbacks/Feedbacks";
+import Feedbacks from "../components/hr/feedbacks/Feedbacks";
 import Analytics from "../components/shared/analytics/Analytics";
 import FileFolders from "../components/shared/fileFolders/FileFolders";
-import FeedbackSingle from "../components/shared/feedbacks/FeedbackSingle";
-
+import FeedbackSingle from "../components/hr/feedbacks/FeedbackSingle";
 import CreateForm from "../components/hr/users/CreateForm";
 import SurveyPackDetails from "../components/user/surveys/mySurveyPacks/MySurveyPackDetails";
 import SurveyPacks from "../components/user/surveys/mySurveyPacks/MySurveyPacks";
 import OtherSurveyPackDetails from "../components/user/surveys/surveyPacks/OtherSurveyPackDetails";
-import OtherSurveyPacks from "../components/user/surveys/surveyPacks/OtherSurveyPacks";
 
 const MainRoutes = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
@@ -32,9 +29,9 @@ const MainRoutes = () => {
         <Route path="/" element={<Main />}>
           <Route index element={<Dashboard />}></Route>
           <Route path="/home" element={<Dashboard />}></Route>
-          <Route path="/mysurveypacks" element={<Inbox />}></Route>
+          <Route path="/usersurveypacks" element={<SurveyPacks />}></Route>
           <Route
-            path="/mysurveypacks/:packid"
+            path="/usersurveypacks/:packid"
             element={<SurveyPackDetails />}
           ></Route>{" "}
           <Route path="/surveys" element={<Surveys />}></Route>{" "}
@@ -44,15 +41,11 @@ const MainRoutes = () => {
               role === UserRole.HR ? <CreateSurvey /> : <Navigate to="/" />
             }
           />
-          <Route path="/users" element={<Users />}></Route>
+          <Route path="/employees" element={<Users />}></Route>
           <Route path="/feedbacks" element={<Feedbacks />}></Route>{" "}
-          <Route path="/feedbacks/:id" element={<FeedbackSingle />}></Route>
+          <Route path="/feedbacks/:packid" element={<FeedbackSingle />}></Route>
           <Route
-            path="/othersurveypacks"
-            element={<OtherSurveyPacks />}
-          ></Route>
-          <Route
-            path="/othersurveypacks/:packid"
+            path="/surveys/:userpackid"
             element={<OtherSurveyPackDetails />}
           ></Route>
           <Route path="/sendForm/:userid" element={<CreateForm />}></Route>
@@ -62,7 +55,6 @@ const MainRoutes = () => {
           <Route path="/info" element={<Info />}></Route>
           <Route path="/logout" element={<Logout />}></Route>
         </Route>
-
         <Route path="*" element={<Navigate to="/" />} />
       </Routes>
     </div>

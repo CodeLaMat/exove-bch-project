@@ -1,6 +1,7 @@
 import React from "react";
 import html2canvas from "html2canvas";
 import { jsPDF } from "jspdf";
+import Button from "../button/Button";
 
 const GenericPdfDownloader = ({ rootElementId, downloadFileName }) => {
   const downloadPdfDocument = () => {
@@ -13,7 +14,11 @@ const GenericPdfDownloader = ({ rootElementId, downloadFileName }) => {
     });
   };
 
-  return <button onClick={downloadPdfDocument}>Download Pdf</button>;
+  return (
+    <Button type="button" variant="standard" onClick={downloadPdfDocument}>
+      Download Pdf
+    </Button>
+  );
 };
 
 export default GenericPdfDownloader;

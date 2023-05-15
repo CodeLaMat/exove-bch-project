@@ -1,24 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import classes from "./SelectMyParticipants.module.css";
-import { RootState } from "../../../../app/store";
-import { IEmployee } from "../../../../types/userTypes";
-import { removeParticipants } from "../../../../features/survey/paticipantsSlice";
-import { IParticipant, IParticipantInput } from "../../../../types/dataTypes";
-import Button from "../../../shared/button/Button";
+import { RootState } from "../../../app/store";
+import { IEmployee } from "../../../types/userTypes";
+import { removeParticipants } from "../../../features/survey/paticipantsSlice";
+import { IParticipant, IParticipantInput } from "../../../types/dataTypes";
+import Button from "../../shared/button/Button";
 import { Toast } from "react-bootstrap";
 import {
   initialiseSurveyPacks,
   updateEmployeesTakingSurvey,
-  updateManagerInSurvey,
-} from "../../../../features/survey/surveyPacksSlice";
+} from "../../../features/survey/surveyPacksSlice";
 
 interface SelectMyParticipantsProps {
-  surveyPackId: string;
+  surveyPack: string;
 }
 
 const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
-  surveyPackId,
+  surveyPack,
 }) => {
   const dispatch = useAppDispatch();
   const [selectedParticipants, setSelectedParticipants] = useState<
@@ -92,7 +91,7 @@ const SelectMyParticipants: React.FC<SelectMyParticipantsProps> = ({
     setShowToast(true);
     dispatch(
       updateEmployeesTakingSurvey({
-        surveyPackId: surveyPackId,
+        surveyPackId: surveyPack,
         updatedParticipants: selectedParticipants,
       })
     );
