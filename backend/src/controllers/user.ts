@@ -217,12 +217,15 @@ const ldapLogin = async (req: Request, res: Response) => {
             imagePath: userData.jpegPhoto,
           } as LdapUser,
         };
+        req.user = payload.user;
         console.log("payload", payload);
         const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
           expiresIn: "2d",
         });
 
         console.log("Token: ", token);
+        console.log("req.user", req.user);
+
         // res.cookie("token", token, {
         //   httpOnly: true,
         //   secure: true,
