@@ -30,8 +30,6 @@ const SelectSurvey = () => {
     dispatch(setSurvey(survey._id));
   };
 
-  console.log(selectedSurvey);
-
   useEffect(() => {
     if (selectedSurvey) {
       dispatch(setSurvey(selectedSurvey._id));
