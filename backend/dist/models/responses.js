@@ -45,110 +45,36 @@ var __importStar =
   };
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
-const QuestionResponseSchema = new mongoose.Schema({
-  question: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "Question",
-    required: true,
-  },
-  response: {
-    type: String,
-  },
-});
-const SurveyResponsesSchema = new mongoose.Schema({
-  employeeTakingSurvey: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  allResponses: [QuestionResponseSchema],
-});
-const ResponsePackSchema = new mongoose.Schema(
+const ResponseSchema = new mongoose.Schema(
   {
-    surveyPack: {
+    questionID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "SurveyPack",
+      ref: "Question",
       required: true,
     },
-    personBeingSurveyed: {
+    userID: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    survey: {
+    evaluatedID: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "survey",
+      ref: "User",
       required: true,
     },
-    totalResponses: [SurveyResponsesSchema],
-    result: [
-      {
-        category: {
-          type: String,
-        },
-        sumResponse: {
-          type: Number,
-        },
-      },
-    ],
+    assignedEvaluations: {
+      type: Array,
+      required: true,
+    },
+    response: {
+      type: mongoose.Schema.Types.Mixed,
+    },
+    createdAt: {
+      type: Date,
+      default: Date.now(),
+    },
   },
   { timestamps: true }
 );
-ResponsePackSchema.statics.calculateSumResponse = async function (
-  personBeingSurveyedId
-) {
-  const result = await this.aggregate([
-    {
-      $match: {
-        personBeingSurveyed: personBeingSurveyedId,
-      },
-    },
-    {
-      $unwind: "$totalResponses",
-    },
-    {
-      $unwind: "$totalResponses.allResponses",
-    },
-    {
-      $lookup: {
-        from: "questions",
-        localField: "totalResponses.allResponses.question",
-        foreignField: "_id",
-        as: "question",
-      },
-    },
-    {
-      $unwind: "$question",
-    },
-    {
-      $match: {
-        "question.questionType": "Multiple choice",
-      },
-    },
-    {
-      $addFields: {
-        responseValue: {
-          $convert: {
-            input: "$totalResponses.allResponses.response",
-            to: "double",
-            onError: 0,
-            onNull: 0,
-          },
-        },
-      },
-    },
-    {
-      $group: {
-        _id: {
-          category: "$question.category",
-        },
-        sumResponse: {
-          $sum: "$responseValue",
-        },
-      },
-    },
-  ]);
-  return result;
-};
-const ResponsePack = mongoose.model("ResponsePack", ResponsePackSchema);
-exports.default = ResponsePack;
+const Responses = mongoose.model("Responses", ResponseSchema);
+exports.default = Responses;
