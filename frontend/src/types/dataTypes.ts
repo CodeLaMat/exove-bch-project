@@ -16,8 +16,9 @@ export type QuestionsByCategory = {
 
 export enum SurveyPackStatus {
   OPEN = "Open",
-  INPROGRESS = "in_progress",
   CLOSED = "Closed",
+  APPROVED = "Approved",
+  DECLINED = "Declined",
 }
 
 export enum Question_Type {

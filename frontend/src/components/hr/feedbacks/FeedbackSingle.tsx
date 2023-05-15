@@ -8,16 +8,23 @@ import {
   ISurvey,
   ISurveypack,
 } from "../../../types/dataTypes";
-import classes from "./MySurveyPackDetails.module.css";
+import classes from "./FeedbackSingle.module.css";
 import Button from "../../shared/button/Button";
 import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
-import { useAppSelector } from "../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { Categories } from "../../../types/dataTypes";
+import PageHeading from "../../pageHeading/PageHeading";
+import { useTranslation } from "react-i18next";
+import { sendReminderEmailToUser } from "../../../features/survey/surveyPacksSlice";
+import { IParticipantInput } from "../../../types/dataTypes";
+import { URLSearchParamsInit } from "react-router-dom";
 
 const FeedbackSingle: React.FC = () => {
+  const { t } = useTranslation();
+  const dispatch = useAppDispatch();
   const { packid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
-
+  const [isSent, setIsSent] = useState<boolean>(false);
   const surveyPacks: ISurveypack[] = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
@@ -66,7 +73,7 @@ const FeedbackSingle: React.FC = () => {
 
   useEffect(() => {
     const calculateDaysLeft = () => {
-      if (!surveyPack) return; // Add this line
+      if (!surveyPack) return;
       const now = new Date();
       const deadline = new Date(surveyPack.deadline);
       const difference = deadline.getTime() - now.getTime();
@@ -101,142 +108,208 @@ const FeedbackSingle: React.FC = () => {
     .filter((name: string) => name)
     .join(", ");
 
-  console.log("Participant Names", surveyPack.employeesTakingSurvey);
+  const handleSendReminderEmail = (
+    surveyPackId: string,
+    personBeingSurveyedId: string
+  ) => {
+    dispatch(
+      sendReminderEmailToUser({
+        surveyPackId,
+        personBeingSurveyed: personBeingSurveyedId,
+      })
+    );
+    setIsSent(true);
+    setTimeout(() => {
+      setIsSent(false);
+    }, 3000);
+  };
+
   return (
-    <div className={classes.surveyPackDetails}>
-      <Card style={{ maxWidth: "80rem" }}>
-        <Card.Header className="text-center" style={{ fontSize: "30px" }}>
-          Survey Pack Details
-        </Card.Header>
-        <Card.Body>
-          <Card.Title> Person Being Surveyed:</Card.Title>
-          <Card.Text>
-            {personBeingSurveyed?.firstName +
-              " " +
-              personBeingSurveyed?.surName}
-          </Card.Text>{" "}
-          <Card.Footer className="text-muted">
-            {daysLeft > 0
-              ? `Days left until deadline: ${daysLeft}`
-              : "Deadline has passed"}
-          </Card.Footer>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              Created at:
-            </ListGroup.Item>
-            <ListGroup.Item variant="info">
-              {new Date(surveyPack.createdAt).toLocaleDateString()}
-            </ListGroup.Item>
-          </ListGroup>{" "}
-          <ListGroup horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              Deadline:{" "}
-            </ListGroup.Item>
-            <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
-              {new Date(surveyPack.deadline).toLocaleDateString()}
-            </ListGroup.Item>
-          </ListGroup>
-          <ListGroup horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>Status: </ListGroup.Item>
-            <ListGroup.Item variant="info">{surveyPack.status}</ListGroup.Item>
-          </ListGroup>
-          <ListGroup horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              Manager:{" "}
-            </ListGroup.Item>
-            <ListGroup.Item variant="info">
-              {manager?.firstName + "" + manager?.surName}
-            </ListGroup.Item>
-          </ListGroup>
-          <ListGroup horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              Manager Approved:{" "}
-            </ListGroup.Item>
-            <ListGroup.Item variant="info">
-              {surveyPack.managerapproved ? "Yes" : "No"}
-            </ListGroup.Item>
-          </ListGroup>
-          <ListGroup horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              HR Approved:{" "}
-            </ListGroup.Item>
-            <ListGroup.Item variant="info">
-              {surveyPack.hrapproved ? "Yes" : "No"}
-            </ListGroup.Item>
-          </ListGroup>
-          <ListGroup horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              Participants of this survey:{" "}
-            </ListGroup.Item>
-            <ListGroup.Item variant="info">
-              {participantNames
-                ? participantNames
-                : "No participants assigned yet"}
-            </ListGroup.Item>
-          </ListGroup>{" "}
-        </Card.Body>
-
-        <Card.Body>
-          <Card>
-            {survey && (
-              <div className={classes.surveyCard} key={survey._id}>
-                <Card.Header>
-                  <h3>{survey.surveyName}</h3>
-                </Card.Header>
-                <div className={classes.descriptionBox}>
-                  <h5>Description:</h5>
-                  <p>{survey.description}</p>
-                </div>
-                <Card.Body>
-                  <h4>Questions:</h4>
-                  <Accordion defaultActiveKey="0">
-                    {Object.entries(questionsByCategory).map(
-                      ([category, questions], index) => (
-                        <Accordion.Item key={category} eventKey={`${index}`}>
-                          <Accordion.Header>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                width: "100%",
-                              }}
-                            >
-                              <h5>{category}</h5>
-                              <span>
-                                {questions.length}{" "}
-                                {questions.length === 1
-                                  ? "question"
-                                  : "questions"}
-                              </span>
-                            </div>
-                          </Accordion.Header>
-
-                          <Accordion.Body>
-                            <ListGroup variant="flush">
-                              {questions.map((question, qIndex) => (
-                                <ListGroup.Item
-                                  key={qIndex}
-                                  className="my-3"
-                                  style={{ fontSize: "20px" }}
-                                >
-                                  {qIndex + 1}. {question.question}
-                                </ListGroup.Item>
-                              ))}
-                            </ListGroup>
-                          </Accordion.Body>
-                        </Accordion.Item>
-                      )
-                    )}
-                  </Accordion>
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
-                </Card.Body>
+    <div>
+      {" "}
+      <PageHeading pageTitle={t("Feedbacks")} />
+      <div className={classes.surveyPackDetails}>
+        <Card style={{ maxWidth: "80rem" }}>
+          <Card.Header className="text-center" style={{ fontSize: "30px" }}>
+            Survey Pack Details
+          </Card.Header>
+          <Card.Body>
+            <Card.Title> Person Being Surveyed:</Card.Title>
+            <Card.Text>
+              {personBeingSurveyed?.firstName +
+                " " +
+                personBeingSurveyed?.surName}
+            </Card.Text>{" "}
+            <Card.Footer className="text-muted">
+              {daysLeft > 0
+                ? `Days left until deadline: ${daysLeft}`
+                : "Deadline has passed"}
+            </Card.Footer>
+            <ListGroup key="xxl" horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                Created at:
+              </ListGroup.Item>
+              <ListGroup.Item variant="info">
+                {new Date(surveyPack.createdAt).toLocaleDateString()}
+              </ListGroup.Item>
+            </ListGroup>{" "}
+            <ListGroup horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                Deadline:{" "}
+              </ListGroup.Item>
+              <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
+                {new Date(surveyPack.deadline).toLocaleDateString()}
+              </ListGroup.Item>{" "}
+              <div>
+                {daysLeft <= 0 &&
+                  surveyPack.employeesTakingSurvey.filter(
+                    (employee: IParticipantInput) =>
+                      employee.acceptanceStatus === "Approved"
+                  ).length <= 0 && (
+                    <Button
+                      variant="alert"
+                      onClick={() =>
+                        handleSendReminderEmail(
+                          surveyPack._id,
+                          surveyPack.employeesTakingSurvey
+                            .filter(
+                              (employee: IParticipantInput) =>
+                                employee.acceptanceStatus === "Pending"
+                            )
+                            .map(
+                              (employee: IParticipantInput) => employee.employee
+                            )
+                        )
+                      }
+                    >
+                      Send Reminder
+                    </Button>
+                  )}
               </div>
-            )}
-          </Card>
-        </Card.Body>
-      </Card>
+            </ListGroup>{" "}
+            <ListGroup horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                Status:{" "}
+              </ListGroup.Item>
+              <ListGroup.Item variant="info">
+                {surveyPack.status}
+              </ListGroup.Item>
+            </ListGroup>
+            <ListGroup horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                Manager:{" "}
+              </ListGroup.Item>
+              <ListGroup.Item variant="info">
+                {manager?.firstName + "" + manager?.surName}
+              </ListGroup.Item>
+            </ListGroup>
+            <ListGroup horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                Manager Approved:{" "}
+              </ListGroup.Item>
+              <ListGroup.Item variant="info">
+                {surveyPack.managerapproved ? "Yes" : "No"}
+              </ListGroup.Item>
+            </ListGroup>
+            <ListGroup horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                HR Approved:{" "}
+              </ListGroup.Item>
+              <ListGroup.Item variant="info">
+                {surveyPack.hrapproved ? "Yes" : "No"}
+              </ListGroup.Item>
+            </ListGroup>
+            <ListGroup horizontal="xxl" className="my-2">
+              <ListGroup.Item style={{ width: "30rem" }}>
+                Participants of this survey:
+              </ListGroup.Item>
+              <ListGroup.Item>
+                {participantNames ? (
+                  participantNames
+                    .split(", ")
+                    .map((name: string, index: number, array: string[]) => (
+                      <span
+                        key={index}
+                        className={
+                          surveyPack.employeesTakingSurvey[index]
+                            .acceptanceStatus === "Declined"
+                            ? classes.declined
+                            : surveyPack.employeesTakingSurvey[index]
+                                .acceptanceStatus === "Pending"
+                            ? classes.pending
+                            : classes.accepted
+                        }
+                      >
+                        {name}
+                        {index !== array.length - 1 && ", "}
+                      </span>
+                    ))
+                ) : (
+                  <span>No participants assigned yet</span>
+                )}
+              </ListGroup.Item>
+            </ListGroup>
+          </Card.Body>
+
+          <Card.Body>
+            <Card>
+              {survey && (
+                <div className={classes.surveyCard} key={survey._id}>
+                  <Card.Header>
+                    <h3>{survey.surveyName}</h3>
+                  </Card.Header>
+                  <div className={classes.descriptionBox}>
+                    <h5>Description:</h5>
+                    <p>{survey.description}</p>
+                  </div>
+                  <Card.Body>
+                    <h4>Questions:</h4>
+                    <Accordion defaultActiveKey="0">
+                      {Object.entries(questionsByCategory).map(
+                        ([category, questions], index) => (
+                          <Accordion.Item key={category} eventKey={`${index}`}>
+                            <Accordion.Header>
+                              <div
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "space-between",
+                                  width: "100%",
+                                }}
+                              >
+                                <h5>{category}</h5>
+                                <span>
+                                  {questions.length}{" "}
+                                  {questions.length === 1
+                                    ? "question"
+                                    : "questions"}
+                                </span>
+                              </div>
+                            </Accordion.Header>
+
+                            <Accordion.Body>
+                              <ListGroup variant="flush">
+                                {questions.map((question, qIndex) => (
+                                  <ListGroup.Item
+                                    key={qIndex}
+                                    className="my-3"
+                                    style={{ fontSize: "20px" }}
+                                  >
+                                    {qIndex + 1}. {question.question}
+                                  </ListGroup.Item>
+                                ))}
+                              </ListGroup>
+                            </Accordion.Body>
+                          </Accordion.Item>
+                        )
+                      )}
+                    </Accordion>
+                  </Card.Body>
+                </div>
+              )}
+            </Card>
+          </Card.Body>
+        </Card>
+      </div>
     </div>
   );
 };

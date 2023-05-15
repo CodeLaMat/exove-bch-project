@@ -238,7 +238,33 @@ const updateManager = async (req: Request, res: Response) => {
   });
 };
 
+const sendReminderEmail = async (req: Request, res: Response) => {
+  const {
+    params: { id: surveyPackId },
+    body: { personBeingSurveyed },
+  } = req;
+
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
+  }
+  try {
+    await sendUserEmail({
+      senderName: req.user.name,
+      senderEmail: req.user.email,
+      name: personBeingSurveyed.displayName as string,
+      email: personBeingSurveyed.email as string,
+    });
+
+    res.status(200).json({ message: "Reminder email sent successfully." });
+  } catch (error) {
+    console.error("Error sending email: ", error);
+    res.status(500).json({ message: "Failed to send reminder email." });
+  }
+};
+
 export {
+  sendReminderEmail,
   getAllSurveyPacks,
   createSurveyPack,
   getSurveyPack,

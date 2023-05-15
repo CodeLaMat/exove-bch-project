@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
-import classes from "./HRDashboard.module.css";
-import { Table } from "react-bootstrap";
+import classes from "./DBSurveyList.module.css";
+import { Dropdown, Table } from "react-bootstrap";
 import { ISurvey } from "../../../types/dataTypes";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { RootState } from "../../../app/store";
@@ -23,24 +23,38 @@ const DBSurveyList = () => {
       <Table striped bordered hover size="sm">
         <thead>
           <tr>
-            <th>{t("Survey ID")}</th>
+            <th>#</th>
             <th>{t("Survey Name")}</th>
             <th>{t("Description")}</th>
             <th>{t("Questions")}</th>
           </tr>
         </thead>
         <tbody>
-          {surveys.map((survey: ISurvey) => (
+          {surveys.map((survey: ISurvey, index) => (
             <tr key={survey._id}>
-              <td>{survey._id}</td>
+              <td>{index + 1}</td>
               <td>{survey.surveyName}</td>
-              <td>{survey.description}</td>
+              <td className="text-truncate" style={{ maxWidth: "300px" }}>
+                {survey.description}
+              </td>
               <td>
-                <ul>
-                  {survey.questions.map((question) => (
-                    <li key={question._id}>{question.question}</li>
-                  ))}
-                </ul>
+                <Dropdown>
+                  <Dropdown.Toggle
+                    variant="secondary"
+                    id="dropdown-basic"
+                    size="sm"
+                  >
+                    {t("View Questions")}
+                  </Dropdown.Toggle>
+
+                  <Dropdown.Menu>
+                    {survey.questions.map((question) => (
+                      <Dropdown.Item key={question._id}>
+                        {question.question}
+                      </Dropdown.Item>
+                    ))}
+                  </Dropdown.Menu>
+                </Dropdown>
               </td>
             </tr>
           ))}

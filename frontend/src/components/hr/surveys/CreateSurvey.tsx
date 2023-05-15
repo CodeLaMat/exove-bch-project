@@ -122,112 +122,121 @@ const CreateSurvey: React.FC = () => {
   );
 
   return (
-    <div className={classes.surveyCreate_container}>
+    <div>
+      {" "}
       <PageHeading pageTitle={t("Create Survey")} />{" "}
-      <div className={classes.back_button}>
-        <Button variant="primary" onClick={() => navigate("/surveys")}>
-          {t("Back")}
-        </Button>
-        <Button variant="primary" onClick={handleShowModal}>
-          {t("Add Question")}
-        </Button>
-      </div>
-      <div className={classes.top}>
-        <div className={classes.surveyForm_container}>
-          <form action="POST" onSubmit={submitHandler}>
-            <label>
-              {t("Survey Name")}:
-              <input type="text" name="surveyName" onChange={onchangeHandler} />
-            </label>
-            <label>
-              {t("Description")}:
-              <input
-                type="text"
-                name="description"
-                onChange={onchangeHandler}
-              />
-            </label>
-            <Accordion
-              defaultActiveKey={["0"]}
-              alwaysOpen
-              className={classes.Accordion}
-            >
-              {Object.entries(questionsByCategory).map(
-                ([category, questions], index) => (
-                  <Accordion.Item eventKey={category} key={category}>
-                    <Accordion.Header>{t(`${category}`)}</Accordion.Header>
-                    <Accordion.Body>
-                      <table className={classes.table}>
-                        <thead>
-                          <tr>
-                            <th>{t("Question")}</th>
-                            <th>{t("Question type")}</th>
-                            <th>{t("Choose")}</th>
-                          </tr>
-                        </thead>
-                        <tbody>
-                          {questions.map((question) => (
-                            <tr
-                              key={question._id}
-                              className={index % 2 === 0 ? "" : "highlight"}
-                            >
-                              <td className={classes.table_cell}>
-                                {t(`${question.question}`)}
-                              </td>
-                              <td className={classes.table_cell}>
-                                {t(`${question.questionType}`)}
-                              </td>
-                              <td className={classes.table_cell}>
-                                <Form.Check
-                                  aria-label="option 1"
-                                  type="checkbox"
-                                  name={question._id}
-                                  value={question._id}
-                                  id={question._id}
-                                  onChange={checkboxHandler}
-                                />
-                              </td>
-                            </tr>
-                          ))}
-                        </tbody>
-                      </table>
-                    </Accordion.Body>
-                  </Accordion.Item>
-                )
-              )}
-            </Accordion>
-            <div className={classes.submit_button}>
-              <Button type="submit" variant="primary">
-                {t("Submit")}
-              </Button>
-            </div>
-          </form>
+      <div className={classes.surveyCreate_container}>
+        <div className={classes.back_button}>
+          <Button variant="primary" onClick={() => navigate("/surveys")}>
+            {t("Back")}
+          </Button>
+          <Button variant="primary" onClick={handleShowModal}>
+            {t("Add Question")}
+          </Button>
         </div>
-      </div>
-      <div>
-        <Modal show={showQuestionModal} onHide={handleCloseModal}>
-          <Modal.Header closeButton>
-            <Modal.Title>{t("Add Question")}</Modal.Title>
-          </Modal.Header>
-          <AddQuestions />
-          <Modal.Footer></Modal.Footer>
-        </Modal>{" "}
-        <Toast
-          className={classes.toast}
-          show={isFormSubmitted}
-          autohide
-          delay={3000}
-          bg="info"
-          onClose={() => {
-            setIsFormSubmitted(false);
-            navigate("/surveys");
-          }}
-        >
-          <Toast.Header>
-            <strong className="mr-auto">The Form Submitted</strong>
-          </Toast.Header>
-          <Toast.Body>The created form have been sent successfully.</Toast.Body>
-        </Toast>
+        <div className={classes.top}>
+          <div className={classes.surveyForm_container}>
+            <form action="POST" onSubmit={submitHandler}>
+              <label>
+                {t("Survey Name")}:
+                <input
+                  type="text"
+                  name="surveyName"
+                  onChange={onchangeHandler}
+                />
+              </label>
+              <label>
+                {t("Description")}:
+                <input
+                  type="text"
+                  name="description"
+                  onChange={onchangeHandler}
+                />
+              </label>
+              <Accordion
+                defaultActiveKey={["0"]}
+                alwaysOpen
+                className={classes.Accordion}
+              >
+                {Object.entries(questionsByCategory).map(
+                  ([category, questions], index) => (
+                    <Accordion.Item eventKey={category} key={category}>
+                      <Accordion.Header>{t(`${category}`)}</Accordion.Header>
+                      <Accordion.Body>
+                        <table className={classes.table}>
+                          <thead>
+                            <tr>
+                              <th>{t("Question")}</th>
+                              <th>{t("Question type")}</th>
+                              <th>{t("Choose")}</th>
+                            </tr>
+                          </thead>
+                          <tbody>
+                            {questions.map((question) => (
+                              <tr
+                                key={question._id}
+                                className={index % 2 === 0 ? "" : "highlight"}
+                              >
+                                <td className={classes.table_cell}>
+                                  {t(`${question.question}`)}
+                                </td>
+                                <td className={classes.table_cell}>
+                                  {t(`${question.questionType}`)}
+                                </td>
+                                <td className={classes.table_cell}>
+                                  <Form.Check
+                                    aria-label="option 1"
+                                    type="checkbox"
+                                    name={question._id}
+                                    value={question._id}
+                                    id={question._id}
+                                    onChange={checkboxHandler}
+                                  />
+                                </td>
+                              </tr>
+                            ))}
+                          </tbody>
+                        </table>
+                      </Accordion.Body>
+                    </Accordion.Item>
+                  )
+                )}
+              </Accordion>
+              <div className={classes.submit_button}>
+                <Button type="submit" variant="primary">
+                  {t("Submit")}
+                </Button>
+              </div>
+            </form>
+          </div>
+        </div>
+        <div>
+          <Modal show={showQuestionModal} onHide={handleCloseModal}>
+            <Modal.Header closeButton>
+              <Modal.Title>{t("Add Question")}</Modal.Title>
+            </Modal.Header>
+            <AddQuestions />
+            <Modal.Footer></Modal.Footer>
+          </Modal>{" "}
+          <Toast
+            className={classes.toast}
+            show={isFormSubmitted}
+            autohide
+            delay={3000}
+            bg="info"
+            onClose={() => {
+              setIsFormSubmitted(false);
+              navigate("/surveys");
+            }}
+          >
+            <Toast.Header>
+              <strong className="mr-auto">The Form Submitted</strong>
+            </Toast.Header>
+            <Toast.Body>
+              The created form have been sent successfully.
+            </Toast.Body>
+          </Toast>
+        </div>
       </div>
     </div>
   );

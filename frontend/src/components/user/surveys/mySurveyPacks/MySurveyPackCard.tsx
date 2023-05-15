@@ -37,7 +37,7 @@ const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
   return (
     <Card
       style={{
-        width: "18rem",
+        width: "15rem",
         backgroundColor: isSixParticipants ? "#87ccae" : "#82c2ff",
       }}
     >

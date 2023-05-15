@@ -1,19 +1,11 @@
 .surveys_container {
   width: 90%;
   height: 100%;
-  margin: auto;
+  margin: 3.2rem;
   padding: 2rem;
   background-color: #fff;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }
-
-.top {
-  display: flex;
-  justify-content: center;
-  margin-top: 2rem;
-  align-items: center;
-}
-
 .actions {
   display: flex;
   justify-content: space-between;
@@ -22,15 +14,27 @@
 
 .table_container {
   overflow-x: auto;
+  max-height: 500px;
 }
-
-th {
+.table_container th {
   font-weight: bold;
   text-align: left;
 }
+.table_container tr th:first-child {
+  width: 5%;
+}
+.table_container tr th:nth-child(2) {
+  width: 20%;
+}
 
-td {
-  vertical-align: middle;
+.table_container tr th:nth-last-child(2),
+.table_container tr th:last-child {
+  width: 17%;
+  white-space: nowrap;
+}
+
+.table_container table {
+  table-layout: fixed;
 }
 
 ul {

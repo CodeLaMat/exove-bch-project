@@ -1,5 +1,5 @@
 import React from "react";
-import MenuItem from "../shared/MenuItem";
+import MenuItem from "./MenuItem";
 import { faChartSimple, faMessage } from "@fortawesome/free-solid-svg-icons";
 
 const UserMenus = () => {
@@ -12,9 +12,9 @@ const UserMenus = () => {
         pageTitle="Dashboard"
       />
       <MenuItem
-        name="Surveys"
+        name="Evaluations"
         icon={faMessage}
-        link="/surveys"
+        link="/userevaluations"
         pageTitle="Survey Packs"
       />{" "}
       <MenuItem

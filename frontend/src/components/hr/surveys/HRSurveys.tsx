@@ -52,91 +52,95 @@ const HRSurveys = () => {
 
   if (role === UserRole.HR) {
     return (
-      <div className={classes.surveys_container}>
+      <div>
         <PageHeading pageTitle={t("Survey forms")} />
-        <div className={classes.top}>
-          <div className={classes.maincontent}>
-            <div className={classes.actions}>
-              <Button
-                variant="primary"
-                onClick={() => navigate("/createsurvey")}
-              >
-                {t("Create new Form")}
-              </Button>{" "}
-              <Button variant="primary" onClick={handleShowModal}>
-                {t("Add Question")}
-              </Button>
-            </div>
-            <div className={classes.table_container}>
-              <Table striped bordered hover size="sm">
-                <thead>
-                  <tr>
-                    <th>{t("Survey Name")}</th>
-                    <th>{t("Description")}</th>
-                    <th>{t("Questions")}</th>
-                    <th>{t("Delete")} </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {surveysArray.map((survey: ISurvey) => (
-                    <tr key={survey._id}>
-                      <td>{survey.surveyName}</td>
-                      <OverlayTrigger
-                        overlay={
-                          <Tooltip id={`tooltip-${survey._id}`}>
-                            {survey.description}
-                          </Tooltip>
-                        }
-                      >
-                        <td
-                          className="text-truncate"
-                          style={{ maxWidth: "900px" }}
-                        >
-                          {survey.description}
-                        </td>
-                      </OverlayTrigger>
-                      <td>
-                        <Dropdown>
-                          <Dropdown.Toggle
-                            variant="secondary"
-                            id="dropdown-basic"
-                          >
-                            {t("View Questions")}
-                          </Dropdown.Toggle>
-
-                          <Dropdown.Menu>
-                            {survey.questions.map((question) => (
-                              <Dropdown.Item key={question._id}>
-                                {question.question}
-                              </Dropdown.Item>
-                            ))}
-                          </Dropdown.Menu>
-                        </Dropdown>
-                      </td>
-                      <td>
-                        <Button
-                          variant="primary"
-                          type="button"
-                          onClick={() => handleDelete(survey._id)}
-                        >
-                          {t("Delete")}
-                        </Button>
-                      </td>
+        <div className={classes.surveys_container}>
+          <div className={classes.top}>
+            <div className={classes.maincontent}>
+              <div className={classes.actions}>
+                <Button
+                  variant="primary"
+                  onClick={() => navigate("/createsurvey")}
+                >
+                  {t("Create new Form")}
+                </Button>{" "}
+                <Button variant="primary" onClick={handleShowModal}>
+                  {t("Add Question")}
+                </Button>
+              </div>
+              <div className={classes.table_container}>
+                <Table striped bordered hover size="sm">
+                  <thead>
+                    <tr>
+                      <th>#</th>
+                      <th>{t("Survey Name")}</th>
+                      <th>{t("Description")}</th>
+                      <th>{t("Questions")}</th>
+                      <th>{t("Delete")} </th>
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
+                  </thead>
+                  <tbody>
+                    {surveysArray.map((survey: ISurvey, index) => (
+                      <tr key={survey._id}>
+                        <td>{index + 1}</td>
+                        <td>{survey.surveyName}</td>
+                        <OverlayTrigger
+                          overlay={
+                            <Tooltip id={`tooltip-${survey._id}`}>
+                              {survey.description}
+                            </Tooltip>
+                          }
+                        >
+                          <td
+                            className="text-truncate"
+                            style={{ maxWidth: "900px" }}
+                          >
+                            {survey.description}
+                          </td>
+                        </OverlayTrigger>
+                        <td>
+                          <Dropdown>
+                            <Dropdown.Toggle
+                              variant="secondary"
+                              id="dropdown-basic"
+                            >
+                              {t("View Questions")}
+                            </Dropdown.Toggle>
+
+                            <Dropdown.Menu>
+                              {survey.questions.map((question) => (
+                                <Dropdown.Item key={question._id}>
+                                  {question.question}
+                                </Dropdown.Item>
+                              ))}
+                            </Dropdown.Menu>
+                          </Dropdown>
+                        </td>
+                        <td>
+                          <Button
+                            variant="primary"
+                            type="button"
+                            onClick={() => handleDelete(survey._id)}
+                          >
+                            {t("Delete")}
+                          </Button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </div>
             </div>
           </div>
-        </div>
-        <div>
-          <Modal show={showQuestionModal} onHide={handleCloseModal}>
-            <Modal.Header closeButton>
-              <Modal.Title>{t("Add Question")}</Modal.Title>
-            </Modal.Header>
-            <AddQuestion />
-            <Modal.Footer></Modal.Footer>
-          </Modal>
+          <div>
+            <Modal show={showQuestionModal} onHide={handleCloseModal}>
+              <Modal.Header closeButton>
+                <Modal.Title>{t("Add Question")}</Modal.Title>
+              </Modal.Header>
+              <AddQuestion />
+              <Modal.Footer></Modal.Footer>
+            </Modal>
+          </div>
         </div>
       </div>
     );

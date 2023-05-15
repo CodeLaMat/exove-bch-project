@@ -1,14 +1,19 @@
+.userDashboardContainer {
+  height: 100vh;
+  margin: 30px 60px;
+}
+
 .userInfoContainer {
   display: flex;
   align-items: center;
   flex-direction: column;
   position: absolute;
-  padding: 20px;
-  width: 35%;
-  height: 85%;
+  padding: 3%;
+  width: 35vw;
+  height: 85vh;
   left: 20%;
   margin-top: 10px;
-  background: #1ea9ff0e;
+  background: #7bc2e5;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
 }
@@ -17,9 +22,9 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 250px;
-  width: 250px;
-  background-color: #afb3d1;
+  height: 30vh;
+  width: 15vw;
+  background-color: #ffffff;
   border-radius: 50%;
 }
 
@@ -31,20 +36,17 @@
   border-radius: 50%;
 }
 
-.placeholder {
-  color: #ccd2e3;
+.info_placeholder {
+  color: #7bc2e5;
   font-size: 80px;
 }
 
-.userInfoId {
-  color: #1c1f37;
-}
-
 .profileContainer {
+  margin-top: 20%;
   display: flex;
   flex-wrap: wrap;
   align-items: center;
-  margin: 60px;
+  color: rgb(255, 255, 255);
 }
 
 .profileRow {
@@ -58,24 +60,34 @@
 
 .profileLabel {
   font-weight: bold;
-  margin-right: 20px;
+  width: 50%;
 }
 
 .profileData {
+  width: 40%;
   font-size: 16px;
   flex-grow: 1;
+  color: #18547f;
 }
 
 .userPerformContainer {
+  margin-top: 10px;
   position: absolute;
   padding: 20px;
-  width: 35%;
-  height: 85%;
+  width: 35vw;
+  height: 85vh;
   left: 60%;
-  margin-top: 10px;
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 8px;
+}
+
+.userPerform_heading {
+  display: flex;
+  justify-content: space-between;
+}
+
+.userPerform_date {
 }
 
 .container {
@@ -119,7 +131,7 @@
 }
 
 .categoryName {
-  font-size: 14px;
+  font-size: 12px;
   width: 150px;
 }
 
@@ -128,7 +140,17 @@
   margin-left: 200px;
 }
 
-.data {
+.categoryPercentage {
+  font-size: 12px;
+  width: 10%;
+  font-weight: 800;
+}
+
+.breifInfo {
   font-size: 14px;
-  margin-left: 10px;
+  margin-top: 6%;
+}
+
+.breifInfo p {
+  font-size: 80%;
 }

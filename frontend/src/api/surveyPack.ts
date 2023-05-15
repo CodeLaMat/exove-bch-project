@@ -134,6 +134,28 @@ const updateEmployeesTakingSurvey = async (
   }
 };
 
+const updateSurveyPack = async (
+  id: string,
+  updateData: Partial<ICreateSurveyPack>
+): Promise<void> => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.patch(
+      `${URL.SURVEYPACKS_URL}/${id}`,
+      updateData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("API response:", response.data);
+  } catch (error) {
+    console.error("Error updating survey pack:", error);
+    throw error;
+  }
+};
+
 const updateManager = async (
   surveyPackId: string,
   manager: string
@@ -157,8 +179,50 @@ const updateManager = async (
     throw error;
   }
 };
+// const sendReminderEmail = async (userId: string): Promise<void> => {
+//   const token = Cookies.get("token");
+//   try {
+//     const response = await axios.patch(
+//       `${URL.SURVEYPACKS_URL}/send-reminder/${userId}`,
+//       {},
+//       {
+//         headers: {
+//           Authorization: `Bearer ${token}`,
+//         },
+//       }
+//     );
+//     console.log("API response:", response);
+//   } catch (error) {
+//     console.error("Error sending reminder email:", error);
+//     throw error;
+//   }
+// };
+
+const sendReminderEmail = async (
+  surveyPackId: string,
+  personBeingSurveyed: string
+): Promise<void> => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.patch(
+      `${URL.SURVEYPACKS_URL}/send-reminder/${surveyPackId}`,
+      { personBeingSurveyed },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("API response:", response);
+  } catch (error) {
+    console.error("Error sending reminder email:", error);
+    throw error;
+  }
+};
 
 export default {
+  sendReminderEmail,
+  updateSurveyPack,
   updateManager,
   getAll,
   updateEmployeesTakingSurvey,

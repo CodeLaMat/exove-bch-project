@@ -14,7 +14,7 @@ const data = [
 
 const UserChart = () => {
   return (
-    <ResponsiveContainer width="80%" height="25%">
+    <ResponsiveContainer width="100%" height="20%">
       <BarChart width={50} height={20} data={data}>
         <Bar dataKey="quality" fill="#FD1F9B" />
         <Bar dataKey="social" fill="#264083" />

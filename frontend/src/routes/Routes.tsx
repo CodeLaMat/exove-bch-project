@@ -1,6 +1,5 @@
 import React from "react";
 import { UserRole } from "../enum";
-import Info from "../components/userProfile/Info";
 import Logout from "../components/login/Logout";
 import MyProfile from "../components/userProfile/MyProfile";
 import Layout from "../pages/Layout";
@@ -10,11 +9,12 @@ import Dashboard from "../components/shared/dashboard/Dashboard";
 
 import Surveys from "../components/shared/surveys/Surveys";
 import Users from "../components/shared/users/Users";
-import Analytics from "../components/shared/analytics/Analytics";
-import FileFolders from "../components/shared/fileFolders/FileFolders";
+import Analytics from "../components/hr/analytics/Analytics";
+
 import Feedbacks from "../components/hr/feedbacks/Feedbacks";
 import Inbox from "../components/shared/surveyPacks/SurveyPacks";
 import SurveyPacks from "../components/user/surveys/mySurveyPacks/MySurveyPacks";
+import ConfirmParticipants from "../components/hr/confirmParticipants/PendingSurveys";
 
 export const sideMenuRoutes: RouteConfig = {
   [UserRole.HR]: [
@@ -52,17 +52,14 @@ export const sideMenuRoutes: RouteConfig = {
           element: <Analytics />,
         },
         {
-          path: "filesfolders",
-          element: <FileFolders />,
+          path: "pendingsurveys",
+          element: <ConfirmParticipants />,
         },
         {
           path: "myprofile",
           element: <MyProfile />,
         },
-        {
-          path: "info",
-          element: <Info />,
-        },
+
         {
           path: "logout",
           element: <Logout />,
@@ -96,10 +93,7 @@ export const sideMenuRoutes: RouteConfig = {
           path: "myprofile",
           element: <MyProfile />,
         },
-        {
-          path: "info",
-          element: <Info />,
-        },
+
         {
           path: "logout",
           element: <Logout />,
@@ -128,10 +122,7 @@ export const sideMenuRoutes: RouteConfig = {
           path: "myprofile",
           element: <MyProfile />,
         },
-        {
-          path: "info",
-          element: <Info />,
-        },
+
         {
           path: "logout",
           element: <Logout />,

@@ -8,13 +8,13 @@ import {
   ISurvey,
   ISurveypack,
 } from "../../../../types/dataTypes";
-import classes from "./OtherSurveyPackDetails.module.css";
+import classes from "./EvaluationPackDetails.module.css";
 import Button from "../../../shared/button/Button";
 import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Categories } from "../../../../types/dataTypes";
 
-const OtherSurveyPackDetails: React.FC = () => {
+const EvaluationPackDetails: React.FC = () => {
   const { userpackid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
@@ -101,7 +101,6 @@ const OtherSurveyPackDetails: React.FC = () => {
     .filter((name: string) => name)
     .join(", ");
 
-  console.log("Participant Names", surveyPack.employeesTakingSurvey);
   return (
     <div className={classes.surveyPackDetails}>
       <Card style={{ maxWidth: "80rem" }}>
@@ -279,4 +278,4 @@ const OtherSurveyPackDetails: React.FC = () => {
   );
 };
 
-export default OtherSurveyPackDetails;
+export default EvaluationPackDetails;

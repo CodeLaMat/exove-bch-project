@@ -14,13 +14,7 @@
   align-items: center;
   padding: 20px;
   overflow-y: scroll;
-  height: 50vh;
-}
-
-.actions {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 2rem;
+  height: 70vh;
 }
 
 .table_container {

@@ -23,7 +23,11 @@ const Feedbacks: React.FC = () => {
   const surveyPacks: ISurveypack[][] = useSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
+
   const surveyPacksArray = Object.values(surveyPacks);
+  const approvedSurveyPacks = surveyPacksArray[0]?.filter(
+    (surveyPack) => surveyPack.hrapproved
+  );
 
   const getSurveyedPerson = (personId: string) => {
     const employee = employeesArray.find(
@@ -62,79 +66,82 @@ const Feedbacks: React.FC = () => {
   };
 
   return (
-    <div className={classes.users_container}>
-      <PageHeading pageTitle={t("Feedback")} />
-      <Table striped bordered hover>
-        <thead>
-          <tr>
-            <th>N</th>
-            <th>{t("Surveyed person")}</th>
-            <th>{t("Approved Participants")}</th>
-            <th>{t("Manager")}</th>
-            <th>{t("Manager Approved")}</th>
-            <th>{t("Status")}</th>
-            <th>{t("Creation date")}</th>
-            <th>{t("Deadline")}</th>
-            <th>{t("Open")}</th>
-          </tr>
-        </thead>
-        <tbody>
-          {surveyPacksArray[0]?.map((surveyPack, index) => (
-            <tr key={surveyPack._id}>
-              <td>{index + 1}</td>
-              <td>{getSurveyedPerson(surveyPack.personBeingSurveyed)}</td>
-              <td
-                className={`${
-                  surveyPack.employeesTakingSurvey.filter(
-                    (employee) => employee.acceptanceStatus === "Approved"
-                  ).length === 6
-                    ? classes.acceptance_approved
-                    : ""
-                }`}
-              >
-                <span
+    <div>
+      <PageHeading pageTitle={t("Feedbacks")} />
+      <div className={classes.users_container}>
+        <Table striped bordered hover>
+          <thead>
+            <tr>
+              <th>N</th>
+              <th>{t("Surveyed person")}</th>
+              <th>{t("Approved Participants")}</th>
+              <th>{t("Manager")}</th>
+              <th>{t("Manager Approved")}</th>
+              <th>{t("Status")}</th>
+              <th>{t("Creation date")}</th>
+              <th>{t("Deadline")}</th>
+              <th>{t("Open")}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {approvedSurveyPacks?.map((surveyPack, index) => (
+              <tr key={surveyPack._id}>
+                <td>{index + 1}</td>
+                <td>{getSurveyedPerson(surveyPack.personBeingSurveyed)}</td>
+                <td
                   className={`${
                     surveyPack.employeesTakingSurvey.filter(
-                      (employee) => employee.acceptanceStatus === "Declined"
-                    ).length > 0
-                      ? classes.acceptance_declined
-                      : surveyPack.employeesTakingSurvey.filter(
-                          (employee) => employee.acceptanceStatus === "Approved"
-                        ).length > 0
+                      (employee) => employee.acceptanceStatus === "Approved"
+                    ).length === 6
                       ? classes.acceptance_approved
-                      : classes.acceptanceStatus_default
+                      : ""
                   }`}
                 >
-                  {
-                    surveyPack.employeesTakingSurvey.filter(
-                      (employee) => employee.acceptanceStatus !== "Pending"
-                    ).length
-                  }
-                </span>
-                /{surveyPack.employeesTakingSurvey.length}
-              </td>
-              <td>{getManager(surveyPack.manager)}</td>
-              <td>{surveyPack.managerapproved.toString()}</td>
-              <td>{surveyPack.status}</td>
-              <td>
-                {new Date(surveyPack.createdAt).toLocaleDateString("en-GB")}
-              </td>
-              <td>
-                {new Date(surveyPack.deadline).toLocaleDateString("en-GB")}
-              </td>
-              <td>
-                <Button
-                  variant="primary"
-                  type="button"
-                  onClick={() => handleSurveyPackClick(surveyPack._id)}
-                >
-                  {t("Open")}
-                </Button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
+                  <span
+                    className={`${
+                      surveyPack.employeesTakingSurvey.filter(
+                        (employee) => employee.acceptanceStatus === "Declined"
+                      ).length > 0
+                        ? classes.acceptance_declined
+                        : surveyPack.employeesTakingSurvey.filter(
+                            (employee) =>
+                              employee.acceptanceStatus === "Approved"
+                          ).length > 0
+                        ? classes.acceptance_approved
+                        : classes.acceptanceStatus_default
+                    }`}
+                  >
+                    {
+                      surveyPack.employeesTakingSurvey.filter(
+                        (employee) => employee.acceptanceStatus !== "Pending"
+                      ).length
+                    }
+                  </span>
+                  /{surveyPack.employeesTakingSurvey.length}
+                </td>
+                <td>{getManager(surveyPack.manager)}</td>
+                <td>{surveyPack.managerapproved.toString()}</td>
+                <td>{surveyPack.status}</td>
+                <td>
+                  {new Date(surveyPack.createdAt).toLocaleDateString("en-GB")}
+                </td>
+                <td>
+                  {new Date(surveyPack.deadline).toLocaleDateString("en-GB")}
+                </td>
+                <td>
+                  <Button
+                    variant="primary"
+                    type="button"
+                    onClick={() => handleSurveyPackClick(surveyPack._id)}
+                  >
+                    {t("Open")}
+                  </Button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
     </div>
   );
   return null;

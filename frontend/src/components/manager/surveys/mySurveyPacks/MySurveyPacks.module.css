@@ -1,0 +1,19 @@
+.mySurveyPack_container {
+  margin: 30px;
+  height: 82vh;
+}
+
+.includedSurveyPacks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  margin-top: 20px;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .includedSurveyPacks > div {
+    flex: 1 0 100%;
+    max-width: 100%;
+  }
+}

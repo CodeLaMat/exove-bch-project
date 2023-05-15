@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateManager = exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = void 0;
+exports.updateManager = exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = exports.sendReminderEmail = void 0;
 const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
@@ -196,3 +196,24 @@ const updateManager = async (req, res) => {
     });
 };
 exports.updateManager = updateManager;
+const sendReminderEmail = async (req, res) => {
+    const { params: { id: surveyPackId }, body: { personBeingSurveyed }, } = req;
+    const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
+    if (!surveyPack) {
+        throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
+    }
+    try {
+        await (0, util_1.sendUserEmail)({
+            senderName: req.user.name,
+            senderEmail: req.user.email,
+            name: personBeingSurveyed.displayName,
+            email: personBeingSurveyed.email,
+        });
+        res.status(200).json({ message: "Reminder email sent successfully." });
+    }
+    catch (error) {
+        console.error("Error sending email: ", error);
+        res.status(500).json({ message: "Failed to send reminder email." });
+    }
+};
+exports.sendReminderEmail = sendReminderEmail;

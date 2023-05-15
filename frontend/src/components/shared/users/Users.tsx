@@ -10,14 +10,7 @@ import { initialiseEmployees } from "../../../features/user/employeesSlice";
 
 import { useNavigate } from "react-router-dom";
 import Button from "../button/Button";
-import { createNewSurveyPack } from "../../../features/survey/surveyPacksSlice";
-import {
-  ICreateSurveyPack,
-  IParticipant,
-  ISurvey,
-  SurveyPackStatus,
-  User,
-} from "../../../types/dataTypes";
+
 import { useTranslation } from "react-i18next";
 
 const Users = () => {
@@ -50,43 +43,46 @@ const Users = () => {
 
   if (role === UserRole.HR) {
     return (
-      <div className={classes.users_container}>
+      <div>
+        {" "}
         <PageHeading pageTitle={t("Employee list")} />
-        <Table striped bordered hover>
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>{t("Full Name")}</th>
-              <th>{t("Title")}</th>
-              <th>{t("Department")}</th>
-              <th>{t("Last evaluation date")}</th>
-              <th>{t("Start evaluation")}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sortedEmployees &&
-              sortedEmployees.map((employee: IEmployee, index: number) => (
-                <tr key={employee._id}>
-                  <td>{index + 1}</td>
-                  <td>
-                    {employee.firstName} {employee.surName}
-                  </td>
-                  <td>{employee.title}</td>
-                  <td>{employee.department}</td>{" "}
-                  <td>{new Date(Date.now()).toLocaleDateString("en-GB")}</td>
-                  <td>
-                    <Button
-                      variant="standard"
-                      type="button"
-                      onClick={() => handleFormSendClick(employee._id)}
-                    >
-                      {t("Start")}
-                    </Button>
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </Table>
+        <div className={classes.users_container}>
+          <Table striped bordered hover>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>{t("Full Name")}</th>
+                <th>{t("Title")}</th>
+                <th>{t("Department")}</th>
+                <th>{t("Last evaluation date")}</th>
+                <th>{t("Start evaluation")}</th>
+              </tr>
+            </thead>
+            <tbody>
+              {sortedEmployees &&
+                sortedEmployees.map((employee: IEmployee, index: number) => (
+                  <tr key={employee._id}>
+                    <td>{index + 1}</td>
+                    <td>
+                      {employee.firstName} {employee.surName}
+                    </td>
+                    <td>{employee.title}</td>
+                    <td>{employee.department}</td>{" "}
+                    <td>{new Date(Date.now()).toLocaleDateString("en-GB")}</td>
+                    <td>
+                      <Button
+                        variant="standard"
+                        type="button"
+                        onClick={() => handleFormSendClick(employee._id)}
+                      >
+                        {t("Start")}
+                      </Button>
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </Table>
+        </div>
       </div>
     );
   }
