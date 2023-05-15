@@ -38,10 +38,6 @@ const CreateForm: React.FC = () => {
     hrapproved,
   } = surveyPack;
 
-  console.log("Person being surveyed", personBeingSurveyed);
-  console.log("Manager", manager);
-  console.log("Survey", survey);
-
   const [steps, setSteps] = useState([
     {
       key: "firstStep",

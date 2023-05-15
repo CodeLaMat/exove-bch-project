@@ -35,7 +35,7 @@ const HRMenus = () => {
         pageTitle={t("Employees")}
       />
       <MenuItem
-        name={t("Feedbacks")}
+        name={t("Feedback")}
         icon={faFileCircleQuestion}
         link="/feedbacks"
         pageTitle={t("Feedback")}

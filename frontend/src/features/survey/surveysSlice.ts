@@ -18,6 +18,7 @@ export const surveysSlice = createSlice({
   reducers: {
     getAllSurveys: (state, action: PayloadAction<ISurvey[]>) => {
       state.surveys = action.payload;
+      console.log("action.payload", action.payload)
       sessionStorage.setItem("surveys", JSON.stringify(action.payload));
     },
     deleteSurvey: (state, action: PayloadAction<string>) => {

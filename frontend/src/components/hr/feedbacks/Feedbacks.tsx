@@ -45,8 +45,6 @@ const Feedbacks: React.FC = () => {
     return "";
   };
 
-  console.log(employeesArray);
-
   useEffect(() => {
     dispatch(initialiseSurveyPacks());
   }, [dispatch]);
@@ -137,7 +135,6 @@ const Feedbacks: React.FC = () => {
       </Table>
     </div>
   );
-  return null;
 };
 
 export default Feedbacks;

@@ -82,9 +82,6 @@ const FeedbackSingle: React.FC = () => {
     return <div>Survey pack not found</div>;
   }
 
-  console.log("current");
-  console.log("found", foundSurveyPack);
-
   const personBeingSurveyed = employees.find(
     (e) => e._id === surveyPack.personBeingSurveyed
   );
@@ -101,7 +98,6 @@ const FeedbackSingle: React.FC = () => {
     .filter((name: string) => name)
     .join(", ");
 
-  console.log("Participant Names", surveyPack.employeesTakingSurvey);
   return (
     <div className={classes.surveyPackDetails}>
       <Card style={{ maxWidth: "80rem" }}>

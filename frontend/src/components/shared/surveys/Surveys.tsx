@@ -12,14 +12,6 @@ const Surveys = () => {
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.loginUser.userData);
   const role = userData[0].role.join("");
-
-  const surveys: ISurvey[] = useAppSelector(
-    (state: RootState) => state.surveys.surveys
-  );
-  const surveysArray = Object.values(surveys);
-
-  console.log(surveysArray);
-
   useEffect(() => {
     dispatch(initialiseSurveys());
   }, [dispatch]);
