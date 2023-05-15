@@ -2,12 +2,13 @@ import { Request, Response } from "express";
 import Questions from "../models/questions";
 
 const addQuestion = async (req: Request, res: Response) => {
+  
   try {
     const question = new Questions({
       question: req.body.question,
       category: req.body.category,
       description: req.body.description,
-      QuestionType: req.body.questionType,
+      questionType: req.body.questionType,
       // add any other necessary fields here
    });
 
