@@ -2,12 +2,14 @@ import React, { useEffect, useState } from "react";
 import { IEmployee, ISurveypack } from "../../../types/dataTypes";
 import Button from "../../shared/button/Button";
 import { Card, ListGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 interface SurveyPackCardProps {
   surveyPack: ISurveypack;
   employees: IEmployee[];
   handleSurveyPackClick: (userpackid: string) => void;
 }
+
 
 const TeamPackCard: React.FC<SurveyPackCardProps> = ({
   surveyPack,
@@ -17,6 +19,8 @@ const TeamPackCard: React.FC<SurveyPackCardProps> = ({
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
   const isParticipantSelected = surveyPack.employeesTakingSurvey?.length >= 1;
+
+  const { t } = useTranslation();
 
   useEffect(() => {
     const calculateDaysLeft = () => {
@@ -53,7 +57,7 @@ const TeamPackCard: React.FC<SurveyPackCardProps> = ({
         </Card.Subtitle>
         <ListGroup key="xxl" horizontal="xxl" className="my-2">
           <ListGroup.Item style={{ maxWidth: "30rem" }}>
-            Deadline:{" "}
+          {t("Deadline")}:{" "}
           </ListGroup.Item>
           <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
             {new Date(surveyPack.deadline).toLocaleDateString()}
@@ -64,7 +68,7 @@ const TeamPackCard: React.FC<SurveyPackCardProps> = ({
         variant="primary"
         onClick={() => handleSurveyPackClick(surveyPack._id)}
       >
-        View
+        {t("View")}
       </Button>
     </Card>
   );
