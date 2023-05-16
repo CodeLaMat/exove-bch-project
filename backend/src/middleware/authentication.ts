@@ -6,6 +6,7 @@ import { UserRoles } from "../types/dataTypes";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
 import { ObjectId } from "mongodb";
+import { CustomRequest, LdapUser } from "../controllers/user";
 
 let userRole: string = "";
 
@@ -15,11 +16,10 @@ interface UserType {
   email: string;
   role: UserRoles;
 }
-
 declare global {
   namespace Express {
     interface Request {
-      user: UserType;
+      user: LdapUser;
     }
   }
 }
@@ -40,7 +40,11 @@ const authenticateUser = async (
   try {
     const decodedToken: { [key: string]: any } = jwt_decode(token!);
 
-    userRole = decodedToken.user.role[0];
+    const { userId, name, email, role, phoneNumber, groupId, imagePath } =
+      decodedToken.user as LdapUser;
+    req.user = { userId, name, email, role, phoneNumber, groupId, imagePath };
+
+    //userRole = decodedToken.user.role[0];
     next();
   } catch (error) {
     throw new UnauthenticatedError("Authentication failed");
@@ -67,11 +71,11 @@ const authenticateUser = async (
 
 const authorizePermissions = (...roles: string[]) => {
   return (
-    req: Request & { user: UserType },
+    req: Request & { user: LdapUser },
     res: Response,
     next: NextFunction
   ) => {
-    if (!roles.includes(userRole)) {
+    if (!roles.includes(req.user.role[0])) {
       throw new UnauthorizedError("Unauthorized to access this route");
     }
     next();
