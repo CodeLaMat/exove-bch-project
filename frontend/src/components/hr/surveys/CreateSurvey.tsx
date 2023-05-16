@@ -94,7 +94,6 @@ const CreateSurvey: React.FC = () => {
     const sendSurvey = async (formData: SurveyFormData) => {
       try {
         await dispatch(addSurvey(formData));
-        console.log("Survey data submitted successfully!");
       } catch (error) {
         console.error("Error submitting survey data:", error);
       } finally {
