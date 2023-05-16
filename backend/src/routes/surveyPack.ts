@@ -64,6 +64,6 @@ router
 
 router
   .route("/replace-surveyor/:id")
-  .patch(authenticateUser, authorizePermissions("hr"), replaceSurveyor);
+  .patch(authenticateUser, authorizePermissions("hr", "user"), replaceSurveyor);
 
 export default router;

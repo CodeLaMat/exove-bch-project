@@ -1,12 +1,6 @@
 import axios from "axios";
 import { URL } from "../enum";
-import {
-  ICreateSurveyPack,
-  IParticipant,
-  IParticipantInput,
-  ISurvey,
-  User,
-} from "../types/dataTypes";
+import { ICreateSurveyPack, IParticipantInput } from "../types/dataTypes";
 import Cookies from "js-cookie";
 
 const getAll = async () => {

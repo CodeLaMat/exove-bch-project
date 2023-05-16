@@ -32,5 +32,5 @@ router
     .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.sendReminderEmail);
 router
     .route("/replace-surveyor/:id")
-    .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.replaceSurveyor);
+    .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "user"), surveyPack_1.replaceSurveyor);
 exports.default = router;

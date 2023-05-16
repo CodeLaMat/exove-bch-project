@@ -9,13 +9,19 @@ import {
 import classes from "./MySurveyPackDetails.module.css";
 import Button from "../../../shared/button/Button";
 import { Card, ListGroup, Modal } from "react-bootstrap";
-import { useAppSelector } from "../../../../hooks/hooks";
+import { useAppDispatch, useAppSelector } from "../../../../hooks/hooks";
 import SelectMyParticipants from "./SelectMyParticipants";
 import SelectMyManager from "./SelectMyManager";
+import ChangeParticipant from "./ChangeParticipant";
 
 const SurveyPackDetails: React.FC = () => {
+  const dispatch = useAppDispatch();
   const [selectedManager, setSelectedManager] = useState(null);
   const [showManagerModal, setShowManagerModal] = useState(false);
+  const [showSingleModal, setShowSingleModal] = useState(false);
+  const [declinedParticipantId, setDeclinedParticipantId] =
+    useState<string>("");
+
   const [daysLeft, setDaysLeft] = useState<number>(0);
   const { packid } = useParams();
   const [showModal, setShowModal] = useState(false);
@@ -36,6 +42,24 @@ const SurveyPackDetails: React.FC = () => {
   );
 
   useEffect(() => {
+    const findDeclinedParticipant = () => {
+      const declinedParticipant = surveyPack.employeesTakingSurvey?.find(
+        (participant: IParticipant) =>
+          participant.acceptanceStatus === "Declined"
+      );
+      if (declinedParticipant) {
+        setDeclinedParticipantId(declinedParticipant.employee);
+      } else {
+        setDeclinedParticipantId("");
+      }
+    };
+
+    findDeclinedParticipant();
+  }, [surveyPack]);
+
+  console.log("Declined", declinedParticipantId);
+
+  useEffect(() => {
     const calculateDaysLeft = () => {
       if (!surveyPack) return;
       const now = new Date();
@@ -53,8 +77,6 @@ const SurveyPackDetails: React.FC = () => {
   if (!surveyPack) {
     return <div>Survey pack not found</div>;
   }
-
-  console.log(daysLeft);
 
   const personBeingSurveyed = employees.find(
     (e) => e._id === surveyPack.personBeingSurveyed
@@ -77,6 +99,13 @@ const SurveyPackDetails: React.FC = () => {
   };
   const handleCloseModal = () => {
     setShowModal(false);
+  };
+
+  const handleOpenSingleModal = () => {
+    setShowSingleModal(true);
+  };
+  const handleCloseSingleModal = () => {
+    setShowSingleModal(false);
   };
 
   const handleOpenManagerModal = () => {
@@ -148,27 +177,71 @@ const SurveyPackDetails: React.FC = () => {
               Participants of this survey:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
-              {participantNames
-                ? participantNames
-                : "No participants assigned yet"}
+              {participantNames ? (
+                participantNames
+                  .split(", ")
+                  .map((name: string, index: number, array: string[]) => {
+                    const participant = surveyPack.employeesTakingSurvey[index];
+                    const isDeclined =
+                      participant.acceptanceStatus === "Declined";
+                    const isApproved =
+                      participant.acceptanceStatus === "Approved";
+                    const isPending =
+                      participant.acceptanceStatus === "Pending";
+                    let participantClass = "";
+                    if (isApproved) {
+                      participantClass = classes.accepted;
+                    } else if (isDeclined) {
+                      participantClass = classes.declined;
+                    } else if (isPending) {
+                      participantClass = classes.pending;
+                    }
+                    return (
+                      <div key={index} className={participantClass}>
+                        <span>
+                          {name}
+                          {index !== array.length - 1 && ", "}
+                        </span>
+                        {isDeclined && (
+                          <Button
+                            variant="small"
+                            className="button-small"
+                            onClick={() => handleOpenSingleModal()}
+                          >
+                            Replace
+                          </Button>
+                        )}
+                      </div>
+                    );
+                  })
+              ) : (
+                <span>No participants assigned yet</span>
+              )}
             </ListGroup.Item>
           </ListGroup>
-          <Button
-            variant="secondary"
-            onClick={handleOpenManagerModal}
-            disabled={isSixParticipants}
-          >
-            Select Manager
-          </Button>
-          {managerSelected && (
+          <div>
+            <Button
+              variant="secondary"
+              onClick={handleOpenManagerModal}
+              disabled={
+                surveyPack.employeesTakingSurvey.length >= 6 ||
+                surveyPack.hrapproved
+              }
+            >
+              Change Manager
+            </Button>
             <Button
               variant="secondary"
               onClick={handleOpenModal}
-              disabled={isSixParticipants}
+              disabled={
+                surveyPack.employeesTakingSurvey.length >= 6 ||
+                !managerSelected ||
+                surveyPack.hrapproved
+              }
             >
-              Select Participants
+              Change Participants
             </Button>
-          )}
+          </div>
         </Card.Body>
         <Card.Footer className="text-muted">
           {daysLeft > 0
@@ -201,6 +274,22 @@ const SurveyPackDetails: React.FC = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
+            Close
+          </Button>
+        </Modal.Footer>
+      </Modal>
+      <Modal show={showSingleModal} onHide={handleCloseSingleModal}>
+        <Modal.Header closeButton>
+          <Modal.Title>Select Manager</Modal.Title>
+        </Modal.Header>
+        <Modal.Body className={classes.modalBody}>
+          <ChangeParticipant
+            surveyPackId={surveyPack._id}
+            declinedParticipantId={declinedParticipantId}
+          />
+        </Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={handleCloseSingleModal}>
             Close
           </Button>
         </Modal.Footer>

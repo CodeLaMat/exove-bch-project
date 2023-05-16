@@ -74,7 +74,7 @@ const Feedbacks: React.FC = () => {
             <tr>
               <th>N</th>
               <th>{t("Surveyed person")}</th>
-              <th>{t("Approved Participants")}</th>
+              <th>{t("Submitted Participants")}</th>
               <th>{t("Manager")}</th>
               <th>{t("Manager Approved")}</th>
               <th>{t("Status")}</th>
@@ -91,7 +91,7 @@ const Feedbacks: React.FC = () => {
                 <td
                   className={`${
                     surveyPack.employeesTakingSurvey.filter(
-                      (employee) => employee.acceptanceStatus === "Approved"
+                      (employee) => employee.isSurveyComplete
                     ).length === 6
                       ? classes.acceptance_approved
                       : ""
@@ -100,12 +100,11 @@ const Feedbacks: React.FC = () => {
                   <span
                     className={`${
                       surveyPack.employeesTakingSurvey.filter(
-                        (employee) => employee.acceptanceStatus === "Declined"
+                        (employee) => !employee.isSurveyComplete
                       ).length > 0
                         ? classes.acceptance_declined
                         : surveyPack.employeesTakingSurvey.filter(
-                            (employee) =>
-                              employee.acceptanceStatus === "Approved"
+                            (employee) => employee.isSurveyComplete
                           ).length > 0
                         ? classes.acceptance_approved
                         : classes.acceptanceStatus_default
@@ -113,7 +112,7 @@ const Feedbacks: React.FC = () => {
                   >
                     {
                       surveyPack.employeesTakingSurvey.filter(
-                        (employee) => employee.acceptanceStatus !== "Pending"
+                        (employee) => employee.isSurveyComplete
                       ).length
                     }
                   </span>

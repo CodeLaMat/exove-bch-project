@@ -190,16 +190,6 @@ const EvaluationPackDetails: React.FC = () => {
               {surveyPack.hrapproved ? "Yes" : "No"}
             </ListGroup.Item>
           </ListGroup>
-          <ListGroup key="xxl" horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>
-              Participants of this survey:{" "}
-            </ListGroup.Item>
-            <ListGroup.Item variant="info">
-              {participantNames
-                ? participantNames
-                : "No participants assigned yet"}
-            </ListGroup.Item>
-          </ListGroup>{" "}
         </Card.Body>
 
         <Card.Body>

@@ -15,7 +15,7 @@ export enum METHOD {
 export enum URL {
   EMPLOYEES_URL = "http://localhost:5010/api/v1/users/user",
   QUESTIONS_URL = "http://localhost:5010/api/v1/questions",
-  RESPONSES_URL = "./responses.json",
+  RESPONSES_URL = "http://localhost:5010/api/v1/responses",
   SURVEYS_URL = "http://localhost:5010/api/v1/surveys",
   LOGIN_URL = "http://localhost:5010/api/v1/users/auth/ldaplogin",
   LOGIN2_URL = "http://localhost:5000/auth",

@@ -200,7 +200,7 @@ const SurveyPackDetails: React.FC = () => {
                 Change Participants
               </Button>
             )}{" "}
-            {daysLeft <= 0 && (
+            {daysLeft <= 0 && surveyPack.employeesTakingSurvey.length < 6 && (
               <Button
                 variant="alert"
                 onClick={() =>

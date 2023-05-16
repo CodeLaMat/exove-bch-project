@@ -34,6 +34,12 @@ const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
     return () => clearInterval(intervalId);
   }, [surveyPack]);
 
+  const hasDeclinedStatus = () => {
+    return surveyPack.employeesTakingSurvey.some(
+      (employee) => employee.acceptanceStatus === "Declined"
+    );
+  };
+
   return (
     <Card
       style={{
@@ -66,6 +72,7 @@ const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
       </Card.Body>{" "}
       <Button
         variant="primary"
+        className={hasDeclinedStatus() ? classes.viewButtonDeclined : undefined}
         onClick={() => handleSurveyPackClick(surveyPack._id)}
       >
         View
