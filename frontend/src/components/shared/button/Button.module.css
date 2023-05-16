@@ -10,6 +10,19 @@
   border-radius: 4px;
   margin: 10px;
 }
+.Button-small {
+  color: #ffffff;
+  background-color: #b83945;
+  display: inline-block;
+  padding: 4px 8px;
+  font-size: 8px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  border-radius: 4px;
+  margin: 10px;
+}
 
 .Button-primary {
   color: #ffffff;

@@ -87,7 +87,6 @@ const SelectMyManager: React.FC<SelectMyParticipantsProps> = ({
     dispatch(updateManagerInSurvey({ surveyPackId, participantId }));
   };
 
-  // handleSubmit
   const handleSubmit = () => {
     setShowToast(true);
     dispatch(

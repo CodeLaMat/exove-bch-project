@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router";
+import { useParams } from "react-router";
 import { RootState } from "../../../app/store";
 import { IEmployee, IParticipant, ISurveypack } from "../../../types/dataTypes";
 import classes from "./PendingPackDetails.module.css";
@@ -193,11 +193,11 @@ const SurveyPackDetails: React.FC = () => {
               </Button>
             ) : null}{" "}
             <Button variant="secondary" onClick={handleOpenManagerModal}>
-              Cange Participants
+              Change Manager
             </Button>{" "}
             {managerSelected && (
               <Button variant="secondary" onClick={handleOpenModal}>
-                Select Participants
+                Change Participants
               </Button>
             )}{" "}
             {daysLeft <= 0 && (

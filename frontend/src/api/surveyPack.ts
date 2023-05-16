@@ -38,54 +38,6 @@ const createSurveyPack = async (
   }
 };
 
-const updatePersonBeingSurveyed = async (
-  surveyPackId: string,
-  personBeingSurveyed: User[]
-): Promise<void> => {
-  const token = Cookies.get("token");
-  try {
-    const response = await axios.patch(
-      `${URL.SURVEYPACKS_URL}/surveypacks/${surveyPackId}`,
-      {
-        personBeingSurveyed,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log("API response:", response);
-  } catch (error) {
-    console.error("Error updating personBeingSurveyed:", error);
-    throw error;
-  }
-};
-
-const updateSurvey = async (
-  surveyPackId: string,
-  survey: ISurvey[]
-): Promise<void> => {
-  const token = Cookies.get("token");
-  try {
-    const response = await axios.patch(
-      `${URL.SURVEYPACKS_URL}/surveypacks/${surveyPackId}`,
-      {
-        survey,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      }
-    );
-    console.log("API response:", response);
-  } catch (error) {
-    console.error("Error updating survey:", error);
-    throw error;
-  }
-};
-
 const addParticipant = async (
   surveyPackId: string,
   participant: IParticipantInput
@@ -179,24 +131,6 @@ const updateManager = async (
     throw error;
   }
 };
-// const sendReminderEmail = async (userId: string): Promise<void> => {
-//   const token = Cookies.get("token");
-//   try {
-//     const response = await axios.patch(
-//       `${URL.SURVEYPACKS_URL}/send-reminder/${userId}`,
-//       {},
-//       {
-//         headers: {
-//           Authorization: `Bearer ${token}`,
-//         },
-//       }
-//     );
-//     console.log("API response:", response);
-//   } catch (error) {
-//     console.error("Error sending reminder email:", error);
-//     throw error;
-//   }
-// };
 
 const sendReminderEmail = async (
   surveyPackId: string,
@@ -220,14 +154,39 @@ const sendReminderEmail = async (
   }
 };
 
+const replaceSurveyor = async (
+  surveyPackId: string,
+  oldUserId: string,
+  newParticipant: IParticipantInput
+): Promise<void> => {
+  const token = Cookies.get("token");
+  try {
+    const response = await axios.patch(
+      `${URL.SURVEYPACKS_URL}/replace-surveyor/${surveyPackId}`,
+      {
+        oldUserId,
+        newParticipant,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+    console.log("API response:", response);
+  } catch (error) {
+    console.error("Error replacing surveyor:", error);
+    throw error;
+  }
+};
+
 export default {
   sendReminderEmail,
   updateSurveyPack,
   updateManager,
   getAll,
   updateEmployeesTakingSurvey,
-  updatePersonBeingSurveyed,
-  updateSurvey,
   addParticipant,
   createSurveyPack,
+  replaceSurveyor,
 };

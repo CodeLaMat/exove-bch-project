@@ -47,9 +47,13 @@ const ManagerTeam: React.FC = () => {
     navigate(`/pendingsurveys/${surveyid}`);
   };
 
+  if (!teamSurveyPacks) {
+    return <div>Nothing to display</div>;
+  }
+
   return (
     <div>
-      <PageHeading pageTitle={t("Team Surveys")} />
+      <PageHeading pageTitle={t("Pending Surveys")} />
       <div className={classes.otherSurveyPack_container}>
         <div className={classes.otherSurveyPack_container}>
           <h3>Waiting for the approval</h3>

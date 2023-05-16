@@ -13,6 +13,7 @@ import {
   getAllSurveyPacks,
   updateManager,
   sendReminderEmail,
+  replaceSurveyor,
 } from "../controllers/surveyPack";
 import {
   authenticateUser,
@@ -52,12 +53,17 @@ router
     updateManagerApproval
   );
 
+// Added by Eyvaz
 router
   .route("/manager-update/:id")
-  .patch(authenticateUser, authorizePermissions("user"), updateManager);
+  .patch(authenticateUser, authorizePermissions("user", "hr"), updateManager);
 
 router
   .route("/send-reminder/:id")
   .patch(authenticateUser, authorizePermissions("hr"), sendReminderEmail);
+
+router
+  .route("/replace-surveyor/:id")
+  .patch(authenticateUser, authorizePermissions("hr"), replaceSurveyor);
 
 export default router;

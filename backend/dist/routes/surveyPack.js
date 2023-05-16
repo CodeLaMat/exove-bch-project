@@ -23,10 +23,14 @@ router
     .route("/manager/:id")
     .get(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "manager"), surveyPack_1.getManagerApproval)
     .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr", "manager"), surveyPack_1.updateManagerApproval);
+// Added by Eyvaz
 router
     .route("/manager-update/:id")
-    .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("user"), surveyPack_1.updateManager);
+    .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("user", "hr"), surveyPack_1.updateManager);
 router
     .route("/send-reminder/:id")
     .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.sendReminderEmail);
+router
+    .route("/replace-surveyor/:id")
+    .patch(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), surveyPack_1.replaceSurveyor);
 exports.default = router;

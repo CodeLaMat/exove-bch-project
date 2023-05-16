@@ -2,7 +2,7 @@ import React from "react";
 import classes from "./Button.module.css";
 
 interface ButtonProps {
-  variant: "primary" | "secondary" | "alert" | "standard";
+  variant: "primary" | "secondary" | "alert" | "standard" | "small";
   onClick?: (event: React.FormEvent<HTMLButtonElement>) => void;
   disabled?: boolean;
   className?: string;

@@ -218,6 +218,7 @@ const updateManagerApproval = async (req: Request, res: Response) => {
   });
 };
 
+// Added by Eyvaz to update the manager in the surveyPack
 const updateManager = async (req: Request, res: Response) => {
   const {
     params: { id: surveyPackId },
@@ -238,6 +239,7 @@ const updateManager = async (req: Request, res: Response) => {
   });
 };
 
+// Added by Eyvaz to send email to the pesronBeingSurveyed to select the participants
 const sendReminderEmail = async (req: Request, res: Response) => {
   const {
     params: { id: surveyPackId },
@@ -263,6 +265,51 @@ const sendReminderEmail = async (req: Request, res: Response) => {
   }
 };
 
+// Added by Eyvaz to update the participant individually
+const replaceSurveyor = async (req: Request, res: Response) => {
+  const {
+    params: { id: surveyPackId },
+    body: { oldUserId, newParticipant },
+  } = req;
+
+  const surveyPack = await SurveyPack.findById({ _id: surveyPackId });
+  if (!surveyPack) {
+    throw new NotFoundError(`SurveyPack ${surveyPackId} not found`);
+  }
+
+  const indexToReplace = surveyPack.employeesTakingSurvey.findIndex(
+    (participant) => participant.employee._id.toString() === oldUserId
+  );
+  if (indexToReplace === -1) {
+    throw new BadRequestError(`User with id ${oldUserId} not found in survey`);
+  }
+  surveyPack.employeesTakingSurvey[indexToReplace] = newParticipant;
+
+  await surveyPack.save();
+
+  const newUser = await User.findById(newParticipant.employee);
+  if (!newUser) {
+    throw new NotFoundError(
+      `User with id ${newParticipant.employee} not found`
+    );
+  }
+
+  try {
+    await sendParticipantEmail({
+      receiverEmail: newUser.email as string,
+      receiverName: newUser.displayName as string,
+      employeeName: newUser.displayName as string,
+    });
+  } catch (error) {
+    console.error(`Error sending email to ${newUser.email}`, error);
+  }
+
+  res.status(StatusCodes.OK).json({
+    msg: `User ${oldUserId} replaced with user ${newParticipant.employee} successfully`,
+    employeesTakingSurvey: surveyPack.employeesTakingSurvey,
+  });
+};
+
 export {
   sendReminderEmail,
   getAllSurveyPacks,
@@ -275,4 +322,5 @@ export {
   getManagerApproval,
   updateManagerApproval,
   updateManager,
+  replaceSurveyor,
 };

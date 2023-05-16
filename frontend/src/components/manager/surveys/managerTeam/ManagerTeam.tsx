@@ -6,7 +6,6 @@ import classes from "./ManagerTeam.module.css";
 import { useNavigate } from "react-router";
 import { initialiseSurveyPacks } from "../../../../features/survey/surveyPacksSlice";
 import { initialiseEmployees } from "../../../../features/user/employeesSlice";
-import { IParticipant } from "../../../../types/dataTypes";
 import { initialiseSurveys } from "../../../../features/survey/surveysSlice";
 import TeamPackCard from "./TeamPackCard";
 import PageHeading from "../../../pageHeading/PageHeading";

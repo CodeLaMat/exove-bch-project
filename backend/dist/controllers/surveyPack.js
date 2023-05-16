@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.updateManager = exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = exports.sendReminderEmail = void 0;
+exports.replaceSurveyor = exports.updateManager = exports.updateManagerApproval = exports.getManagerApproval = exports.updateSurveyors = exports.getSurveyors = exports.deleteSurveyPack = exports.updateSurveyPack = exports.getSurveyPack = exports.createSurveyPack = exports.getAllSurveyPacks = exports.sendReminderEmail = void 0;
 const surveyPack_1 = __importDefault(require("../models/surveyPack"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
@@ -182,6 +182,7 @@ const updateManagerApproval = async (req, res) => {
     });
 };
 exports.updateManagerApproval = updateManagerApproval;
+// Added by Eyvaz to update the manager in the surveyPack
 const updateManager = async (req, res) => {
     const { params: { id: surveyPackId }, body: { manager }, } = req;
     const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
@@ -196,6 +197,7 @@ const updateManager = async (req, res) => {
     });
 };
 exports.updateManager = updateManager;
+// Added by Eyvaz to send email to the pesronBeingSurveyed to select the participants
 const sendReminderEmail = async (req, res) => {
     const { params: { id: surveyPackId }, body: { personBeingSurveyed }, } = req;
     const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
@@ -217,3 +219,36 @@ const sendReminderEmail = async (req, res) => {
     }
 };
 exports.sendReminderEmail = sendReminderEmail;
+// Added by Eyvaz to update the participant individually
+const replaceSurveyor = async (req, res) => {
+    const { params: { id: surveyPackId }, body: { oldUserId, newParticipant }, } = req;
+    const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
+    if (!surveyPack) {
+        throw new errors_1.NotFoundError(`SurveyPack ${surveyPackId} not found`);
+    }
+    const indexToReplace = surveyPack.employeesTakingSurvey.findIndex((participant) => participant.employee._id.toString() === oldUserId);
+    if (indexToReplace === -1) {
+        throw new errors_1.BadRequestError(`User with id ${oldUserId} not found in survey`);
+    }
+    surveyPack.employeesTakingSurvey[indexToReplace] = newParticipant;
+    await surveyPack.save();
+    const newUser = await user_1.default.findById(newParticipant.employee);
+    if (!newUser) {
+        throw new errors_1.NotFoundError(`User with id ${newParticipant.employee} not found`);
+    }
+    try {
+        await (0, util_1.sendParticipantEmail)({
+            receiverEmail: newUser.email,
+            receiverName: newUser.displayName,
+            employeeName: newUser.displayName,
+        });
+    }
+    catch (error) {
+        console.error(`Error sending email to ${newUser.email}`, error);
+    }
+    res.status(http_status_codes_1.StatusCodes.OK).json({
+        msg: `User ${oldUserId} replaced with user ${newParticipant.employee} successfully`,
+        employeesTakingSurvey: surveyPack.employeesTakingSurvey,
+    });
+};
+exports.replaceSurveyor = replaceSurveyor;

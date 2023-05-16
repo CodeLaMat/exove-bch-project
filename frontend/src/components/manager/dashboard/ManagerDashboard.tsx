@@ -14,6 +14,8 @@ const ManagerDashboard = () => {
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
+
+  const employeesArray = Object.values(employees);
   const { t } = useTranslation();
 
   const dispatch = useAppDispatch();
@@ -26,6 +28,16 @@ const ManagerDashboard = () => {
 
   const currentUser =
     employees && employees.find((entry) => entry.email === email);
+
+  const getManager = (personId: string) => {
+    const employee = employeesArray.find(
+      (employee) => employee._id === personId
+    );
+    if (employee) {
+      return `${employee.firstName} ${employee.surName}`;
+    }
+    return "";
+  };
 
   useEffect(() => {
     dispatch(initialiseSurveyPacks());
@@ -81,7 +93,7 @@ const ManagerDashboard = () => {
               <div className={classes.profileRow}>
                 <div className={classes.profileLabel}>Manager:</div>
                 <div className={classes.profileData}>
-                  {currentUser.work.reportsTo}
+                  {getManager(currentUser.work.reportsTo)}
                 </div>
               </div>
             </div>

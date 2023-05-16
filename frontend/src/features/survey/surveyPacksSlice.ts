@@ -63,7 +63,7 @@ const surveyPacksSlice = createSlice({
       state,
       action: PayloadAction<{
         surveyPackId: string;
-        changes: Partial<ISurveypack>;
+        changes: Partial<ICreateSurveyPack>;
       }>
     ) => {
       const { surveyPackId, changes } = action.payload;
@@ -72,6 +72,27 @@ const surveyPacksSlice = createSlice({
       );
       if (surveyPack) {
         Object.assign(surveyPack, changes);
+      }
+    },
+    updateParticipantAcceptanceStatus: (
+      state,
+      action: PayloadAction<{
+        surveyPackId: string;
+        participantId: string;
+        acceptanceStatus: "Pending" | "Approved" | "Declined";
+      }>
+    ) => {
+      const { surveyPackId, participantId, acceptanceStatus } = action.payload;
+      const surveyPack = state.surveyPacks.find(
+        (pack) => pack._id === surveyPackId
+      );
+      if (surveyPack) {
+        const participant = surveyPack.employeesTakingSurvey.find(
+          (participant) => participant.id === participantId
+        );
+        if (participant) {
+          participant.acceptanceStatus = acceptanceStatus;
+        }
       }
     },
   },
@@ -175,7 +196,39 @@ export const sendReminderEmailToUser = createAsyncThunk(
   }
 );
 
-export const { getAllSurveyPacks, updatePersonBeingSurveyed, updateManager } =
-  surveyPacksSlice.actions;
+export const replaceSurveyorInSurvey = createAsyncThunk(
+  "surveyPacks/replaceSurveyorInSurvey",
+  async (
+    {
+      surveyPackId,
+      oldUserId,
+      newParticipant,
+    }: {
+      surveyPackId: string;
+      oldUserId: string;
+      newParticipant: IParticipantInput;
+    },
+    { dispatch }
+  ) => {
+    try {
+      await surveyPackService.replaceSurveyor(
+        surveyPackId,
+        oldUserId,
+        newParticipant
+      );
+      const updatedSurveyPacks = await surveyPackService.getAll();
+      dispatch(getAllSurveyPacks(updatedSurveyPacks));
+    } catch (error) {
+      console.error(error);
+    }
+  }
+);
+
+export const {
+  getAllSurveyPacks,
+  updatePersonBeingSurveyed,
+  updateManager,
+  updateParticipantAcceptanceStatus,
+} = surveyPacksSlice.actions;
 
 export default surveyPacksSlice.reducer;

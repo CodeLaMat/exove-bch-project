@@ -10,14 +10,13 @@ import {
 } from "../../../types/dataTypes";
 import classes from "./FeedbackSingle.module.css";
 import Button from "../../shared/button/Button";
-import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
+import { Card, ListGroup, Accordion } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { Categories } from "../../../types/dataTypes";
 import PageHeading from "../../pageHeading/PageHeading";
 import { useTranslation } from "react-i18next";
 import { sendReminderEmailToUser } from "../../../features/survey/surveyPacksSlice";
 import { IParticipantInput } from "../../../types/dataTypes";
-import { URLSearchParamsInit } from "react-router-dom";
 
 const FeedbackSingle: React.FC = () => {
   const { t } = useTranslation();
@@ -25,6 +24,10 @@ const FeedbackSingle: React.FC = () => {
   const { packid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
   const [isSent, setIsSent] = useState<boolean>(false);
+  const [replacementParticipant, setReplacementParticipant] = useState<
+    string | undefined
+  >(undefined);
+
   const surveyPacks: ISurveypack[] = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
@@ -122,6 +125,28 @@ const FeedbackSingle: React.FC = () => {
     setTimeout(() => {
       setIsSent(false);
     }, 3000);
+  };
+
+  const handleReplaceParticipant = (declinedParticipant: IParticipant) => {
+    // Here you can implement the logic to select a new participant from the employee list.
+    // For the purpose of this example, I'll just select the first employee who is not a current participant.
+    const newParticipant = employees.find(
+      (e) =>
+        !surveyPack.employeesTakingSurvey.some(
+          (p: IParticipant) => p.employee === e._id
+        )
+    );
+
+    if (newParticipant) {
+      setReplacementParticipant(newParticipant._id);
+      // Here you can dispatch an action to update your store with the new participant.
+      // dispatch(replaceParticipant({ surveyPackId: surveyPack._id, oldParticipantId: declinedParticipant.employee, newParticipantId: newParticipant._id }));
+    } else {
+      // Handle the case when there are no more available employees to participate in the survey.
+      console.error(
+        "No more available employees to participate in the survey."
+      );
+    }
   };
 
   return (
@@ -223,27 +248,40 @@ const FeedbackSingle: React.FC = () => {
               <ListGroup.Item style={{ width: "30rem" }}>
                 Participants of this survey:
               </ListGroup.Item>
-              <ListGroup.Item>
+              <ListGroup.Item style={{ maxWidth: "30rem" }}>
                 {participantNames ? (
                   participantNames
                     .split(", ")
-                    .map((name: string, index: number, array: string[]) => (
-                      <span
-                        key={index}
-                        className={
-                          surveyPack.employeesTakingSurvey[index]
-                            .acceptanceStatus === "Declined"
-                            ? classes.declined
-                            : surveyPack.employeesTakingSurvey[index]
-                                .acceptanceStatus === "Pending"
-                            ? classes.pending
-                            : classes.accepted
-                        }
-                      >
-                        {name}
-                        {index !== array.length - 1 && ", "}
-                      </span>
-                    ))
+                    .map((name: string, index: number, array: string[]) => {
+                      const participant =
+                        surveyPack.employeesTakingSurvey[index];
+                      const isDeclined =
+                        participant.acceptanceStatus === "Declined";
+                      return (
+                        <div
+                          key={index}
+                          className={
+                            isDeclined ? classes.declined : classes.accepted
+                          }
+                        >
+                          <span>
+                            {name}
+                            {index !== array.length - 1 && ", "}
+                          </span>
+                          {isDeclined && (
+                            <Button
+                              variant="small"
+                              className="button-small"
+                              onClick={() =>
+                                handleReplaceParticipant(participant)
+                              }
+                            >
+                              Replace
+                            </Button>
+                          )}
+                        </div>
+                      );
+                    })
                 ) : (
                   <span>No participants assigned yet</span>
                 )}
@@ -264,7 +302,7 @@ const FeedbackSingle: React.FC = () => {
                   </div>
                   <Card.Body>
                     <h4>Questions:</h4>
-                    <Accordion defaultActiveKey="0">
+                    <Accordion>
                       {Object.entries(questionsByCategory).map(
                         ([category, questions], index) => (
                           <Accordion.Item key={category} eventKey={`${index}`}>

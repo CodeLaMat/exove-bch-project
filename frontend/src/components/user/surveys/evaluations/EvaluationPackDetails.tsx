@@ -4,6 +4,7 @@ import { RootState } from "../../../../app/store";
 import {
   IEmployee,
   IParticipant,
+  IParticipantInput,
   IQuestion,
   ISurvey,
   ISurveypack,
@@ -13,8 +14,12 @@ import Button from "../../../shared/button/Button";
 import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Categories } from "../../../../types/dataTypes";
+import { useDispatch } from "react-redux";
+import { updateSurveyPack } from "../../../../features/survey/surveyPacksSlice";
+import { AppDispatch } from "../../../../app/store";
 
 const EvaluationPackDetails: React.FC = () => {
+  const dispatch: AppDispatch = useDispatch();
   const { userpackid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
@@ -32,6 +37,10 @@ const EvaluationPackDetails: React.FC = () => {
   const surveyPacksArray = Object.values(surveyPacks);
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
   const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === userpackid);
+
+  const userData = useAppSelector((state) => state.loginUser.userData?.[0]);
+  const userEmail = userData.email.join("");
+  const userId = employees.find((e) => e.email === userEmail)?._id ?? "";
 
   const manager = employees.find((e) => e._id === surveyPack.manager);
 
@@ -78,13 +87,6 @@ const EvaluationPackDetails: React.FC = () => {
     return () => clearInterval(intervalId);
   }, [surveyPack]);
 
-  if (!surveyPack) {
-    return <div>Survey pack not found</div>;
-  }
-
-  console.log("current");
-  console.log("found", foundSurveyPack);
-
   const personBeingSurveyed = employees.find(
     (e) => e._id === surveyPack.personBeingSurveyed
   );
@@ -101,6 +103,31 @@ const EvaluationPackDetails: React.FC = () => {
     .filter((name: string) => name)
     .join(", ");
 
+  const participant: IParticipantInput | undefined =
+    foundSurveyPack?.employeesTakingSurvey?.find(
+      (participant) => participant.employee === userId
+    );
+
+  const handleAcceptanceStatusChange = async (
+    acceptanceStatus: "Pending" | "Approved" | "Declined",
+    surveyPack: ISurveypack,
+    participantId: string
+  ) => {
+    const updatedParticipants = surveyPack.employeesTakingSurvey.map((p) =>
+      p.employee === participantId ? { ...p, acceptanceStatus } : p
+    );
+
+    dispatch(
+      updateSurveyPack({
+        surveyPackId: surveyPack._id,
+        changes: { employeesTakingSurvey: updatedParticipants },
+      })
+    );
+  };
+
+  if (!surveyPack) {
+    return <div>Survey pack not found</div>;
+  }
   return (
     <div className={classes.surveyPackDetails}>
       <Card style={{ maxWidth: "80rem" }}>
@@ -186,89 +213,136 @@ const EvaluationPackDetails: React.FC = () => {
                   <h5>Description:</h5>
                   <p>{survey.description}</p>
                 </div>
-                <Card.Body>
-                  <h4>Questions:</h4>
-                  <Accordion defaultActiveKey="0">
-                    {Object.entries(questionsByCategory).map(
-                      ([category, questions], index) => (
-                        <Accordion.Item key={category} eventKey={`${index}`}>
-                          <Accordion.Header>
-                            <div
-                              style={{
-                                display: "flex",
-                                justifyContent: "space-between",
-                                width: "100%",
-                              }}
+                {participant &&
+                  participant.acceptanceStatus === "Approved" &&
+                  !participant.isSurveyComplete && (
+                    <Card.Body>
+                      <h4>Questions:</h4>
+                      <Accordion defaultActiveKey="0">
+                        {Object.entries(questionsByCategory).map(
+                          ([category, questions], index) => (
+                            <Accordion.Item
+                              key={category}
+                              eventKey={`${index}`}
                             >
-                              <h5>{category}</h5>
-                              <span>
-                                {questions.length}{" "}
-                                {questions.length === 1
-                                  ? "question"
-                                  : "questions"}
-                              </span>
-                            </div>
-                          </Accordion.Header>
-
-                          <Accordion.Body>
-                            <ListGroup variant="flush">
-                              {questions.map((question, qIndex) => (
-                                <ListGroup.Item
-                                  key={qIndex}
-                                  className="my-3"
-                                  style={{ fontSize: "20px" }}
+                              <Accordion.Header>
+                                <div
+                                  style={{
+                                    display: "flex",
+                                    justifyContent: "space-between",
+                                    width: "100%",
+                                  }}
                                 >
-                                  {/* Add the question number here */}
-                                  {qIndex + 1}. {question.question}
-                                  {question.questionType ===
-                                  "Multiple choice" ? (
-                                    <Form>
-                                      <Form.Group
-                                        controlId={`range-${qIndex}`}
-                                        className="my-4"
-                                      >
-                                        <Form.Label>
-                                          <span
-                                            className={
-                                              classes.questionDescription
-                                            }
+                                  <h5>{category}</h5>
+                                  <span>
+                                    {questions.length}{" "}
+                                    {questions.length === 1
+                                      ? "question"
+                                      : "questions"}
+                                  </span>
+                                </div>
+                              </Accordion.Header>
+
+                              <Accordion.Body>
+                                <ListGroup variant="flush">
+                                  {questions.map((question, qIndex) => (
+                                    <ListGroup.Item
+                                      key={qIndex}
+                                      className="my-3"
+                                      style={{ fontSize: "20px" }}
+                                    >
+                                      {/* Add the question number here */}
+                                      {qIndex + 1}. {question.question}
+                                      {question.questionType ===
+                                      "Multiple choice" ? (
+                                        <Form>
+                                          <Form.Group
+                                            controlId={`range-${qIndex}`}
+                                            className="my-4"
                                           >
-                                            {" "}
-                                            Evaluation from 1 to 5
-                                          </span>
-                                        </Form.Label>
-                                        <Form.Control
-                                          type="range"
-                                          min="1"
-                                          max="5"
-                                          defaultValue="3"
-                                          className="my-4"
-                                        />
-                                      </Form.Group>
-                                    </Form>
-                                  ) : (
-                                    <Form>
-                                      <Form.Group controlId="formBasicText">
-                                        <Form.Control
-                                          type="text"
-                                          placeholder="Enter your answer"
-                                          className="my-4"
-                                        />
-                                      </Form.Group>
-                                    </Form>
-                                  )}
-                                </ListGroup.Item>
-                              ))}
-                            </ListGroup>
-                          </Accordion.Body>
-                        </Accordion.Item>
-                      )
-                    )}
-                  </Accordion>
-                  <Button variant="primary" type="submit">
-                    Submit
-                  </Button>
-                </Card.Body>
+                                            <Form.Label>
+                                              <span
+                                                className={
+                                                  classes.questionDescription
+                                                }
+                                              >
+                                                {" "}
+                                                Evaluation from 1 to 5
+                                              </span>
+                                            </Form.Label>
+                                            <Form.Control
+                                              type="range"
+                                              min="1"
+                                              max="5"
+                                              defaultValue="3"
+                                              className="my-4"
+                                            />
+                                          </Form.Group>
+                                        </Form>
+                                      ) : (
+                                        <Form>
+                                          <Form.Group controlId="formBasicText">
+                                            <Form.Control
+                                              type="text"
+                                              placeholder="Enter your answer"
+                                              className="my-4"
+                                            />
+                                          </Form.Group>
+                                        </Form>
+                                      )}
+                                    </ListGroup.Item>
+                                  ))}
+                                </ListGroup>
+                              </Accordion.Body>
+                            </Accordion.Item>
+                          )
+                        )}
+                      </Accordion>
+                      <Button variant="primary" type="submit">
+                        Submit
+                      </Button>
+                    </Card.Body>
+                  )}
+                {participant && participant.acceptanceStatus === "Pending" && (
+                  <Card.Body>
+                    <div>
+                      <Button
+                        variant="primary"
+                        onClick={() =>
+                          handleAcceptanceStatusChange(
+                            "Approved",
+                            surveyPack,
+                            participant.employee
+                          )
+                        }
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        variant="alert"
+                        onClick={() =>
+                          handleAcceptanceStatusChange(
+                            "Declined",
+                            surveyPack,
+                            participant.employee
+                          )
+                        }
+                      >
+                        Decline
+                      </Button>
+                    </div>
+                  </Card.Body>
+                )}
+                {participant && participant.acceptanceStatus === "Declined" && (
+                  <Card.Body>
+                    <div>You have declined this survey.</div>
+                  </Card.Body>
+                )}
+                {!participant && (
+                  <Card.Body>
+                    <div>You are not a participant in this survey.</div>
+                  </Card.Body>
+                )}
               </div>
             )}
           </Card>
