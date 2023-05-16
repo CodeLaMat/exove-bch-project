@@ -31,7 +31,7 @@ const UserSurveyPacks = () => {
   const surveyPacksArray = Object.values(surveyPacks);
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
 
-  const userEmail = userData.email.join("");
+  const userEmail = userData.email;
   const userId = employees.find((e) => e.email === userEmail)?._id ?? "";
 
   const includedSurveyPacks = cleanedSurveyPacks.filter((surveyPack) =>
