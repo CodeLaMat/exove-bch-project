@@ -29,7 +29,7 @@ import PendingPackDetails from "../components/hr/confirmParticipants/PendingPack
 
 const MainRoutes = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const role = userData[0].role.join("");
+  const role = userData[0].role;
 
   return (
     <div>

@@ -22,12 +22,13 @@ const ManagerTeam: React.FC = () => {
   const surveyPacks: ISurveypack[] = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
-  const userData = useAppSelector((state) => state.loginUser.userData?.[0]);
+  
+  const userData = useAppSelector((state) => state.loginUser.userData[0]);
 
   const surveyPacksArray = Object.values(surveyPacks);
-  const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
+  const cleanedSurveyPacks = Object.values(surveyPacksArray);
 
-  const userEmail = userData.email.join("");
+  const userEmail = userData.email;
   // const userId = employees.find((e) => e.email === userEmail)?._id ?? "";
 
   const teamSurveyPacks = cleanedSurveyPacks.filter(

@@ -26,7 +26,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.showCurrentUser = exports.logout = exports.getOneUser = exports.getAllLdapUsers = exports.getAllUsers = exports.ldapLogin = exports.login = exports.updateManager = void 0;
+exports.showCurrentUser = exports.logout = exports.getOneUser = exports.getAllUsers = exports.ldapLogin = exports.login = exports.updateManager = void 0;
 const user_1 = __importDefault(require("../models/user"));
 const errors_1 = require("../errors");
 const http_status_codes_1 = require("http-status-codes");
@@ -166,18 +166,17 @@ const ldapLogin = async (req, res) => {
             });
             userAttributes.push(user);
         });
-        result.on("end", () => {
+        result.on("end", async () => {
             console.log("authentication successfull");
             const userData = userAttributes[0];
+            const loggedInUser = await getUserByEmail(userData.mail.toString());
+            console.log("loggedInUser", loggedInUser);
             const payload = {
                 user: {
-                    userId: userData.userid,
-                    role: userData.description,
-                    name: userData.cn,
-                    email: userData.mail,
-                    phoneNumber: userData.telephoneNumber,
-                    groupId: userData.gidNumber,
-                    imagePath: userData.jpegPhoto,
+                    userId: loggedInUser._id,
+                    role: loggedInUser.role,
+                    name: `${loggedInUser.firstName} ${loggedInUser.surName}`,
+                    email: loggedInUser.email,
                 },
             };
             req.user = payload.user;
@@ -185,7 +184,7 @@ const ldapLogin = async (req, res) => {
             const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
                 expiresIn: "2d",
             });
-            console.log("Token: ", token);
+            console.log("loginToken: ", token);
             console.log("req.user", req.user);
             // res.cookie("token", token, {
             //   httpOnly: true,
@@ -204,59 +203,6 @@ const ldapLogin = async (req, res) => {
     });
 };
 exports.ldapLogin = ldapLogin;
-const getAllLdapUsers = async (req, res) => {
-    console.log("getting all ldap users");
-    const client = createNewClient();
-    const bindDN = `cn=admin,dc=test,dc=com`;
-    client.bind(bindDN, "myadminpassword", (err) => {
-        if (err) {
-            console.error(err);
-            res.status(401).send("Authentication failed");
-            return;
-        }
-    });
-    const opts = {
-        filter: "(objectClass=inetOrgPerson)",
-        scope: "sub",
-        attributes: ["*"],
-    };
-    const users = [];
-    client.search(`ou=People,dc=test,dc=com`, opts, (err, result) => {
-        if (err) {
-            console.error(err);
-            res.status(500).send("Error retrieving user info");
-            return;
-        }
-        const userAttributes = [];
-        result.on("searchEntry", (entry) => {
-            const user = {};
-            entry.attributes.forEach((attribute) => {
-                const key = attribute.type;
-                const value = attribute.vals;
-                user[key] = value;
-            });
-            userAttributes.push(user);
-        });
-        result.on("end", () => {
-            console.log("authentication successfull");
-            const userData = users[0];
-            const payload = {
-                user: {
-                    role: userData.description,
-                    name: userData.cn,
-                    email: userData.mail,
-                    phoneNumber: userData.telephoneNumber,
-                    groupId: userData.gidNumber,
-                    imagePath: userData.jpegPhoto,
-                },
-            };
-            console.log("payload", payload);
-        });
-    });
-    await client.unbind();
-    console.log("client unbound");
-};
-exports.getAllLdapUsers = getAllLdapUsers;
 const getOneUser = async (req, res, next) => {
     const { params: { id: userId }, } = req;
     const user = await user_1.default.findOne({ _id: userId });
@@ -267,6 +213,14 @@ const getOneUser = async (req, res, next) => {
     res.status(http_status_codes_1.StatusCodes.OK).json({ user });
 };
 exports.getOneUser = getOneUser;
+const getUserByEmail = async (email) => {
+    console.log("getting user by email");
+    const user = await user_1.default.findOne({ email: email });
+    if (!user) {
+        throw new errors_1.NotFoundError(`No user with emial ${email}`);
+    }
+    return user;
+};
 const showCurrentUser = async (req, res) => {
     res.status(http_status_codes_1.StatusCodes.OK).json({ user: req.user });
 };

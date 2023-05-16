@@ -18,8 +18,8 @@ const ManagerDashboard = () => {
 
   const dispatch = useAppDispatch();
   const userData = useAppSelector((state) => state.loginUser.userData[0]);
-  const email = userData.email.join("");
-  const FullName = userData.name.join(" ");
+  const email = userData.email;
+  const FullName = userData.name;
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];
   const lastName = nameArray[1];

@@ -8,7 +8,7 @@ import LanguageSwitcher from "../shared/Translation";
 const ProfileMenu = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
 
-  const FullName = userData[0].name.join(" ");
+  const FullName = userData[0].name;
   const nameArray = FullName.split(" ");
   const firstName = nameArray[0];
   const lastName = nameArray[1];

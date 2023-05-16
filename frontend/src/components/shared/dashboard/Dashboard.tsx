@@ -19,7 +19,7 @@ const Dashboard = () => {
   const { t } = useTranslation();
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const role = userData[0].role.join("");
+  const role = userData[0].role;
 
   useEffect(() => {
     dispatch(initialiseEmployees());

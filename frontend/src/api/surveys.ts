@@ -5,6 +5,7 @@ import Cookies from "js-cookie";
 
 const getAll = async () => {
   const token = Cookies.get("token");
+  console.log("token", token);
   const response = await axios.get(URL.SURVEYS_URL, {
     withCredentials: true, // set this to true to send cookies with the request
     headers: {

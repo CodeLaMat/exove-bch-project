@@ -13,7 +13,6 @@ router.route("/user/:id").get(authentication_1.authenticateUser, user_1.getOneUs
 router
     .route("/user/:id/manager")
     .put(authentication_1.authenticateUser, (0, authentication_1.authorizePermissions)("hr"), user_1.updateManager); // Add the updateManager route
-router.route("/ldapusers").get(user_1.getAllLdapUsers);
 router.route("/showMe").get(authentication_1.authenticateUser, user_1.showCurrentUser);
 router.route("/auth/logout").get(user_1.logout);
 exports.default = router;

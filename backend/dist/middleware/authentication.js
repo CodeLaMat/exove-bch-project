@@ -15,7 +15,7 @@ const authenticateUser = async (req, res, next) => {
     const token = authorizationHeader.substring(7);
     try {
         const decodedToken = (0, jwt_decode_1.default)(token);
-        userRole = decodedToken.user.role[0];
+        userRole = decodedToken.user.role;
         next();
     }
     catch (error) {

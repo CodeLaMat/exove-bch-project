@@ -26,7 +26,7 @@ const HRSurveys = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const role = userData[0].role.join("");
+  const role = userData[0].role;
 
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys

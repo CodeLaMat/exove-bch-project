@@ -202,19 +202,21 @@ const ldapLogin = async (req: Request, res: Response) => {
         userAttributes.push(user as SearchEntryObject);
       });
 
-      result.on("end", () => {
+      result.on("end", async () => {
         console.log("authentication successfull");
         const userData = userAttributes[0];
 
+        const loggedInUser = await getUserByEmail(userData.mail.toString());
+        
+        console.log("loggedInUser", loggedInUser);
+      
+
         const payload = {
           user: {
-            userId: userData.userid,
-            role: userData.description,
-            name: userData.cn,
-            email: userData.mail,
-            phoneNumber: userData.telephoneNumber,
-            groupId: userData.gidNumber,
-            imagePath: userData.jpegPhoto,
+            userId: loggedInUser._id,
+            role: loggedInUser.role,
+            name: `${loggedInUser.firstName} ${loggedInUser.surName}`,
+            email: loggedInUser.email,
           } as LdapUser,
         };
         req.user = payload.user;
@@ -223,7 +225,7 @@ const ldapLogin = async (req: Request, res: Response) => {
           expiresIn: "2d",
         });
 
-        console.log("Token: ", token);
+        console.log("loginToken: ", token);
         console.log("req.user", req.user);
 
         // res.cookie("token", token, {
@@ -246,73 +248,6 @@ const ldapLogin = async (req: Request, res: Response) => {
   );
 };
 
-const getAllLdapUsers = async (req: Request, res: Response) => {
-  console.log("getting all ldap users");
-  const client = createNewClient();
-
-  const bindDN = `cn=admin,dc=test,dc=com`;
-
-  client.bind(bindDN, "myadminpassword", (err: Error | null) => {
-    if (err) {
-      console.error(err);
-      res.status(401).send("Authentication failed");
-      return;
-    }
-  });
-
-  const opts: SearchOptions = {
-    filter: "(objectClass=inetOrgPerson)",
-    scope: "sub",
-    attributes: ["*"],
-  };
-
-  const users: any[] = [];
-
-  client.search(
-    `ou=People,dc=test,dc=com`,
-    opts,
-    (err: Error | null, result: ldap.SearchCallbackResponse) => {
-      if (err) {
-        console.error(err);
-        res.status(500).send("Error retrieving user info");
-        return;
-      }
-
-      const userAttributes: SearchEntryObject[] = [];
-
-      result.on("searchEntry", (entry) => {
-        const user: Record<string, any> = {};
-        entry.attributes.forEach((attribute) => {
-          const key = attribute.type;
-          const value = attribute.vals;
-          user[key] = value;
-        });
-        userAttributes.push(user as SearchEntryObject);
-      });
-
-      result.on("end", () => {
-        console.log("authentication successfull");
-        const userData = users[0];
-
-        const payload = {
-          user: {
-            role: userData.description,
-            name: userData.cn,
-            email: userData.mail,
-            phoneNumber: userData.telephoneNumber,
-            groupId: userData.gidNumber,
-            imagePath: userData.jpegPhoto,
-          } as LdapUser,
-        };
-        console.log("payload", payload);
-      });
-    }
-  );
-
-  await client.unbind();
-  console.log("client unbound");
-};
-
 const getOneUser = async (req: Request, res: Response, next: NextFunction) => {
   const {
     params: { id: userId },
@@ -323,6 +258,15 @@ const getOneUser = async (req: Request, res: Response, next: NextFunction) => {
   }
   checkPermissions(req.user, userId);
   res.status(StatusCodes.OK).json({ user });
+};
+
+const getUserByEmail = async (email: string) => {
+  console.log("getting user by email");
+  const user = await User.findOne({ email: email });
+  if (!user) {
+    throw new NotFoundError(`No user with emial ${email}`);
+  }
+  return user;
 };
 
 const showCurrentUser = async (req: Request, res: Response) => {
@@ -373,7 +317,6 @@ export {
   login,
   ldapLogin,
   getAllUsers,
-  getAllLdapUsers,
   getOneUser,
   logout,
   showCurrentUser,

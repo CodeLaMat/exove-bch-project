@@ -22,7 +22,7 @@ const Users = () => {
     (state: RootState) => state.employees.employees
   );
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const role = userData[0].role.join("");
+  const role = userData[0].role;
   const employeesArray = Object.values(employees);
 
   //Sorting employees by name

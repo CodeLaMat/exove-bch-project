@@ -12,7 +12,7 @@ const Sidemenu = () => {
   const { isAuthenticated } = useAppSelector((state) => state.loginUser);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
-  const role = userData[0].role.join("");
+  const role = userData[0].role;
 
   return (
     <div className={classes.sideMenu_container}>

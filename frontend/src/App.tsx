@@ -11,10 +11,11 @@ const App = () => {
   const { isAuthenticated } = useAppSelector((state) => state.loginUser);
 
   const userData = useAppSelector((state) => state.loginUser.userData);
+  console.log("userData", userData);
   let role = "";
 
   if (userData[0]) {
-    role = userData[0].role[0];
+    role = userData[0].role;
   } else {
     role = "user";
   }

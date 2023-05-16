@@ -4,7 +4,6 @@ import {
   login,
   ldapLogin,
   getAllUsers,
-  getAllLdapUsers,
   getOneUser,
   logout,
   showCurrentUser,
@@ -29,7 +28,6 @@ router
   .route("/user/:id/manager")
   .put(authenticateUser, authorizePermissions("hr"), updateManager); // Add the updateManager route
 
-router.route("/ldapusers").get(getAllLdapUsers);
 router.route("/showMe").get(authenticateUser, showCurrentUser);
 router.route("/auth/logout").get(logout);
 
