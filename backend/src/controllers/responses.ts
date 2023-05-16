@@ -4,10 +4,13 @@ import SurveyPack from "../models/surveyPack";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 import User from "../models/user";
+import { CustomRequest, LdapUser } from "./user";
 
 const addResponse = async (req: Request, res: Response) => {
   const { id: responsePackId } = req.params;
-  const { name: employeeName } = req.user;
+  const {
+    name: [employeeName],
+  } = req.user;
   const { allResponses } = req.body;
 
   const responsePack = await ResponsePack.findOne({ _id: responsePackId });

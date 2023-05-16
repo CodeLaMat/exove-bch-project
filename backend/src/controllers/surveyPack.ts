@@ -7,6 +7,8 @@ import {
   sendUserEmail,
   sendHrApprovalEmail,
   sendParticipantEmail,
+  sendDeclineEmail,
+  sendReminder,
 } from "../util";
 import ResponsePack from "../models/responses";
 import survey from "../models/surveys";
@@ -34,8 +36,8 @@ const createSurveyPack = async (req: Request, res: Response) => {
     await sendUserEmail({
       name: personBeingSurveyed.displayName as string,
       email: personBeingSurveyed.email as string,
-      senderEmail: `essisalomaa@test.com`,
-      senderName: `Essi Salomaa`,
+      senderEmail: req.user.email[0],
+      senderName: req.user.name[0],
     });
   } catch (error) {
     console.error("Error sending email: ", error);
@@ -93,8 +95,8 @@ const updateSurveyPack = async (req: Request, res: Response) => {
             receiverEmail: surveyor.email as string,
             receiverName: surveyor.displayName as string,
             employeeName: reviewee.displayName as string,
-            senderEmail: `essisalomaa@test.com`,
-            senderName: `Essi Salomaa`,
+            senderEmail: req.user.email[0],
+            senderName: req.user.name[0],
           });
         }
       } catch (error) {
@@ -184,7 +186,7 @@ const updateSurveyors = async (req: Request, res: Response) => {
   if (
     surveyPack.employeesTakingSurvey.length === 6 &&
     surveyPack.employeesTakingSurvey.every((status) => {
-      return status.acceptanceStatus === "Declined";
+      return status.acceptanceStatus === "Pending";
     })
   ) {
     const [surveyors, reviewee] = await Promise.all([
@@ -208,6 +210,28 @@ const updateSurveyors = async (req: Request, res: Response) => {
         }
       } catch (error) {
         console.error(`Error sending email to ${surveyor.email}`, error);
+      }
+    }
+  } else if (
+    surveyPack.employeesTakingSurvey.some((status) => {
+      return status.acceptanceStatus === "Declined";
+    })
+  ) {
+    const personBeingSurveyed = await User.findById(
+      surveyPack.personBeingSurveyed
+    );
+    if (personBeingSurveyed) {
+      try {
+        await sendDeclineEmail({
+          senderName: req.user.name[0],
+          employeeEmail: personBeingSurveyed.email as string,
+          employeeName: personBeingSurveyed.displayName as string,
+        });
+      } catch (error) {
+        console.error(
+          `Error sending declined email to ${personBeingSurveyed.email}`,
+          error
+        );
       }
     }
   }
@@ -289,11 +313,9 @@ const sendReminderEmail = async (req: Request, res: Response) => {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }
   try {
-    await sendUserEmail({
-      senderName: req.user.name,
-      senderEmail: req.user.email,
-      name: personBeingSurveyed.displayName as string,
-      email: personBeingSurveyed.email as string,
+    await sendReminder({
+      revieweeName: personBeingSurveyed.displayName,
+      revieweeEmail: personBeingSurveyed.email,
     });
 
     res.status(200).json({ message: "Reminder email sent successfully." });

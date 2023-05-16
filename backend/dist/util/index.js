@@ -3,7 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.sendParticipantEmail = exports.sendHrApprovalEmail = exports.sendUserEmail = exports.nodemailerConfig = exports.checkPermissions = exports.createTokenUser = exports.attachCookiesToResponse = exports.isTokenValid = exports.createJWT = void 0;
+exports.sendReminder = exports.sendDeclineEmail = exports.sendParticipantEmail = exports.sendHrApprovalEmail = exports.sendUserEmail = exports.nodemailerConfig = exports.checkPermissions = exports.createTokenUser = exports.attachCookiesToResponse = exports.isTokenValid = exports.createJWT = void 0;
 const jwt_1 = require("./jwt");
 Object.defineProperty(exports, "createJWT", { enumerable: true, get: function () { return jwt_1.createJWT; } });
 Object.defineProperty(exports, "isTokenValid", { enumerable: true, get: function () { return jwt_1.isTokenValid; } });
@@ -20,3 +20,7 @@ const sendHrApprovalEmail_1 = __importDefault(require("./sendHrApprovalEmail"));
 exports.sendHrApprovalEmail = sendHrApprovalEmail_1.default;
 const sendParticipantEmail_1 = __importDefault(require("./sendParticipantEmail"));
 exports.sendParticipantEmail = sendParticipantEmail_1.default;
+const sendDeclinedEmail_1 = __importDefault(require("./sendDeclinedEmail"));
+exports.sendDeclineEmail = sendDeclinedEmail_1.default;
+const sendReminder_1 = __importDefault(require("./sendReminder"));
+exports.sendReminder = sendReminder_1.default;
