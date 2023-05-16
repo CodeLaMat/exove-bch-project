@@ -6,7 +6,7 @@ import { IResponsePack } from "../types/dataTypes";
 type ResponseType = IResponsePack & mongoose.Document;
 
 const QuestionResponseSchema = new mongoose.Schema({
-  questionId: {
+  question: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
     required: true,
@@ -16,14 +16,14 @@ const QuestionResponseSchema = new mongoose.Schema({
   },
 });
 
-const SurveyResponsesSchema = new mongoose.Schema({
-  employeeTakingSurveyId: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
-  },
-  allResponses: [QuestionResponseSchema],
-});
+// const SurveyResponsesSchema = new mongoose.Schema({
+//   employeeTakingSurvey: {
+//     type: mongoose.Schema.Types.ObjectId,
+//     ref: "User",
+//     required: true,
+//   },
+//   allResponses: [QuestionResponseSchema],
+// });
 
 const ResponsePackSchema = new mongoose.Schema(
   {
@@ -33,12 +33,22 @@ const ResponsePackSchema = new mongoose.Schema(
       ref: "SurveyPack",
       required: true,
     },
-    personBeingSurveyedId: {
+    personBeingSurveyed: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    totalResponses: [SurveyResponsesSchema],
+    employeeTakingSurvey: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+    },
+    survey: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "survey",
+      required: true,
+    },
+    allResponses: [QuestionResponseSchema],
   },
   { timestamps: true }
 );

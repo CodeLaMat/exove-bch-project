@@ -5,7 +5,7 @@ import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 
 const addResponse = async (req: Request, res: Response) => {
-  const employeeTakingSurveyId = req.user.userId.toString();
+  const employeeTakingSurvey = req.user.userId.toString();
   const { surveyPack: surveyPackId } = req.body;
 
   const surveyPack = await SurveyPack.findOne({ _id: surveyPackId });
@@ -14,21 +14,21 @@ const addResponse = async (req: Request, res: Response) => {
   }
 
   const isValidEmployee = surveyPack.employeesTakingSurvey.find(
-    (employee) => employee.employee.toString() === employeeTakingSurveyId
+    (employee) => employee.employee.toString() === employeeTakingSurvey
   );
   if (!isValidEmployee) {
     throw new UnauthorizedError("Your not authorized to take this survey");
   }
   const alreadySubmitted = await ResponsePack.findOne({
     surveyPack: surveyPackId,
-    employeeTakingSurveyId: req.user.userId,
+    employeeTakingSurvey: req.user.userId,
   });
   if (alreadySubmitted) {
     throw new BadRequestError(
       "Already submitted an Evaluation for this employee"
     );
   }
-  req.body.employeeTakingSurveyId = req.user.userId;
+  req.body.employeeTakingSurvey = req.user.userId;
   const responsePack = await ResponsePack.create(req.body);
   res.status(StatusCodes.CREATED).json({ responsePack });
 };
