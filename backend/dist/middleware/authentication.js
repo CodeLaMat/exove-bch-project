@@ -15,7 +15,9 @@ const authenticateUser = async (req, res, next) => {
     const token = authorizationHeader.substring(7);
     try {
         const decodedToken = (0, jwt_decode_1.default)(token);
-        userRole = decodedToken.user.role[0];
+        const { userId, name, email, role, phoneNumber, groupId, imagePath } = decodedToken.user;
+        req.user = { userId, name, email, role, phoneNumber, groupId, imagePath };
+        //userRole = decodedToken.user.role[0];
         next();
     }
     catch (error) {
@@ -43,7 +45,7 @@ exports.authenticateUser = authenticateUser;
 // };
 const authorizePermissions = (...roles) => {
     return (req, res, next) => {
-        if (!roles.includes(userRole)) {
+        if (!roles.includes(req.user.role[0])) {
             throw new errors_1.UnauthorizedError("Unauthorized to access this route");
         }
         next();

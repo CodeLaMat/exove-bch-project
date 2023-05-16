@@ -18,7 +18,7 @@ import * as ldap from "ldapjs";
 import { SearchEntryObject, SearchOptions } from "ldapjs";
 import { promisify } from "util";
 
-interface LdapUser {
+export interface LdapUser {
   userId: string;
   role: UserRoles;
   name: string;
@@ -26,6 +26,12 @@ interface LdapUser {
   phoneNumber: string;
   groupId: string;
   imagePath: string;
+}
+
+export interface CustomRequest extends Request {
+  locals: {
+    user?: LdapUser;
+  };
 }
 
 interface LdapLoginRequestBody {
@@ -217,14 +223,16 @@ const ldapLogin = async (req: Request, res: Response) => {
             imagePath: userData.jpegPhoto,
           } as LdapUser,
         };
-        req.user = payload.user;
+        // req.locals = {
+        //   ...req.locals,
+        //   user: payload.user,
+        // };
         console.log("payload", payload);
         const token = jwt.sign(payload, `${process.env.JWT_SECRET}`, {
           expiresIn: "2d",
         });
 
         console.log("Token: ", token);
-        console.log("req.user", req.user);
 
         // res.cookie("token", token, {
         //   httpOnly: true,

@@ -10,7 +10,7 @@ const errors_1 = require("../errors");
 const user_1 = __importDefault(require("../models/user"));
 const addResponse = async (req, res) => {
     const { id: responsePackId } = req.params;
-    const { name: employeeName } = req.user;
+    const { name: [employeeName], } = req.user;
     const { allResponses } = req.body;
     const responsePack = await responses_1.default.findOne({ _id: responsePackId });
     if (!responsePack) {
