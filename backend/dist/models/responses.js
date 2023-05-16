@@ -46,7 +46,7 @@ var __importStar =
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose = __importStar(require("mongoose"));
 const QuestionResponseSchema = new mongoose.Schema({
-  questionId: {
+  question: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
     required: true,
@@ -70,7 +70,7 @@ const ResponsePackSchema = new mongoose.Schema(
       ref: "SurveyPack",
       required: true,
     },
-    personBeingSurveyedId: {
+    personBeingSurveyed: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
