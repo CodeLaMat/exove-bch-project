@@ -5,7 +5,7 @@ import { UserRoles } from "../types/dataTypes";
 import { ObjectId } from "mongodb";
 
 interface Payload {
-  userId: ObjectId;
+  userId: ObjectId | string;
   name: string;
   email: string;
   role: UserRoles;

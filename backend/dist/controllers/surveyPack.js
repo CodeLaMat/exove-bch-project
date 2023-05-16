@@ -5,19 +5,6 @@ var __importDefault =
     return mod && mod.__esModule ? mod : { default: mod };
   };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.replaceSurveyor =
-  exports.updateManager =
-  exports.updateManagerApproval =
-  exports.getManagerApproval =
-  exports.updateSurveyors =
-  exports.getSurveyors =
-  exports.deleteSurveyPack =
-  exports.updateSurveyPack =
-  exports.getSurveyPack =
-  exports.createSurveyPack =
-  exports.getAllSurveyPacks =
-  exports.sendReminderEmail =
-    void 0;
 exports.updateManagerApproval =
   exports.getManagerApproval =
   exports.updateSurveyors =
@@ -33,6 +20,8 @@ const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const user_1 = __importDefault(require("../models/user"));
 const util_1 = require("../util");
+const responses_1 = __importDefault(require("../models/responses"));
+const surveys_1 = __importDefault(require("../models/surveys"));
 const getAllSurveyPacks = async (req, res) => {
   const surveyPacks = await surveyPack_1.default.find();
   if (!surveyPacks) {
@@ -56,8 +45,8 @@ const createSurveyPack = async (req, res) => {
     await (0, util_1.sendUserEmail)({
       name: personBeingSurveyed.displayName,
       email: personBeingSurveyed.email,
-      senderEmail: req.user.email,
-      senderName: req.user.name,
+      senderEmail: `essisalomaa@test.com`,
+      senderName: `Essi Salomaa`,
     });
   } catch (error) {
     console.error("Error sending email: ", error);
@@ -114,19 +103,61 @@ const updateSurveyPack = async (req, res) => {
             receiverEmail: surveyor.email,
             receiverName: surveyor.displayName,
             employeeName: reviewee.displayName,
-            senderEmail: req.user.email,
-            senderName: req.user.name,
+            senderEmail: `essisalomaa@test.com`,
+            senderName: `Essi Salomaa`,
           });
         }
       } catch (error) {
         console.error(`Error sending email to ${surveyor.email}`, error);
       }
     }
+    const surveys = await surveys_1.default.findById(
+      updatedSurveyPack === null || updatedSurveyPack === void 0
+        ? void 0
+        : updatedSurveyPack.survey
+    );
+    if (!surveys) {
+      throw new errors_1.NotFoundError("surveys not found");
+    }
+    const allResponses = surveys.questions.map((question) => {
+      return {
+        question: question._id,
+        response: "",
+      };
+    });
+    const totalResponses =
+      updatedSurveyPack === null || updatedSurveyPack === void 0
+        ? void 0
+        : updatedSurveyPack.employeesTakingSurvey.map((e) => ({
+            employeeTakingSurvey: e.employee,
+            allResponses: allResponses,
+          }));
+    const responsePack = responses_1.default.create({
+      surveyPack:
+        updatedSurveyPack === null || updatedSurveyPack === void 0
+          ? void 0
+          : updatedSurveyPack._id,
+      personBeingSurveyed:
+        updatedSurveyPack === null || updatedSurveyPack === void 0
+          ? void 0
+          : updatedSurveyPack.personBeingSurveyed,
+      survey:
+        updatedSurveyPack === null || updatedSurveyPack === void 0
+          ? void 0
+          : updatedSurveyPack.survey,
+      totalResponses: totalResponses,
+    });
+    return res.status(http_status_codes_1.StatusCodes.OK).json({
+      msg: "surveyPack successfully updated and responsePack created",
+      surveyPack: updatedSurveyPack,
+      responsePack: responsePack,
+    });
+  } else {
+    return res.status(http_status_codes_1.StatusCodes.OK).json({
+      msg: "surveyPack successfully updated",
+      surveyPack: updatedSurveyPack,
+    });
   }
-  res.status(http_status_codes_1.StatusCodes.OK).json({
-    msg: "surveyPack successfully updated",
-    surveyPack: updatedSurveyPack,
-  });
 };
 exports.updateSurveyPack = updateSurveyPack;
 const deleteSurveyPack = async (req, res) => {
@@ -289,44 +320,3 @@ const sendReminderEmail = async (req, res) => {
   }
 };
 exports.sendReminderEmail = sendReminderEmail;
-// Added by Eyvaz to update the participant individually
-const replaceSurveyor = async (req, res) => {
-  const {
-    params: { id: surveyPackId },
-    body: { oldUserId, newParticipant },
-  } = req;
-  const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId });
-  if (!surveyPack) {
-    throw new errors_1.NotFoundError(`SurveyPack ${surveyPackId} not found`);
-  }
-  const indexToReplace = surveyPack.employeesTakingSurvey.findIndex(
-    (participant) => participant.employee._id.toString() === oldUserId
-  );
-  if (indexToReplace === -1) {
-    throw new errors_1.BadRequestError(
-      `User with id ${oldUserId} not found in survey`
-    );
-  }
-  surveyPack.employeesTakingSurvey[indexToReplace] = newParticipant;
-  await surveyPack.save();
-  const newUser = await user_1.default.findById(newParticipant.employee);
-  if (!newUser) {
-    throw new errors_1.NotFoundError(
-      `User with id ${newParticipant.employee} not found`
-    );
-  }
-  try {
-    await (0, util_1.sendParticipantEmail)({
-      receiverEmail: newUser.email,
-      receiverName: newUser.displayName,
-      employeeName: newUser.displayName,
-    });
-  } catch (error) {
-    console.error(`Error sending email to ${newUser.email}`, error);
-  }
-  res.status(http_status_codes_1.StatusCodes.OK).json({
-    msg: `User ${oldUserId} replaced with user ${newParticipant.employee} successfully`,
-    employeesTakingSurvey: surveyPack.employeesTakingSurvey,
-  });
-};
-exports.replaceSurveyor = replaceSurveyor;
