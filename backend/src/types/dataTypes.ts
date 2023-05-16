@@ -232,20 +232,19 @@ export interface ISurveypack {
 }
 
 export interface IQuestionResponse {
-  _id: string;
-  questionId: Partial<IQuestion>;
-  response: number | string;
+  question: Partial<IQuestion>;
+  response: string;
 }
 
 export interface ISurveyResponses {
-  _id: string;
-  employeeTakingSurveyId: User;
+  employeeTakingSurvey: User;
   allResponses: IQuestionResponse[];
 }
 
 export interface IResponsePack {
-  _id: string;
-  surveyPackId: Partial<ISurveypack>;
+  surveyPack: Partial<ISurveypack>;
+  personBeingSurveyed: Partial<User>;
+  survey: Partial<ISurvey>;
   totalResponses: ISurveyResponses[];
   createdAt: Date;
 }

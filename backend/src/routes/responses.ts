@@ -3,11 +3,9 @@ const router = Router();
 import {
   addResponse,
   getAllResponses,
-  updateResponse,
-  updateResponse,
   showStats,
   getSingleResponse,
-  getSingleResponse,
+  updateResponse,
 } from "../controllers/responses";
 import {
   authenticateUser,
@@ -17,17 +15,8 @@ import {
 router.route("/").get(authenticateUser, getAllResponses);
 router.route("/stats").get(showStats);
 router
-  .route("/")
-  .post(authenticateUser, addResponse)
-  .get(authenticateUser, getAllResponses);
-router.route("/stats").get(showStats);
-router
-  .route("/")
-  .post(authenticateUser, addResponse)
-  .get(authenticateUser, getAllResponses);
-router.route("/stats").get(showStats);
-router
   .route("/:id")
   .get(authenticateUser, getSingleResponse)
+  .patch(authenticateUser, addResponse)
   .patch(authenticateUser, updateResponse);
 export default router;
