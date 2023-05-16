@@ -1,44 +1,126 @@
 import * as mongoose from "mongoose";
 import { Model } from "mongoose";
-import { ResponseModel } from "../types/dataTypes";
+import { IResponsePack } from "../types/dataTypes";
 
-type ResponseType = ResponseModel & mongoose.Document;
+type ResponseType = IResponsePack & mongoose.Document;
 
-const ResponseSchema = new mongoose.Schema(
+interface ICategoryResult {
+  category: string;
+  sumResponse: number;
+}
+
+const QuestionResponseSchema = new mongoose.Schema({
+  question: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Question",
+    required: true,
+  },
+  response: {
+    type: String,
+  },
+});
+
+const SurveyResponsesSchema = new mongoose.Schema({
+  employeeTakingSurvey: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
+  allResponses: [QuestionResponseSchema],
+});
+
+const ResponsePackSchema = new mongoose.Schema(
   {
-    questionID: {
+    surveyPack: {
       type: mongoose.Schema.Types.ObjectId,
-      ref: "Question",
+      ref: "SurveyPack",
       required: true,
     },
-    userID: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-    },
-    evaluatedID: {
+    personBeingSurveyed: {
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
-    assignedEvaluations: {
-      type: Array,
+    survey: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "survey",
       required: true,
     },
-    response: {
-      type: mongoose.Schema.Types.Mixed,
-    },
-    createdAt: {
-      type: Date,
-      default: Date.now(),
-    },
+    totalResponses: [SurveyResponsesSchema],
+    result: [
+      {
+        category: {
+          type: String,
+        },
+        sumResponse: {
+          type: Number,
+        },
+      },
+    ],
   },
   { timestamps: true }
 );
 
-const Responses: Model<ResponseType> = mongoose.model<ResponseType>(
-  "Responses",
-  ResponseSchema
+ResponsePackSchema.statics.calculateSumResponse = async function (
+  personBeingSurveyedId: mongoose.Types.ObjectId
+): Promise<ICategoryResult[]> {
+  const result: ICategoryResult[] = await this.aggregate([
+    {
+      $match: {
+        personBeingSurveyed: personBeingSurveyedId,
+      },
+    },
+    {
+      $unwind: "$totalResponses",
+    },
+    {
+      $unwind: "$totalResponses.allResponses",
+    },
+    {
+      $lookup: {
+        from: "questions",
+        localField: "totalResponses.allResponses.question",
+        foreignField: "_id",
+        as: "question",
+      },
+    },
+    {
+      $unwind: "$question",
+    },
+    {
+      $match: {
+        "question.questionType": "Multiple choice",
+      },
+    },
+    {
+      $addFields: {
+        responseValue: {
+          $convert: {
+            input: "$totalResponses.allResponses.response",
+            to: "double",
+            onError: 0,
+            onNull: 0,
+          },
+        },
+      },
+    },
+    {
+      $group: {
+        _id: {
+          category: "$question.category",
+        },
+        sumResponse: {
+          $sum: "$responseValue",
+        },
+      },
+    },
+  ]);
+  return result;
+};
+
+const ResponsePack: Model<ResponseType> = mongoose.model<ResponseType>(
+  "ResponsePack",
+  ResponsePackSchema
 );
 
-export default Responses;
+export default ResponsePack;

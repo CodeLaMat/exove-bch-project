@@ -2,9 +2,10 @@ import jwt from "jsonwebtoken";
 import { Response } from "express";
 import User from "../models/user";
 import { UserRoles } from "../types/dataTypes";
+import { ObjectId } from "mongodb";
 
 interface Payload {
-  userId: string;
+  userId: ObjectId | string;
   name: string;
   email: string;
   role: UserRoles;

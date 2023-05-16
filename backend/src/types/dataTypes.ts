@@ -197,9 +197,9 @@ export interface IQuestion {
   description?: string;
 }
 
-export interface IQuestions {
-  question: IQuestion[];
-}
+// export interface IQuestions {
+//   question: IQuestion[];
+// }
 
 export interface ISurvey {
   _id: string;
@@ -232,20 +232,19 @@ export interface ISurveypack {
 }
 
 export interface IQuestionResponse {
-  _id: string;
-  questionId: string;
-  response: number | string;
+  question: Partial<IQuestion>;
+  response: string;
 }
 
 export interface ISurveyResponses {
-  _id: string;
-  responses: IQuestionResponse[];
-  employeeIdTakingSurvey: string;
+  employeeTakingSurvey: User;
+  allResponses: IQuestionResponse[];
 }
 
 export interface IResponsePack {
-  _id: string;
-  surveyPackId: string;
-  responses: ISurveyResponses[];
+  surveyPack: Partial<ISurveypack>;
+  personBeingSurveyed: Partial<User>;
+  survey: Partial<ISurvey>;
+  totalResponses: ISurveyResponses[];
   createdAt: Date;
 }

@@ -5,11 +5,12 @@ import User from "../models/user";
 import { UserRoles } from "../types/dataTypes";
 import jwt from "jsonwebtoken";
 import jwt_decode from "jwt-decode";
+import { ObjectId } from "mongodb";
 
 let userRole: string = "";
 
 interface UserType {
-  userId: string;
+  userId: ObjectId | string;
   name: string;
   email: string;
   role: UserRoles;

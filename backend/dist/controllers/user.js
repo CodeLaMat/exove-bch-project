@@ -180,11 +180,13 @@ const ldapLogin = async (req, res) => {
                     imagePath: userData.jpegPhoto,
                 },
             };
+            req.user = payload.user;
             console.log("payload", payload);
             const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
                 expiresIn: "2d",
             });
             console.log("Token: ", token);
+            console.log("req.user", req.user);
             // res.cookie("token", token, {
             //   httpOnly: true,
             //   secure: true,
