@@ -11,12 +11,6 @@ const ManagerMenus = () => {
   return (
     <div>
       <MenuItem
-        name="DashBoard"
-        icon={faChartSimple}
-        link="/home"
-        pageTitle="Dashboard"
-      />
-      <MenuItem
         name="Team Surveys"
         icon={faUsers}
         link="managerteam"

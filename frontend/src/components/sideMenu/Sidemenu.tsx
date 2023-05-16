@@ -1,11 +1,17 @@
 import React from "react";
 import { UserRole } from "../../enum";
 import classes from "./Sidemenu.module.css";
+import MenuItem from "./MenuItem";
+import {
+  faSquarePollVertical,
+  faChartSimple,
+  faUsers,
+  faFileCircleQuestion,
+  faFileImport,
+  faMessage,
+} from "@fortawesome/free-solid-svg-icons";
 import logo from "../../assets/img/logo.jpg";
 import { useAppSelector } from "../../hooks/hooks";
-import HRMenus from "./HRMenus";
-import ManagerMenus from "./ManagerMenu";
-import UserMenus from "./UserMenus";
 import LanguageSwitcher from "../shared/Translation";
 
 const Sidemenu = () => {
@@ -26,9 +32,68 @@ const Sidemenu = () => {
         {isAuthenticated && (
           <>
             <div className={classes.menulist}>
-              {role === UserRole.HR && <HRMenus />}
-              {role === UserRole.Manager && <ManagerMenus />}
-              {role === UserRole.User && <UserMenus />}
+            <MenuItem
+              name="Dashboard"
+              icon={faChartSimple}
+              link="/home"
+              pageTitle="Dashboard"
+            />
+              {role === UserRole.HR && 
+               <div>
+                  <MenuItem
+                    name="Survey Forms"
+                    icon={faSquarePollVertical}
+                    link="/surveys"
+                    pageTitle="Survey Forms"
+                  />
+                  <MenuItem
+                    name="Employees"
+                    icon={faUsers}
+                    link="/employees"
+                    pageTitle="Employees"
+                  />
+                  <div className={classes.menulist}>
+                    <MenuItem
+                      name="Pending"
+                      icon={faFileImport}
+                      link="/pendingsurveys"
+                      pageTitle="Awaiting Approval"
+                    />
+                  </div>
+                  <MenuItem
+                    name="Feedback"
+                    icon={faFileCircleQuestion}
+                    link="/feedbacks"
+                    pageTitle="Feedback"
+                  />
+                </div>
+              }
+              {role === UserRole.Manager &&
+              <div>
+                <MenuItem
+                  name="Team Surveys"
+                  icon={faUsers}
+                  link="managerteam"
+                  pageTitle="Team Surveys"
+                />
+              </div>
+              }
+              {role !== UserRole.HR &&
+                <div>
+                  <MenuItem
+                    name="Evaluations"
+                    icon={faMessage}
+                    link="/userevaluations"
+                    pageTitle="Survey Packs"
+                  />{" "}
+                  <MenuItem
+                    name="My Surveys"
+                    icon={faMessage}
+                    link="/usersurveypacks"
+                    pageTitle="My Survey Packs"
+                  />{" "}
+                </div>
+              }       
             </div>{" "}
           </>
         )}
