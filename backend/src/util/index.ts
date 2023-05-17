@@ -5,6 +5,8 @@ import nodemailerConfig from "./nodemailerConfig";
 import sendUserEmail from "./sendUserEmail";
 import sendHrApprovalEmail from "./sendHrApprovalEmail";
 import sendParticipantEmail from "./sendParticipantEmail";
+import sendDeclineEmail from "./sendDeclinedEmail";
+import sendReminder from "./sendReminder";
 
 export {
   createJWT,
@@ -16,4 +18,6 @@ export {
   sendUserEmail,
   sendHrApprovalEmail,
   sendParticipantEmail,
+  sendDeclineEmail,
+  sendReminder,
 };

@@ -179,7 +179,10 @@ const ldapLogin = async (req, res) => {
                     email: loggedInUser.email,
                 },
             };
-            req.user = payload.user;
+            // req.locals = {
+            //   ...req.locals,
+            //   user: payload.user,
+            // };
             console.log("payload", payload);
             const token = jsonwebtoken_1.default.sign(payload, `${process.env.JWT_SECRET}`, {
                 expiresIn: "2d",

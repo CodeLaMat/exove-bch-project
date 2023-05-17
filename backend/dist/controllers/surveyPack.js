@@ -32,8 +32,8 @@ const createSurveyPack = async (req, res) => {
         await (0, util_1.sendUserEmail)({
             name: personBeingSurveyed.displayName,
             email: personBeingSurveyed.email,
-            senderEmail: `essisalomaa@test.com`,
-            senderName: `Essi Salomaa`,
+            senderEmail: req.user.email[0],
+            senderName: req.user.name[0],
         });
     }
     catch (error) {
@@ -81,8 +81,8 @@ const updateSurveyPack = async (req, res) => {
                         receiverEmail: surveyor.email,
                         receiverName: surveyor.displayName,
                         employeeName: reviewee.displayName,
-                        senderEmail: `essisalomaa@test.com`,
-                        senderName: `Essi Salomaa`,
+                        senderEmail: req.user.email[0],
+                        senderName: req.user.name[0],
                     });
                 }
             }
@@ -158,7 +158,7 @@ const updateSurveyors = async (req, res) => {
     await surveyPack.save();
     if (surveyPack.employeesTakingSurvey.length === 6 &&
         surveyPack.employeesTakingSurvey.every((status) => {
-            return status.acceptanceStatus === "Declined";
+            return status.acceptanceStatus === "Pending";
         })) {
         const [surveyors, reviewee] = await Promise.all([
             user_1.default.find({
@@ -180,6 +180,23 @@ const updateSurveyors = async (req, res) => {
             }
             catch (error) {
                 console.error(`Error sending email to ${surveyor.email}`, error);
+            }
+        }
+    }
+    else if (surveyPack.employeesTakingSurvey.some((status) => {
+        return status.acceptanceStatus === "Declined";
+    })) {
+        const personBeingSurveyed = await user_1.default.findById(surveyPack.personBeingSurveyed);
+        if (personBeingSurveyed) {
+            try {
+                await (0, util_1.sendDeclineEmail)({
+                    senderName: req.user.name[0],
+                    employeeEmail: personBeingSurveyed.email,
+                    employeeName: personBeingSurveyed.displayName,
+                });
+            }
+            catch (error) {
+                console.error(`Error sending declined email to ${personBeingSurveyed.email}`, error);
             }
         }
     }
@@ -237,11 +254,9 @@ const sendReminderEmail = async (req, res) => {
         throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
     }
     try {
-        await (0, util_1.sendUserEmail)({
-            senderName: req.user.name,
-            senderEmail: req.user.email,
-            name: personBeingSurveyed.displayName,
-            email: personBeingSurveyed.email,
+        await (0, util_1.sendReminder)({
+            revieweeName: personBeingSurveyed.displayName,
+            revieweeEmail: personBeingSurveyed.email,
         });
         res.status(200).json({ message: "Reminder email sent successfully." });
     }
