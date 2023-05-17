@@ -13,11 +13,12 @@ import Button from "../../../shared/button/Button";
 import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Categories } from "../../../../types/dataTypes";
+import { useTranslation } from "react-i18next";
 
 const EvaluationPackDetails: React.FC = () => {
   const { userpackid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
-
+  const { t } = useTranslation();
   const surveyPacks: ISurveypack[] = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
@@ -79,7 +80,7 @@ const EvaluationPackDetails: React.FC = () => {
   }, [surveyPack]);
 
   if (!surveyPack) {
-    return <div>Survey pack not found</div>;
+    return <div>{t("Survey pack not found")}</div>;
   }
 
   console.log("current");
@@ -105,10 +106,10 @@ const EvaluationPackDetails: React.FC = () => {
     <div className={classes.surveyPackDetails}>
       <Card style={{ maxWidth: "80rem" }}>
         <Card.Header className="text-center" style={{ fontSize: "30px" }}>
-          Survey Pack Details
+        {t("Survey Pack Details")}
         </Card.Header>
         <Card.Body>
-          <Card.Title> Person Being Surveyed:</Card.Title>
+          <Card.Title> {t("Person Being Surveyed")}:</Card.Title>
           <Card.Text>
             {personBeingSurveyed?.firstName +
               " " +
@@ -116,12 +117,12 @@ const EvaluationPackDetails: React.FC = () => {
           </Card.Text>{" "}
           <Card.Footer className="text-muted">
             {daysLeft > 0
-              ? `Days left until deadline: ${daysLeft}`
-              : "Deadline has passed"}
+              ? `${t("Days left until deadline")}: ${daysLeft}`
+              : `${t("Deadline has passed")}`}
           </Card.Footer>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Created at:
+            {t("Created at")}:
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {new Date(surveyPack.createdAt).toLocaleDateString()}
@@ -129,19 +130,19 @@ const EvaluationPackDetails: React.FC = () => {
           </ListGroup>{" "}
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Deadline:{" "}
+            {t("Deadline")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
               {new Date(surveyPack.deadline).toLocaleDateString()}
             </ListGroup.Item>
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>Status: </ListGroup.Item>
+            <ListGroup.Item style={{ width: "30rem" }}>{t("Status")}: </ListGroup.Item>
             <ListGroup.Item variant="info">{surveyPack.status}</ListGroup.Item>
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Manager:{" "}
+            {t("Manager")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {manager?.firstName + "" + manager?.surName}
@@ -149,7 +150,7 @@ const EvaluationPackDetails: React.FC = () => {
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Manager Approved:{" "}
+            {t("Manager Approved")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {surveyPack.managerapproved ? "Yes" : "No"}
@@ -157,7 +158,7 @@ const EvaluationPackDetails: React.FC = () => {
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              HR Approved:{" "}
+            {t("HR Approved")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {surveyPack.hrapproved ? "Yes" : "No"}
@@ -165,12 +166,12 @@ const EvaluationPackDetails: React.FC = () => {
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Participants of this survey:{" "}
+            {t("Participants of this survey")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {participantNames
                 ? participantNames
-                : "No participants assigned yet"}
+                : `${t("No participants assigned yet")}`}
             </ListGroup.Item>
           </ListGroup>{" "}
         </Card.Body>
@@ -183,11 +184,11 @@ const EvaluationPackDetails: React.FC = () => {
                   <h3>{survey.surveyName}</h3>
                 </Card.Header>
                 <div className={classes.descriptionBox}>
-                  <h5>Description:</h5>
+                  <h5>{t("Description")}:</h5>
                   <p>{survey.description}</p>
                 </div>
                 <Card.Body>
-                  <h4>Questions:</h4>
+                  <h4>{t("Questions")}:</h4>
                   <Accordion defaultActiveKey="0">
                     {Object.entries(questionsByCategory).map(
                       ([category, questions], index) => (
@@ -200,12 +201,12 @@ const EvaluationPackDetails: React.FC = () => {
                                 width: "100%",
                               }}
                             >
-                              <h5>{category}</h5>
+                              <h5>{t(category)}</h5>
                               <span>
                                 {questions.length}{" "}
                                 {questions.length === 1
-                                  ? "question"
-                                  : "questions"}
+                                  ? `${t("question")}`
+                                  : `${t("questions")}`}
                               </span>
                             </div>
                           </Accordion.Header>
@@ -234,7 +235,7 @@ const EvaluationPackDetails: React.FC = () => {
                                             }
                                           >
                                             {" "}
-                                            Evaluation from 1 to 5
+                                            {t("Evaluation from 1 to 5")}
                                           </span>
                                         </Form.Label>
                                         <Form.Control
@@ -266,7 +267,7 @@ const EvaluationPackDetails: React.FC = () => {
                     )}
                   </Accordion>
                   <Button variant="primary" type="submit">
-                    Submit
+                  {t("Submit")}
                   </Button>
                 </Card.Body>
               </div>

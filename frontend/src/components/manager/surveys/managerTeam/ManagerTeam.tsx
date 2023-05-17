@@ -51,7 +51,7 @@ const ManagerTeam: React.FC = () => {
       <PageHeading pageTitle={t("Team Surveys")} />
       <div className={classes.otherSurveyPack_container}>
         <div className={classes.otherSurveyPack_container}>
-          <h3>Your subordinates</h3>
+          <h3>{t("Your subordinates")}</h3>
           <div className={classes.excludedSurveyPacks}>
             {teamSurveyPacks.map((teamPack) => (
               <TeamPackCard
