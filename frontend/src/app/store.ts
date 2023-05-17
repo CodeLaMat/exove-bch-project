@@ -15,6 +15,7 @@ import userSlice from "../features/user/userSlice";
 import questionSlice from "../features/form/QuestionSlice";
 import surveyPackSlice from "../features/survey/surveyPackSlice";
 import selectedEmployeesSlice from "../features/survey/paticipantsSlice";
+import responsesSlice from "../features/survey/responsesSlice";
 
 type AppAction = Action<string> | { payload: unknown; type: string };
 
@@ -28,6 +29,7 @@ const rootReducer: Reducer = combineReducers({
   surveyPacks: surveyPacksSlice,
   surveyPack: surveyPackSlice,
   selectedParticipants: selectedEmployeesSlice,
+  responses: responsesSlice,
 });
 
 export const store = configureStore({

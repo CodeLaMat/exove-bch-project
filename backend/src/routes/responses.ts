@@ -17,6 +17,6 @@ router.route("/stats").get(showStats);
 router
   .route("/:id")
   .get(authenticateUser, getSingleResponse)
-  .patch(authenticateUser, addResponse)
+  .post(authenticateUser, addResponse)
   .patch(authenticateUser, updateResponse);
 export default router;

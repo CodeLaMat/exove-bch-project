@@ -32,8 +32,7 @@ const UserSurveys: React.FC = () => {
 
   const excludedSurveyPacks = cleanedSurveyPacks.filter((surveyPack) =>
     surveyPack.employeesTakingSurvey.some(
-      (participant: IParticipant) =>
-        participant.employee === userId && surveyPack.hrapproved === true
+      (participant: IParticipant) => participant.employee === userId
     )
   );
 

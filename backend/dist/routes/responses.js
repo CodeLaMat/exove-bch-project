@@ -7,18 +7,8 @@ const authentication_1 = require("../middleware/authentication");
 router.route("/").get(authentication_1.authenticateUser, responses_1.getAllResponses);
 router.route("/stats").get(responses_1.showStats);
 router
-    .route("/")
-    .post(authentication_1.authenticateUser, responses_1.addResponse)
-    .get(authentication_1.authenticateUser, responses_1.getAllResponses);
-router.route("/stats").get(responses_1.showStats);
-router
-    .route("/")
-    .post(authentication_1.authenticateUser, responses_1.addResponse)
-    .get(authentication_1.authenticateUser, responses_1.getAllResponses);
-router.route("/stats").get(responses_1.showStats);
-router
     .route("/:id")
     .get(authentication_1.authenticateUser, responses_1.getSingleResponse)
-    .patch(authentication_1.authenticateUser, responses_1.addResponse)
+    .post(authentication_1.authenticateUser, responses_1.addResponse)
     .patch(authentication_1.authenticateUser, responses_1.updateResponse);
 exports.default = router;

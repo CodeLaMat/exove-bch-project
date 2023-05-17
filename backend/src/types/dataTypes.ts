@@ -249,11 +249,11 @@ export interface IResponsePack {
   createdAt: Date;
 }
 
-export interface IQuestionResponse {
-  _id: string;
-  questionId: Partial<IQuestion>;
-  response: number | string;
-}
+// export interface IQuestionResponse {
+//   _id: string;
+//   questionId: Partial<IQuestion>;
+//   response: number | string;
+// }
 
 export interface ISurveyResponses {
   _id: string;
@@ -266,4 +266,14 @@ export interface IResponsePack {
   surveyPackId: Partial<ISurveypack>;
   totalResponses: ISurveyResponses[];
   createdAt: Date;
+}
+
+export interface IResponse {
+  questionId: string;
+  response: string;
+}
+
+export interface IEmployeeTakingSurvey {
+  employeeTakingSurvey: User;
+  allResponses: { questionId: string; response: string }[];
 }

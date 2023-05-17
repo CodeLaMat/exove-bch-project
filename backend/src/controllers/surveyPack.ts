@@ -12,6 +12,7 @@ import {
 } from "../util";
 import ResponsePack from "../models/responses";
 import survey from "../models/surveys";
+import { IEmployeeTakingSurvey } from "../types/dataTypes";
 
 const getAllSurveyPacks = async (req: Request, res: Response) => {
   const surveyPacks = await SurveyPack.find();
@@ -63,6 +64,14 @@ const updateSurveyPack = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`No surveyPack with id ${surveyPackId}`);
   }
+  // const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
+  //   surveyPackId,
+  //   req.body,
+  //   {
+  //     new: true,
+  //     runValidators: true,
+  //   }
+  // );
   const updatedSurveyPack = await SurveyPack.findByIdAndUpdate(
     surveyPackId,
     req.body,
@@ -70,7 +79,7 @@ const updateSurveyPack = async (req: Request, res: Response) => {
       new: true,
       runValidators: true,
     }
-  );
+  ).populate("survey", "questions");
   if (
     updatedSurveyPack!.hrapproved === true &&
     updatedSurveyPack!.employeesTakingSurvey.length === 6 &&
@@ -107,19 +116,49 @@ const updateSurveyPack = async (req: Request, res: Response) => {
     if (!surveys) {
       throw new NotFoundError("surveys not found");
     }
-    const allResponses = surveys.questions.map((question) => {
-      return {
-        question: question._id,
-        response: "",
-      };
-    });
+    // const allResponses = surveys.questions.map((question) => {
+    //   return {
+    //     question: question._id,
+    //     response: "",
+    //   };
+    // });
 
-    const totalResponses = updatedSurveyPack?.employeesTakingSurvey.map(
-      (e) => ({
-        employeeTakingSurvey: e.employee,
-        allResponses: allResponses,
-      })
+    console.log("updatedSurveyPack", updatedSurveyPack);
+    console.log(
+      "updatedSurveyPack.employeesTakingSurvey",
+      updatedSurveyPack?.employeesTakingSurvey
     );
+    console.log("updatedSurveyPack.survey", updatedSurveyPack?.survey);
+    console.log(
+      "updatedSurveyPack.survey.questions",
+      updatedSurveyPack?.survey?.questions
+    );
+
+    let totalResponses: IEmployeeTakingSurvey[];
+
+    if (
+      updatedSurveyPack &&
+      updatedSurveyPack.employeesTakingSurvey &&
+      updatedSurveyPack.survey.questions &&
+      updatedSurveyPack.survey
+    ) {
+      totalResponses = updatedSurveyPack.employeesTakingSurvey.map((e) => ({
+        employeeTakingSurvey: e.employee,
+        allResponses: updatedSurveyPack.survey.questions.map((q) => ({
+          questionId: q._id,
+          response: "",
+        })),
+      }));
+    } else {
+      totalResponses = [];
+    }
+
+    // const totalResponses = updatedSurveyPack?.employeesTakingSurvey.map(
+    //   (e) => ({
+    //     employeeTakingSurvey: e.employee,
+    //     allResponses: allResponses,
+    //   })
+    // );
 
     const responsePack = ResponsePack.create({
       surveyPack: updatedSurveyPack?._id,
@@ -127,6 +166,8 @@ const updateSurveyPack = async (req: Request, res: Response) => {
       survey: updatedSurveyPack?.survey,
       totalResponses: totalResponses,
     });
+    console.log("responsePack", responsePack);
+
     return res.status(StatusCodes.OK).json({
       msg: "surveyPack successfully updated and responsePack created",
       surveyPack: updatedSurveyPack,

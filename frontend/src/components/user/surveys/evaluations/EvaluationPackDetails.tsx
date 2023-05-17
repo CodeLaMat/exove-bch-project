@@ -17,8 +17,14 @@ import { Categories } from "../../../../types/dataTypes";
 import { useDispatch } from "react-redux";
 import { updateSurveyPack } from "../../../../features/survey/surveyPacksSlice";
 import { AppDispatch } from "../../../../app/store";
+import {
+  addResponseToPack,
+  updatedResponsePack,
+} from "../../../../features/survey/responsesSlice";
 
 const EvaluationPackDetails: React.FC = () => {
+  const [responses, setResponses] = useState<{ [key: string]: any }>({});
+
   const dispatch: AppDispatch = useDispatch();
   const { userpackid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
@@ -125,9 +131,22 @@ const EvaluationPackDetails: React.FC = () => {
     );
   };
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    Object.entries(responses).forEach(([questionId, response]) => {
+      dispatch(
+        addResponseToPack({
+          responsePackId: surveyPack._id,
+          responseInput: { questionId, response },
+        })
+      );
+    });
+  };
+
   if (!surveyPack) {
     return <div>Survey pack not found</div>;
   }
+
   return (
     <div className={classes.surveyPackDetails}>
       <Card style={{ maxWidth: "80rem" }}>
@@ -232,63 +251,77 @@ const EvaluationPackDetails: React.FC = () => {
                                   </span>
                                 </div>
                               </Accordion.Header>
-
-                              <Accordion.Body>
-                                <ListGroup variant="flush">
-                                  {questions.map((question, qIndex) => (
-                                    <ListGroup.Item
-                                      key={qIndex}
-                                      className="my-3"
-                                      style={{ fontSize: "20px" }}
-                                    >
-                                      {/* Add the question number here */}
-                                      {qIndex + 1}. {question.question}
-                                      {question.questionType ===
-                                      "Multiple choice" ? (
-                                        <Form>
-                                          <Form.Group
-                                            controlId={`range-${qIndex}`}
-                                            className="my-4"
-                                          >
-                                            <Form.Label>
-                                              <span
-                                                className={
-                                                  classes.questionDescription
+                              {surveyPack.hrapproved ? (
+                                <Accordion.Body>
+                                  <ListGroup variant="flush">
+                                    {questions.map((question, qIndex) => (
+                                      <ListGroup.Item
+                                        key={qIndex}
+                                        className="my-3"
+                                        style={{ fontSize: "20px" }}
+                                      >
+                                        {/* Add the question number here */}
+                                        {qIndex + 1}. {question.question}
+                                        {question.questionType ===
+                                        "Multiple choice" ? (
+                                          <Form>
+                                            {[1, 2, 3, 4, 5].map((val) => (
+                                              <Form.Check
+                                                key={val}
+                                                inline
+                                                label={val}
+                                                name={`radioGroup-${qIndex}`}
+                                                type="radio"
+                                                id={`radio-${val}`}
+                                                value={val}
+                                                onChange={(e) =>
+                                                  setResponses({
+                                                    ...responses,
+                                                    [question._id]:
+                                                      e.target.value,
+                                                  })
                                                 }
-                                              >
-                                                {" "}
-                                                Evaluation from 1 to 5
-                                              </span>
-                                            </Form.Label>
-                                            <Form.Control
-                                              type="range"
-                                              min="1"
-                                              max="5"
-                                              defaultValue="3"
-                                              className="my-4"
-                                            />
-                                          </Form.Group>
-                                        </Form>
-                                      ) : (
-                                        <Form>
-                                          <Form.Group controlId="formBasicText">
-                                            <Form.Control
-                                              type="text"
-                                              placeholder="Enter your answer"
-                                              className="my-4"
-                                            />
-                                          </Form.Group>
-                                        </Form>
-                                      )}
-                                    </ListGroup.Item>
-                                  ))}
-                                </ListGroup>
-                              </Accordion.Body>
+                                              />
+                                            ))}
+                                          </Form>
+                                        ) : (
+                                          <Form>
+                                            <Form.Group controlId="formBasicText">
+                                              <Form.Control
+                                                type="text"
+                                                placeholder="Enter your answer"
+                                                className="my-4"
+                                                onChange={(e) =>
+                                                  setResponses({
+                                                    ...responses,
+                                                    [question._id]:
+                                                      e.target.value,
+                                                  })
+                                                }
+                                              />
+                                            </Form.Group>
+                                          </Form>
+                                        )}
+                                      </ListGroup.Item>
+                                    ))}
+                                  </ListGroup>
+                                </Accordion.Body>
+                              ) : (
+                                <p>
+                                  The participants of this survey have not been
+                                  approved by HR yet.
+                                </p>
+                              )}
                             </Accordion.Item>
                           )
                         )}
                       </Accordion>
-                      <Button variant="primary" type="submit">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        onClick={handleSubmit}
+                        disabled={!surveyPack.hrapproved}
+                      >
                         Submit
                       </Button>
                     </Card.Body>
