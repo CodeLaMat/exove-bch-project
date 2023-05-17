@@ -50,3 +50,10 @@ input[type="range"]::-webkit-slider-thumb {
 .questionDescription {
   color: #acaebd;
 }
+
+.toast {
+  position: fixed;
+  top: 20px;
+  right: 20px;
+  z-index: 1050;
+}

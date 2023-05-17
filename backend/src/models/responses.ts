@@ -10,7 +10,7 @@ interface ICategoryResult {
 }
 
 const QuestionResponseSchema = new mongoose.Schema({
-  questionId: {
+  question: {
     type: mongoose.Schema.Types.ObjectId,
     ref: "Question",
     required: true,

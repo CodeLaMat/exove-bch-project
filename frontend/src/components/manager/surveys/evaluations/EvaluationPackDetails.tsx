@@ -1,26 +1,37 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { RootState } from "../../../../app/store";
 import {
   IEmployee,
   IParticipant,
   IParticipantInput,
   IQuestion,
+  IResponsePack,
   ISurvey,
   ISurveypack,
 } from "../../../../types/dataTypes";
 import classes from "./EvaluationPackDetails.module.css";
 import Button from "../../../shared/button/Button";
-import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
+import { Card, ListGroup, Form, Accordion, Toast } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Categories } from "../../../../types/dataTypes";
 import { updateSurveyPack } from "../../../../features/survey/surveyPacksSlice";
 import { AppDispatch } from "../../../../app/store";
 import { useDispatch } from "react-redux";
+import {
+  addResponseToPack,
+  initialiseResponsePacks,
+} from "../../../../features/survey/responsesSlice";
 
 const EvaluationPackDetails: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { packid } = useParams();
+  const [responses, setResponses] = useState<
+    Array<{ questionId: string; answer: any }>
+  >([]);
+  const [showToast, setShowToast] = useState(false);
+  const navigate = useNavigate();
+
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
   const surveyPacks: ISurveypack[] = useAppSelector(
@@ -32,9 +43,14 @@ const EvaluationPackDetails: React.FC = () => {
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
+  const responsePacks: IResponsePack[] = useAppSelector(
+    (state: RootState) => state.responses.responsePacks
+  );
 
   const surveysArray = Object.values(surveys);
   const surveyPacksArray = Object.values(surveyPacks);
+  const responsePacksArray = Object.values(responsePacks);
+
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
   const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === packid);
 
@@ -72,6 +88,10 @@ const EvaluationPackDetails: React.FC = () => {
       }
     });
   }
+
+  useEffect(() => {
+    dispatch(initialiseResponsePacks());
+  }, [dispatch]);
 
   useEffect(() => {
     const calculateDaysLeft = () => {
@@ -125,7 +145,57 @@ const EvaluationPackDetails: React.FC = () => {
     );
   };
 
-  console.log(participant);
+  const handleResponseSelection = (questionId: string, answer: any) => {
+    const updatedResponses = responses.filter(
+      (response) => response.questionId !== questionId
+    );
+    updatedResponses.push({ questionId, answer });
+    setResponses(updatedResponses);
+  };
+
+  const getResponsePackId = (surveyPackId: string) => {
+    const responsePackArray = responsePacksArray[0];
+    if (Array.isArray(responsePackArray)) {
+      const responsePack = responsePackArray.find(
+        (rp) => rp.surveyPack === surveyPackId
+      );
+      return responsePack ? responsePack._id : null;
+    }
+    return null;
+  };
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setShowToast(true);
+    const transformedResponses = responses.map((response) => ({
+      question: response.questionId,
+      response: response.answer,
+    }));
+    if (!packid) {
+      console.error("No userpackid found.");
+      return;
+    }
+    const responsePackId = getResponsePackId(packid);
+    if (responsePackId) {
+      dispatch(
+        addResponseToPack({
+          responsePackId,
+          allResponses: { allResponses: transformedResponses },
+        })
+      );
+      setTimeout(() => {
+        setShowToast(false);
+        navigate("/managerevaluations");
+      }, 3000);
+      setResponses([]);
+    } else {
+      alert("Cannot submit responses, responsePackId not found");
+    }
+  };
+
+  console.log("REsponsePacks", responsePacksArray);
+  console.log("SurveyPackId", packid);
+  console.error("REsponses", responses);
 
   if (!surveyPack) {
     return <div>Survey pack not found</div>;
@@ -235,63 +305,75 @@ const EvaluationPackDetails: React.FC = () => {
                                   </span>
                                 </div>
                               </Accordion.Header>
-
-                              <Accordion.Body>
-                                <ListGroup variant="flush">
-                                  {questions.map((question, qIndex) => (
-                                    <ListGroup.Item
-                                      key={qIndex}
-                                      className="my-3"
-                                      style={{ fontSize: "20px" }}
-                                    >
-                                      {/* Add the question number here */}
-                                      {qIndex + 1}. {question.question}
-                                      {question.questionType ===
-                                      "Multiple choice" ? (
-                                        <Form>
-                                          <Form.Group
-                                            controlId={`range-${qIndex}`}
-                                            className="my-4"
-                                          >
-                                            <Form.Label>
-                                              <span
-                                                className={
-                                                  classes.questionDescription
+                              {surveyPack.hrapproved ? (
+                                <Accordion.Body>
+                                  <ListGroup variant="flush">
+                                    {questions.map((question, qIndex) => (
+                                      <ListGroup.Item
+                                        key={qIndex}
+                                        className="my-3"
+                                        style={{ fontSize: "20px" }}
+                                      >
+                                        {/* Add the question number here */}
+                                        {qIndex + 1}. {question.question}
+                                        {question.questionType ===
+                                        "Multiple choice" ? (
+                                          <Form>
+                                            {[1, 2, 3, 4, 5].map((val) => (
+                                              <Form.Check
+                                                key={val}
+                                                inline
+                                                label={val}
+                                                name={`radioGroup-${qIndex}`}
+                                                type="radio"
+                                                id={`radio-${val}`}
+                                                value={val}
+                                                onChange={(e) =>
+                                                  handleResponseSelection(
+                                                    question._id,
+                                                    e.target.value
+                                                  )
                                                 }
-                                              >
-                                                {" "}
-                                                Evaluation from 1 to 5
-                                              </span>
-                                            </Form.Label>
-                                            <Form.Control
-                                              type="range"
-                                              min="1"
-                                              max="5"
-                                              defaultValue="3"
-                                              className="my-4"
-                                            />
-                                          </Form.Group>
-                                        </Form>
-                                      ) : (
-                                        <Form>
-                                          <Form.Group controlId="formBasicText">
-                                            <Form.Control
-                                              type="text"
-                                              placeholder="Enter your answer"
-                                              className="my-4"
-                                            />
-                                          </Form.Group>
-                                        </Form>
-                                      )}
-                                    </ListGroup.Item>
-                                  ))}
-                                </ListGroup>
-                              </Accordion.Body>
+                                              />
+                                            ))}
+                                          </Form>
+                                        ) : (
+                                          <Form>
+                                            <Form.Group controlId="formBasicText">
+                                              <Form.Control
+                                                type="text"
+                                                placeholder="Enter your answer"
+                                                className="my-4"
+                                                onChange={(e) =>
+                                                  handleResponseSelection(
+                                                    question._id,
+                                                    e.target.value
+                                                  )
+                                                }
+                                              />
+                                            </Form.Group>
+                                          </Form>
+                                        )}
+                                      </ListGroup.Item>
+                                    ))}
+                                  </ListGroup>
+                                </Accordion.Body>
+                              ) : (
+                                <p>
+                                  The participants of this survey have not been
+                                  approved by HR yet.
+                                </p>
+                              )}
                             </Accordion.Item>
                           )
                         )}
                       </Accordion>
-                      <Button variant="primary" type="submit">
+                      <Button
+                        variant="primary"
+                        type="submit"
+                        onClick={handleSubmit}
+                        disabled={!surveyPack.hrapproved}
+                      >
                         Submit
                       </Button>
                     </Card.Body>
@@ -341,6 +423,12 @@ const EvaluationPackDetails: React.FC = () => {
           </Card>
         </Card.Body>
       </Card>
+      <Toast className={classes.toast} show={showToast} autohide bg="info">
+        <Toast.Header>
+          <strong className="mr-auto">Participants Submitted</strong>
+        </Toast.Header>
+        <Toast.Body>Your answers have been successfully submitted.</Toast.Body>
+      </Toast>
     </div>
   );
 };

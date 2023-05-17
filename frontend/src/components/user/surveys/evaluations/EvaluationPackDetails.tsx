@@ -1,17 +1,18 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { RootState } from "../../../../app/store";
 import {
   IEmployee,
   IParticipant,
   IParticipantInput,
   IQuestion,
+  IResponsePack,
   ISurvey,
   ISurveypack,
 } from "../../../../types/dataTypes";
 import classes from "./EvaluationPackDetails.module.css";
 import Button from "../../../shared/button/Button";
-import { Card, ListGroup, Form, Accordion } from "react-bootstrap";
+import { Card, ListGroup, Form, Accordion, Toast } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/hooks";
 import { Categories } from "../../../../types/dataTypes";
 import { useDispatch } from "react-redux";
@@ -19,13 +20,16 @@ import { updateSurveyPack } from "../../../../features/survey/surveyPacksSlice";
 import { AppDispatch } from "../../../../app/store";
 import {
   addResponseToPack,
-  updatedResponsePack,
+  initialiseResponsePacks,
 } from "../../../../features/survey/responsesSlice";
 
 const EvaluationPackDetails: React.FC = () => {
-  const [responses, setResponses] = useState<{ [key: string]: any }>({});
-
+  const [responses, setResponses] = useState<
+    Array<{ questionId: string; answer: any }>
+  >([]);
+  const [showToast, setShowToast] = useState(false);
   const dispatch: AppDispatch = useDispatch();
+  const navigate = useNavigate();
   const { userpackid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
 
@@ -35,12 +39,18 @@ const EvaluationPackDetails: React.FC = () => {
   const employees: IEmployee[] = useAppSelector(
     (state: RootState) => state.employees.employees
   );
+
   const surveys: ISurvey[] = useAppSelector(
     (state: RootState) => state.surveys.surveys
   );
 
+  const responsePacks: IResponsePack[] = useAppSelector(
+    (state: RootState) => state.responses.responsePacks
+  );
+
   const surveysArray = Object.values(surveys);
   const surveyPacksArray = Object.values(surveyPacks);
+  const responsePacksArray = Object.values(responsePacks);
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
   const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === userpackid);
 
@@ -78,6 +88,10 @@ const EvaluationPackDetails: React.FC = () => {
       }
     });
   }
+
+  useEffect(() => {
+    dispatch(initialiseResponsePacks());
+  }, [dispatch]);
 
   useEffect(() => {
     const calculateDaysLeft = () => {
@@ -131,16 +145,56 @@ const EvaluationPackDetails: React.FC = () => {
     );
   };
 
+  const handleResponseSelection = (questionId: string, answer: any) => {
+    const updatedResponses = responses.filter(
+      (response) => response.questionId !== questionId
+    );
+    updatedResponses.push({ questionId, answer });
+    setResponses(updatedResponses);
+  };
+
+  const getResponsePackId = (surveyPackId: string) => {
+    const responsePackArray = responsePacksArray[0];
+    if (Array.isArray(responsePackArray)) {
+      const responsePack = responsePackArray.find(
+        (rp) => rp.surveyPack === surveyPackId
+      );
+      return responsePack ? responsePack._id : null;
+    }
+    return null;
+  };
+
+  console.log("REsponsePacks", responsePacksArray);
+  console.log("SurveyPackId", userpackid);
+  console.error("REsponses", responses);
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    Object.entries(responses).forEach(([questionId, response]) => {
+    setShowToast(true);
+    const transformedResponses = responses.map((response) => ({
+      question: response.questionId,
+      response: response.answer,
+    }));
+    if (!userpackid) {
+      console.error("No userpackid found.");
+      return;
+    }
+    const responsePackId = getResponsePackId(userpackid);
+    if (responsePackId) {
       dispatch(
         addResponseToPack({
-          responsePackId: surveyPack._id,
-          responseInput: { questionId, response },
+          responsePackId,
+          allResponses: { allResponses: transformedResponses },
         })
       );
-    });
+      setTimeout(() => {
+        setShowToast(false);
+        navigate("/userevaluations");
+      }, 3000);
+      setResponses([]);
+    } else {
+      alert("Cannot submit responses, responsePackId not found");
+    }
   };
 
   if (!surveyPack) {
@@ -275,11 +329,10 @@ const EvaluationPackDetails: React.FC = () => {
                                                 id={`radio-${val}`}
                                                 value={val}
                                                 onChange={(e) =>
-                                                  setResponses({
-                                                    ...responses,
-                                                    [question._id]:
-                                                      e.target.value,
-                                                  })
+                                                  handleResponseSelection(
+                                                    question._id,
+                                                    e.target.value
+                                                  )
                                                 }
                                               />
                                             ))}
@@ -292,11 +345,10 @@ const EvaluationPackDetails: React.FC = () => {
                                                 placeholder="Enter your answer"
                                                 className="my-4"
                                                 onChange={(e) =>
-                                                  setResponses({
-                                                    ...responses,
-                                                    [question._id]:
-                                                      e.target.value,
-                                                  })
+                                                  handleResponseSelection(
+                                                    question._id,
+                                                    e.target.value
+                                                  )
                                                 }
                                               />
                                             </Form.Group>
@@ -371,6 +423,12 @@ const EvaluationPackDetails: React.FC = () => {
           </Card>
         </Card.Body>
       </Card>
+      <Toast className={classes.toast} show={showToast} autohide bg="info">
+        <Toast.Header>
+          <strong className="mr-auto">Participants Submitted</strong>
+        </Toast.Header>
+        <Toast.Body>Your answers have been successfully submitted.</Toast.Body>
+      </Toast>
     </div>
   );
 };

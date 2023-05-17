@@ -145,7 +145,7 @@ const updateSurveyPack = async (req: Request, res: Response) => {
       totalResponses = updatedSurveyPack.employeesTakingSurvey.map((e) => ({
         employeeTakingSurvey: e.employee,
         allResponses: updatedSurveyPack.survey.questions.map((q) => ({
-          questionId: q._id,
+          question: q._id,
           response: "",
         })),
       }));

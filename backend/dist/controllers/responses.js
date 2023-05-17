@@ -16,14 +16,10 @@ const addResponse = async (req, res) => {
     if (!responsePack) {
         throw new errors_1.NotFoundError(`No responsePack with id: ${responsePackId}`);
     }
-    let employeeTakingSurvey;
-    for (const response of responsePack.totalResponses) {
+    const employeeTakingSurvey = responsePack.totalResponses.find(async (response) => {
         const employee = await user_1.default.findById(response.employeeTakingSurvey);
-        if ((employee === null || employee === void 0 ? void 0 : employee.displayName) === employeeName) {
-            employeeTakingSurvey = response;
-            break;
-        }
-    }
+        return employee && employee.displayName === employeeName;
+    });
     if (!employeeTakingSurvey) {
         throw new errors_1.UnauthorizedError(`User ${employeeName} is not authorized to add responses to this survey`);
     }

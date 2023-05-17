@@ -2,23 +2,19 @@ import axios from "axios";
 import { URL } from "../enum";
 // import { IResponseInput } from "../types/dataTypes";
 import Cookies from "js-cookie";
-
-export interface IQuestionResponse {
-  _id: string;
-  questionId: string;
-  response: number | string;
-}
+import { User } from "../types/dataTypes";
 
 export interface ISurveyResponses {
-  _id: string;
-  responses: IQuestionResponse[];
+  _id?: string;
+  allResponses: IResponseInput[];
   employeeIdTakingSurvey: string;
 }
 
 export interface IResponsePack {
   _id: string;
-  surveyPackId: string;
-  responses: ISurveyResponses[];
+  survey: string;
+  surveyPack: string;
+  totalResponses: ISurveyResponses[];
   createdAt: Date;
 }
 
@@ -26,9 +22,13 @@ export interface IResponsePacks {
   responsePacks: IResponsePack[];
 }
 
+export interface IResponse {
+  question: string;
+  response: string;
+}
+
 export interface IResponseInput {
-  questionId: string;
-  response: number | string;
+  allResponses: IResponse[];
 }
 
 const getAll = async () => {
@@ -75,15 +75,14 @@ const addResponse = async (
   }
 };
 
-const updateResponse = async (
+const updateResponsePack = async (
   responsePackId: string,
-  responseId: string,
   responseInput: IResponseInput
 ) => {
   const token = Cookies.get("token");
   try {
     const response = await axios.patch(
-      `${URL.RESPONSES_URL}/${responsePackId}/responses/${responseId}`,
+      `${URL.RESPONSES_URL}/${responsePackId}`,
       responseInput,
       {
         headers: {
@@ -113,6 +112,6 @@ export default {
   getAll,
   getSingleResponse,
   addResponse,
-  updateResponse,
+  updateResponsePack,
   showStats,
 };

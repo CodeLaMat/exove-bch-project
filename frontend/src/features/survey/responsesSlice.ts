@@ -1,11 +1,11 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
-import { Dispatch, Action } from "redux";
 import responsePackService from "../../../src/api/responses";
 import {
   IResponsePack,
   IResponsePacks,
   IResponseInput,
 } from "../../types/dataTypes";
+import { AxiosError } from "axios";
 
 const initialState: IResponsePacks = {
   responsePacks: [],
@@ -15,9 +15,6 @@ const responsePacksSlice = createSlice({
   name: "responsePacks",
   initialState,
   reducers: {
-    getAllResponsePacks: (state, action: PayloadAction<IResponsePack[]>) => {
-      state.responsePacks = action.payload;
-    },
     updateResponsePack: (
       state,
       action: PayloadAction<{
@@ -34,35 +31,54 @@ const responsePacksSlice = createSlice({
       }
     },
   },
+  extraReducers: (builder) => {
+    builder.addCase(
+      initialiseResponsePacks.fulfilled,
+      (state, action: PayloadAction<IResponsePack[]>) => {
+        state.responsePacks = action.payload;
+      }
+    );
+    builder.addCase(
+      updatedResponsePack.fulfilled,
+      (state, action: PayloadAction<IResponsePack[]>) => {
+        state.responsePacks = action.payload;
+      }
+    );
+    builder.addCase(
+      addResponseToPack.fulfilled,
+      (state, action: PayloadAction<IResponsePack[]>) => {
+        state.responsePacks = action.payload;
+      }
+    );
+  },
 });
 
-export const initialiseResponsePacks = () => {
-  return async (dispatch: Dispatch<Action>) => {
+export const initialiseResponsePacks = createAsyncThunk(
+  "responsePacks/initialize",
+  async () => {
     const responsePacks = await responsePackService.getAll();
-    dispatch(getAllResponsePacks(responsePacks));
-  };
-};
-
+    return responsePacks;
+  }
+);
 export const updatedResponsePack = createAsyncThunk(
   "responsePacks/updateResponsePack",
   async (
     {
       responsePackId,
-      responseId,
-      changes,
-    }: { responsePackId: string; responseId: string; changes: IResponseInput },
-    { dispatch }
+      allResponses,
+    }: { responsePackId: string; allResponses: IResponseInput },
+    { rejectWithValue }
   ) => {
     try {
-      await responsePackService.updateResponse(
+      await responsePackService.updateResponsePack(
         responsePackId,
-        responseId,
-        changes
+        allResponses
       );
       const updatedResponsePacks = await responsePackService.getAll();
-      dispatch(getAllResponsePacks(updatedResponsePacks));
+      return updatedResponsePacks;
     } catch (error) {
-      console.error(error);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
@@ -72,21 +88,21 @@ export const addResponseToPack = createAsyncThunk(
   async (
     {
       responsePackId,
-      responseInput,
-    }: { responsePackId: string; responseInput: IResponseInput },
-    { dispatch }
+      allResponses,
+    }: { responsePackId: string; allResponses: IResponseInput },
+    { rejectWithValue }
   ) => {
     try {
-      await responsePackService.addResponse(responsePackId, responseInput);
+      await responsePackService.addResponse(responsePackId, allResponses);
       const updatedResponsePacks = await responsePackService.getAll();
-      dispatch(getAllResponsePacks(updatedResponsePacks));
+      return updatedResponsePacks;
     } catch (error) {
-      console.error(error);
+      const err = error as AxiosError;
+      return rejectWithValue(err.response?.data);
     }
   }
 );
 
-export const { getAllResponsePacks, updateResponsePack } =
-  responsePacksSlice.actions;
+export const { updateResponsePack } = responsePacksSlice.actions;
 
 export default responsePacksSlice.reducer;

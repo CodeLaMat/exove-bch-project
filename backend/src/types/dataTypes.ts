@@ -269,11 +269,11 @@ export interface IResponsePack {
 }
 
 export interface IResponse {
-  questionId: string;
+  question: string;
   response: string;
 }
 
 export interface IEmployeeTakingSurvey {
   employeeTakingSurvey: User;
-  allResponses: { questionId: string; response: string }[];
+  allResponses: { question: string; response: string }[];
 }

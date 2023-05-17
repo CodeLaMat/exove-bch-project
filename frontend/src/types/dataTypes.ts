@@ -153,20 +153,21 @@ export interface ICreateSurveyPack {
 
 export interface IQuestionResponse {
   _id: string;
-  questionId: string;
+  question: string;
   response: number | string;
 }
 
 export interface ISurveyResponses {
-  _id: string;
-  responses: IQuestionResponse[];
+  _id?: string;
+  allResponses: IResponseInput[];
   employeeIdTakingSurvey: string;
 }
 
 export interface IResponsePack {
   _id: string;
-  surveyPackId: string;
-  responses: ISurveyResponses[];
+  survey: string;
+  surveyPack: string;
+  totalResponses: ISurveyResponses[];
   createdAt: Date;
 }
 
@@ -174,7 +175,19 @@ export interface IResponsePacks {
   responsePacks: IResponsePack[];
 }
 
+// export interface IQuestionInput {
+//   _id: string;
+//   category: Categories;
+//   question: string;
+//   questionType: Question_Type;
+//   description?: string;
+// }
+
+export interface IResponse {
+  question: string;
+  response: string;
+}
+
 export interface IResponseInput {
-  questionId: string;
-  response: number | string;
+  allResponses: IResponse[];
 }
