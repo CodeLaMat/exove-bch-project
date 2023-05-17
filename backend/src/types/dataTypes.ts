@@ -246,5 +246,11 @@ export interface IResponsePack {
   personBeingSurveyed: Partial<User>;
   survey: Partial<ISurvey>;
   totalResponses: ISurveyResponses[];
+  sumResults: {
+    [key: string]: number;
+  };
+  stringResults: {
+    [key: string]: string[];
+  };
   createdAt: Date;
 }
