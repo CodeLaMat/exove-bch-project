@@ -232,8 +232,11 @@ export interface ISurveypack {
 }
 
 export interface IQuestionResponse {
-  question: Partial<IQuestion>;
-  response: string;
+  question: {
+    _id?: string;
+  };
+  response: any;
+  responsePack: string;
 }
 
 export interface ISurveyResponses {

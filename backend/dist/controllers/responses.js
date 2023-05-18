@@ -23,8 +23,15 @@ const addResponse = async (req, res) => {
     if (!employeeTakingSurvey) {
         throw new errors_1.UnauthorizedError(`User ${employeeName} is not authorized to add responses to this survey`);
     }
+    console.log("responsePackId:", responsePackId);
+    console.log("responsePack:", responsePack);
+    console.log("employeeTakingSurvey:", employeeTakingSurvey);
     for (const { question, response } of allResponses) {
-        const currentEmployeeResponse = employeeTakingSurvey.allResponses.find((response) => { var _a; return ((_a = response.question._id) === null || _a === void 0 ? void 0 : _a.toString()) === question; });
+        const currentEmployeeResponse = employeeTakingSurvey.allResponses.find((response) => {
+            var _a;
+            return ((_a = response.question._id) === null || _a === void 0 ? void 0 : _a.toString()) === question &&
+                response.responsePack.toString() === responsePackId;
+        });
         if (currentEmployeeResponse && currentEmployeeResponse.response !== "") {
             throw new errors_1.BadRequestError(`User ${employeeName} has already submitted a response for this question`);
         }
@@ -35,6 +42,7 @@ const addResponse = async (req, res) => {
             employeeTakingSurvey.allResponses.push({
                 question: { _id: question },
                 response,
+                responsePack: responsePackId,
             });
         }
     }

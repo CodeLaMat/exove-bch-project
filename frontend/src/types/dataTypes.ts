@@ -166,6 +166,7 @@ export interface ISurveyResponses {
 export interface IResponsePack {
   _id: string;
   survey: string;
+  personBeingSurveyed: string;
   surveyPack: string;
   totalResponses: ISurveyResponses[];
   createdAt: Date;

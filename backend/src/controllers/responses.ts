@@ -17,6 +17,7 @@ const addResponse = async (req: Request, res: Response) => {
   if (!responsePack) {
     throw new NotFoundError(`No responsePack with id: ${responsePackId}`);
   }
+
   const employeeTakingSurvey = responsePack.totalResponses.find(
     async (response) => {
       const employee = await User.findById(response.employeeTakingSurvey);
@@ -30,9 +31,15 @@ const addResponse = async (req: Request, res: Response) => {
     );
   }
 
+  console.log("responsePackId:", responsePackId);
+  console.log("responsePack:", responsePack);
+  console.log("employeeTakingSurvey:", employeeTakingSurvey);
+
   for (const { question, response } of allResponses) {
     const currentEmployeeResponse = employeeTakingSurvey.allResponses.find(
-      (response) => response.question._id?.toString() === question
+      (response) =>
+        response.question._id?.toString() === question &&
+        response.responsePack.toString() === responsePackId
     );
     if (currentEmployeeResponse && currentEmployeeResponse.response !== "") {
       throw new BadRequestError(
@@ -46,6 +53,7 @@ const addResponse = async (req: Request, res: Response) => {
       employeeTakingSurvey.allResponses.push({
         question: { _id: question },
         response,
+        responsePack: responsePackId,
       });
     }
   }

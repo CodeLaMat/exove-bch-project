@@ -10,7 +10,6 @@ import { UserRole } from "../../../enum";
 import { initialiseEmployees } from "../../../features/user/employeesSlice";
 import { initialiseQuestions } from "../../../features/survey/surveySlice";
 import { useTranslation } from "react-i18next";
-import GenericPdfDownloader from "./pdfDownloader";
 import UserDashboard from "../../user/dashboard/UserDashboard";
 import ManagerDashboard from "../../manager/dashboard/ManagerDashboard";
 
@@ -52,10 +51,6 @@ const Dashboard = () => {
               <DBUsers />
             </div>
           </div>{" "}
-          <GenericPdfDownloader
-            downloadFileName="DashboardPDF"
-            rootElementId="dashboardPdf"
-          />
         </div>
       </div>
     );

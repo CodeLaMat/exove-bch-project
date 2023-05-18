@@ -8,8 +8,17 @@ const GenericPdfDownloader = ({ rootElementId, downloadFileName }) => {
     const input = document.getElementById(rootElementId);
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL("image/png");
-      const pdf = new jsPDF();
-      pdf.addImage(imgData, "JPEG", 0, 15, -200, -175);
+      const pdf = new jsPDF("p", "mm", "a4");
+      let width = pdf.internal.pageSize.getWidth();
+      let height = pdf.internal.pageSize.getHeight();
+
+      let aspectRatio = canvas.width / canvas.height;
+
+      let imgWidth = width;
+      let imgHeight = imgWidth / aspectRatio;
+
+      pdf.addImage(imgData, "JPEG", 0, 0, imgWidth, imgHeight);
+
       pdf.save(`${downloadFileName}.pdf`);
     });
   };

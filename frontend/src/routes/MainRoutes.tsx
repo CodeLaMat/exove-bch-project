@@ -25,6 +25,7 @@ import ManagerEvaluationPackDetails from "../components/manager/surveys/evaluati
 import ManagerTeam from "../components/manager/surveys/managerTeam/ManagerTeam";
 import ConfirmParticipants from "../components/hr/confirmParticipants/PendingSurveys";
 import PendingPackDetails from "../components/hr/confirmParticipants/PendingPackDetails";
+import Report from "../components/hr/feedbacks/Report";
 
 const MainRoutes = () => {
   const userData = useAppSelector((state) => state.loginUser.userData);
@@ -83,6 +84,10 @@ const MainRoutes = () => {
             element={
               role === UserRole.HR ? <FeedbackSingle /> : <Navigate to="/" />
             }
+          ></Route>
+          <Route
+            path="/feedbacks/reports/:id"
+            element={role === UserRole.HR ? <Report /> : <Navigate to="/" />}
           ></Route>
           <Route
             path="/sendForm/:userid"

@@ -22,7 +22,11 @@ import {
 
 router
   .route("/")
-  .get(authenticateUser, authorizePermissions("hr", "user"), getAllSurveyPacks)
+  .get(
+    authenticateUser,
+    authorizePermissions("hr", "user", "manager"),
+    getAllSurveyPacks
+  )
   .post(authenticateUser, authorizePermissions("hr"), createSurveyPack);
 router
   .route("/:id")

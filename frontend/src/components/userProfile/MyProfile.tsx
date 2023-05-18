@@ -21,7 +21,7 @@ const MyProfile = () => {
 
   const currentUser =
     employees && employees.find((entry) => entry.email === email);
- 
+
   if (!currentUser) {
     return <p>{t("User not found")}.</p>;
   }
@@ -57,7 +57,7 @@ const MyProfile = () => {
             </p>
             <p>
               {" "}
-              <strong>{t("Title")}Title: </strong>
+              <strong>{t("Title")}: </strong>
               {currentUser.title}
             </p>
             <p>

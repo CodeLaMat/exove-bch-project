@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { RootState } from "../../../app/store";
 import {
   IEmployee,
@@ -10,7 +10,7 @@ import {
 } from "../../../types/dataTypes";
 import classes from "./FeedbackSingle.module.css";
 import Button from "../../shared/button/Button";
-import { Card, ListGroup, Accordion } from "react-bootstrap";
+import { Card, ListGroup, Accordion, Toast } from "react-bootstrap";
 import { useAppDispatch, useAppSelector } from "../../../hooks/hooks";
 import { Categories } from "../../../types/dataTypes";
 import PageHeading from "../../pageHeading/PageHeading";
@@ -20,13 +20,12 @@ import { IParticipantInput } from "../../../types/dataTypes";
 
 const FeedbackSingle: React.FC = () => {
   const { t } = useTranslation();
+  const navigate = useNavigate();
   const dispatch = useAppDispatch();
   const { packid } = useParams();
   const [daysLeft, setDaysLeft] = useState<number>(0);
   const [isSent, setIsSent] = useState<boolean>(false);
-  const [replacementParticipant, setReplacementParticipant] = useState<
-    string | undefined
-  >(undefined);
+  const [personSurveyed, setpersonSurveyed] = useState("");
 
   const surveyPacks: ISurveypack[] = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
@@ -75,6 +74,12 @@ const FeedbackSingle: React.FC = () => {
   }
 
   useEffect(() => {
+    if (foundSurveyPack) {
+      setpersonSurveyed(foundSurveyPack.personBeingSurveyed);
+    }
+  }, [foundSurveyPack]);
+
+  useEffect(() => {
     const calculateDaysLeft = () => {
       if (!surveyPack) return;
       const now = new Date();
@@ -118,33 +123,18 @@ const FeedbackSingle: React.FC = () => {
         personBeingSurveyed: personBeingSurveyedId,
       })
     );
+
     setIsSent(true);
     setTimeout(() => {
       setIsSent(false);
     }, 3000);
   };
 
-  const handleReplaceParticipant = (declinedParticipant: IParticipant) => {
-    // Here you can implement the logic to select a new participant from the employee list.
-    // For the purpose of this example, I'll just select the first employee who is not a current participant.
-    const newParticipant = employees.find(
-      (e) =>
-        !surveyPack.employeesTakingSurvey.some(
-          (p: IParticipant) => p.employee === e._id
-        )
-    );
-
-    if (newParticipant) {
-      setReplacementParticipant(newParticipant._id);
-      // Here you can dispatch an action to update your store with the new participant.
-      // dispatch(replaceParticipant({ surveyPackId: surveyPack._id, oldParticipantId: declinedParticipant.employee, newParticipantId: newParticipant._id }));
-    } else {
-      // Handle the case when there are no more available employees to participate in the survey.
-      console.error(
-        "No more available employees to participate in the survey."
-      );
-    }
+  const handleDownloadPdf = (id: string) => {
+    navigate(`/feedbacks/reports/${id}`);
   };
+
+  console.log(personSurveyed);
 
   return (
     <div>
@@ -156,7 +146,20 @@ const FeedbackSingle: React.FC = () => {
             Survey Pack Details
           </Card.Header>
           <Card.Body>
-            <Card.Title> Person Being Surveyed:</Card.Title>
+            <Card.Title>
+              <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div>Person Being Surveyed:</div>
+                <div>
+                  <Button
+                    variant="secondary"
+                    type="button"
+                    onClick={() => handleDownloadPdf(personSurveyed)}
+                  >
+                    DETAILS
+                  </Button>
+                </div>
+              </div>
+            </Card.Title>
             <Card.Text>
               {personBeingSurveyed?.firstName +
                 " " +
@@ -252,8 +255,7 @@ const FeedbackSingle: React.FC = () => {
                     .map((name: string, index: number, array: string[]) => {
                       const participant =
                         surveyPack.employeesTakingSurvey[index];
-                      const isDeclined =
-                        participant.acceptanceStatus === "Declined";
+                      const isDeclined = !participant.isSurveyComplete;
                       return (
                         <div
                           key={index}
@@ -265,15 +267,18 @@ const FeedbackSingle: React.FC = () => {
                             {name}
                             {index !== array.length - 1 && ", "}
                           </span>
-                          {isDeclined && (
+                          {isDeclined && daysLeft <= 0 && (
                             <Button
                               variant="small"
                               className="button-small"
                               onClick={() =>
-                                handleReplaceParticipant(participant)
+                                handleSendReminderEmail(
+                                  surveyPack._id,
+                                  surveyPack.personBeingSurveyedId
+                                )
                               }
                             >
-                              Replace
+                              Send reminder
                             </Button>
                           )}
                         </div>
@@ -344,6 +349,14 @@ const FeedbackSingle: React.FC = () => {
             </Card>
           </Card.Body>
         </Card>
+        <Toast className={classes.toast} show={isSent} autohide bg="info">
+          <Toast.Header>
+            <strong className="mr-auto">Email has been sent</strong>
+          </Toast.Header>
+          <Toast.Body>
+            The reminding email has been sent to the employee.
+          </Toast.Body>
+        </Toast>
       </div>
     </div>
   );

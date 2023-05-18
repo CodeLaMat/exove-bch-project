@@ -154,11 +154,12 @@ const EvaluationPackDetails: React.FC = () => {
   };
 
   const getResponsePackId = (surveyPackId: string) => {
-    const responsePackArray = responsePacksArray[0];
+    const responsePackArray = Object.values(responsePacksArray[0]);
     if (Array.isArray(responsePackArray)) {
       const responsePack = responsePackArray.find(
         (rp) => rp.surveyPack === surveyPackId
       );
+      console.error("REsponse PAKCKID", responsePack._id);
       return responsePack ? responsePack._id : null;
     }
     return null;
@@ -175,6 +176,7 @@ const EvaluationPackDetails: React.FC = () => {
       question: response.questionId,
       response: response.answer,
     }));
+
     if (!userpackid) {
       console.error("No userpackid found.");
       return;
@@ -187,11 +189,27 @@ const EvaluationPackDetails: React.FC = () => {
           allResponses: { allResponses: transformedResponses },
         })
       );
-      setTimeout(() => {
-        setShowToast(false);
-        navigate("/userevaluations");
-      }, 3000);
-      setResponses([]);
+      const updatedEmployees = surveyPack?.employeesTakingSurvey.map(
+        (participant: IParticipantInput) => {
+          if (participant.employee === userId) {
+            return { ...participant, isSurveyComplete: true };
+          }
+          return participant;
+        }
+      );
+      if (updatedEmployees) {
+        dispatch(
+          updateSurveyPack({
+            surveyPackId: userpackid,
+            changes: { employeesTakingSurvey: updatedEmployees },
+          })
+        );
+        setTimeout(() => {
+          setShowToast(false);
+          navigate("/userevaluations");
+        }, 3000);
+        setResponses([]);
+      }
     } else {
       alert("Cannot submit responses, responsePackId not found");
     }

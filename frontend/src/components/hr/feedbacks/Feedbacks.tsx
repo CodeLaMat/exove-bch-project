@@ -64,7 +64,7 @@ const Feedbacks: React.FC = () => {
   };
 
   return (
-    <div>
+    <div className={classes.users_Maincontainer}>
       <PageHeading pageTitle={t("Feedbacks")} />
       <div className={classes.users_container}>
         <Table striped bordered hover>

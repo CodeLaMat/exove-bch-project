@@ -31,7 +31,7 @@ const SurveyPackDetails: React.FC = () => {
   const surveyPack = cleanedSurveyPacks.find((pack) => pack._id === packid);
   const manager = employees.find((e) => e._id === surveyPack.manager);
 
-  const managerSelected = useAppSelector(
+  const managerSelected: boolean = useAppSelector(
     (state: RootState) => state.selectedParticipants.managerSelected
   );
 

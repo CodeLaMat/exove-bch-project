@@ -171,6 +171,7 @@ const EvaluationPackDetails: React.FC = () => {
       question: response.questionId,
       response: response.answer,
     }));
+
     if (!packid) {
       console.error("No userpackid found.");
       return;
@@ -183,16 +184,31 @@ const EvaluationPackDetails: React.FC = () => {
           allResponses: { allResponses: transformedResponses },
         })
       );
-      setTimeout(() => {
-        setShowToast(false);
-        navigate("/managerevaluations");
-      }, 3000);
-      setResponses([]);
+      const updatedEmployees = surveyPack?.employeesTakingSurvey.map(
+        (participant: IParticipantInput) => {
+          if (participant.employee === userId) {
+            return { ...participant, isSurveyComplete: true };
+          }
+          return participant;
+        }
+      );
+      if (updatedEmployees) {
+        dispatch(
+          updateSurveyPack({
+            surveyPackId: packid,
+            changes: { employeesTakingSurvey: updatedEmployees },
+          })
+        );
+        setTimeout(() => {
+          setShowToast(false);
+          navigate("/userevaluations");
+        }, 3000);
+        setResponses([]);
+      }
     } else {
       alert("Cannot submit responses, responsePackId not found");
     }
   };
-
   console.log("REsponsePacks", responsePacksArray);
   console.log("SurveyPackId", packid);
   console.error("REsponses", responses);

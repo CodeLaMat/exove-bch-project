@@ -1,0 +1,94 @@
+.report_dataContainer {
+  justify-content: center;
+  padding: 15px;
+  width: 100%;
+  height: 29.7cm;
+
+  border: solid 1px;
+}
+
+.report {
+  width: 21cm;
+  height: 29.7cm;
+}
+
+.report_container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.header {
+  height: 25%;
+}
+
+.userInfo_container {
+  height: 14rem;
+  line-height: 1.2rem;
+}
+
+.userInfo {
+  margin: 30% 10px 10px 5px;
+  background-color: #c1ccdd78;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.titleValueRow span {
+  font-size: 12px;
+  color: rgb(28, 33, 31);
+  line-height: normal;
+  width: 50%;
+  margin-bottom: 5px;
+}
+
+.titleValueRow div {
+  font-size: 12px;
+  color: rgb(28, 33, 31);
+  line-height: normal;
+  width: 50%;
+  margin-bottom: 5px;
+}
+
+.titleValueRow {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: -5px;
+}
+
+.userInfo_container p {
+  font-size: 14px;
+  margin: 5px;
+}
+
+.evaluation_body {
+  display: flex;
+  height: 68%;
+  width: 100%;
+  justify-content: center;
+}
+.evaluationCustomSize {
+  max-width: 40%;
+}
+
+.progressBarCustomSize {
+  height: 8px;
+}
+.dashboard_progress {
+}
+.userInfo_container {
+}
+
+.footer {
+  margin-top: auto;
+  height: 5%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 1rem;
+  border-top: solid 0.5px gray;
+}
+
+.nameOnCorner {
+  text-align: "right";
+}
