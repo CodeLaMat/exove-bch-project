@@ -16,19 +16,15 @@ const addResponse = async (req, res) => {
     if (!responsePack) {
         throw new errors_1.NotFoundError(`No responsePack with id: ${responsePackId}`);
     }
-    let employeeTakingSurvey;
-    for (const response of responsePack.totalResponses) {
+    const employeeTakingSurvey = responsePack.totalResponses.find(async (response) => {
         const employee = await user_1.default.findById(response.employeeTakingSurvey);
-        if ((employee === null || employee === void 0 ? void 0 : employee.displayName) === employeeName) {
-            employeeTakingSurvey = response;
-            break;
-        }
-    }
+        return (employee === null || employee === void 0 ? void 0 : employee.displayName) === employeeName;
+    });
     if (!employeeTakingSurvey) {
         throw new errors_1.UnauthorizedError(`User ${employeeName} is not authorized to add responses to this survey`);
     }
     for (const { question, response } of allResponses) {
-        const currentEmployeeResponse = employeeTakingSurvey.allResponses.find((response) => { var _a; return ((_a = response.question._id) === null || _a === void 0 ? void 0 : _a.toString()) === question; });
+        const currentEmployeeResponse = employeeTakingSurvey.allResponses.find((r) => { var _a; return ((_a = r.question._id) === null || _a === void 0 ? void 0 : _a.toString()) === question; });
         if (currentEmployeeResponse && currentEmployeeResponse.response !== "") {
             throw new errors_1.BadRequestError(`User ${employeeName} has already submitted a response for this question`);
         }
@@ -44,7 +40,7 @@ const addResponse = async (req, res) => {
     }
     await responsePack.save();
     return res
-        .status(http_status_codes_1.StatusCodes.CREATED)
+        .status(http_status_codes_1.StatusCodes.OK)
         .json({ msg: "Response added successfully", responsePack });
 };
 exports.addResponse = addResponse;

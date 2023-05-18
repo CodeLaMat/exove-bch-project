@@ -135,9 +135,7 @@ const deleteSurveyPack = async (req, res) => {
 exports.deleteSurveyPack = deleteSurveyPack;
 const getSurveyors = async (req, res) => {
     const { params: { id: surveyPackId }, } = req;
-    const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId }, { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 })
-        .populate("employeesTakingSurvey")
-        .populate("survey");
+    const surveyPack = await surveyPack_1.default.findById({ _id: surveyPackId }, { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }).populate("employeesTakingSurvey");
     if (!surveyPack) {
         throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
     }

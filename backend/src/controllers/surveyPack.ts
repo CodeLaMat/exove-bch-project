@@ -159,9 +159,7 @@ const getSurveyors = async (req: Request, res: Response) => {
   const surveyPack = await SurveyPack.findById(
     { _id: surveyPackId },
     { employeesTakingSurvey: 1, manager: 1, managerapproved: 1 }
-  )
-    .populate("employeesTakingSurvey")
-    .populate("survey");
+  ).populate("employeesTakingSurvey");
   if (!surveyPack) {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }

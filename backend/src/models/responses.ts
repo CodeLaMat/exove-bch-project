@@ -68,7 +68,6 @@ const ResponsePackSchema = new mongoose.Schema(
         default: 0,
       },
     },
-
     stringResults: {
       "Quality focus": {
         type: [String],

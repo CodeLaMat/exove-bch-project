@@ -1,10 +1,8 @@
 import { Request, Response } from "express";
 import ResponsePack from "../models/responses";
-import SurveyPack from "../models/surveyPack";
 import { StatusCodes } from "http-status-codes";
 import { BadRequestError, NotFoundError, UnauthorizedError } from "../errors";
 import User from "../models/user";
-import { CustomRequest, LdapUser } from "./user";
 
 const addResponse = async (req: Request, res: Response) => {
   const { id: responsePackId } = req.params;
@@ -17,14 +15,12 @@ const addResponse = async (req: Request, res: Response) => {
   if (!responsePack) {
     throw new NotFoundError(`No responsePack with id: ${responsePackId}`);
   }
-  let employeeTakingSurvey;
-  for (const response of responsePack.totalResponses) {
-    const employee = await User.findById(response.employeeTakingSurvey);
-    if (employee?.displayName === employeeName) {
-      employeeTakingSurvey = response;
-      break;
+  const employeeTakingSurvey = responsePack.totalResponses.find(
+    async (response) => {
+      const employee = await User.findById(response.employeeTakingSurvey);
+      return employee?.displayName === employeeName;
     }
-  }
+  );
   if (!employeeTakingSurvey) {
     throw new UnauthorizedError(
       `User ${employeeName} is not authorized to add responses to this survey`
@@ -33,8 +29,9 @@ const addResponse = async (req: Request, res: Response) => {
 
   for (const { question, response } of allResponses) {
     const currentEmployeeResponse = employeeTakingSurvey.allResponses.find(
-      (response) => response.question._id?.toString() === question
+      (r) => r.question._id?.toString() === question
     );
+
     if (currentEmployeeResponse && currentEmployeeResponse.response !== "") {
       throw new BadRequestError(
         `User ${employeeName} has already submitted a response for this question`
@@ -54,7 +51,7 @@ const addResponse = async (req: Request, res: Response) => {
   await responsePack.save();
 
   return res
-    .status(StatusCodes.CREATED)
+    .status(StatusCodes.OK)
     .json({ msg: "Response added successfully", responsePack });
 };
 
