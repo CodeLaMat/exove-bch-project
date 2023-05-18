@@ -8,6 +8,27 @@ const responses_1 = __importDefault(require("../models/responses"));
 const http_status_codes_1 = require("http-status-codes");
 const errors_1 = require("../errors");
 const user_1 = __importDefault(require("../models/user"));
+// const addResponse = async (req: Request, res: Response) => {
+//   const { id: responsePackId } = req.params;
+//   const {
+//     name: [employeeName],
+//   } = req.user;
+//   const { allResponses } = req.body;
+//   const responsePack = await ResponsePack.findOne({ _id: responsePackId });
+//   if (!responsePack) {
+//     throw new NotFoundError(`No responsePack with id: ${responsePackId}`);
+//   }
+//   const employeeTakingSurvey = responsePack.totalResponses.find(
+//     async (response) => {
+//       const employee = await User.findById(response.employeeTakingSurvey);
+//       return employee && employee.displayName === employeeName;
+//     }
+//   );
+//   if (!employeeTakingSurvey) {
+//     throw new UnauthorizedError(
+//       `User ${employeeName} is not authorized to add responses to this survey`
+//     );
+//   }
 const addResponse = async (req, res) => {
     const { id: responsePackId } = req.params;
     const { name: [employeeName], } = req.user;
@@ -16,16 +37,23 @@ const addResponse = async (req, res) => {
     if (!responsePack) {
         throw new errors_1.NotFoundError(`No responsePack with id: ${responsePackId}`);
     }
-    const employeeTakingSurvey = responsePack.totalResponses.find(async (response) => {
-        const employee = await user_1.default.findById(response.employeeTakingSurvey);
+    // Get all employee ids
+    const employeeIds = responsePack.totalResponses.map((response) => response.employeeTakingSurvey);
+    // Get all employees
+    const employees = await user_1.default.find({ _id: { $in: employeeIds } });
+    const employeeTakingSurvey = responsePack.totalResponses.find((response) => {
+        const employee = employees.find((e) => e._id.toString() === response.employeeTakingSurvey.toString());
         return employee && employee.displayName === employeeName;
     });
-    if (!employeeTakingSurvey) {
-        throw new errors_1.UnauthorizedError(`User ${employeeName} is not authorized to add responses to this survey`);
-    }
     console.log("responsePackId:", responsePackId);
     console.log("responsePack:", responsePack);
     console.log("employeeTakingSurvey:", employeeTakingSurvey);
+    console.log("All employeeTakingSurvey:", responsePack.totalResponses);
+    console.log("All employees:", employees);
+    console.log("Matched employeeTakingSurvey:", employeeTakingSurvey);
+    if (!employeeTakingSurvey) {
+        throw new errors_1.UnauthorizedError(`User ${employeeName} is not authorized to add responses to this survey`);
+    }
     for (const { question, response } of allResponses) {
         const currentEmployeeResponse = employeeTakingSurvey.allResponses.find((response) => {
             var _a;
@@ -37,6 +65,9 @@ const addResponse = async (req, res) => {
         }
         if (currentEmployeeResponse) {
             currentEmployeeResponse.response = response;
+        }
+        if (response === "") {
+            throw new errors_1.BadRequestError("Response cannot be empty");
         }
         else {
             employeeTakingSurvey.allResponses.push({

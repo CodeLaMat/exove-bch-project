@@ -25,7 +25,7 @@ import {
 
 const EvaluationPackDetails: React.FC = () => {
   const [responses, setResponses] = useState<
-    Array<{ questionId: string; answer: any }>
+    Array<{ questionId: string; response: any }>
   >([]);
   const [showToast, setShowToast] = useState(false);
   const dispatch: AppDispatch = useDispatch();
@@ -145,11 +145,11 @@ const EvaluationPackDetails: React.FC = () => {
     );
   };
 
-  const handleResponseSelection = (questionId: string, answer: any) => {
+  const handleResponseSelection = (questionId: string, response: any) => {
     const updatedResponses = responses.filter(
       (response) => response.questionId !== questionId
     );
-    updatedResponses.push({ questionId, answer });
+    updatedResponses.push({ questionId, response });
     setResponses(updatedResponses);
   };
 
@@ -169,46 +169,51 @@ const EvaluationPackDetails: React.FC = () => {
   console.log("SurveyPackId", userpackid);
   console.error("REsponses", responses);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setShowToast(true);
     const transformedResponses = responses.map((response) => ({
       question: response.questionId,
-      response: response.answer,
+      response: response.response,
     }));
 
     if (!userpackid) {
       console.error("No userpackid found.");
       return;
     }
+
     const responsePackId = getResponsePackId(userpackid);
     if (responsePackId) {
-      dispatch(
-        addResponseToPack({
-          responsePackId,
-          allResponses: { allResponses: transformedResponses },
-        })
-      );
-      const updatedEmployees = surveyPack?.employeesTakingSurvey.map(
-        (participant: IParticipantInput) => {
-          if (participant.employee === userId) {
-            return { ...participant, isSurveyComplete: true };
-          }
-          return participant;
-        }
-      );
-      if (updatedEmployees) {
-        dispatch(
-          updateSurveyPack({
-            surveyPackId: userpackid,
-            changes: { employeesTakingSurvey: updatedEmployees },
+      try {
+        await dispatch(
+          addResponseToPack({
+            responsePackId,
+            allResponses: { allResponses: transformedResponses },
           })
         );
-        setTimeout(() => {
-          setShowToast(false);
-          navigate("/userevaluations");
-        }, 3000);
-        setResponses([]);
+        const updatedEmployees = surveyPack?.employeesTakingSurvey.map(
+          (participant: IParticipantInput) => {
+            if (participant.employee === userId) {
+              return { ...participant, isSurveyComplete: true };
+            }
+            return participant;
+          }
+        );
+        if (updatedEmployees) {
+          await dispatch(
+            updateSurveyPack({
+              surveyPackId: userpackid,
+              changes: { employeesTakingSurvey: updatedEmployees },
+            })
+          );
+          setTimeout(() => {
+            setShowToast(false);
+            navigate("/userevaluations");
+          }, 3000);
+          setResponses([]);
+        }
+      } catch (error) {
+        console.error("Error during submission: ", error);
       }
     } else {
       alert("Cannot submit responses, responsePackId not found");

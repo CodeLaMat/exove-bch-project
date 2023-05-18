@@ -27,7 +27,7 @@ const EvaluationPackDetails: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
   const { packid } = useParams();
   const [responses, setResponses] = useState<
-    Array<{ questionId: string; answer: any }>
+    Array<{ questionId: string; response: any }>
   >([]);
   const [showToast, setShowToast] = useState(false);
   const navigate = useNavigate();
@@ -145,11 +145,11 @@ const EvaluationPackDetails: React.FC = () => {
     );
   };
 
-  const handleResponseSelection = (questionId: string, answer: any) => {
+  const handleResponseSelection = (questionId: string, response: any) => {
     const updatedResponses = responses.filter(
       (response) => response.questionId !== questionId
     );
-    updatedResponses.push({ questionId, answer });
+    updatedResponses.push({ questionId, response });
     setResponses(updatedResponses);
   };
 
@@ -169,7 +169,7 @@ const EvaluationPackDetails: React.FC = () => {
     setShowToast(true);
     const transformedResponses = responses.map((response) => ({
       question: response.questionId,
-      response: response.answer,
+      response: response.response,
     }));
 
     if (!packid) {
