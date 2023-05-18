@@ -12,6 +12,7 @@ import { Card, ListGroup, Modal } from "react-bootstrap";
 import { useAppSelector } from "../../../../hooks/hooks";
 import SelectMyManager from "../mySurveyPacks/SelectMyManager";
 import SelectMyParticipants from "../mySurveyPacks/SelectMyParticipants";
+import { useTranslation } from "react-i18next";
 
 const SurveyPackDetails: React.FC = () => {
   const [selectedManager, setSelectedManager] = useState(null);
@@ -19,6 +20,7 @@ const SurveyPackDetails: React.FC = () => {
   const [daysLeft, setDaysLeft] = useState<number>(0);
   const { teampackid } = useParams();
   const [showModal, setShowModal] = useState(false);
+  const { t } = useTranslation();
   const surveyPacks: ISurveypack[] = useAppSelector(
     (state: RootState) => state.surveyPacks.surveyPacks
   );
@@ -51,7 +53,7 @@ const SurveyPackDetails: React.FC = () => {
   }, [surveyPack]);
 
   if (!surveyPack) {
-    return <div>Survey pack not found</div>;
+    return <div>{t("Logout")}Survey pack not found</div>;
   }
 
   console.log(daysLeft);
@@ -91,9 +93,9 @@ const SurveyPackDetails: React.FC = () => {
   return (
     <div className={classes.surveyPackDetails}>
       <Card style={{ maxWidth: "80rem" }}>
-        <Card.Header className="text-center">Survey Pack Details</Card.Header>
+        <Card.Header className="text-center">{t("Logout")}</Card.Header>
         <Card.Body>
-          <Card.Title> Person Being Surveyed:</Card.Title>
+          <Card.Title>{t("Person Being Surveyed")}:</Card.Title>
           <Card.Text>
             {personBeingSurveyed?.firstName +
               " " +
@@ -101,7 +103,7 @@ const SurveyPackDetails: React.FC = () => {
           </Card.Text>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Created at:
+            {t("Created at")}:
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {new Date(surveyPack.createdAt).toLocaleDateString()}
@@ -109,19 +111,19 @@ const SurveyPackDetails: React.FC = () => {
           </ListGroup>{" "}
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Deadline:{" "}
+            {t("Deadline")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
               {new Date(surveyPack.deadline).toLocaleDateString()}
             </ListGroup.Item>
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
-            <ListGroup.Item style={{ width: "30rem" }}>Status: </ListGroup.Item>
+            <ListGroup.Item style={{ width: "30rem" }}>{t("Status")}: </ListGroup.Item>
             <ListGroup.Item variant="info">{surveyPack.status}</ListGroup.Item>
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Manager:{" "}
+            {t("Manager")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {manager?.firstName + "" + manager?.surName}
@@ -129,7 +131,7 @@ const SurveyPackDetails: React.FC = () => {
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Manager Approved:{" "}
+            {t("Manager Approved")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {surveyPack.managerapproved ? "Yes" : "No"}
@@ -137,7 +139,7 @@ const SurveyPackDetails: React.FC = () => {
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              HR Approved:{" "}
+            {t("HR Approved")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {surveyPack.hrapproved ? "Yes" : "No"}
@@ -145,12 +147,12 @@ const SurveyPackDetails: React.FC = () => {
           </ListGroup>
           <ListGroup key="xxl" horizontal="xxl" className="my-2">
             <ListGroup.Item style={{ width: "30rem" }}>
-              Participants of this survey:{" "}
+            {t("Participants of this survey")}:{" "}
             </ListGroup.Item>
             <ListGroup.Item variant="info">
               {participantNames
                 ? participantNames
-                : "No participants assigned yet"}
+                : `${t("No participants assigned yet")}`}
             </ListGroup.Item>
           </ListGroup>
           <Button
@@ -158,7 +160,7 @@ const SurveyPackDetails: React.FC = () => {
             onClick={handleOpenManagerModal}
             disabled={isSixParticipants}
           >
-            Select Manager
+            {t("Select Manager")}
           </Button>
           {managerSelected && (
             <Button
@@ -166,19 +168,19 @@ const SurveyPackDetails: React.FC = () => {
               onClick={handleOpenModal}
               disabled={isSixParticipants}
             >
-              Select Participants
+              {t("Select Participants")}
             </Button>
           )}
         </Card.Body>
         <Card.Footer className="text-muted">
           {daysLeft > 0
-            ? `Days left until deadline: ${daysLeft}`
-            : "Deadline has passed"}
+            ? `${t("Days left until deadline")}: ${daysLeft}`
+            : `${t("Deadline has passed")}`}
         </Card.Footer>
       </Card>
       <Modal show={showManagerModal} onHide={handleCloseManagerModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Select Manager</Modal.Title>
+          <Modal.Title>{t("Select Manager")}</Modal.Title>
         </Modal.Header>
         <Modal.Body className={classes.modalBody}>
           <SelectMyManager
@@ -188,20 +190,20 @@ const SurveyPackDetails: React.FC = () => {
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseManagerModal}>
-            Close
+          {t("Close")}
           </Button>
         </Modal.Footer>
       </Modal>
       <Modal show={showModal} onHide={handleCloseModal}>
         <Modal.Header closeButton>
-          <Modal.Title>Select Participants</Modal.Title>
+          <Modal.Title>{t("Select Participants")}</Modal.Title>
         </Modal.Header>
         <Modal.Body className={classes.modalBody}>
           <SelectMyParticipants surveyPackId={surveyPack._id} />
         </Modal.Body>
         <Modal.Footer>
           <Button variant="secondary" onClick={handleCloseModal}>
-            Close
+          {t("Close")}
           </Button>
         </Modal.Footer>
       </Modal>

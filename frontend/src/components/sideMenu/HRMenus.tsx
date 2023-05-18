@@ -15,36 +15,36 @@ const HRMenus: React.FC = () => {
   return (
     <div>
       <MenuItem
-        name={t("Dashboard")}
+        name="Dashboard"
         icon={faChartSimple}
         link="/home"
-        pageTitle={t("Dashboard")}
+        pageTitle="Dashboard"
       />
       <MenuItem
-        name={t("Survey Forms")}
+        name="Survey Forms"
         icon={faSquarePollVertical}
         link="/surveys"
-        pageTitle={t("Survey Forms")}
+        pageTitle="Survey Forms"
       />
       <MenuItem
-        name={t("Employees")}
+        name="Employees"
         icon={faUsers}
         link="/employees"
-        pageTitle={t("Employees")}
+        pageTitle="Employees"
       />{" "}
       <div className={classes.menulist}>
         <MenuItem
-          name={t("Pending")}
+          name="Pending"
           icon={faFileImport}
           link="/pendingsurveys"
-          pageTitle={t("Awaiting Approval")}
+          pageTitle="Awaiting Approval"
         />
       </div>
       <MenuItem
-        name={t("Feedback")}
+        name="Feedback"
         icon={faFileCircleQuestion}
         link="/feedbacks"
-        pageTitle={t("Feedback")}
+        pageTitle="Feedback"
       />
       {/* <MenuItem
         name={t("Analytics")}

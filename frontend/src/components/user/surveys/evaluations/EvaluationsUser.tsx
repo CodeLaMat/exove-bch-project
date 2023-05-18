@@ -52,7 +52,7 @@ const UserSurveys: React.FC = () => {
 
       <div className={classes.otherSurveyPack_container}>
         <div className={classes.otherSurveyPack_container}>
-          <h3>Waiting for evaluation</h3>
+          <h3>{t("Arviointia odotellessa")}</h3>
           <div className={classes.excludedSurveyPacks}>
             {excludedSurveyPacks.map((surveyPack) => (
               <UserSurveyPackCard

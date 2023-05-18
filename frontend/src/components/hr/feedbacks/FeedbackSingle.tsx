@@ -19,6 +19,7 @@ import { sendReminderEmailToUser } from "../../../features/survey/surveyPacksSli
 import { IParticipantInput } from "../../../types/dataTypes";
 import { URLSearchParamsInit } from "react-router-dom";
 
+
 const FeedbackSingle: React.FC = () => {
   const { t } = useTranslation();
   const dispatch = useAppDispatch();
@@ -86,7 +87,7 @@ const FeedbackSingle: React.FC = () => {
   }, [surveyPack]);
 
   if (!surveyPack) {
-    return <div>Survey pack not found</div>;
+    return <div>{t("Survey pack not found")}</div>;
   }
 
   const personBeingSurveyed = employees.find(
@@ -124,14 +125,14 @@ const FeedbackSingle: React.FC = () => {
   return (
     <div>
       {" "}
-      <PageHeading pageTitle={t("Feedbacks")} />
+      <PageHeading pageTitle={t("Feedback")} />
       <div className={classes.surveyPackDetails}>
         <Card style={{ maxWidth: "80rem" }}>
           <Card.Header className="text-center" style={{ fontSize: "30px" }}>
-            Survey Pack Details
+          {t("Survey Pack Details")}
           </Card.Header>
           <Card.Body>
-            <Card.Title> Person Being Surveyed:</Card.Title>
+            <Card.Title>{t("Person Being Surveyed")}:</Card.Title>
             <Card.Text>
               {personBeingSurveyed?.firstName +
                 " " +
@@ -144,7 +145,7 @@ const FeedbackSingle: React.FC = () => {
             </Card.Footer>
             <ListGroup key="xxl" horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                Created at:
+              {t("Created at")}:
               </ListGroup.Item>
               <ListGroup.Item variant="info">
                 {new Date(surveyPack.createdAt).toLocaleDateString()}
@@ -152,7 +153,7 @@ const FeedbackSingle: React.FC = () => {
             </ListGroup>{" "}
             <ListGroup horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                Deadline:{" "}
+              {t("Deadline")}:{" "}
               </ListGroup.Item>
               <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
                 {new Date(surveyPack.deadline).toLocaleDateString()}
@@ -179,14 +180,14 @@ const FeedbackSingle: React.FC = () => {
                         )
                       }
                     >
-                      Send Reminder
+                      {t("Send Reminder")}
                     </Button>
                   )}
               </div>
             </ListGroup>{" "}
             <ListGroup horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                Status:{" "}
+              {t("Status")}:{" "}
               </ListGroup.Item>
               <ListGroup.Item variant="info">
                 {surveyPack.status}
@@ -194,7 +195,7 @@ const FeedbackSingle: React.FC = () => {
             </ListGroup>
             <ListGroup horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                Manager:{" "}
+              {t("Manager")}:{" "}
               </ListGroup.Item>
               <ListGroup.Item variant="info">
                 {manager?.firstName + "" + manager?.surName}
@@ -202,7 +203,7 @@ const FeedbackSingle: React.FC = () => {
             </ListGroup>
             <ListGroup horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                Manager Approved:{" "}
+              {t("Manager Approved")}:{" "}
               </ListGroup.Item>
               <ListGroup.Item variant="info">
                 {surveyPack.managerapproved ? "Yes" : "No"}
@@ -210,7 +211,7 @@ const FeedbackSingle: React.FC = () => {
             </ListGroup>
             <ListGroup horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                HR Approved:{" "}
+              {t("HR Approved")}:{" "}
               </ListGroup.Item>
               <ListGroup.Item variant="info">
                 {surveyPack.hrapproved ? "Yes" : "No"}
@@ -218,7 +219,7 @@ const FeedbackSingle: React.FC = () => {
             </ListGroup>
             <ListGroup horizontal="xxl" className="my-2">
               <ListGroup.Item style={{ width: "30rem" }}>
-                Participants of this survey:
+              {t("Participants of this survey")}:
               </ListGroup.Item>
               <ListGroup.Item>
                 {participantNames ? (
@@ -242,7 +243,7 @@ const FeedbackSingle: React.FC = () => {
                       </span>
                     ))
                 ) : (
-                  <span>No participants assigned yet</span>
+                  <span>{t("No participants assigned yet")}</span>
                 )}
               </ListGroup.Item>
             </ListGroup>
@@ -256,11 +257,11 @@ const FeedbackSingle: React.FC = () => {
                     <h3>{survey.surveyName}</h3>
                   </Card.Header>
                   <div className={classes.descriptionBox}>
-                    <h5>Description:</h5>
+                    <h5>{t("Description")}:</h5>
                     <p>{survey.description}</p>
                   </div>
                   <Card.Body>
-                    <h4>Questions:</h4>
+                    <h4>{t("Questions")}:</h4>
                     <Accordion defaultActiveKey="0">
                       {Object.entries(questionsByCategory).map(
                         ([category, questions], index) => (
@@ -273,12 +274,12 @@ const FeedbackSingle: React.FC = () => {
                                   width: "100%",
                                 }}
                               >
-                                <h5>{category}</h5>
+                                <h5>{t(category)}</h5>
                                 <span>
                                   {questions.length}{" "}
                                   {questions.length === 1
-                                    ? "question"
-                                    : "questions"}
+                                    ? `${t("question")}`
+                                    : `${t("question")}`}
                                 </span>
                               </div>
                             </Accordion.Header>

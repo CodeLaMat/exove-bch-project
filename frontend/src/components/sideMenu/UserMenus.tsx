@@ -6,12 +6,6 @@ const UserMenus = () => {
   return (
     <div>
       <MenuItem
-        name="DashBoard"
-        icon={faChartSimple}
-        link="/home"
-        pageTitle="Dashboard"
-      />
-      <MenuItem
         name="Evaluations"
         icon={faMessage}
         link="/userevaluations"

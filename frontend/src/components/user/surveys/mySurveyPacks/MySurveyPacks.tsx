@@ -47,7 +47,7 @@ const MySurveyPacks = () => {
       <PageHeading pageTitle={t("My Surveys")} />
       <div className={classes.mySurveyPack_container}>
         <div className={classes.mySurveyPack_container}>
-          <h3>You will be evaluated</h3>
+          <h3>{t("You will be evaluated")}</h3>
           <div className={classes.includedSurveyPacks}>
             {includedSurveyPacks.map((surveyPack) => (
               <div>

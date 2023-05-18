@@ -59,27 +59,27 @@ const ManagerDashboard = () => {
 
             <div className={classes.profileContainer}>
               <div className={classes.profileRow}>
-                <div className={classes.profileLabel}>Name:</div>
+                <div className={classes.profileLabel}>{t("Name")}:</div>
                 <div
                   className={classes.profileData}
                 >{`${currentUser.firstName} ${currentUser.surName}`}</div>
               </div>
               <div className={classes.profileRow}>
-                <div className={classes.profileLabel}>Email:</div>
+                <div className={classes.profileLabel}>{t("Email")}:</div>
                 <div className={classes.profileData}>{currentUser.email}</div>
               </div>
               <div className={classes.profileRow}>
-                <div className={classes.profileLabel}>Department:</div>
+                <div className={classes.profileLabel}>{t("Department")}:</div>
                 <div className={classes.profileData}>
                   {currentUser.department}
                 </div>
               </div>
               <div className={classes.profileRow}>
-                <div className={classes.profileLabel}>Title:</div>
+                <div className={classes.profileLabel}>{t("Title")}:</div>
                 <div className={classes.profileData}>{currentUser.title}</div>
               </div>
               <div className={classes.profileRow}>
-                <div className={classes.profileLabel}>Manager:</div>
+                <div className={classes.profileLabel}>{t("Manager")}:</div>
                 <div className={classes.profileData}>
                   {currentUser.work.reportsTo}
                 </div>
@@ -88,48 +88,48 @@ const ManagerDashboard = () => {
           </div>
         </div>
         <div className={classes.userPerformContainer}>
-          <h3>Performance based on the last survey</h3>
+          <h3>{t("Performance based on the last survey")}</h3>
           <div className={classes.userPerform_heading}>
             <div className={classes.userPerform_date}>
-              Survey Date: <p>12/03/2023</p>
+            {t("Survey Date")}: <p>12/03/2023</p>
             </div>
-            <Button variant="secondary">Vew report</Button>
+            <Button variant="secondary">{t("View report")}</Button>
           </div>
           <UserChart />
           <div>
             <div className={classes.container}>
-              <h3>Categories</h3>
+              <h3>{t("Categories")}</h3>
               <div className={classes.category}>
                 <div className={`${classes.color} ${classes.qualityColor}`} />
-                <div className={classes.categoryName}>Quality:</div>
+                <div className={classes.categoryName}>{t("Quality")}Quality:</div>
                 <div className={classes.categoryPercentage}>0%</div>
               </div>
               <div className={classes.category}>
                 <div className={`${classes.color} ${classes.socialColor}`} />
-                <div className={classes.categoryName}>Social skills:</div>
+                <div className={classes.categoryName}>{t("Social skills")}:</div>
                 <div className={classes.categoryPercentage}>0%</div>
               </div>
               <div className={classes.category}>
                 <div className={`${classes.color} ${classes.selfColor}`} />
-                <div className={classes.categoryName}>Self-guidance:</div>
+                <div className={classes.categoryName}>{t("Self-guidance")}:</div>
                 <div className={classes.categoryPercentage}>0%</div>
               </div>
               <div className={classes.category}>
                 <div className={`${classes.color} ${classes.leaderColor}`} />
-                <div className={classes.categoryName}>Leadership:</div>
+                <div className={classes.categoryName}>{t("Leadership")}:</div>
                 <div className={classes.categoryPercentage}>0%</div>
               </div>
               <div className={classes.category}>
                 <div className={`${classes.color} ${classes.changeColor}`} />
                 <div className={classes.categoryName}>
-                  Readiness for change:
+                {t("Readiness for change")}:
                 </div>
                 <div className={classes.categoryPercentage}>0%</div>
               </div>
               <div className={classes.breifInfo}>
-                You’re doing good!
+              {t("You’re doing good")}You’re doing good!
                 <p>
-                  Your average performance is 100% better than the last survey
+                {t("Your average performance is 100% better than the last survey")}
                 </p>
               </div>
             </div>

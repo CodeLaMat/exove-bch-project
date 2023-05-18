@@ -3,6 +3,7 @@ import { IEmployee, ISurveypack } from "../../../../types/dataTypes";
 import Button from "../../../shared/button/Button";
 import classes from "./MySurveyPackCard.module.css";
 import { Card, ListGroup } from "react-bootstrap";
+import { useTranslation } from "react-i18next";
 
 interface SurveyPackCardProps {
   surveyPack: ISurveypack;
@@ -16,7 +17,7 @@ const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
   handleSurveyPackClick,
 }) => {
   const [daysLeft, setDaysLeft] = useState<number>(0);
-
+  const { t } = useTranslation();
   const isSixParticipants = surveyPack.employeesTakingSurvey?.length === 6;
 
   useEffect(() => {
@@ -57,7 +58,7 @@ const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
         </Card.Subtitle>
         <ListGroup horizontal="xxl" className="my-2">
           <ListGroup.Item style={{ maxWidth: "30rem" }}>
-            Deadline:{" "}
+          {t("Deadline")}:{" "}
           </ListGroup.Item>
           <ListGroup.Item variant={daysLeft > 0 ? "info" : "danger"}>
             {new Date(surveyPack.deadline).toLocaleDateString()}
@@ -68,7 +69,7 @@ const MySurveyPackCard: React.FC<SurveyPackCardProps> = ({
         variant="primary"
         onClick={() => handleSurveyPackClick(surveyPack._id)}
       >
-        View
+        {t("View")}
       </Button>
     </Card>
   );

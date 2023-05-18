@@ -3,9 +3,10 @@ import { useNavigate } from "react-router-dom";
 import classes from "./ProfileMenu.module.css";
 import { useAppSelector } from "../../hooks/hooks";
 import Dropdown from "react-bootstrap/Dropdown";
-import LanguageSwitcher from "../shared/Translation";
+import { useTranslation } from "react-i18next";
 
 const ProfileMenu = () => {
+  const { t } = useTranslation();
   const userData = useAppSelector((state) => state.loginUser.userData);
 
   const FullName = userData[0].name.join(" ");
@@ -47,13 +48,13 @@ const ProfileMenu = () => {
             </Dropdown.Toggle>
 
             <Dropdown.Menu variant="dark">
-              <Dropdown.Item eventKey="myprofile">My Profile</Dropdown.Item>
+              <Dropdown.Item eventKey="myprofile">{t("My Profile")}</Dropdown.Item>
               {userData[0].role === "hr" && (
                 <Dropdown.Item eventKey="manageUsers">
-                  Manage Users
+                  {t("Manage Users")}
                 </Dropdown.Item>
               )}
-              <Dropdown.Item eventKey="logout">Logout</Dropdown.Item>
+              <Dropdown.Item eventKey="logout">{t("Logout")}</Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         </div>
