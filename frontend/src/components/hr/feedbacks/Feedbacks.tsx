@@ -65,7 +65,7 @@ const Feedbacks: React.FC = () => {
 
   return (
     <div className={classes.users_Maincontainer}>
-      <PageHeading pageTitle={t("Feedbacks")} />
+      <PageHeading pageTitle={t("Feedback")} />
       <div className={classes.users_container}>
         <Table striped bordered hover>
           <thead>
@@ -98,8 +98,8 @@ const Feedbacks: React.FC = () => {
                   <span
                     className={`${
                       surveyPack.employeesTakingSurvey.filter(
-                        (employee) => !employee.isSurveyComplete
-                      ).length > 0
+                        (employee) => employee.isSurveyComplete
+                      ).length <= 0
                         ? classes.acceptance_declined
                         : surveyPack.employeesTakingSurvey.filter(
                             (employee) => employee.isSurveyComplete
@@ -123,7 +123,15 @@ const Feedbacks: React.FC = () => {
                   {new Date(surveyPack.createdAt).toLocaleDateString("en-GB")}
                 </td>
                 <td>
-                  {new Date(surveyPack.deadline).toLocaleDateString("en-GB")}
+                  <span
+                    className={`deadline ${
+                      new Date(surveyPack.deadline) < new Date()
+                        ? "passed-deadline"
+                        : ""
+                    }`}
+                  >
+                    {new Date(surveyPack.deadline).toLocaleDateString("en-GB")}
+                  </span>
                 </td>
                 <td>
                   <Button

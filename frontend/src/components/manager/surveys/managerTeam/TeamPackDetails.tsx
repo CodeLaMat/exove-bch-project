@@ -86,6 +86,10 @@ const SurveyPackDetails: React.FC = () => {
     setShowManagerModal(false);
   };
 
+  const handleDownloadPdf = () => {
+    console.log("Print pdf");
+  };
+
   const isSixParticipants = surveyPack.employeesTakingSurvey?.length === 6;
 
   return (
@@ -93,7 +97,20 @@ const SurveyPackDetails: React.FC = () => {
       <Card style={{ maxWidth: "80rem" }}>
         <Card.Header className="text-center">Survey Pack Details</Card.Header>
         <Card.Body>
-          <Card.Title> Person Being Surveyed:</Card.Title>
+          <Card.Title>
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              <div>Person Being Surveyed:</div>
+              <div>
+                <Button
+                  variant="secondary"
+                  type="button"
+                  onClick={() => handleDownloadPdf()}
+                >
+                  DETAILS
+                </Button>
+              </div>
+            </div>
+          </Card.Title>
           <Card.Text>
             {personBeingSurveyed?.firstName +
               " " +

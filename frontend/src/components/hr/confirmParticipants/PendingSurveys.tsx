@@ -28,7 +28,6 @@ const ManagerTeam: React.FC = () => {
   const cleanedSurveyPacks = Object.values(surveyPacksArray[0]);
 
   const userEmail = userData.email.join("");
-  // const userId = employees.find((e) => e.email === userEmail)?._id ?? "";
 
   const teamSurveyPacks = cleanedSurveyPacks.filter(
     (surveyPack) =>

@@ -3,6 +3,7 @@ import { NavLink } from "react-router-dom";
 import classes from "./MenuItem.module.css";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { IconDefinition } from "@fortawesome/fontawesome-svg-core";
+import { useTranslation } from "react-i18next";
 
 const navLinkStyles = ({ isActive }: { isActive: boolean }) => {
   return {
@@ -22,6 +23,8 @@ interface Iprops {
 }
 
 const MenuItem = (props: Iprops) => {
+  const { t } = useTranslation();
+
   const { icon, name, link, pageTitle, disabled = false } = props;
   return (
     <div className={classes.menuItem}>
@@ -29,7 +32,7 @@ const MenuItem = (props: Iprops) => {
       <span>
         <div>
           <NavLink to={link} style={navLinkStyles}>
-            {name}
+            {t(name)}
           </NavLink>
         </div>
       </span>

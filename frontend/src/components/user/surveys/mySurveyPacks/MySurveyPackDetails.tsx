@@ -235,7 +235,6 @@ const SurveyPackDetails: React.FC = () => {
               onClick={handleOpenModal}
               disabled={
                 surveyPack.employeesTakingSurvey.length >= 6 ||
-                !managerSelected ||
                 surveyPack.hrapproved
               }
             >

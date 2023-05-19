@@ -1,7 +1,8 @@
 .report_dataContainer {
   justify-content: center;
+  align-items: center;
   padding: 15px;
-  width: 100%;
+  width: 90%;
   height: 29.7cm;
 
   border: solid 1px;
@@ -9,7 +10,7 @@
 
 .report {
   width: 21cm;
-  height: 29.7cm;
+  height: 100%;
 }
 
 .report_container {
@@ -28,7 +29,7 @@
 }
 
 .userInfo {
-  margin: 30% 10px 10px 5px;
+  margin: 20% 10px 10px 5px;
   background-color: #c1ccdd78;
   border-radius: 5px;
   padding: 10px;
@@ -58,7 +59,7 @@
 
 .userInfo_container p {
   font-size: 14px;
-  margin: 5px;
+  margin: 10px;
 }
 
 .evaluation_body {
@@ -85,6 +86,7 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+  bottom: 0;
   padding: 0 1rem;
   border-top: solid 0.5px gray;
 }

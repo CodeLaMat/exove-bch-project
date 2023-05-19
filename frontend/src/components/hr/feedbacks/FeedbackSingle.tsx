@@ -139,7 +139,7 @@ const FeedbackSingle: React.FC = () => {
   return (
     <div>
       {" "}
-      <PageHeading pageTitle={t("Feedbacks")} />
+      <PageHeading pageTitle={t("Feedback")} />
       <div className={classes.surveyPackDetails}>
         <Card style={{ maxWidth: "80rem" }}>
           <Card.Header className="text-center" style={{ fontSize: "30px" }}>

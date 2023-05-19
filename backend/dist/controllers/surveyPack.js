@@ -186,7 +186,9 @@ const updateSurveyors = async (req, res) => {
     if (!surveyPack) {
         throw new errors_1.NotFoundError(`surveyPack ${surveyPackId} not found`);
     }
-    surveyPack.employeesTakingSurvey = employeesTakingSurvey;
+    const existingParticipants = new Set(surveyPack.employeesTakingSurvey.map((participant) => participant.employee));
+    const newParticipants = employeesTakingSurvey.filter((participant) => !existingParticipants.has(participant.employee));
+    surveyPack.employeesTakingSurvey.push(...newParticipants);
     await surveyPack.save();
     if (surveyPack.employeesTakingSurvey.length === 6 &&
         surveyPack.employeesTakingSurvey.every((status) => {

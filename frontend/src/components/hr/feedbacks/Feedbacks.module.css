@@ -26,3 +26,12 @@
   color: rgb(22, 23, 22);
   font-size: 18px;
 }
+
+.deadline {
+  color: rgb(22, 23, 22);
+}
+
+.passed-deadline {
+  color: red;
+  font-weight: 800;
+}

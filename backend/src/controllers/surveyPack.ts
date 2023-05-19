@@ -12,7 +12,7 @@ import {
 } from "../util";
 import ResponsePack from "../models/responses";
 import survey from "../models/surveys";
-import { IEmployeeTakingSurvey } from "../types/dataTypes";
+import { IEmployeeTakingSurvey, IParticipant } from "../types/dataTypes";
 
 const getAllSurveyPacks = async (req: Request, res: Response) => {
   const surveyPacks = await SurveyPack.find();
@@ -212,6 +212,7 @@ const getSurveyors = async (req: Request, res: Response) => {
     .status(StatusCodes.OK)
     .json({ employeesTakingSurvey: employeesTakingSurvey, survey: survey });
 };
+
 const updateSurveyors = async (req: Request, res: Response) => {
   const {
     params: { id: surveyPackId },
@@ -222,7 +223,16 @@ const updateSurveyors = async (req: Request, res: Response) => {
   if (!surveyPack) {
     throw new NotFoundError(`surveyPack ${surveyPackId} not found`);
   }
-  surveyPack.employeesTakingSurvey = employeesTakingSurvey;
+  const existingParticipants = new Set(
+    surveyPack.employeesTakingSurvey.map((participant) => participant.employee)
+  );
+  const newParticipants = employeesTakingSurvey.filter(
+    (participant: IParticipant) =>
+      !existingParticipants.has(participant.employee)
+  );
+
+  surveyPack.employeesTakingSurvey.push(...newParticipants);
+
   await surveyPack.save();
   if (
     surveyPack.employeesTakingSurvey.length === 6 &&

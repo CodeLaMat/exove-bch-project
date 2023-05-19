@@ -5,7 +5,7 @@ import SelectSurvey from "./SelectSurvey";
 import classes from "./CreateForm.module.css";
 import { RootState } from "../../../app/store";
 import { IEmployee } from "../../../types/userTypes";
-import { ICreateSurveyPack } from "../../../types/dataTypes";
+import { ICreateSurveyPack, IParticipantInput } from "../../../types/dataTypes";
 import {
   createNewSurveyPack,
   setPersonBeingSurveyed,
@@ -101,10 +101,22 @@ const CreateForm: React.FC = () => {
     if (selectedEmployee) {
       const date = new Date();
       date.setDate(date.getDate() + 30);
+
+      const managerParticipant: IParticipantInput = {
+        acceptanceStatus: "Pending",
+        isSurveyComplete: false,
+        employee: manager,
+      };
+
+      const updatedEmployeesTakingSurvey = [
+        ...employeesTakingSurvey,
+        managerParticipant,
+      ];
+
       const newSurveyPack: ICreateSurveyPack = {
         personBeingSurveyed: personBeingSurveyed,
         survey: survey,
-        employeesTakingSurvey: employeesTakingSurvey,
+        employeesTakingSurvey: updatedEmployeesTakingSurvey,
         deadline: date,
         status: status,
         manager: manager,
