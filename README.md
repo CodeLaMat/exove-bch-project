@@ -28,7 +28,7 @@ Notifications are sent to users upon each status change, ensuring everyone stays
 
 1. Clone the repository.
 2. Install the required node packages using `npm install`.
-3. Configure the LDAP server as per your requirements.
+3. Configure the Docker and LDAP server as per requirements. COnfiguration files can be found in the project.
 
 ## Usage
 
