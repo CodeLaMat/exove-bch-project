@@ -40,4 +40,4 @@ More details about user roles and login credentials can be found within the appl
 
 ## GIF presentation
 
-![Gif](./frontend/src/assets/Video/Media1.gif)
+![Gif](https://raw.githubusercontent.com/CodeLaMat/exove-bch-project/tree/main/frontend/src/assets/Video/Media1.gif)
