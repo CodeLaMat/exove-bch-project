@@ -40,6 +40,5 @@ More details about user roles and login credentials can be found within the appl
 
 ## Video presentation
 
-```markdown
 [![VideoPresentation]](./frontend/src/assets/Video/Media1.mp4)
-```
+
