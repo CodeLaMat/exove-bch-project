@@ -40,4 +40,4 @@ More details about user roles and login credentials can be found within the appl
 
 ## Video presentation
 
-[![VideoPresentation]](./frontend/src/assets/Video/Media1.gif)
+![Gif](./frontend/src/assets/Video/Media1.gif)
