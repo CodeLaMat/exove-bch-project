@@ -38,6 +38,6 @@ Notifications are sent to users upon each status change, ensuring everyone stays
 
 More details about user roles and login credentials can be found within the application.
 
-## Video presentation
+## GIF presentation
 
 ![Gif](./frontend/src/assets/Video/Media1.gif)
